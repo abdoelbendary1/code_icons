@@ -12,7 +12,7 @@ class LoginUseCase {
     required this.authRepository,
   });
   Future<Either<Failures, AuthRepoEntity>> invoke(
-      String email, String password) async {
-    return await authRepository.login(email, password);
+      String username, String password) async {
+    return await authRepository.login(username, password);
   }
 }

@@ -1,22 +1,22 @@
 class LoginRequest {
-  String? email;
-  String? password;
+  String? UserName;
+  String? Password;
 
-  LoginRequest({this.email, this.password});
+  LoginRequest({this.UserName, this.Password});
 
-  LoginRequest.fromJson(Map<String, dynamic> json) {
-    if (json["email"] is String) {
-      email = json["email"];
+  LoginRequest.fromJson(Map<String, String> json) {
+    if (json["UserName"] is String) {
+      UserName = json["UserName"];
     }
-    if (json["password"] is String) {
-      password = json["password"];
+    if (json["Password"] is String) {
+      Password = json["Password"];
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data["email"] = email;
-    data["password"] = password;
+  Map<String, String> toJson() {
+    final Map<String, String> data = <String, String>{};
+    data["UserName"] = UserName as String;
+    data["Password"] = Password as String;
     return data;
   }
 }

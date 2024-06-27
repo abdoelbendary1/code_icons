@@ -4,16 +4,9 @@ import 'package:dartz/dartz.dart';
 
 
 abstract class AuthRepository {
-  Future<Either<Failures, AuthRepoEntity>> signUp(
-    String name,
-    String email,
-    String password,
-    String rePassword,
-    String phone,
-  );
 
   Future<Either<Failures, AuthRepoEntity>> login(
-    String email,
+    String username,
     String password,
   );
 }

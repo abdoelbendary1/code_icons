@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
 import 'package:code_icons/data/model/request/login_request.dart';
-import 'package:code_icons/data/model/request/sign_up_request.dart';
-import 'package:code_icons/data/model/response/auth_respnose/Auth_response_DM.dart';
+import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -19,49 +18,8 @@ class ApiManager {
     return _instance!;
   }
 
-  Future<Either<Failures, AuthResponseDm>> signUp(
-    String name,
-    String email,
-    String password,
-    String rePassword,
-    String phone,
-  ) async {
-    try {
-      var connectivityResult =
-          await Connectivity().checkConnectivity(); // User defined class
-      if (connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi) {
-        SignUpRequest signUpRequest = SignUpRequest(
-          email: email,
-          name: name,
-          password: password,
-          phone: phone,
-        );
-        Uri url = Uri.https(ApiConstants.baseUrl, ApiConstants.signUpEndPoint);
-
-        var response = await http.post(
-          url,
-          body: signUpRequest.toJson(),
-        );
-        var signUpResponse = AuthResponseDm.fromJson(jsonDecode(response.body));
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-          print(signUpResponse.message);
-          return right(signUpResponse);
-        } else {
-          return Left(ServerError(errorMessege: signUpResponse.message!));
-        }
-      } else {
-        // no internet connection
-        return Left(NetworkError(
-            errorMessege: "no internet connection , check your internet"));
-      }
-    } catch (e) {
-      return Left(Failures(errorMessege: e.toString()));
-    }
-  }
-
-  Future<Either<Failures, AuthResponseDm>> login(
-    String email,
+  Future<Either<Failures, AuthResponseDM>> login(
+    String username,
     String password,
   ) async {
     try {
@@ -70,25 +28,26 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(ApiConstants.baseUrl, ApiConstants.loginEndPoint);
-        LoginRequest loginRequest =
-            LoginRequest(email: email, password: password);
 
-        var lang = SharedPrefrence.getData(key: "lang");
+        var request = http.MultipartRequest('POST', url);
+        request.fields['UserName'] = username;
+        request.fields['Password'] = password;
 
-        var response =
-            await http.post(url, body: loginRequest.toJson(), headers: {
-          "lang": lang.toString(),
-        });
-        var loginResponse = AuthResponseDm.fromJson(jsonDecode(response.body));
+        var response = await request.send();
+        var responseBody = await response.stream.toBytes();
+        var responseString = String.fromCharCodes(responseBody);
+
+        var loginResponse = AuthResponseDM.fromJson(jsonDecode(responseString));
+
         if (response.statusCode >= 200 && response.statusCode <= 300) {
-          SharedPrefrence.saveData(
-              key: "token", value: loginResponse.data!.token);
+          /*  SharedPrefrence.saveData(
+              key: "accessToken", value: loginResponse.accessToken!); */
           return right(loginResponse);
+        } else if (responseString.isEmpty) {
+          return left(ServerError(errorMessege: "NULL"));
         } else {
           return left(ServerError(
-              errorMessege: loginResponse.data == null
-                  ? loginResponse.message!
-                  : loginResponse.message!));
+              errorMessege: loginResponse.message ?? "Server error"));
         }
       } else {
         return left(
@@ -98,6 +57,56 @@ class ApiManager {
       return Left(Failures(errorMessege: e.toString()));
     }
   }
+  /*  Future<Either<Failures, AuthResponseDM>> login(
+    String username,
+    String password,
+  ) async {
+    try {
+      var connectivityResult =
+          await Connectivity().checkConnectivity(); // User defined class
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.loginEndPoint);
+        /* var url = Uri.parse("https://demoapi1.code-icons.com/api/Users/login"); */
+        LoginRequest loginRequest =
+            LoginRequest(UserName: username, Password: password);
 
+        /*  var lang = SharedPrefrence.getData(key: "lang"); */
 
+        var response =
+            await http.post(url, body: loginRequest.toJson(), headers: {
+          /*  "lang": lang.toString(), */
+          'Content-Type': 'multipart/form-data',
+        });
+        var loginResponse;
+        if (response.body.isNotEmpty) {
+          loginResponse = AuthResponseDM.fromJson(jsonDecode(response.body));
+        } else {
+          loginResponse = AuthResponseDM(
+              id: 2,
+              name: "Empty",
+              accessToken: "",
+              screens: [],
+              username: "empty");
+        }
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          /*  SharedPrefrence.saveData(
+              key: "accessToken", value: loginResponse.accessToken!); */
+          return right(loginResponse);
+        } else if (response.body.isEmpty) {
+          return left(ServerError(errorMessege: "NULL"));
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "check your internet connection"));
+      }
+    } catch (e) {
+      return Left(Failures(errorMessege: e.toString()));
+    }
+  }
+ */
 }

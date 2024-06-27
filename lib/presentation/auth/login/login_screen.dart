@@ -2,6 +2,7 @@ import 'package:code_icons/domain/di.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_state.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_view_model.dart';
 import 'package:code_icons/presentation/auth/login/widgets/login_body.dart';
+import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
@@ -27,22 +28,24 @@ class LoginScreen extends StatelessWidget {
           DialogUtils.hideLoading(context);
           DialogUtils.showMessage(
               context: context, message: state.errorMessege!);
+          print(state.errorMessege);
         } else if (state is LoginSuccesState) {
           DialogUtils.hideLoading(context);
           DialogUtils.showMessage(
               context: context,
-              message: state.loginRepositoryEntity.message ?? "");
+              message: state.loginRepositoryEntity.name ?? "");
+          print(state.loginRepositoryEntity.username);
 
-          var token = SharedPrefrence.saveData(
+          /*  var token = SharedPrefrence.saveData(
             key: "token",
-            value: state.loginRepositoryEntity.data!.token,
-          );
-          
-          SharedPrefrence.saveData(
+            value: state.loginRepositoryEntity.accessToken,
+          ); */
+
+          /*   SharedPrefrence.saveData(
             key: "username",
-            value: state.loginRepositoryEntity.data!.name,
-          );
-          /*  Navigator.pushReplacementNamed(context, HomeScreenView.routeName); */
+            value: state.loginRepositoryEntity.username,
+          ); */
+          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
         }
       },
       child: Scaffold(
@@ -52,7 +55,7 @@ class LoginScreen extends StatelessWidget {
             passwordController: loginViewModel.passwordController,
             formKey: loginViewModel.formKey,
             buttonFunction: () {
-              loginViewModel.login(context);
+              loginViewModel.login();
             },
           )),
     );
