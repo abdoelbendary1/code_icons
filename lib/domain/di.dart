@@ -11,11 +11,9 @@ import 'package:code_icons/data/repository/repository/auth_repository_impl.dart'
 import 'package:code_icons/domain/repository/data_source/auth_remote_data_source.dart';
 import 'package:code_icons/domain/repository/repository/auth_repository.dart';
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
-import 'package:code_icons/domain/use_cases/signup_usecase.dart';
 
-SignUpUseCase injectSignUpUseCase() {
-  return SignUpUseCase(authRepository: injectAuthRepository());
-}
+
+
 
 LoginUseCase injectLoginUseCase() {
   return LoginUseCase(authRepository: injectAuthRepository());

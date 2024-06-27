@@ -12,16 +12,10 @@ class AuthRepositoryImpl implements AuthRepository {
     required this.authRemoteDataSource,
   });
 
-  @override
-  Future<Either<Failures, AuthRepoEntity>> signUp(String name, String email,
-      String password, String rePassword, String phone) {
-    return authRemoteDataSource.signUp(
-        name, email, password, rePassword, phone);
-  }
-
+ 
   @override
   Future<Either<Failures, AuthRepoEntity>> login(
-      String email, String password) {
-    return authRemoteDataSource.login(email, password);
+      String username, String password) {
+    return authRemoteDataSource.login(username, password);
   }
 }

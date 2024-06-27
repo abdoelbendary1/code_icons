@@ -1,4 +1,3 @@
-import 'package:code_icons/presentation/auth/signUp/sign_up._screen.dart';
 import 'package:code_icons/presentation/utils/constants.dart';
 import 'package:code_icons/presentation/utils/custom_button.dart';
 import 'package:code_icons/presentation/utils/custom_text_field.dart';
@@ -72,10 +71,10 @@ class _LoginBodyState extends State<LoginBody> {
                     //e-mail
                     CustomTextField(
                       controller: widget.emailController,
-                      fieldName: "E-Mail",
-                      hintText: "enter your e-mail",
+                      fieldName: "Username",
+                      hintText: "enter your username",
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
+                        /* if (value == null || value.trim().isEmpty) {
                           return "e-mail field is required";
                         }
                         bool emailValid = RegExp(
@@ -83,7 +82,7 @@ class _LoginBodyState extends State<LoginBody> {
                             .hasMatch(value);
                         if (!emailValid) {
                           return "e-mail is not valid";
-                        }
+                        } */
                         return null;
                       },
                     ),
@@ -111,12 +110,12 @@ class _LoginBodyState extends State<LoginBody> {
                       fieldName: "Password",
                       hintText: "enter your password",
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
+                        /* if (value == null || value.trim().isEmpty) {
                           return "e-mail field is required";
                         }
                         if (value.length < 5 || value.length > 30) {
                           return "password must be more than 6 char and less than 30 char";
-                        }
+                        } */
                         return null;
                       },
                     ),
@@ -140,30 +139,6 @@ class _LoginBodyState extends State<LoginBody> {
                       buttonText: "Login",
                       buttonFunction: widget.buttonFunction,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 20.h,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, SignUpScreen.routeName);
-                            },
-                            child: Text(
-                              "create account",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),

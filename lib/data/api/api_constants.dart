@@ -1,7 +1,7 @@
 class ApiConstants {
-  static String baseUrl = "student.valuxapps.com";
-  static String signUpEndPoint = "/api/register";
-  static String loginEndPoint = "api/login";
+  static String baseUrl = "demoapi1.code-icons.com";
+  
+  static String loginEndPoint = "/api/Users/login";
   static String homeEndPoint = "api/home";
   static String searchEndPoint = "/api/products/search";
   static String addToFavoriteEndPoint = "/api/favorites";
