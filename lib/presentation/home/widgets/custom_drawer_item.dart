@@ -1,55 +1,62 @@
+import 'package:code_icons/data/model/data_model/menu_item.dart';
+import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomDrawerItem extends StatefulWidget {
-  CustomDrawerItem(
-      {super.key,
-      required this.title,
-      required this.subtitle,
-      required this.subtitleCount});
+class CustomMenuItem extends StatelessWidget {
+  CustomMenuItem({
+    super.key,
+    required this.menuItems,
+    required this.title,
+    required this.icon,
+  });
   String? title;
-  String? subtitle;
-  int subtitleCount;
 
-  @override
-  State<CustomDrawerItem> createState() => _CustomDrawerItemState();
-}
+  List<MenuItem> menuItems;
 
-class _CustomDrawerItemState extends State<CustomDrawerItem> {
+  IconData? icon;
+
+  HomeScreenViewModel homeScreenViewModel = HomeScreenViewModel();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, bottom: 3),
+      padding: const EdgeInsets.only(left: 8, bottom: 3, right: 5),
       child: ExpansionTile(
         shape: LinearBorder.none,
         collapsedIconColor: AppColors.whiteColor,
         iconColor: AppColors.whiteColor,
-        title: Text(
-          widget.title ?? "",
-          style:
-              Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 23),
+        leading: Icon(
+          icon,
+          size: 20,
         ),
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: ListView.builder(
-              itemBuilder: (context, index) => ListTile(
-                trailing: const Icon(
-                  Icons.keyboard_arrow_down_outlined,
-                  color: AppColors.whiteColor,
-                ),
-                title: Text(
-                  widget.subtitle ?? "",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: AppColors.yellowColor),
-                ),
-              ),
-              itemCount: widget.subtitleCount,
+        title: Text(
+          title ?? "",
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontSize: 20, color: AppColors.whiteColor),
+        ),
+        children: menuItems.map((menuItem) {
+          return ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed(menuItem.route);
+            },
+            /*  trailing: const Icon(
+                    Icons.keyboard_arrow_down_outlined,
+                    color: AppColors.whiteColor,
+                  ), */
+            title: Text(
+              menuItem.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(color: AppColors.yellowColor),
             ),
-          )
-        ],
+          );
+        }).toList(),
       ),
     );
   }

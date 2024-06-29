@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_image_slideshow: ^0.1.6
   flutter_screenutil: ^5.9.0
+  get_it: ^7.7.0
   http: ^1.2.1
   readmore: ^2.2.0
   shared_preferences: ^2.2.3

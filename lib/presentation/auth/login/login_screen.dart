@@ -1,4 +1,4 @@
-import 'package:code_icons/domain/di.dart';
+import 'package:code_icons/services/di.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_state.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_view_model.dart';
 import 'package:code_icons/presentation/auth/login/widgets/login_body.dart';

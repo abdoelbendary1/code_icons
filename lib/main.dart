@@ -1,7 +1,12 @@
-import 'package:code_icons/domain/my_observer.dart';
+import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/E-commerce%20Setting_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/SystemSettings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/settings_screen.dart';
+import 'package:code_icons/services/my_observer.dart';
 import 'package:code_icons/presentation/auth/login/login_screen.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/utils/theme/app_theme.dart';
+import 'package:code_icons/services/service_locator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:device_preview/device_preview.dart';
 
 void main() {
+  setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(
     DevicePreview(
@@ -23,21 +29,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(430, 932),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      child: MaterialApp(
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        theme: AppTheme.mainTheme,
-        debugShowCheckedModeBanner: false,
-        initialRoute: LoginScreen.routeName,
-        routes: {
-          LoginScreen.routeName: (context) => LoginScreen(),
-          HomeScreen.routeName: (context) => HomeScreen(),
-        },
+    return BlocProvider(
+      create: (context) => getIt<MenuCubit>(),
+      child: ScreenUtilInit(
+        designSize: const Size(430, 932),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        child: MaterialApp(
+          useInheritedMediaQuery: true,
+          locale: DevicePreview.locale(context),
+          builder: DevicePreview.appBuilder,
+          theme: AppTheme.mainTheme,
+          debugShowCheckedModeBanner: false,
+          initialRoute: LoginScreen.routeName,
+          routes: {
+            LoginScreen.routeName: (context) => LoginScreen(),
+            HomeScreen.routeName: (context) => HomeScreen(),
+            SettingsScreen.routeName: (context) => SettingsScreen(),
+            SystemSettings.routeName: (context) => SystemSettings(),
+            EcommerceSetting.routeName: (context) => EcommerceSetting(),
+          },
+        ),
       ),
     );
   }
