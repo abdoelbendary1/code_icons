@@ -1,7 +1,8 @@
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/E-commerce%20Setting_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/SystemSettings_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/settings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
 import 'package:code_icons/services/my_observer.dart';
 import 'package:code_icons/presentation/auth/login/login_screen.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
             SettingsScreen.routeName: (context) => SettingsScreen(),
             SystemSettings.routeName: (context) => SystemSettings(),
             EcommerceSetting.routeName: (context) => EcommerceSetting(),
+            MainSettingScreen.routeName: (context) => MainSettingScreen(),
           },
         ),
       ),
