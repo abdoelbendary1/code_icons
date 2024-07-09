@@ -48,7 +48,7 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
               color: Colors.lightBlue[50],
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: DropdownButton<CustomerDataEntity>(
+            child: DropdownButton<CustomerDataEntity?>(
               padding: EdgeInsets.symmetric(vertical: 4.h),
               dropdownColor: AppColors.blueColor,
               menuMaxHeight: 300.h,
@@ -78,11 +78,11 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
               },
               selectedItemBuilder: (context) => widget.itemList!
                   .map<DropdownMenuItem<CustomerDataEntity>>(
-                      (CustomerDataEntity value) {
+                      (CustomerDataEntity? value) {
                 return DropdownMenuItem<CustomerDataEntity>(
                   value: value,
                   child: Text(
-                    value.brandNameBl ?? "Empty",
+                    value?.brandNameBl ?? "Empty",
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!

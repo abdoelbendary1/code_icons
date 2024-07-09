@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_Custom_TextField.dart';
@@ -34,29 +36,34 @@ class CollectionDetailsForm extends StatelessWidget {
                 AppLocalizations.of(context)!.phone_Number_hint,
                 addCollectionControllers[0],
                 Icons.phone_iphone,
+                readOnly: true,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.address_label,
                 AppLocalizations.of(context)!.address_hint,
                 addCollectionControllers[1],
                 Icons.home,
+                readOnly: true,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.registration_Number_label,
                 AppLocalizations.of(context)!.registration_Number_hint,
                 addCollectionControllers[2],
                 Icons.app_registration,
+                readOnly: true,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.registration_Date_label,
                 AppLocalizations.of(context)!.registration_Date_hint,
                 addCollectionControllers[3],
                 Icons.app_registration,
+                readOnly: true,
                 () async {}),
             _buildTextField(
                 AppLocalizations.of(context)!.commercial_activities_label,
                 AppLocalizations.of(context)!.commercial_activities_hint,
                 addCollectionControllers[4],
+                readOnly: true,
                 Icons.local_activity,
                 () {}),
             Padding(
@@ -81,36 +88,42 @@ class CollectionDetailsForm extends StatelessWidget {
                 AppLocalizations.of(context)!.division_label,
                 AppLocalizations.of(context)!.division_hint,
                 addCollectionControllers[6],
+                readOnly: true,
                 Icons.diversity_3_sharp,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.compensation_label,
                 AppLocalizations.of(context)!.compensation_hint,
                 addCollectionControllers[7],
+                readOnly: true,
                 Icons.attach_money,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.financial_arrears_label,
                 AppLocalizations.of(context)!.financial_arrears_hint,
                 addCollectionControllers[8],
+                readOnly: true,
                 Icons.attach_money,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.current_finance_label,
                 AppLocalizations.of(context)!.current_hint,
                 addCollectionControllers[9],
+                readOnly: true,
                 Icons.attach_money,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.finance_Diffrence_label,
                 AppLocalizations.of(context)!.finance_Diffrence_hint,
                 addCollectionControllers[10],
+                readOnly: false,
                 Icons.add_to_photos_sharp,
                 () {}),
             _buildTextField(
                 AppLocalizations.of(context)!.total_finance_label,
                 AppLocalizations.of(context)!.enter_your_Total_finance_hint,
                 addCollectionControllers[11],
+                readOnly: true,
                 Icons.money,
                 () {}),
             SizedBox(height: 10.h),
@@ -125,11 +138,16 @@ class CollectionDetailsForm extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                   onPressed: () async {
+                    CustomerDataEntity selectedCustomer =
+                        context.read<AddCollectionCubit>().selectedCustomer;
+                    var tradeCollectionRequest = addCollectionCubit
+                        .intializeTradeRequest(selectedCustomer);
                     await addCollectionCubit.postTradeCollection(
                       token: "token",
-                      tradeCollectionRequest:
-                          addCollectionCubit.tradeCollectionRequest,
+                      tradeCollectionRequest: tradeCollectionRequest,
                     );
+                    print(
+                        "selected customer ater post ${selectedCustomer.idBl}");
 
                     Navigator.pop(context);
                   },
@@ -144,8 +162,14 @@ class CollectionDetailsForm extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String label, String hint,
-      TextEditingController controller, IconData icon, void Function()? onTap) {
+  Widget _buildTextField(
+    String label,
+    String hint,
+    TextEditingController controller,
+    IconData icon,
+    void Function()? onTap, {
+    bool? readOnly = false,
+  }) {
     return Column(
       children: [
         ReusableCustomTextField(
@@ -154,6 +178,7 @@ class CollectionDetailsForm extends StatelessWidget {
           controller: controller,
           prefixIcon: icon,
           onTap: onTap,
+          readOnly: readOnly,
         ),
         SizedBox(height: 10.h),
       ],

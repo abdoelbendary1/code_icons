@@ -58,7 +58,8 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                     if (state is GetCustomerDataByIDSuccess) {
                       return ReusableSelectTrader(
                         itemList: addCollectionCubit.customerData,
-                        selectedCustomer: addCollectionCubit.selectedCustomer,
+                        selectedCustomer:
+                            addCollectionCubit.selectedCustomer, //! bug
                       );
                     }
                     return ReusableSelectTrader(
