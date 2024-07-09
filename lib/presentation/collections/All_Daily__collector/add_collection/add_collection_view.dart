@@ -1,4 +1,5 @@
 import 'package:code_icons/data/api/api_manager.dart';
+import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/add_collection_body.dart';
@@ -27,10 +28,13 @@ class AddCollectionView extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
+              CustomerDataEntity selectedCustomer =
+                  context.read<AddCollectionCubit>().selectedCustomer;
+              var tradeCollectionRequest =
+                  addCollectionCubit.intializeTradeRequest(selectedCustomer);
               context.read<AddCollectionCubit>().postTradeCollection(
                   token: "token",
-                  tradeCollectionRequest:
-                      addCollectionCubit.tradeCollectionRequest);
+                  tradeCollectionRequest: tradeCollectionRequest);
             },
             child: Padding(
               padding: EdgeInsets.all(8.0),

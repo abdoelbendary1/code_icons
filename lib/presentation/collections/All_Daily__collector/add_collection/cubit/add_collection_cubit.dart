@@ -29,7 +29,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   //! check the selectedCustomer ID
   CustomerDataEntity selectedCustomer = CustomerDataEntity(idBl: 21);
 
-  late TradeCollectionRequest tradeCollectionRequest = TradeCollectionRequest(
+  /* late TradeCollectionRequest tradeCollectionRequest = TradeCollectionRequest(
     activityBl: 4.0,
     addressBl: ControllerManager().addressController.text,
     collectionDateBl: ControllerManager().registryDateController.text,
@@ -46,8 +46,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     totalBl: double.parse(ControllerManager().totalFinanceController.text),
     tradeRegistryBl: ControllerManager().regisrtyNumController.text,
     yearsOfRepaymentBl: "",
-  );
-  /* TradeCollectionRequest intializeTradeRequest() {
+  ); */
+  TradeCollectionRequest intializeTradeRequest(CustomerDataEntity selectedCustomer) {
     return TradeCollectionRequest(
       activityBl: 4.0,
       addressBl: ControllerManager().addressController.text,
@@ -56,7 +56,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
           double.parse(ControllerManager().compensationController.text),
       currentBl:
           double.parse(ControllerManager().currentFinanceController.text),
-      customerDataIdBl: selectedCustomer.idBl!.toDouble(),
+      customerDataIdBl: selectedCustomer.idBl,
       differentBl:
           double.parse(ControllerManager().diffrentFinanaceController.text),
       divisionBl: ControllerManager().divisionController.text,
@@ -67,7 +67,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       tradeRegistryBl: ControllerManager().regisrtyNumController.text,
       yearsOfRepaymentBl: "",
     );
-  } */
+  }
 
   List<Map<String, dynamic>> years = [
     {'year': "2020", 'isChecked': false},

@@ -13,6 +13,7 @@ class ReusableCustomTextField extends StatelessWidget {
   final IconData? suffixIcon;
   final String? Function(String?)? validator;
   void Function()? onTap;
+  bool? readOnly;
 
   ReusableCustomTextField({
     super.key,
@@ -25,6 +26,7 @@ class ReusableCustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.validator,
     this.onTap,
+    this.readOnly,
   });
 
   @override
@@ -32,6 +34,7 @@ class ReusableCustomTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.w),
       child: TextFormField(
+        readOnly: readOnly ?? false,
         onTap: onTap,
         controller: controller,
         obscureText: obscureText,
