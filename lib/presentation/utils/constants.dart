@@ -1,4 +1,8 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
+import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
+import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
@@ -136,12 +140,14 @@ class AppLocalData {
     },
     "Collections": {
       'icon': Icons.collections_bookmark_sharp,
-      'route': MainSettingScreen.routeName,
+      'route': CollectionsScreen.routeName,
       'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+        MenuItem(title: 'Customer Data', route: CustomerDataScreen.routeName),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName),
+        MenuItem(
+            title: 'All Daily Collector',
+            route: AllDailyCollectorScreen.routeName),
       ],
     },
     "Reports": {

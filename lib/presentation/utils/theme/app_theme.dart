@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData mainTheme = ThemeData(
-    appBarTheme:
-        AppBarTheme(iconTheme: IconThemeData(color: AppColors.whiteColor)),
+    canvasColor: AppColors.whiteColor,
+    appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(
+      color: AppColors.whiteColor,
+    )),
     primaryColor: AppColors.primaryColor,
     textTheme: const TextTheme(
         titleLarge: TextStyle(
