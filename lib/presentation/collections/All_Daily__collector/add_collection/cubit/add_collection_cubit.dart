@@ -47,7 +47,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     tradeRegistryBl: ControllerManager().regisrtyNumController.text,
     yearsOfRepaymentBl: "",
   ); */
-  TradeCollectionRequest intializeTradeRequest(CustomerDataEntity selectedCustomer) {
+  TradeCollectionRequest intializeTradeRequest(
+      CustomerDataEntity selectedCustomer) {
     return TradeCollectionRequest(
       activityBl: 4.0,
       addressBl: ControllerManager().addressController.text,
@@ -67,42 +68,6 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       tradeRegistryBl: ControllerManager().regisrtyNumController.text,
       yearsOfRepaymentBl: "",
     );
-  }
-
-  List<Map<String, dynamic>> years = [
-    {'year': "2020", 'isChecked': false},
-    {'year': "2021", 'isChecked': false},
-    {'year': "2022", 'isChecked': false},
-    {'year': "2023", 'isChecked': false},
-    {'year': "2024", 'isChecked': false},
-  ];
-  List<Map<String, dynamic>> updateCheckedStatus(
-      {required List<Map<String, dynamic>> years,
-      required List<int> paidYears}) {
-    for (var year in years) {
-      if (paidYears.contains(int.parse(year['year']))) {
-        year['isChecked'] = true;
-      }
-    }
-    return years;
-  }
-
-  void updateYearsList(String yearsString) {
-    if (yearsString.isNotEmpty) {
-      List<String> yearsList = yearsString.split(",");
-
-      // Clear the existing list
-      years.clear();
-
-      // Add new items to the list
-      yearsList.forEach((year) {
-        Map<String, dynamic> yearsMap = {
-          'year': year.trim(),
-          'isChecked': false
-        };
-        years.add(yearsMap);
-      });
-    }
   }
 
   void fetchCustomerData() async {
@@ -145,19 +110,83 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     });
   }
 
+  List<Map<String, dynamic>> years = [
+    {'year': "2020", 'isPaid': false},
+    {'year': "2021", 'isPaid': false},
+    {'year': "2022", 'isPaid': false},
+    {'year': "2023", 'isPaid': false},
+    {'year': "2024", 'isPaid': false},
+  ];
+  List<Map<String, dynamic>> updateCheckedStatus(
+      {required List<Map<String, dynamic>> years,
+      required List<int> paidYears}) {
+    for (var year in years) {
+      if (paidYears.contains(int.parse(year['year']))) {
+        year['isPaid'] = true;
+      }
+    }
+    return years;
+  }
+
+  void updateYearsList(String yearsString) {
+    if (yearsString.isNotEmpty) {
+      List<String> yearsList = yearsString.split(",");
+
+      // Clear the existing list
+      years.clear();
+
+      // Add new items to the list
+      yearsList.forEach((year) {
+        Map<String, dynamic> yearsMap = {'year': year.trim(), 'isPaid': false};
+        years.add(yearsMap);
+      });
+    }
+  }
+
   void updateYearsOfPayment(PaymentValuesEntity paymentValuesEntity) {
     years = [
-      {'year': "2020", 'isChecked': false},
-      {'year': "2021", 'isChecked': false},
-      {'year': "2022", 'isChecked': false},
-      {'year': "2023", 'isChecked': false},
-      {'year': "2024", 'isChecked': false},
+      {'year': "2020", 'isPaid': false},
+      {'year': "2021", 'isPaid': false},
+      {'year': "2022", 'isPaid': false},
+      {'year': "2023", 'isPaid': false},
+      {'year': "2024", 'isPaid': false},
     ];
     updateYearsList(
       paymentValuesEntity.yearsOfRepayment!,
     );
     years = updateCheckedStatus(
         years: years, paidYears: paymentValuesEntity.paidYears!);
+  }
+
+  void toggleYearSelection(int index, bool isSelected) {
+    if (allPreviousYearsChecked(index)) {
+      years[index]['isPaid'] = isSelected;
+
+      for (int i = index + 1; i < years.length; i++) {
+        years[i]['isPaid'] = false;
+      }
+
+      emit(YearsUpdatedState(years: List.from(years)));
+    } else {
+      // Feedback to UI should be handled in the onSelected function
+    }
+  }
+
+  bool allPreviousYearsChecked(int index) {
+    for (int i = 0; i < index; i++) {
+      if (!years[i]['isPaid']) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void markAllYearsAsPaid(int upToIndex) {
+    for (int i = 0; i <= upToIndex; i++) {
+      years[i]['isPaid'] = true;
+    }
+
+    emit(YearsUpdatedState(years: List.from(years)));
   }
 
   Future<PaymentValuesEntity> fetchPaymentValues(

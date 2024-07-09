@@ -18,6 +18,7 @@ class YearsOfPaymentGridView extends StatefulWidget {
 }
 
 class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
+  bool isPaid = false;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -37,9 +38,8 @@ class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
           visualDensity: VisualDensity.comfortable,
           selectedColor: Colors.blue, // Replace AppColors.blueColor
           labelStyle: TextStyle(
-            color: year['isChecked']
-                ? Colors.white
-                : Colors.black.withOpacity(0.8),
+            color:
+                year['isPaid'] ? Colors.white : Colors.black.withOpacity(0.8),
             fontSize: 18,
           ),
           checkmarkColor: Colors.white, // Replace AppColors.whiteColor
@@ -48,39 +48,29 @@ class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
             year['year'],
             style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.normal),
           ),
-          selected: year['isChecked'],
+          selected: year['isPaid'],
           onSelected: (bool value) {
-            // Check if all previous years are checked
-            bool allPreviousChecked = true;
-            for (int i = 0; i < index; i++) {
-              if (!context.read<AddCollectionCubit>().years[i]['isChecked']) {
-                allPreviousChecked = false;
-                break;
-              }
-            }
+            final addCollectionCubit = context.read<AddCollectionCubit>();
+            addCollectionCubit.toggleYearSelection(index, value);
 
-            if (allPreviousChecked) {
-              setState(() {
-                year['isChecked'] = value;
-
-                // Set all subsequent years to false
-                for (int i = index + 1;
-                    i < context.read<AddCollectionCubit>().years.length;
-                    i++) {
-                  context.read<AddCollectionCubit>().years[i]['isChecked'] =
-                      false;
-                }
-              });
-            } else {
-              //  show a message or feedback to the user
+            if (!addCollectionCubit.allPreviousYearsChecked(index)) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  duration: Duration(milliseconds: 300),
-                  backgroundColor: AppColors.redColor,
+                  action: SnackBarAction(
+                    label: AppLocalizations.of(context)!
+                        .snackBar_label_year_of_payment_action,
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.greenColor,
+                    onPressed: () {
+                      addCollectionCubit.markAllYearsAsPaid(index);
+                    },
+                  ),
+                  duration: Duration(milliseconds: 2000),
+                  backgroundColor: AppColors.blueColor,
                   content: Text(
                     AppLocalizations.of(context)!
-                        .snackBar_error_year_of_paymentt,
-                    style: Theme.of(context).textTheme.titleLarge,
+                        .snackBar_error_year_of_payment,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               );

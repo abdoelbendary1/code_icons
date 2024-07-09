@@ -29,6 +29,7 @@
     "finance_Diffrence_hint":"ادخل المتنوع", 
     "total_finance_label":"اجمالى",
     "enter_your_Total_finance_hint":"ادخل الاجمالي",
-    "snackBar_error_year_of_paymentt":"يجب سداد السنوات السابقه اولا"
+    "snackBar_error_year_of_payment":"يجب سداد السنوات السابقه اولا",
+    "snackBar_label_year_of_payment_action":"تأكيد الدفع"
 
 }

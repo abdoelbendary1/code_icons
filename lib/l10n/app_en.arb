@@ -28,6 +28,8 @@
     "finance_Diffrence_label":"Finance Diffrence",
     "finance_Diffrence_hint":"Finance Diffrence", 
     "total_finance_label":"Total finance",
-    "enter_your_Total_finance_hint":"Enter your Total finance","snackBar_error_year_of_paymentt":"All previous years must be checked first."
+    "enter_your_Total_finance_hint":"Enter your Total finance",
+    "snackBar_error_year_of_payment":"All previous years must be checked first.",
+    "snackBar_label_year_of_payment_action":"Submit Payment"
 
 }

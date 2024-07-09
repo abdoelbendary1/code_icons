@@ -64,3 +64,10 @@ final class GetCustomerDataByIDSuccess extends AddCollectionState {
     required this.controllers,
   });
 }
+class YearsUpdatedState extends AddCollectionState {
+  final List<Map<String, dynamic>> years;
+  YearsUpdatedState({required this.years});
+
+  @override
+  List<Object> get props => [years];
+}
