@@ -85,30 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         }
                         return Container();
-                        /*  CustomMenuItem(
-                          title: homeScreenViewModel.titles[0],
-                          subtitles: homeScreenViewModel
-                                  .subtitles["mainSettingsEnSubtitles"] ??
-                              [],
-                          subtitleCount: homeScreenViewModel
-                                  .subtitles["mainSettingsEnSubtitles"]
-                                  ?.length ??
-                              2,
-                          icon: homeScreenViewModel.icons[0],
-                          subtitleCurrentIndex:
-                              homeScreenViewModel.subtitleCurrentIndex,
-                          onTap: () {
-                            print(homeScreenViewModel
-                                    .subtitles["mainSettingsEnSubtitles"]![
-                                homeScreenViewModel.subtitleCurrentIndex]);
-                          },
-                        ); */
                       },
                     ),
                   ],
                 )),
           ),
         ),
-        body: const HomeBody());
+        body: HomeBody());
   }
 }

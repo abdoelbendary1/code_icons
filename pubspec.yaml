@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  bloc: ^8.1.4
   connectivity_plus: ^5.0.2
   cupertino_icons: ^1.0.6
   dartz: ^0.10.1
@@ -36,11 +37,17 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.5
   flutter_image_slideshow: ^0.1.6
+  flutter_localizations:
+    sdk: flutter
   flutter_screenutil: ^5.9.0
+  flutter_spinkit: ^5.2.1
   get_it: ^7.7.0
   http: ^1.2.1
+  intl: any
+  loading_animation_widget: ^1.2.1
   readmore: ^2.2.0
   shared_preferences: ^2.2.3
+  syncfusion_flutter_datepicker: ^24.1.40
 
 dev_dependencies:
   flutter_lints: ^3.0.0
@@ -51,6 +58,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

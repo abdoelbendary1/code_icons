@@ -1,7 +1,16 @@
+import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
+import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/E-commerce%20Setting_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/SystemSettings_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/settings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
+import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
+import 'package:code_icons/presentation/utils/shared_prefrence.dart';
+import 'package:code_icons/services/di.dart';
 import 'package:code_icons/services/my_observer.dart';
 import 'package:code_icons/presentation/auth/login/login_screen.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
@@ -12,32 +21,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  /* //auto login
+  await SharedPrefrence.init();
+  var token = SharedPrefrence.getData(key: "accessToken");
+  late String route;
+  if (token == null) {
+    route = LoginScreen.routeName;
+  } else {
+    route = HomeScreen.routeName;
+  } */
   setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => MyApp(), // Wrap your app
+      builder: (context) => MyApp(
+          /*  route: route, */
+          ), // Wrap your app
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({
+    super.key,
+    /* required this.route */
+  });
+  late String route;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<MenuCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<MenuCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => AddCollectionCubit(
+              fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
+              fetchCustomerDataByIDUseCase:
+                  injectFetchCustomerByIdDataUseCase(),
+              fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
+              postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
+              paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase()),
+        ),
+      ],
       child: ScreenUtilInit(
         designSize: const Size(430, 932),
         minTextAdapt: true,
         splitScreenMode: true,
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           useInheritedMediaQuery: true,
-          locale: DevicePreview.locale(context),
+          locale: Locale("ar"),
           builder: DevicePreview.appBuilder,
           theme: AppTheme.mainTheme,
           debugShowCheckedModeBanner: false,
@@ -48,6 +89,13 @@ class MyApp extends StatelessWidget {
             SettingsScreen.routeName: (context) => SettingsScreen(),
             SystemSettings.routeName: (context) => SystemSettings(),
             EcommerceSetting.routeName: (context) => EcommerceSetting(),
+            MainSettingScreen.routeName: (context) => MainSettingScreen(),
+            CollectionsScreen.routeName: (context) => CollectionsScreen(),
+            CustomerDataScreen.routeName: (context) => CustomerDataScreen(),
+            AllTradeProveScreen.routeName: (context) => AllTradeProveScreen(),
+            AllDailyCollectorScreen.routeName: (context) =>
+                AllDailyCollectorScreen(),
+            AddCollectionView.routeName: (context) => AddCollectionView(),
           },
         ),
       ),
