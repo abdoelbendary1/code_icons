@@ -25,7 +25,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //auto login
+  /* //auto login
   await SharedPrefrence.init();
   var token = SharedPrefrence.getData(key: "accessToken");
   late String route;
@@ -33,21 +33,24 @@ void main() async {
     route = LoginScreen.routeName;
   } else {
     route = HomeScreen.routeName;
-  }
+  } */
   setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
       builder: (context) => MyApp(
-        route: route,
-      ), // Wrap your app
+          /*  route: route, */
+          ), // Wrap your app
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key, required this.route});
+  MyApp({
+    super.key,
+    /* required this.route */
+  });
   late String route;
 
   @override
@@ -59,11 +62,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AddCollectionCubit(
-            fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
-            fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
-            fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
-            postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
-          ),
+              fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
+              fetchCustomerDataByIDUseCase:
+                  injectFetchCustomerByIdDataUseCase(),
+              fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
+              postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
+              paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase()),
         ),
       ],
       child: ScreenUtilInit(
@@ -78,7 +82,7 @@ class MyApp extends StatelessWidget {
           builder: DevicePreview.appBuilder,
           theme: AppTheme.mainTheme,
           debugShowCheckedModeBanner: false,
-          initialRoute: route,
+          initialRoute: LoginScreen.routeName,
           routes: {
             LoginScreen.routeName: (context) => LoginScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),

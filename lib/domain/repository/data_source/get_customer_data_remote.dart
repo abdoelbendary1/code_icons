@@ -5,7 +5,10 @@ import 'package:dartz/dartz.dart';
 
 abstract class GetCustomerDataRemoteDataSource {
   Future<Either<Failures, List<CustomerDataEntity>>> fetchCustomerData();
-  Future<Either<Failures, CustomerDataEntity>> fetchCustomerDataByID({required String customerId});
+  Future<Either<Failures, CustomerDataEntity>> fetchCustomerDataByID(
+      {required String customerId});
   Future<Either<Failures, PaymentValuesEntity>> fetchPaymentValuesByID(
       {String? customerId});
+  Future<Either<Failures, PaymentValuesEntity>> postPaymenValuesByID(
+      {int? customerId, List<int>? paidYears});
 }

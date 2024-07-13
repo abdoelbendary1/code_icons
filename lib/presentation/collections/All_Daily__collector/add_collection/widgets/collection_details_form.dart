@@ -17,6 +17,7 @@ class CollectionDetailsForm extends StatelessWidget {
     fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
     fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
     postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
+    paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase(),
   );
 
   final addCollectionControllers = ControllerManager().addCollectionControllers;
@@ -116,6 +117,7 @@ class CollectionDetailsForm extends StatelessWidget {
                 AppLocalizations.of(context)!.finance_Diffrence_label,
                 AppLocalizations.of(context)!.finance_Diffrence_hint,
                 addCollectionControllers[10],
+                onChanged: (value) {},
                 readOnly: false,
                 Icons.add_to_photos_sharp,
                 () {}),
@@ -130,28 +132,63 @@ class CollectionDetailsForm extends StatelessWidget {
             Row(
               children: [
                 const Spacer(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.titleMedium,
-                      foregroundColor: AppColors.whiteColor,
-                      backgroundColor: AppColors.blueColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  onPressed: () async {
-                    CustomerDataEntity selectedCustomer =
-                        context.read<AddCollectionCubit>().selectedCustomer;
-                    var tradeCollectionRequest = addCollectionCubit
-                        .intializeTradeRequest(selectedCustomer);
-                    await addCollectionCubit.postTradeCollection(
-                      token: "token",
-                      tradeCollectionRequest: tradeCollectionRequest,
-                    );
-                    print(
-                        "selected customer ater post ${selectedCustomer.idBl}");
-
-                    Navigator.pop(context);
+                BlocListener<AddCollectionCubit, AddCollectionState>(
+                  bloc: addCollectionCubit,
+                  listener: (context, state) {
+                    if (state is AddCollectionSucces) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          "تمت الإضافه بنجاح",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        backgroundColor: AppColors.greenColor,
+                        duration: Durations.extralong1,
+                      ));
+                      Navigator.pop(context);
+                    } else if (state is AddCollectionError) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          "حدث خطأ ما",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        backgroundColor: AppColors.redColor,
+                        duration: Durations.extralong1,
+                      ));
+                    }
                   },
-                  child: Text(AppLocalizations.of(context)!.save),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.titleMedium,
+                        foregroundColor: AppColors.whiteColor,
+                        backgroundColor: AppColors.blueColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    onPressed: () async {
+                      CustomerDataEntity selectedCustomer =
+                          context.read<AddCollectionCubit>().selectedCustomer;
+                      var tradeCollectionRequest =
+                          addCollectionCubit.intializeTradeRequest(
+                              selectedCustomer: selectedCustomer,
+                              context: context);
+                      await addCollectionCubit.postTradeCollection(
+                        token: "token",
+                        tradeCollectionRequest: tradeCollectionRequest,
+                      );
+                      print(
+                          "selected customer ater post ${selectedCustomer.idBl}");
+
+                      /*    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          "تمت الإضافه بنجاح",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        backgroundColor: AppColors.greenColor,
+                        duration: Durations.extralong1,
+                      ));
+                      Navigator.pop(context); */
+                    },
+                    child: Text(AppLocalizations.of(context)!.save),
+                  ),
                 ),
               ],
             ),
@@ -169,6 +206,7 @@ class CollectionDetailsForm extends StatelessWidget {
     IconData icon,
     void Function()? onTap, {
     bool? readOnly = false,
+    void Function(String)? onChanged,
   }) {
     return Column(
       children: [
@@ -179,6 +217,7 @@ class CollectionDetailsForm extends StatelessWidget {
           prefixIcon: icon,
           onTap: onTap,
           readOnly: readOnly,
+          onChanged: onChanged,
         ),
         SizedBox(height: 10.h),
       ],

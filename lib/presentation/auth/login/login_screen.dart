@@ -45,7 +45,13 @@ class LoginScreen extends StatelessWidget {
             key: "username",
             value: state.loginRepositoryEntity.username,
           ); */
-          Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            HomeScreen.routeName,
+            (route) {
+              return false;
+            },
+          );
         }
       },
       child: Scaffold(

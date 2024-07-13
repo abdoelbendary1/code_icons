@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class AddCollectionBody extends StatefulWidget {
   AddCollectionBody({super.key});
@@ -18,11 +20,11 @@ class AddCollectionBody extends StatefulWidget {
 
 class _AddCollectionBodyState extends State<AddCollectionBody> {
   AddCollectionCubit addCollectionCubit = AddCollectionCubit(
-    fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
-    fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
-    fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
-    postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
-  );
+      fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
+      fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
+      fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
+      postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
+      paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase());
 
   @override
   void initState() {
@@ -54,8 +56,21 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BlocBuilder<AddCollectionCubit, AddCollectionState>(
+                  buildWhen: (previous, current) {
+                    if (previous is GetCustomerDataByIDSuccess) {
+                      return false;
+                    }
+                    if (current is YearsUpdatedState) {
+                      return false;
+                    } else {
+                      return true;
+                    }
+                  },
                   builder: (context, state) {
-                    if (state is GetCustomerDataByIDSuccess) {
+                    if (state
+                            is GetCustomerDataByIDSuccess /* ||
+                        state is YearsUpdatedState */
+                        ) {
                       return ReusableSelectTrader(
                         itemList: addCollectionCubit.customerData,
                         selectedCustomer:
@@ -92,10 +107,11 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   builder: (context, state) {
                     print("Builder State: $state");
                     if (state is GetCustomerDataByIDInitial) {
-                      return const Center(
-                          child: CircularProgressIndicator(
-                        color: AppColors.blueColor,
-                      ));
+                      return Center(
+                          child: LoadingAnimationWidget.flickr(
+                              leftDotColor: AppColors.blueColor,
+                              rightDotColor: AppColors.lightBlueColor,
+                              size: 60));
                     } else if (state is GetCustomerDataByIDError) {
                       return Center(child: Text(state.errorMsg));
                     } else if (state is GetCustomerDataByIDSuccess) {

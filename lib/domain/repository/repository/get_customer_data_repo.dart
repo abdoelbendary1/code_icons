@@ -9,4 +9,6 @@ abstract class GetCustomerDataRepo {
       {required String customerId});
   Future<Either<Failures, PaymentValuesEntity>> fetchPaymentValuesByID(
       {String? customerId});
+  Future<Either<Failures, PaymentValuesEntity>> postPaymenValuesByID(
+      {int? customerId, List<int>? paidYears});
 }

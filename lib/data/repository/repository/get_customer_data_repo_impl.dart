@@ -30,4 +30,11 @@ class GetCustomerDataRepoImpl implements GetCustomerDataRepo {
     return getCustomerDataRemoteDataSource.fetchPaymentValuesByID(
         customerId: customerId);
   }
+
+  @override
+  Future<Either<Failures, PaymentValuesEntity>> postPaymenValuesByID(
+      {int? customerId, List<int>? paidYears}) {
+    return getCustomerDataRemoteDataSource.postPaymenValuesByID(
+        customerId: customerId, paidYears: paidYears);
+  }
 }

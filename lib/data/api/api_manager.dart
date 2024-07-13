@@ -1,19 +1,16 @@
 // ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
+import 'package:code_icons/data/model/data_model/postDataEX.dart';
 import 'package:code_icons/data/model/request/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/TradeCollectionResponse.dart';
-
 import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
 import 'package:code_icons/data/model/response/get_customer_data.dart';
 import 'package:code_icons/data/model/response/payment_values_dm.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
-
 import 'package:http/http.dart' as http;
 
 class ApiManager {
@@ -47,8 +44,10 @@ class ApiManager {
         var loginResponse = AuthResponseDM.fromJson(jsonDecode(responseString));
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
+          await SharedPrefrence.init();
           SharedPrefrence.saveData(
               key: "accessToken", value: loginResponse.accessToken!);
+
           return right(loginResponse);
         } else if (responseString.isEmpty) {
           return left(ServerError(errorMessege: "NULL"));
@@ -105,7 +104,6 @@ class ApiManager {
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
-      
       } else {
         return left(
             NetworkError(errorMessege: "check your internet connection"));
@@ -163,7 +161,6 @@ class ApiManager {
           print("server error");
         }
         return left(ServerError(errorMessege: "Server error (Unknown data)"));
-      
       } else {
         return left(
             NetworkError(errorMessege: "check your internet connection"));
@@ -218,7 +215,6 @@ class ApiManager {
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
-      
       } else {
         return left(
             NetworkError(errorMessege: "check your internet connection"));
@@ -267,6 +263,58 @@ class ApiManager {
       } else {
         return left(
             NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, PaymentValuesDM>> postPaymenValuesByID(
+      {int? customerId, List<int>? paidYears}) async {
+    try {
+      var connectivityResult =
+          await Connectivity().checkConnectivity(); // User defined class
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl,
+            "${ApiConstants.paymentValuesEndPoint}/$customerId");
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+        var request = http.Request(
+            'POST',
+            Uri.parse(
+                'https://demoapi1.code-icons.com/api/CustomerData/PaymentValues/$customerId'));
+
+        request.body = json.encode(paidYears);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        // Process the response
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          var responseBodyJson = jsonDecode(responseBody);
+          var paymentValuesResponse =
+              PaymentValuesDM.fromJson(responseBodyJson);
+
+          print(
+              "Payment total data from api request= ==============: ${paymentValuesResponse.total}");
+          print("payment  : ${paymentValuesResponse.late}");
+          print(
+              "years of payment  : ${paymentValuesResponse.yearsOfRepayment}");
+
+          return right(paymentValuesResponse);
+        } else {
+          print("server error");
+        }
+        return left(ServerError(errorMessege: "Server error (Unknown data)"));
+      } else {
+        return left(
+            NetworkError(errorMessege: "check your internet connection"));
       }
     } catch (e) {
       print("Exception: $e");

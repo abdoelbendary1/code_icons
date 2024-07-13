@@ -29,7 +29,9 @@
     "finance_Diffrence_hint":"Finance Diffrence", 
     "total_finance_label":"Total finance",
     "enter_your_Total_finance_hint":"Enter your Total finance",
-    "snackBar_error_year_of_payment":"All previous years must be checked first.",
-    "snackBar_label_year_of_payment_action":"Submit Payment"
+    "snackBar_error_year_of_payment_pay":"All prevoius years must be paid first",
+    "snackBar_label_year_of_payment_pay_action":"Confirm",
+    "snackBar_label_year_of_payment_unpay_action":"Confirm",
+    "snackBar_error_year_of_payment_unpay":"Are you sure to check this as unpaid"
 
 }

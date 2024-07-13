@@ -1,7 +1,7 @@
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
 
 class ReusableCustomTextField extends StatelessWidget {
   final String labelText;
@@ -14,6 +14,7 @@ class ReusableCustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   void Function()? onTap;
   bool? readOnly;
+  void Function(String)? onChanged;
 
   ReusableCustomTextField({
     super.key,
@@ -27,6 +28,7 @@ class ReusableCustomTextField extends StatelessWidget {
     this.validator,
     this.onTap,
     this.readOnly,
+    this.onChanged,
   });
 
   @override
@@ -34,6 +36,7 @@ class ReusableCustomTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.w),
       child: TextFormField(
+        onChanged: onChanged,
         readOnly: readOnly ?? false,
         onTap: onTap,
         controller: controller,

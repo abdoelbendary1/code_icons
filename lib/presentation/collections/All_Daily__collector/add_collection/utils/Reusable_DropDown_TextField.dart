@@ -27,6 +27,7 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
     fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
     fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
     postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
+    paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase(),
   );
 
   @override

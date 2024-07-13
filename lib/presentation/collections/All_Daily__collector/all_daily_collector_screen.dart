@@ -25,7 +25,7 @@ class AllDailyCollectorScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                fixedSize: Size(160.h, 50.w),
+                /* fixedSize: Size(160.h, 50.w), */
                 backgroundColor: AppColors.blueGreyColor,
                 foregroundColor: AppColors.whiteColor,
                 shape: RoundedRectangleBorder(

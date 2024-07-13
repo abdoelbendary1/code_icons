@@ -1,13 +1,13 @@
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 
+// ignore: must_be_immutable
 class YearsOfPaymentGridView extends StatefulWidget {
   AddCollectionCubit addCollectionCubit;
-  /* List<Map> yearsOfPayment; */
+
   YearsOfPaymentGridView({
     super.key,
     required this.addCollectionCubit,
@@ -51,30 +51,7 @@ class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
           selected: year['isPaid'],
           onSelected: (bool value) {
             final addCollectionCubit = context.read<AddCollectionCubit>();
-            addCollectionCubit.toggleYearSelection(index, value);
-
-            if (!addCollectionCubit.allPreviousYearsChecked(index)) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  action: SnackBarAction(
-                    label: AppLocalizations.of(context)!
-                        .snackBar_label_year_of_payment_action,
-                    textColor: AppColors.whiteColor,
-                    backgroundColor: AppColors.greenColor,
-                    onPressed: () {
-                      addCollectionCubit.markAllYearsAsPaid(index);
-                    },
-                  ),
-                  duration: Duration(milliseconds: 2000),
-                  backgroundColor: AppColors.blueColor,
-                  content: Text(
-                    AppLocalizations.of(context)!
-                        .snackBar_error_year_of_payment,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-              );
-            }
+            addCollectionCubit.handleYearSelection(context, index, value);
           },
         );
       },

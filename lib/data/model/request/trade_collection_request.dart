@@ -76,6 +76,8 @@ class TradeCollectionRequest {
     }
   }
 
+  
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["collectionDateBL"] = collectionDateBl;
@@ -94,4 +96,8 @@ class TradeCollectionRequest {
     _data["totalBL"] = totalBl;
     return _data;
   }
+
+
+
+  
 }

@@ -29,7 +29,9 @@
     "finance_Diffrence_hint":"ادخل المتنوع", 
     "total_finance_label":"اجمالى",
     "enter_your_Total_finance_hint":"ادخل الاجمالي",
-    "snackBar_error_year_of_payment":"يجب سداد السنوات السابقه اولا",
-    "snackBar_label_year_of_payment_action":"تأكيد الدفع"
+    "snackBar_error_year_of_payment_pay":"يجب سداد السنوات السابقه اولا",
+    "snackBar_label_year_of_payment_pay_action":"تأكيد الدفع",
+    "snackBar_label_year_of_payment_unpay_action":"تأكيد الإلغاء",
+    "snackBar_error_year_of_payment_unpay":"هل تريد وضع علامة على هذه السنة كغير مدفوعة؟"
 
 }

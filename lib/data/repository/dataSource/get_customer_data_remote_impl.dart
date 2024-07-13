@@ -31,10 +31,17 @@ class GetCustomerDataRemoteDataSourceImpl
   @override
   Future<Either<Failures, PaymentValuesEntity>> fetchPaymentValuesByID(
       {String? customerId}) async {
-  
     var either =
         await apiManager.fetchPaymentValuesByID(customerId: customerId);
     return either.fold(
         (failure) => Left(failure), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failures, PaymentValuesEntity>> postPaymenValuesByID(
+      {int? customerId, List<int>? paidYears}) async {
+    var either = await apiManager.postPaymenValuesByID(
+        customerId: customerId, paidYears: paidYears);
+    return either.fold((l) => Left(l), (r) => Right(r));
   }
 }

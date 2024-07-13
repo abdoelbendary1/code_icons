@@ -20,6 +20,7 @@ import 'package:code_icons/domain/use_cases/fetch_customer_data.dart';
 import 'package:code_icons/domain/use_cases/fetch_customer_data_by_ID.dart';
 import 'package:code_icons/domain/use_cases/fetch_paymnetValues.dart';
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
+import 'package:code_icons/domain/use_cases/post-payment_values_by_ID_usecase.dart';
 import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart';
 
 LoginUseCase injectLoginUseCase() {
@@ -46,6 +47,11 @@ FetchCustomerDataByIDUseCase injectFetchCustomerByIdDataUseCase() {
 
 FetchPaymentValuesUseCase injectFetchPaymentValuesUseCase() {
   return FetchPaymentValuesUseCase(
+      getCustomerDataRepo: injectGetCustomerDataRepo());
+}
+
+PostPaymentValuesByIdUseCase injectPostPaymentValuesByIdUseCase() {
+  return PostPaymentValuesByIdUseCase(
       getCustomerDataRepo: injectGetCustomerDataRepo());
 }
 
