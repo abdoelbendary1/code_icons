@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/presentation/collections/CustomerData/add_customer/grid_data_source.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,22 +15,16 @@ class ReusableSelectTrader extends StatefulWidget {
     super.key,
     required this.itemList,
     required this.selectedCustomer,
+    required this.onChanged,
   });
   CustomerDataEntity? selectedCustomer;
   List<CustomerDataEntity>? itemList;
+  void Function(CustomerDataEntity?)? onChanged;
   @override
   State<ReusableSelectTrader> createState() => _ReusableSelectTraderState();
 }
 
 class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
-  AddCollectionCubit addCollectionCubit = AddCollectionCubit(
-    fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
-    fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
-    fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
-    postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
-    paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase(),
-  );
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,11 +33,11 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.customer_Name_DropDown_title,
+            "يتبع",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: AppColors.blackColor, fontWeight: FontWeight.w600),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 20.h),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 4.0.h),
             decoration: BoxDecoration(
@@ -58,7 +53,10 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
               hint: Text(
                 AppLocalizations.of(context)!.select_Customer_hint_text,
               ),
-              value: widget.selectedCustomer,
+              value: widget.selectedCustomer != null &&
+                      widget.itemList!.contains(widget.selectedCustomer)
+                  ? widget.selectedCustomer
+                  : null,
               icon: const Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: Colors.blue,
@@ -67,16 +65,7 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
               elevation: 16,
               style: Theme.of(context).textTheme.titleSmall,
               underline: Container(),
-              onChanged: (value) {
-                /* setState(() {
-                  widget.selectedCustomer = value;
-                  addCollectionCubit.fetchCustomerDataByID(
-                      customerId: value!.idBl.toString());
-                }); */
-                context.read<AddCollectionCubit>().selectedCustomer = value!;
-                context.read<AddCollectionCubit>().fetchCustomerDataByID(
-                    customerId: value?.idBl.toString() ?? "7");
-              },
+              onChanged: widget.onChanged,
               selectedItemBuilder: (context) => widget.itemList!
                   .map<DropdownMenuItem<CustomerDataEntity>>(
                       (CustomerDataEntity? value) {
@@ -93,20 +82,7 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
               }).toList(),
               items: widget.itemList?.map<DropdownMenuItem<CustomerDataEntity>>(
                   (CustomerDataEntity value) {
-                /* widget.selectedCustomer = value; */
-
                 return DropdownMenuItem<CustomerDataEntity>(
-                  onTap: () {
-                    /*     context
-                        .read<AddCollectionCubit>()
-                        .changeTraderCardInfo(newTrader: value);
-                    addCollectionCubit.trader = value;
-                    print(addCollectionCubit.trader.name); */
-                    /*  addCollectionCubit.fetchCustomerDataByID(
-                        customerId: value.idBl.toString());
-                    print("selected ID : ${widget.selectedCustomer!.idBl} ");
-                    print(widget.selectedCustomer!.idBl); */
-                  },
                   value: value,
                   child: Text(
                     value.brandNameBl ?? "empty",
@@ -118,6 +94,9 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
                 );
               }).toList(),
             ),
+          ),
+          SizedBox(
+            height: 20.h,
           ),
         ],
       ),

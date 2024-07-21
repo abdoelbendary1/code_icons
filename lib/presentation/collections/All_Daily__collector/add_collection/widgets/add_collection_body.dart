@@ -67,18 +67,30 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                     }
                   },
                   builder: (context, state) {
-                    if (state
-                            is GetCustomerDataByIDSuccess /* ||
-                        state is YearsUpdatedState */
-                        ) {
+                    if (state is GetCustomerDataByIDSuccess) {
                       return ReusableSelectTrader(
                         itemList: addCollectionCubit.customerData,
-                        selectedCustomer:
-                            addCollectionCubit.selectedCustomer, //! bug
+                        selectedCustomer: addCollectionCubit.selectedCustomer,
+                        onChanged: (value) {
+                          context.read<AddCollectionCubit>().selectedCustomer =
+                              value!;
+                          context
+                              .read<AddCollectionCubit>()
+                              .fetchCustomerDataByID(
+                                  customerId: value.idBl.toString());
+                        }, //! bug
                       );
                     }
                     return ReusableSelectTrader(
                       itemList: addCollectionCubit.customerData,
+                      onChanged: (value) {
+                        context.read<AddCollectionCubit>().selectedCustomer =
+                            value!;
+                        context
+                            .read<AddCollectionCubit>()
+                            .fetchCustomerDataByID(
+                                customerId: value.idBl.toString());
+                      },
                       selectedCustomer: null,
                     );
                   },

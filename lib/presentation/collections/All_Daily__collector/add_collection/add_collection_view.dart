@@ -1,5 +1,6 @@
 import 'package:code_icons/data/api/api_manager.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/add_collection_body.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddCollectionView extends StatelessWidget {
-  AddCollectionView({super.key});
+  AddCollectionView({super.key, required TradeCollectionEntity data});
 
   static const routeName = "AddCollectionView";
   AddCollectionCubit addCollectionCubit = AddCollectionCubit(
@@ -50,27 +51,6 @@ class AddCollectionView extends StatelessWidget {
         },
         child: CustomSliverAppBar(
           title: AppLocalizations.of(context)!.add_Collection_Title,
-          /* actions: [
-            TextButton(
-              onPressed: () async {
-                CustomerDataEntity selectedCustomer =
-                    context.read<AddCollectionCubit>().selectedCustomer;
-                var tradeCollectionRequest =
-                    addCollectionCubit.intializeTradeRequest(selectedCustomer);
-                await addCollectionCubit.postTradeCollection(
-                  token: "token",
-                  tradeCollectionRequest: tradeCollectionRequest,
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  AppLocalizations.of(context)!.save,
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-            ),
-          ], */
           body: AddCollectionBody(),
         ),
       ),

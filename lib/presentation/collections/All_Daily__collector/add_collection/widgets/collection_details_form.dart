@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -144,7 +145,8 @@ class CollectionDetailsForm extends StatelessWidget {
                         backgroundColor: AppColors.greenColor,
                         duration: Durations.extralong1,
                       ));
-                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, AllDailyCollectorScreen.routeName);
                     } else if (state is AddCollectionError) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(

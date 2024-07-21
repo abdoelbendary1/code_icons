@@ -16,6 +16,6 @@ class PostTradeCollectionDataSourceImpl
       required TradeCollectionRequest tradeCollectionRequest}) async {
     var either = await apiManager.postTradeCollectionData(
         token: token, tradeCollectionRequest: tradeCollectionRequest);
-    return either.fold((l) => left(l), (respone) => right(respone));
+    return either.fold((l) => left(l), (response) => right(response));
   }
 }

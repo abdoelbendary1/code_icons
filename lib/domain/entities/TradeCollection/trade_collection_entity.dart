@@ -1,7 +1,33 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class TradeCollectionEntity {
-  String collectionID;
+  int? idBl;
+  String? collectionDateBl;
+  String? yearsOfRepaymentBl;
+  dynamic yearsOfRepaymentLstBl;
+  String? paymentReceiptNumBl;
+  double? compensationBl;
+  double? lateBl;
+  double? currentBl;
+  double? differentBl;
+  double? totalBl;
+  dynamic notesBl;
+  int? customerDataIdBl;
+  /* String? cutomerName;
+  String? address; */
+
   TradeCollectionEntity({
-    required this.collectionID,
+    this.idBl,
+    this.collectionDateBl,
+    this.yearsOfRepaymentBl,
+    this.yearsOfRepaymentLstBl,
+    this.paymentReceiptNumBl,
+    this.compensationBl,
+    this.lateBl,
+    this.currentBl,
+    this.differentBl,
+    this.totalBl,
+    this.notesBl,
+    this.customerDataIdBl, String? cutomerName, String? address,
+   /*  this.cutomerName,
+    this.address, */
   });
 }

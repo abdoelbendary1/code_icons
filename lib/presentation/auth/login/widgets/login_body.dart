@@ -41,23 +41,32 @@ class _LoginBodyState extends State<LoginBody> {
               height: 10.h,
             ),
             //text
-            Padding(
-              padding: EdgeInsets.only(left: 32.h, right: 124.h),
-              child: Text(
-                "Welcom back !",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 32.h, right: 32.h),
+                  child: Text(
+                    "مرحباً بعودتك",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 32.h, right: 32.h),
+                  child: Text(
+                    "من فضلك ادخل اسم المستخدم وكلمه المرور",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontSize: 16),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 32.h, right: 124.h),
-              child: Text(
-                "Please sign in with your mail",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontSize: 16),
-              ),
-            ),
+
             SizedBox(
               height: 20.h,
             ),
@@ -71,8 +80,8 @@ class _LoginBodyState extends State<LoginBody> {
                     //e-mail
                     CustomTextField(
                       controller: widget.emailController,
-                      fieldName: "Username",
-                      hintText: "enter your username",
+                      fieldName: "اسم المستخدم",
+                      hintText: "من فضلك ادخل اسم المستخدم",
                       validator: (value) {
                         /* if (value == null || value.trim().isEmpty) {
                           return "e-mail field is required";
@@ -107,8 +116,8 @@ class _LoginBodyState extends State<LoginBody> {
                             : AppAssets.viewPass),
                       ),
                       controller: widget.passwordController,
-                      fieldName: "Password",
-                      hintText: "enter your password",
+                      fieldName: "كلمه المرور",
+                      hintText: "من فضلك ادخل كلمه المرور",
                       validator: (value) {
                         /* if (value == null || value.trim().isEmpty) {
                           return "e-mail field is required";
@@ -125,7 +134,7 @@ class _LoginBodyState extends State<LoginBody> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "Forgot password",
+                            "هل نسيت كلمه المرور؟",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
@@ -136,7 +145,7 @@ class _LoginBodyState extends State<LoginBody> {
                     ),
                     // login button
                     CustomButton(
-                      buttonText: "Login",
+                      buttonText: "تسجيل الدخول",
                       buttonFunction: widget.buttonFunction,
                     ),
                   ],

@@ -1,7 +1,11 @@
+import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
+import 'package:code_icons/presentation/collections/CustomerData/add_customer/add_customer_Screen.dart';
+import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
@@ -61,6 +65,26 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<MenuCubit>(),
         ),
         BlocProvider(
+          create: (context) => AllDailyCollectorCubit(
+            fetchTradeCollectionDataUseCase:
+                injectFetchTradeCollectionDataUseCase(),
+            fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => CustomersCubit(
+            postCustomerDataUseCase: injectPostCustomerDataUseCase(),
+            fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
+            fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
+            fetchCurrencyByIDUseCase: injectFetchCurrencyDataByIDUseCase(),
+            fetchCurrencyUseCase: iinjectFetchCurrencyUseCase(),
+            fetchActivityUseCase: injectFetchActivityListUseCase(),
+            fetchGeneralCentralUseCase: injectFetchGeneralCentralListUseCase(),
+            fetchTradeOfficeUseCase: injectFetchTradeOfficeListUseCase(),
+            fetchStationListUseCase: injectFetchStationListUseCase(),
+          ),
+        ),
+        BlocProvider(
           create: (context) => AddCollectionCubit(
               fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
               fetchCustomerDataByIDUseCase:
@@ -95,7 +119,10 @@ class MyApp extends StatelessWidget {
             AllTradeProveScreen.routeName: (context) => AllTradeProveScreen(),
             AllDailyCollectorScreen.routeName: (context) =>
                 AllDailyCollectorScreen(),
-            AddCollectionView.routeName: (context) => AddCollectionView(),
+            AddCustomerScreen.routeName: (context) => AddCustomerScreen(),
+            AddCollectionView.routeName: (context) => AddCollectionView(
+                  data: TradeCollectionEntity(),
+                ),
           },
         ),
       ),

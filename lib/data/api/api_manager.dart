@@ -1,12 +1,17 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
-import 'package:code_icons/data/model/data_model/postDataEX.dart';
+
 import 'package:code_icons/data/model/request/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/TradeCollectionResponse.dart';
+import 'package:code_icons/data/model/response/activity/activity_data_model.dart';
 import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
+import 'package:code_icons/data/model/response/currency/currency.dart';
+import 'package:code_icons/data/model/response/general_central/general_central_data_model.dart';
 import 'package:code_icons/data/model/response/get_customer_data.dart';
 import 'package:code_icons/data/model/response/payment_values_dm.dart';
+import 'package:code_icons/data/model/response/station/station_data_model.dart';
+import 'package:code_icons/data/model/response/trade_office/trade_office.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -99,14 +104,332 @@ class ApiManager {
           List<CustomerDataModel> customerDataList = responseBodyJson
               .map((json) => CustomerDataModel.fromJson(json))
               .toList();
-
-          return right(customerDataList);
+          if (customerDataList.isNotEmpty) {
+            return right(customerDataList);
+          } else {
+            return left(ServerError(errorMessege: "list is empty"));
+          }
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
         return left(
             NetworkError(errorMessege: "check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, CurrencyDataModel>> fetchCurrencyDataById(
+      {required int currencyId}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/api/Currency/$currencyId');
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          var responseBodyJson = jsonDecode(responseBody);
+          CurrencyDataModel currencyData =
+              CurrencyDataModel.fromJson(responseBodyJson);
+
+          return right(currencyData);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<CurrencyDataModel>>> fetchCurrencyData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url =
+            Uri.https(ApiConstants.baseUrl, ApiConstants.currencyEndPoint);
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<CurrencyDataModel> currencyDataList = responseBodyJson
+              .map((json) => CurrencyDataModel.fromJson(json))
+              .toList();
+
+          return right(currencyDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<TradeOfficeDataModel>>>
+      fetchTradeOfficeData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url =
+            Uri.https(ApiConstants.baseUrl, ApiConstants.tradeOfficeEndPoint);
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<TradeOfficeDataModel> tradeOfficeDataList = responseBodyJson
+              .map((json) => TradeOfficeDataModel.fromJson(json))
+              .toList();
+
+          return right(tradeOfficeDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<StationDataModel>>> fetchStationData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.stationEndPoint);
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<StationDataModel> stationDataList = responseBodyJson
+              .map((json) => StationDataModel.fromJson(json))
+              .toList();
+
+          return right(stationDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<GeneralCentralDataModel>>>
+      fetchGeneralCenterseData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(
+            ApiConstants.baseUrl, ApiConstants.generalCentersEndPoint);
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<GeneralCentralDataModel> generalCentralDataList =
+              responseBodyJson
+                  .map((json) => GeneralCentralDataModel.fromJson(json))
+                  .toList();
+
+          return right(generalCentralDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<ActivityDataModel>>> fetchActivityeData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url =
+            Uri.https(ApiConstants.baseUrl, ApiConstants.activityEndPoint);
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<ActivityDataModel> activityDataList = responseBodyJson
+              .map((json) => ActivityDataModel.fromJson(json))
+              .toList();
+
+          return right(activityDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, String>> postCustomerData(
+      CustomerDataModel customerData) async {
+    try {
+      var connectivityResult =
+          await Connectivity().checkConnectivity(); // User defined class
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url =
+            Uri.https(ApiConstants.baseUrl, ApiConstants.customerDataEndPoint);
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+
+        // Define the headers
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        // Create the request
+        var request = http.Request('POST', url);
+        request.body = json.encode(customerData.toJson());
+        request.headers.addAll(headers);
+
+        // Send the request
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        // Process the response
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          print("customer response id $responseBody");
+          return right(responseBody);
+        } else {
+          print("error ${response.statusCode}");
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -250,10 +573,54 @@ class ApiManager {
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           int collectionID = int.parse(response.body);
           var tradeCollectionResponse =
-              TradeCollectionResponse(collectionID: collectionID.toString());
-          print(
-              "trade collection ID : ${tradeCollectionResponse.collectionID}");
+              TradeCollectionResponse(idBl: collectionID);
+          print("trade collection ID : ${tradeCollectionResponse.idBl}");
           return right(tradeCollectionResponse);
+        } else {
+          print(
+              "Server error: ${response.statusCode} - ${response.reasonPhrase}");
+          return left(ServerError(
+              errorMessege: "Server error: ${response.reasonPhrase}"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<TradeCollectionResponse>>>
+      fetchTradeCollectionData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(
+            ApiConstants.baseUrl, ApiConstants.tradeCollectionEndPoint);
+        /*   var url =
+            Uri.parse("https://demoapi1.code-icons.com/api/TradeCollection"); */
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        var response = await http.get(
+          url,
+          headers: headers,
+        );
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          List<dynamic> responseBody = jsonDecode(response.body);
+
+          var tradeCollections = responseBody
+              .map((json) => TradeCollectionResponse.fromJson(json))
+              .toList();
+
+          return right(tradeCollections);
         } else {
           print(
               "Server error: ${response.statusCode} - ${response.reasonPhrase}");
@@ -288,7 +655,7 @@ class ApiManager {
         var request = http.Request(
             'POST',
             Uri.parse(
-                'https://demoapi1.code-icons.com/api/CustomerData/PaymentValues/$customerId'));
+                'https://${ApiConstants.baseUrl}/api/CustomerData/PaymentValues/$customerId'));
 
         request.body = json.encode(paidYears);
         request.headers.addAll(headers);

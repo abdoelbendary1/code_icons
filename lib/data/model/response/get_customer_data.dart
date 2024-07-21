@@ -53,7 +53,7 @@ class CustomerDataModel extends CustomerDataEntity {
     if (json["licenseYearBL"] is int) {
       licenseYearBl = json["licenseYearBL"];
     }
-    if (json["capitalBL"] is int) {
+    if (json["capitalBL"] is double) {
       capitalBl = json["capitalBL"];
     }
     if (json["validBL"] is int) {

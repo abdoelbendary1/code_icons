@@ -6,3 +6,6 @@ final GetIt getIt = GetIt.instance;
 void setupLocator() {
   getIt.registerLazySingleton(() => MenuCubit());
 }
+
+
+
