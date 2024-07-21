@@ -15,4 +15,10 @@ class FetchGeneralCentralListUseCase {
   Future<Either<Failures, List<GeneralCentralEntity>>> invoke() async {
     return await getCustomerDataRepo.fetchGeneralCenterseData();
   }
+
+  Future<Either<Failures, GeneralCentralEntity>> fetchGeneralCenterseDataById(
+      {required int generalCentralId}) {
+    return getCustomerDataRepo.fetchGeneralCenterseDataById(
+        generalCentralId: generalCentralId);
+  }
 }

@@ -15,4 +15,10 @@ class FetchActivityListUseCase {
   Future<Either<Failures, List<ActivityEntity>>> invoke() async {
     return await getCustomerDataRepo.fetchActivityeData();
   }
+
+  Future<Either<Failures, ActivityEntity>> fetchActivityeDataById(
+      {required int activityId}) async {
+    return await getCustomerDataRepo.fetchActivityeDataById(
+        activityId: activityId);
+  }
 }

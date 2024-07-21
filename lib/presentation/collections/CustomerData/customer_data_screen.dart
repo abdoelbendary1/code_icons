@@ -3,6 +3,7 @@ import 'package:code_icons/domain/use_cases/fetch_customer_data.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/add_customer_Screen.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/grid_data_source.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
+import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/services/di.dart';
 
 import 'package:flutter/material.dart';
@@ -229,13 +230,7 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
               } else if (state is FetchCustomersError) {
                 return Center(child: Text('Error: ${state.errorMsg}'));
               }
-              return Center(
-                child: LoadingAnimationWidget.flickr(
-                  leftDotColor: AppColors.blueColor,
-                  rightDotColor: AppColors.lightBlueColor,
-                  size: 60,
-                ),
-              );
+              return SizedBox(height: 30, child: LoadingStateAnimation());
             },
           ),
         ],

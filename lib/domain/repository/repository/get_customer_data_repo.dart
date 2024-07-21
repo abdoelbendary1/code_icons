@@ -27,4 +27,12 @@ abstract class GetCustomerDataRepo {
       fetchGeneralCenterseData();
   Future<Either<Failures, List<ActivityEntity>>> fetchActivityeData();
   Future<Either<Failures, List<StationEntity>>> fetchStationData();
+  Future<Either<Failures, TradeOfficeEntity>> fetchTradeOfficeDataById(
+      {required int tradeOfficeId});
+  Future<Either<Failures, GeneralCentralEntity>> fetchGeneralCenterseDataById(
+      {required int generalCentralId});
+  Future<Either<Failures, ActivityEntity>> fetchActivityeDataById(
+      {required int activityId});
+  Future<Either<Failures, StationEntity>> fetchStationDataById(
+      {required stationId});
 }

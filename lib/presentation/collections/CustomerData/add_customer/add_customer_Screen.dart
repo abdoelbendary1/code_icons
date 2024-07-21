@@ -1,5 +1,6 @@
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/form.dart';
+import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/add_custom_form.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class AddCustomerScreen extends StatelessWidget {
       backgroundColor: AppColors.whiteColor,
       body: CustomSliverAppBar(
         title: "إضافه عميل",
-        body: AddCustomerForm(),
+        body: AddCustomerCardsForm(),
       ),
     );
   }

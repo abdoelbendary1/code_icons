@@ -1,21 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:code_icons/data/model/response/get_customer_data.dart';
-import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/selectCurrency.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_Station.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_activity.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_company_type.dart';
-import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_general_central.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_registry_type.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_trade_office.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_valid.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
+import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_popup/flutter_popup.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_Custom_TextField.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
@@ -204,7 +201,8 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                       builder: (context, state) {
                         if (state is LoadCurrency) {
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: SizedBox(
+                                height: 30, child: LoadingStateAnimation()),
                           );
                         }
 
@@ -221,8 +219,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                                 value!;
                             context
                                 .read<CustomersCubit>()
-                                .fetchCurrencyDataByID(
-                                    currencyId: value.id!.toString());
+                                .fetchCurrencyDataByID(currencyId: value.id!);
                             customersCubit.changeCurrency(value);
                           },
                         );

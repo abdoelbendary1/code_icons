@@ -15,4 +15,10 @@ class FetchTradeOfficeListUseCase {
   Future<Either<Failures, List<TradeOfficeEntity>>> invoke() async {
     return await getCustomerDataRepo.fetchTradeOfficeData();
   }
+
+  Future<Either<Failures, TradeOfficeEntity>> fetchTradeOfficeDataById(
+      {required int tradeOfficeId}) {
+    return getCustomerDataRepo.fetchTradeOfficeDataById(
+        tradeOfficeId: tradeOfficeId);
+  }
 }

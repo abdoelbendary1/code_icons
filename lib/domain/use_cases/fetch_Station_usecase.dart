@@ -14,4 +14,9 @@ class FetchStationListUseCase {
   Future<Either<Failures, List<StationEntity>>> invoke() async {
     return await getCustomerDataRepo.fetchStationData();
   }
+
+  Future<Either<Failures, StationEntity>> fetchStationDataById(
+      {required stationId}) {
+    return getCustomerDataRepo.fetchStationDataById(stationId: stationId);
+  }
 }

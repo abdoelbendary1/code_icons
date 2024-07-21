@@ -1,6 +1,7 @@
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/collection_details_form.dart';
+import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
@@ -119,11 +120,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   builder: (context, state) {
                     print("Builder State: $state");
                     if (state is GetCustomerDataByIDInitial) {
-                      return Center(
-                          child: LoadingAnimationWidget.flickr(
-                              leftDotColor: AppColors.blueColor,
-                              rightDotColor: AppColors.lightBlueColor,
-                              size: 60));
+                      return Center(child: SizedBox(height: 30, child: LoadingStateAnimation()));
                     } else if (state is GetCustomerDataByIDError) {
                       return Center(child: Text(state.errorMsg));
                     } else if (state is GetCustomerDataByIDSuccess) {

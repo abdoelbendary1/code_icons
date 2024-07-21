@@ -1,7 +1,33 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'customers_cubit.dart';
 
 @immutable
 sealed class CustomersState {}
+
+class UpdateTradeRegistryTypeLoading extends CustomersState {}
+
+class UpdateTradeRegistryTypeSuccess extends CustomersState {
+  Map<String, dynamic>? selectedTradeRegistryType;
+  UpdateTradeRegistryTypeSuccess({required this.selectedTradeRegistryType});
+}
+
+class UpdateValidTypeSuccess extends CustomersState {
+  Map<String, dynamic>? selectedValidType;
+  UpdateValidTypeSuccess({
+    this.selectedValidType,
+  });
+}
+
+class UpdateValidTypeLoading extends CustomersState {}
+
+class UpdateCompanyTypeSuccess extends CustomersState {
+  Map<String, dynamic>? selectedCopmanyyType;
+  UpdateCompanyTypeSuccess({
+    this.selectedCopmanyyType,
+  });
+}
+
+class UpdateCompanyTypeLoading extends CustomersState {}
 
 final class CustomersInitial extends CustomersState {}
 
@@ -113,6 +139,11 @@ final class FetchStationError extends CustomersState {
 final class FetchStationSuccess extends CustomersState {
   List<StationEntity> stations;
   FetchStationSuccess({required this.stations});
+}
+
+final class LoadedStation extends CustomersState {
+  StationEntity station;
+  LoadedStation({required this.station});
 }
 
 final class LoadStation extends CustomersState {

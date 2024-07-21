@@ -4,6 +4,7 @@ import 'package:code_icons/domain/entities/TradeCollection/trade_collection_enti
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
+import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
@@ -198,11 +199,7 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                   } else if (state is GetAllCollectionsError) {
                     return Center(child: Text('Error: ${state.errorMsg}'));
                   }
-                  return Center(
-                      child: LoadingAnimationWidget.flickr(
-                          leftDotColor: AppColors.blueColor,
-                          rightDotColor: AppColors.lightBlueColor,
-                          size: 60));
+                  return SizedBox(height: 30, child: LoadingStateAnimation());
                 },
               ),
             ],

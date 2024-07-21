@@ -103,4 +103,39 @@ class GetCustomerDataRemoteDataSourceImpl
     return either.fold(
         (failure) => Left(failure), (response) => Right(response));
   }
+
+  @override
+  Future<Either<Failures, ActivityEntity>> fetchActivityeDataById(
+      {required int activityId}) async {
+    var either =
+        await apiManager.fetchActivityeDataById(activityId: activityId);
+    return either.fold(
+        (failure) => Left(failure), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failures, GeneralCentralEntity>> fetchGeneralCenterseDataById(
+      {required int generalCentralId}) async {
+    var either = await apiManager.fetchGeneralCenterseDataById(
+        generalCentralId: generalCentralId);
+    return either.fold(
+        (failure) => Left(failure), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failures, StationEntity>> fetchStationDataById(
+      {required stationId}) async {
+    var either = await apiManager.fetchStationDataById(stationId: stationId);
+    return either.fold(
+        (failure) => Left(failure), (response) => Right(response));
+  }
+
+  @override
+  Future<Either<Failures, TradeOfficeEntity>> fetchTradeOfficeDataById(
+      {required int tradeOfficeId}) async {
+    var either =
+        await apiManager.fetchTradeOfficeDataById(tradeOfficeID: tradeOfficeId);
+    return either.fold(
+        (failure) => Left(failure), (response) => Right(response));
+  }
 }

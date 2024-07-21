@@ -82,4 +82,32 @@ class GetCustomerDataRepoImpl implements GetCustomerDataRepo {
   Future<Either<Failures, List<StationEntity>>> fetchStationData() {
     return getCustomerDataRemoteDataSource.fetchStationData();
   }
+
+  @override
+  Future<Either<Failures, ActivityEntity>> fetchActivityeDataById(
+      {required int activityId}) {
+    return getCustomerDataRemoteDataSource.fetchActivityeDataById(
+        activityId: activityId);
+  }
+
+  @override
+  Future<Either<Failures, GeneralCentralEntity>> fetchGeneralCenterseDataById(
+      {required int generalCentralId}) {
+    return getCustomerDataRemoteDataSource.fetchGeneralCenterseDataById(
+        generalCentralId: generalCentralId);
+  }
+
+  @override
+  Future<Either<Failures, StationEntity>> fetchStationDataById(
+      {required stationId}) {
+    return getCustomerDataRemoteDataSource.fetchStationDataById(
+        stationId: stationId);
+  }
+
+  @override
+  Future<Either<Failures, TradeOfficeEntity>> fetchTradeOfficeDataById(
+      {required int tradeOfficeId}) {
+    return getCustomerDataRemoteDataSource.fetchTradeOfficeDataById(
+        tradeOfficeId: tradeOfficeId);
+  }
 }

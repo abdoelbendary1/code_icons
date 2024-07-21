@@ -124,6 +124,26 @@ class CustomersCubit extends Cubit<CustomersState> {
     return selectedCurrency;
   }
 
+  void updateSelectedValidType(Map<String, dynamic>? value) {
+    emit(UpdateValidTypeLoading());
+    selectedValidType = value;
+    emit(UpdateValidTypeSuccess(selectedValidType: selectedCopmanyyType));
+  }
+
+  void updateSelectedTradeRegistryType(Map<String, dynamic>? value) {
+    emit(UpdateTradeRegistryTypeLoading());
+    selectedTradeRegistryType = value;
+    isSubBranchSelected = value?['type'] == "فرعي";
+    emit(UpdateTradeRegistryTypeSuccess(
+        selectedTradeRegistryType: selectedTradeRegistryType));
+  }
+
+  void updateSelectedCompanyType(Map<String, dynamic>? value) {
+    emit(UpdateCompanyTypeLoading());
+    selectedCopmanyyType = value;
+    emit(UpdateCompanyTypeSuccess(selectedCopmanyyType: selectedCopmanyyType));
+  }
+
   bool isSubBranchSelected = false;
   void showTradeRegistryTypes(BuildContext context) {
     showModalBottomSheet(
@@ -232,11 +252,41 @@ class CustomersCubit extends Cubit<CustomersState> {
     });
   }
 
+  Future<void> fetchTradeOfficeDataByID({required int tradeOfficeId}) async {
+    emit(LoadTradeOffice());
+    var either = await fetchTradeOfficeUseCase.getCustomerDataRepo
+        .fetchTradeOfficeDataById(tradeOfficeId: tradeOfficeId);
+
+    either.fold((failure) {
+      print(failure.errorMessege);
+      emit(FetchTradeOfficeError(errorMsg: failure.errorMessege));
+    }, (tradeOfficeEntity) {
+      /*  ControllerManager().updateTradeOfficeController(tradeOfficeEntity); */
+      selectedTradeOffice.idBl = tradeOfficeEntity.idBl;
+      emit(LoadedTradeOffice(tradeOfficeEntity: tradeOfficeEntity));
+    });
+  }
+
   void fetchStations() async {
     var either = await fetchStationListUseCase.invoke();
     either.fold((l) => emit(FetchStationError(errorMsg: l.errorMessege)), (r) {
       stationData = r;
       emit(FetchStationSuccess(stations: r));
+    });
+  }
+
+  void fetchStationDataByID({required int stationId}) async {
+    emit(LoadStation());
+    var either = await fetchStationListUseCase.fetchStationDataById(
+        stationId: stationId);
+
+    either.fold((failure) {
+      print(failure.errorMessege);
+      emit(FetchStationError(errorMsg: failure.errorMessege));
+    }, (stationEntity) {
+      /*  ControllerManager().updateStationController(stationEntity); */
+      selectedStation.idBl = stationEntity.idBl;
+      emit(LoadedStation(station: stationEntity));
     });
   }
 
@@ -246,6 +296,21 @@ class CustomersCubit extends Cubit<CustomersState> {
         (r) {
       generalCentralData = r;
       emit(FetchGeneralCentralSuccess(generalCentrals: r));
+    });
+  }
+
+  void fetchGeneralCentralDataByID({required int generalCentralId}) async {
+    emit(LoadGeneralCentral());
+    var either = await fetchGeneralCentralUseCase.fetchGeneralCenterseDataById(
+        generalCentralId: generalCentralId);
+
+    either.fold((failure) {
+      print(failure.errorMessege);
+      emit(FetchGeneralCentralError(errorMsg: failure.errorMessege));
+    }, (generalCentralEntity) {
+      /*   ControllerManager().updateGeneralCentralController(generalCentralEntity); */
+      selectedGeneralCentral.idBl = generalCentralEntity.idBl;
+      emit(LoadedGeneralCentral(generalCentralEntity: generalCentralEntity));
     });
   }
 
@@ -265,10 +330,9 @@ class CustomersCubit extends Cubit<CustomersState> {
     });
   }
 
-  Future<void> fetchCurrencyDataByID({required String currencyId}) async {
+  void fetchCurrencyDataByID({required int currencyId}) async {
     emit(LoadCurrency());
-    var either = await fetchCurrencyByIDUseCase.invoke(
-        currencyId: int.parse(currencyId));
+    var either = await fetchCurrencyByIDUseCase.invoke(currencyId: currencyId);
 
     either.fold((failure) {
       print(failure.errorMessege);
@@ -277,6 +341,21 @@ class CustomersCubit extends Cubit<CustomersState> {
       ControllerManager().updateCurrencyController(currencyEntity);
       selectedCurrency.id = currencyEntity.id;
       emit(LoadedCurrency(currencyEntity: currencyEntity));
+    });
+  }
+
+  void fetchAvtivityDataByID({required int activityId}) async {
+    emit(LoadActivity());
+    var either = await fetchActivityUseCase.getCustomerDataRepo
+        .fetchActivityeDataById(activityId: activityId);
+
+    either.fold((failure) {
+      print(failure.errorMessege);
+      emit(FetchActivityError(errorMsg: failure.errorMessege));
+    }, (activityEntity) {
+      /* ControllerManager().updateCurrencyController(activityEntity); */
+      selectedActivity.idBl = activityEntity.idBl;
+      emit(LoadedActivity(activityEntity: activityEntity));
     });
   }
 

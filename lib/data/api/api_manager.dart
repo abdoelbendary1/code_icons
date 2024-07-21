@@ -254,6 +254,50 @@ class ApiManager {
     }
   }
 
+  Future<Either<Failures, TradeOfficeDataModel>> fetchTradeOfficeDataById(
+      {required int tradeOfficeID}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/${ApiConstants.tradeOfficeEndPoint}/$tradeOfficeID');
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          dynamic responseBodyJson = jsonDecode(responseBody);
+          TradeOfficeDataModel tradeOfficeData =
+              TradeOfficeDataModel.fromJson(responseBodyJson);
+
+          return right(tradeOfficeData);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
   Future<Either<Failures, List<StationDataModel>>> fetchStationData() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
@@ -285,6 +329,50 @@ class ApiManager {
               .toList();
 
           return right(stationDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, StationDataModel>> fetchStationDataById(
+      {required int stationId}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/${ApiConstants.stationEndPoint}/$stationId');
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          dynamic responseBodyJson = jsonDecode(responseBody);
+          StationDataModel stationData =
+              StationDataModel.fromJson(responseBodyJson);
+
+          return right(stationData);
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
@@ -343,6 +431,49 @@ class ApiManager {
     }
   }
 
+  Future<Either<Failures, GeneralCentralDataModel>>
+      fetchGeneralCenterseDataById({required int generalCentralId}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/${ApiConstants.generalCentersEndPoint}/$generalCentralId');
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          dynamic responseBodyJson = jsonDecode(responseBody);
+          GeneralCentralDataModel generalCentralData =
+              GeneralCentralDataModel.fromJson(responseBodyJson);
+
+          return right(generalCentralData);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
   Future<Either<Failures, List<ActivityDataModel>>> fetchActivityeData() async {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
@@ -375,6 +506,50 @@ class ApiManager {
               .toList();
 
           return right(activityDataList);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, ActivityDataModel>> fetchActivityeDataById(
+      {required int activityId}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/${ApiConstants.activityEndPoint}/$activityId');
+        String token =
+            await SharedPrefrence.getData(key: 'accessToken') as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          dynamic responseBodyJson = jsonDecode(responseBody);
+          ActivityDataModel activityData =
+              ActivityDataModel.fromJson(responseBodyJson);
+
+          return right(activityData);
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
