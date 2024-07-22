@@ -83,10 +83,10 @@ class _LoginBodyState extends State<LoginBody> {
                       fieldName: "اسم المستخدم",
                       hintText: "من فضلك ادخل اسم المستخدم",
                       validator: (value) {
-                        /* if (value == null || value.trim().isEmpty) {
-                          return "e-mail field is required";
+                        if (value == null || value.trim().isEmpty) {
+                          return "يجب ادخال اسم المستخدم";
                         }
-                        bool emailValid = RegExp(
+                       /*  bool emailValid = RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(value);
                         if (!emailValid) {
@@ -119,10 +119,10 @@ class _LoginBodyState extends State<LoginBody> {
                       fieldName: "كلمه المرور",
                       hintText: "من فضلك ادخل كلمه المرور",
                       validator: (value) {
-                        /* if (value == null || value.trim().isEmpty) {
-                          return "e-mail field is required";
+                        if (value == null || value.trim().isEmpty) {
+                          return "يجب ادخال كلمه المرور";
                         }
-                        if (value.length < 5 || value.length > 30) {
+                      /*   if (value.length < 5 || value.length > 30) {
                           return "password must be more than 6 char and less than 30 char";
                         } */
                         return null;

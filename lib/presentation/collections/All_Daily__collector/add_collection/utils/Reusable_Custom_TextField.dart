@@ -2,7 +2,6 @@ import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class ReusableCustomTextField extends StatelessWidget {
   final String labelText;
   final String hintText;
@@ -15,6 +14,7 @@ class ReusableCustomTextField extends StatelessWidget {
   void Function()? onTap;
   bool? readOnly;
   void Function(String)? onChanged;
+  Key? textKey;
 
   ReusableCustomTextField({
     super.key,
@@ -36,6 +36,7 @@ class ReusableCustomTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.w),
       child: TextFormField(
+        /* key: textKey, */
         onChanged: onChanged,
         readOnly: readOnly ?? false,
         onTap: onTap,

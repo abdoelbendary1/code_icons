@@ -57,11 +57,14 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
     customersCubit.fetchStations();
   }
 
+  /* var nameKey = GlobalKey(); */
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => customersCubit,
       child: Form(
+        key: customersCubit.formKey,
         child: Column(
           children: [
             Accordion(
@@ -91,20 +94,33 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                     children: [
                       SizedBox(height: 20.h),
                       _buildTextField(
-                          "الاسم التجارى",
-                          "الاسم التجارى",
-                          ControllerManager()
-                              .getControllerByName('brandNameBL'),
-                          Icons.phone_iphone,
-                          () {}),
+                        "الاسم التجارى",
+                        "الاسم التجارى",
+                        ControllerManager().getControllerByName('brandNameBL'),
+                        Icons.phone_iphone,
+                        () {},
+                        /*  textKey: nameKey, */
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال الاسم التجارى";
+                          }
+                          return null;
+                        },
+                      ),
                       _buildTextField(
-                          "الرقم القومي",
-                          "الرقم القومي",
-                          ControllerManager()
-                              .getControllerByName('nationalIdBL'),
-                          Icons.home,
-                          keyboardType: TextInputType.number,
-                          () {}),
+                        "الرقم القومي",
+                        "الرقم القومي",
+                        ControllerManager().getControllerByName('nationalIdBL'),
+                        Icons.home,
+                        keyboardType: TextInputType.number,
+                        () {},
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال الاسم الرقم القومي";
+                          }
+                          return null;
+                        },
+                      ),
                       _buildTextField(
                         "تاريخ الميلاد",
                         "تاريخ الميلاد",
@@ -119,14 +135,27 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                               dateStorageMap: customersCubit.dateStorageMap,
                               key: "birthDayBL");
                         },
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال تاريخ الميلاد";
+                          }
+                          return null;
+                        },
                       ),
                       _buildTextField(
-                          AppLocalizations.of(context)!.phone_Number_label,
-                          AppLocalizations.of(context)!.phone_Number_hint,
-                          ControllerManager().getControllerByName('phoneBL'),
-                          Icons.local_activity,
-                          keyboardType: TextInputType.number,
-                          () {}),
+                        AppLocalizations.of(context)!.phone_Number_label,
+                        AppLocalizations.of(context)!.phone_Number_hint,
+                        ControllerManager().getControllerByName('phoneBL'),
+                        Icons.local_activity,
+                        keyboardType: TextInputType.number,
+                        () {},
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال رقم الموبايل";
+                          }
+                          return null;
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -241,14 +270,22 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                               readOnly: true,
                               ControllerManager()
                                   .getControllerByName('licenseDateBL'),
-                              Icons.phone_iphone, () {
-                            _selectDate(
-                                context: context,
-                                controller: ControllerManager()
-                                    .getControllerByName('licenseDateBL'),
-                                dateStorageMap: customersCubit.dateStorageMap,
-                                key: "licenseDateBL");
-                          }),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "يجب ادخال تاريخ الترخيص";
+                                }
+                                return null;
+                              },
+                              Icons.phone_iphone,
+                              () {
+                                _selectDate(
+                                    context: context,
+                                    controller: ControllerManager()
+                                        .getControllerByName('licenseDateBL'),
+                                    dateStorageMap:
+                                        customersCubit.dateStorageMap,
+                                    key: "licenseDateBL");
+                              }),
                           _buildTextField(
                               "سنه الترخيص",
                               "سنه الترخيص",
@@ -256,7 +293,12 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                                   .getControllerByName('licenseYearBL'),
                               Icons.phone_iphone,
                               keyboardType: TextInputType.number,
-                              () {}),
+                              validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "يجب ادخال سنه الترخيص";
+                            }
+                            return null;
+                          }, () {}),
                           _buildTextField(
                               "رأس المال",
                               "رأس المال",
@@ -264,7 +306,13 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                                   .getControllerByName('capitalBL'),
                               Icons.phone_iphone,
                               keyboardType: TextInputType.number,
-                              () {}),
+                              validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "يجب ادخال قيمه رأس المال";
+                            }
+
+                            return null;
+                          }, () {}),
                           Row(
                             children: [
                               Expanded(
@@ -480,22 +528,34 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                               "النشاط",
                               ControllerManager()
                                   .getControllerByName('divisionBL'),
-                              Icons.diversity_3_sharp,
-                              () {}),
+                              Icons.diversity_3_sharp, validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "يجب ادخال النشاط";
+                            }
+                            return null;
+                          }, () {}),
                           _buildTextField(
                               AppLocalizations.of(context)!.address_label,
                               AppLocalizations.of(context)!.address_hint,
                               ControllerManager()
                                   .getControllerByName('addressBL'),
-                              Icons.phone_iphone,
-                              () {}),
+                              Icons.phone_iphone, validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "يجب ادخال النشاط";
+                            }
+                            return null;
+                          }, () {}),
                           _buildTextField(
                               "المالك",
                               "المالك",
                               ControllerManager()
                                   .getControllerByName('ownerBL'),
-                              Icons.phone_iphone,
-                              () {}),
+                              Icons.phone_iphone, validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "يجب ادخال اسم المالك";
+                            }
+                            return null;
+                          }, () {}),
                           BlocConsumer<CustomersCubit, CustomersState>(
                             bloc: customersCubit,
                             listener: (context, state) {
@@ -658,6 +718,8 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
     bool? readOnly = false,
     void Function(String)? onChanged,
     TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+    Key? textKey,
   }) {
     return Column(
       children: [
@@ -670,6 +732,8 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
           readOnly: readOnly,
           onChanged: onChanged,
           keyboardType: keyboardType,
+          key: textKey,
+          validator: validator,
         ),
         SizedBox(height: 25.h),
       ],

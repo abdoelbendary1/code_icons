@@ -70,6 +70,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   Map<String, dynamic>? selectedTradeRegistryType;
   Map<String, dynamic>? selectedCopmanyyType;
   Map<String, dynamic>? selectedValidType;
+  final formKey = GlobalKey<FormState>();
   //! check the selectedCustomer ID
   CustomerDataEntity selectedCustomer = CustomerDataEntity();
   final List<Map<String, dynamic>> tradeRegistryTypes = [
@@ -187,6 +188,68 @@ class CustomersCubit extends Cubit<CustomersState> {
   };
   CustomerDataModel createCustomerDataModelFromControllers(
       List<TextEditingController> controllers, BuildContext context) {
+    /*  if (selectedActivity.idBl != null ||
+        selectedCopmanyyType['companyTypeBL'] != null ||
+        selectedActivity.idBl != null ||
+        selectedActivity.idBl != null) {} */
+    if (controllers[7].text.isNotEmpty) {
+      return CustomerDataModel(
+        idBl: tryParseInt(controllers[0].text,
+            defaultValue: 1), // Assuming 1 is the default ID
+        brandNameBl: controllers[1].text,
+        nationalIdBl:
+            ControllerManager().getControllerByName('nationalIdBL').text,
+        birthDayBl: convertStringToDate(
+            inputString:
+                ControllerManager().getControllerByName("birthDayBL").text),
+        tradeRegistryBl:
+            ControllerManager().getControllerByName('tradeRegistryBL').text,
+        licenseDateBl: convertStringToDate(
+            inputString:
+                ControllerManager().getControllerByName('licenseDateBL').text),
+        licenseYearBl: tryParseInt(controllers[6].text, defaultValue: 0),
+        capitalBl: double.parse(controllers[7].text),
+        validBl: getKeyByValue(
+            mapList: validtypes,
+            value: selectedValidType?['type'],
+            mapKey: "id",
+            mapValue: "type"),
+        companyTypeBl: selectedCopmanyyType != null
+            ? getKeyByValue(
+                mapList: companyTypeList,
+                value: selectedCopmanyyType?['companyTypeBL'],
+                mapKey: "companyTypeBL",
+                mapValue: "companyTypeBL")
+            : 1,
+        companyTypeNameBl: getKeyByValue(
+                mapList: companyTypeList,
+                value: selectedCopmanyyType?['companyTypeBL'],
+                mapKey: "companyTypeBL",
+                mapValue: "companyTypeBL")
+            .toString(),
+        currencyIdBl: selectedCurrency.id,
+        tradeOfficeBl: selectedTradeOffice.idBl,
+        tradeOfficeNameBl: selectedTradeOffice.tradeOfficeBl,
+        activityBl: selectedActivity.idBl,
+        activityNameBl: selectedActivity.activityBl,
+        /* expiredBl: ControllerManager().getControllerByName('expiredBL').text, */
+        divisionBl: ControllerManager().getControllerByName('divisionBL').text,
+        tradeTypeBl:
+            ControllerManager().getControllerByName('tradeTypeBL').text,
+        ownerBl: ControllerManager().getControllerByName('ownerBL').text,
+        addressBl: ControllerManager().getControllerByName('addressBL').text,
+        stationBl: selectedStation.idBl,
+        stationNameBl: selectedStation.stationBl,
+        phoneBl: ControllerManager().getControllerByName('phoneBL').text,
+        numExpiredBl:
+            ControllerManager().getControllerByName('numExpiredBL').text,
+        tradeRegistryTypeBl: getKeyByValue(
+            mapList: tradeRegistryTypes,
+            value: selectedTradeRegistryType!['type'],
+            mapKey: "type",
+            mapValue: "type"),
+      );
+    }
     return CustomerDataModel(
       idBl: tryParseInt(controllers[0].text,
           defaultValue: 1), // Assuming 1 is the default ID
@@ -202,7 +265,9 @@ class CustomersCubit extends Cubit<CustomersState> {
           inputString:
               ControllerManager().getControllerByName('licenseDateBL').text),
       licenseYearBl: tryParseInt(controllers[6].text, defaultValue: 0),
-      capitalBl: double.parse(controllers[7].text),
+      capitalBl: controllers[7].text.isNotEmpty
+          ? double.parse(controllers[7].text)
+          : 0.0,
       validBl: getKeyByValue(
           mapList: validtypes,
           value: selectedValidType?['type'],
@@ -237,9 +302,10 @@ class CustomersCubit extends Cubit<CustomersState> {
       numExpiredBl:
           ControllerManager().getControllerByName('numExpiredBL').text,
       tradeRegistryTypeBl: getKeyByValue(
-        mapList: tradeRegistryTypes,
-        value: selectedTradeRegistryType!['type'],
-      ),
+          mapList: tradeRegistryTypes,
+          value: selectedTradeRegistryType?['type'],
+          mapKey: "type",
+          mapValue: "type"),
     );
   }
 
@@ -360,9 +426,11 @@ class CustomersCubit extends Cubit<CustomersState> {
   }
 
   void addCustomer(CustomerDataModel customerData) async {
-    var either = await postCustomerDataUseCase.invoke(customerData);
-    either.fold((l) => emit(AddCustomerError(errorMsg: l.errorMessege)),
-        (r) => emit(AddCustomerSuccess(proccessId: r)));
+    if (formKey.currentState!.validate()) {
+      var either = await postCustomerDataUseCase.invoke(customerData);
+      either.fold((l) => emit(AddCustomerError(errorMsg: l.errorMessege)),
+          (r) => emit(AddCustomerSuccess(proccessId: r)));
+    }
   }
 
   void fetchCustomers() async {

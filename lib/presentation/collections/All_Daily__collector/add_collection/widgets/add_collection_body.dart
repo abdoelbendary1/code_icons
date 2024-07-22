@@ -120,7 +120,9 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   builder: (context, state) {
                     print("Builder State: $state");
                     if (state is GetCustomerDataByIDInitial) {
-                      return Center(child: SizedBox(height: 30, child: LoadingStateAnimation()));
+                      return Center(
+                          child: SizedBox(
+                              height: 30, child: LoadingStateAnimation()));
                     } else if (state is GetCustomerDataByIDError) {
                       return Center(child: Text(state.errorMsg));
                     } else if (state is GetCustomerDataByIDSuccess) {

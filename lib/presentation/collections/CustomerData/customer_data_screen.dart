@@ -63,8 +63,7 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
           IconButton(
             icon: Icon(Icons.add, size: 30),
             onPressed: () {
-              Navigator.pushReplacementNamed(
-                  context, AddCustomerScreen.routeName);
+              Navigator.pushNamed(context, AddCustomerScreen.routeName);
             },
           ),
         ],
