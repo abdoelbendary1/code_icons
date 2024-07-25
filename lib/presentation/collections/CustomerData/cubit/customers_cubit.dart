@@ -14,6 +14,7 @@ import 'package:code_icons/domain/use_cases/post_customer_data.dart';
 import 'package:code_icons/domain/use_cases/fetch_trade_office_useCase.dart';
 import 'package:code_icons/domain/use_cases/fetch_general_central_useCase.dart';
 import 'package:code_icons/domain/use_cases/fetch_activity_useCase.dart';
+import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,12 @@ class CustomersCubit extends Cubit<CustomersState> {
   Map<String, dynamic>? selectedCopmanyyType;
   Map<String, dynamic>? selectedValidType;
   final formKey = GlobalKey<FormState>();
+  String section_one_id = "1";
+  String section_two_id = "2";
+  String section_three_id = "3";
+  bool isSectionOneOpen = false;
+  bool isSectionTwoOpen = false;
+  bool isSectionThreeOpen = false;
   //! check the selectedCustomer ID
   CustomerDataEntity selectedCustomer = CustomerDataEntity();
   final List<Map<String, dynamic>> tradeRegistryTypes = [
@@ -425,11 +432,20 @@ class CustomersCubit extends Cubit<CustomersState> {
     });
   }
 
-  void addCustomer(CustomerDataModel customerData) async {
+  void addCustomer(CustomerDataModel customerData, BuildContext context) async {
     if (formKey.currentState!.validate()) {
       var either = await postCustomerDataUseCase.invoke(customerData);
       either.fold((l) => emit(AddCustomerError(errorMsg: l.errorMessege)),
           (r) => emit(AddCustomerSuccess(proccessId: r)));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "برجاء ادخال جميع البيانات",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        backgroundColor: AppColors.redColor,
+        duration: Durations.extralong1,
+      ));
     }
   }
 

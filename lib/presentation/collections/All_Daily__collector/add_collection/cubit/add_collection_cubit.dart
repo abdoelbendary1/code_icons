@@ -41,24 +41,29 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   String yearsOfRepaymentBl = "";
 
   TradeCollectionRequest intializeTradeRequest(
-      {required CustomerDataEntity selectedCustomer,required BuildContext context}) {
+      {required CustomerDataEntity selectedCustomer,
+      required BuildContext context}) {
     return TradeCollectionRequest(
       activityBl: 4.0,
-      addressBl: ControllerManager().addressController.text,
-      collectionDateBl: ControllerManager().registryDateController.text,
-      compensationBl:
-          double.parse(ControllerManager().compensationController.text),
-      currentBl:
-          double.parse(ControllerManager().currentFinanceController.text),
+      addressBl: ControllerManager().addCollectionAddressController.text,
+      collectionDateBl:
+          ControllerManager().addCollectionRegistryDateController.text,
+      compensationBl: double.parse(
+          ControllerManager().addCollectionCompensationController.text),
+      currentBl: double.parse(
+          ControllerManager().addCollectionCurrentFinanceController.text),
       customerDataIdBl: selectedCustomer.idBl,
-      differentBl:
-          double.parse(ControllerManager().diffrentFinanaceController.text),
-      divisionBl: ControllerManager().divisionController.text,
-      lateBl: double.parse(ControllerManager().lateFinanceController.text),
+      differentBl: double.parse(
+          ControllerManager().addCollectionDiffrentFinanaceController.text),
+      divisionBl: ControllerManager().addCollectionDivisionController.text,
+      lateBl: double.parse(
+          ControllerManager().addCollectionLateFinanceController.text),
       paymentReceiptNumBl: 5,
-      phoneBl: ControllerManager().phoneNumController.text,
-      totalBl: double.parse(ControllerManager().totalFinanceController.text),
-      tradeRegistryBl: ControllerManager().regisrtyNumController.text,
+      phoneBl: ControllerManager().addCollectionPhoneNumController.text,
+      totalBl: double.parse(
+          ControllerManager().addCollectionTotalFinanceController.text),
+      tradeRegistryBl:
+          ControllerManager().addCollectionRegisrtyNumController.text,
       yearsOfRepaymentBl: context.read<AddCollectionCubit>().yearsOfRepaymentBl,
     );
   }

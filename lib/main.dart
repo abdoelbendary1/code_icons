@@ -4,10 +4,14 @@ import 'package:code_icons/presentation/collections/All_Daily__collector/add_col
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/add_customer_Screen.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
@@ -72,6 +76,14 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
+          create: (context) => UnlimitedCollectionCubit(
+            getUnRegisteredTradeCollectionUseCase:
+                injectGetUnRegisteredTradeCollectionUseCase(),
+            postUnRegisteredTradeCollectionUseCase:
+                injectPostUnRegisteredTradeCollectionUseCase(),
+          ),
+        ),
+        BlocProvider(
           create: (context) => CustomersCubit(
             postCustomerDataUseCase: injectPostCustomerDataUseCase(),
             fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
@@ -102,7 +114,7 @@ class MyApp extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           useInheritedMediaQuery: true,
-          locale: Locale("ar"),
+          locale: const Locale("ar"),
           builder: DevicePreview.appBuilder,
           theme: AppTheme.mainTheme,
           debugShowCheckedModeBanner: false,
@@ -115,10 +127,17 @@ class MyApp extends StatelessWidget {
             EcommerceSetting.routeName: (context) => EcommerceSetting(),
             MainSettingScreen.routeName: (context) => MainSettingScreen(),
             CollectionsScreen.routeName: (context) => CollectionsScreen(),
+            UnlimitedCollection.routeName: (context) => UnlimitedCollection(
+                  data: TradeCollectionEntity(),
+                ),
             CustomerDataScreen.routeName: (context) => CustomerDataScreen(),
             AllTradeProveScreen.routeName: (context) => AllTradeProveScreen(),
             AllDailyCollectorScreen.routeName: (context) =>
                 AllDailyCollectorScreen(),
+            RecietsCollectionsScreen.routeName: (context) =>
+                RecietsCollectionsScreen(),
+            UnRegisteredCollectionsScreen.routeName: (context) =>
+                UnRegisteredCollectionsScreen(),
             AddCustomerScreen.routeName: (context) => AddCustomerScreen(),
             AddCollectionView.routeName: (context) => AddCollectionView(
                   data: TradeCollectionEntity(),

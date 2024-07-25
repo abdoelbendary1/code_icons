@@ -143,177 +143,273 @@ class CustomerDataSource extends DataGridSource {
   }
 
   Widget buildBrandNameCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.yellow),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildNationalIdCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.green),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildBirthDayCell(DateTime value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value.toIso8601String(),
-        style: TextStyle(color: Colors.blue),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value.toIso8601String(),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildTradeRegistryCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.purple),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildLicenseDateCell(DateTime value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value.toIso8601String(),
-        style: TextStyle(color: Colors.orange),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value.toIso8601String(),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildLicenseYearCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.red),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildCapitalCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.cyan),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildCompanyTypeNameCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.pink),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildTradeOfficeNameCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.brown),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildActivityNameCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.lime),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildDivisionCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.indigo),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildTradeTypeCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.teal),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildAddressCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.grey),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildStationNameCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.blueGrey),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildPhoneCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.lightGreen),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }
 
   Widget buildDefaultCell(String value) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        value,
-        style: TextStyle(color: Colors.white),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }

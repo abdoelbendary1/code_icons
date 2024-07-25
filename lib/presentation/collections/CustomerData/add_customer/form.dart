@@ -10,6 +10,7 @@ import 'package:code_icons/presentation/collections/CustomerData/add_customer/wi
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_valid.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
+import 'package:code_icons/presentation/utils/Date_picker.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,8 +90,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                 ControllerManager().getControllerByName('birthDayBL'),
                 Icons.app_registration,
                 () {
-                  //date here
-                  _selectDate(
+                  AppDatePicker.selectDate(
                       context: context,
                       controller:
                           ControllerManager().getControllerByName('birthDayBL'),
@@ -327,8 +327,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                   readOnly: true,
                   ControllerManager().getControllerByName('licenseDateBL'),
                   Icons.phone_iphone, () {
-                //date here
-                _selectDate(
+                AppDatePicker.selectDate(
                     context: context,
                     controller: ControllerManager()
                         .getControllerByName('licenseDateBL'),
@@ -491,7 +490,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                         CustomerDataModel customerData = customersCubit
                             .createCustomerDataModelFromControllers(
                                 addCustomerControllers, context);
-                        customersCubit.addCustomer(customerData);
+                        customersCubit.addCustomer(customerData, context);
                         print(
                             "customerData.activityBl: ${customerData.activityBl}");
                         print(

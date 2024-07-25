@@ -1,8 +1,10 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
@@ -142,12 +144,17 @@ class AppLocalData {
       'icon': Icons.collections_bookmark_sharp,
       'route': CollectionsScreen.routeName,
       'items': [
-        MenuItem(title: 'Customer Data', route: CustomerDataScreen.routeName),
+        MenuItem(title: 'بيانات العملاء', route: CustomerDataScreen.routeName),
         MenuItem(
             title: 'all Trade Prove', route: AllTradeProveScreen.routeName),
         MenuItem(
-            title: 'All Daily Collector',
-            route: AllDailyCollectorScreen.routeName),
+            title: 'بيان التسديدات', route: AllDailyCollectorScreen.routeName),
+        MenuItem(
+            title: 'حوافظ غير مقيده',
+            route: UnRegisteredCollectionsScreen.routeName),
+        MenuItem(
+            title: 'دفاتر الايصالات',
+            route: RecietsCollectionsScreen.routeName),
       ],
     },
     "Reports": {

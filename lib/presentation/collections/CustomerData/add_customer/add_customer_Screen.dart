@@ -10,11 +10,13 @@ class AddCustomerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.whiteColor,
-      body: CustomSliverAppBar(
-        title: "إضافه عميل",
-        body: AddCustomerCardsForm(),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.whiteColor,
+        body: CustomSliverAppBar(
+          title: "إضافه عميل",
+          body: AddCustomerCardsForm(),
+        ),
       ),
     );
   }

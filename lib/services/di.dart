@@ -31,9 +31,11 @@ import 'package:code_icons/domain/use_cases/fetch_general_central_useCase.dart';
 import 'package:code_icons/domain/use_cases/fetch_paymnetValues.dart';
 import 'package:code_icons/domain/use_cases/fetch_trade_collections_usecase.dart';
 import 'package:code_icons/domain/use_cases/fetch_trade_office_useCase.dart';
+import 'package:code_icons/domain/use_cases/get_UnRegistered_trade_collection_use_case%20.dart';
 
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
 import 'package:code_icons/domain/use_cases/post-payment_values_by_ID_usecase.dart';
+import 'package:code_icons/domain/use_cases/post_UnRegistered_trade_collection_use_case%20.dart';
 import 'package:code_icons/domain/use_cases/post_customer_data.dart';
 import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart';
 
@@ -122,6 +124,17 @@ PostTradeCollectionRepo injectPostTradeCollectionRepo() {
 PostTradeCollectionDataSource injectPostTradeCollectionDataSource() {
   return PostTradeCollectionDataSourceImpl(
       apiManager: ApiManager.getInstance());
+}
+
+PostUnRegisteredTradeCollectionUseCase
+    injectPostUnRegisteredTradeCollectionUseCase() {
+  return PostUnRegisteredTradeCollectionUseCase(
+      postTradeCollectionRepo: injectPostTradeCollectionRepo());
+}
+
+GetUnRegisteredTradeCollectionUseCase injectGetUnRegisteredTradeCollectionUseCase() {
+  return GetUnRegisteredTradeCollectionUseCase(
+      postTradeCollectionRepo: injectPostTradeCollectionRepo());
 }
 
 FetchTradeOfficeListUseCase injectFetchTradeOfficeListUseCase() {

@@ -27,7 +27,7 @@ class AllDailyCollectorCubit extends Cubit<AllDailyCollectorState> {
         await fetchTradeCollectionDataUseCase.fetchTradeCollectionData();
     either.fold((l) => emit(GetAllCollectionsError(errorMsg: l.errorMessege)),
         (r) {
-      if (r.isNotEmpty) {
+      {
         emit(GetAllCollectionsSuccess(dataList: r));
       }
     });

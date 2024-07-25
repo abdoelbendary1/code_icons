@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
+import 'package:code_icons/data/model/data_model/unlimited_Data_model.dart';
 
 import 'package:code_icons/data/model/request/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/TradeCollectionResponse.dart';
+import 'package:code_icons/data/model/response/UnRegisteredCollections/un_registered_collections_response.dart';
 import 'package:code_icons/data/model/response/activity/activity_data_model.dart';
 import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
 import 'package:code_icons/data/model/response/currency/currency.dart';
@@ -751,6 +753,92 @@ class ApiManager {
               TradeCollectionResponse(idBl: collectionID);
           print("trade collection ID : ${tradeCollectionResponse.idBl}");
           return right(tradeCollectionResponse);
+        } else {
+          print(
+              "Server error: ${response.statusCode} - ${response.reasonPhrase}");
+          return left(ServerError(
+              errorMessege: "Server error: ${response.reasonPhrase}"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, String>> postUnRegisteredTradeCollectionData({
+    required UnRegisteredCollectionsResponse unRegisteredTradeCollectionRequest,
+  }) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/api/TradeCollection/UnRegistered');
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        var body = json.encode(unRegisteredTradeCollectionRequest.toJson());
+
+        var request = http.Request('POST', url)
+          ..headers.addAll(headers)
+          ..body = body;
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          var responseBody = await response.stream.bytesToString();
+          return right(responseBody);
+        } else {
+          print(
+              "Server error: ${response.statusCode} - ${response.reasonPhrase}");
+          return left(ServerError(
+              errorMessege: "Server error: ${response.reasonPhrase}"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<UnRegisteredCollectionsResponse>>>
+      getUnRegisteredTradeCollectionData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse(
+            'https://${ApiConstants.baseUrl}/api/TradeCollection/UnRegistered');
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        var request = http.Request('GET', url)..headers.addAll(headers);
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          var responseBody = await response.stream.bytesToString();
+          List<dynamic> jsonList = json.decode(responseBody);
+          List<UnRegisteredCollectionsResponse> unRegisteredDataList = jsonList
+              .map((json) => UnRegisteredCollectionsResponse.fromJson(json))
+              .toList();
+          print(unRegisteredDataList.elementAt(2).idBl);
+          return right(unRegisteredDataList);
         } else {
           print(
               "Server error: ${response.statusCode} - ${response.reasonPhrase}");

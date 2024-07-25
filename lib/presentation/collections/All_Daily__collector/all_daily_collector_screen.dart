@@ -1,16 +1,16 @@
-import 'package:code_icons/data/api/api_manager.dart';
 import 'package:code_icons/data/model/data_model/add_collection_table.dart';
 import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 
@@ -41,12 +41,134 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
         .whenComplete(() => allDailyCollectorCubit.fetchAllCollections());
   }
 
+  var renderOverlay = true;
+  var visible = true;
+  var switchLabelPosition = false;
+  var extend = false;
+  var mini = false;
+  var rmicons = false;
+  var customDialRoot = false;
+  var closeManually = false;
+  var useRAnimation = true;
+  var isDialOpen = ValueNotifier<bool>(false);
+  var speedDialDirection = SpeedDialDirection.up;
+  var buttonSize = const Size(56.0, 56.0);
+  var childrenButtonSize = const Size(56.0, 56.0);
+  var selectedfABLocation = FloatingActionButtonLocation.centerTop;
+  var items = [
+    FloatingActionButtonLocation.startFloat,
+    FloatingActionButtonLocation.startDocked,
+    FloatingActionButtonLocation.centerFloat,
+    FloatingActionButtonLocation.endFloat,
+    FloatingActionButtonLocation.endDocked,
+    FloatingActionButtonLocation.startTop,
+    FloatingActionButtonLocation.centerTop,
+    FloatingActionButtonLocation.endTop,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AllDailyCollectorCubit, AllDailyCollectorState>(
       bloc: allDailyCollectorCubit,
       builder: (context, state) {
         return Scaffold(
+          /*  floatingActionButton: SpeedDial(
+            // animatedIcon: AnimatedIcons.menu_close,
+            // animatedIconTheme: IconThemeData(size: 22.0),
+            // / This is ignored if animatedIcon is non null
+            // child: Text("open"),
+            // activeChild: Text("close"),
+            icon: Icons.add,
+            activeIcon: Icons.close,
+            spacing: 3,
+            mini: mini,
+            openCloseDial: isDialOpen,
+            childPadding: const EdgeInsets.all(5),
+            spaceBetweenChildren: 4,
+            dialRoot: customDialRoot
+                ? (ctx, open, toggleChildren) {
+                    return ElevatedButton(
+                      onPressed: toggleChildren,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue[900],
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 22, vertical: 18),
+                      ),
+                      child: const Text(
+                        "Custom Dial Root",
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    );
+                  }
+                : null,
+            buttonSize:
+                buttonSize, // it's the SpeedDial size which defaults to 56 itself
+            // iconTheme: IconThemeData(size: 22),
+            label: extend
+                ? const Text("Open")
+                : null, // The label of the main button.
+            /// The active label of the main button, Defaults to label if not specified.
+            activeLabel: extend ? const Text("Close") : null,
+
+            /// Transition Builder between label and activeLabel, defaults to FadeTransition.
+            // labelTransitionBuilder: (widget, animation) => ScaleTransition(scale: animation,child: widget),
+            /// The below button size defaults to 56 itself, its the SpeedDial childrens size
+            childrenButtonSize: childrenButtonSize,
+            visible: visible,
+            direction: speedDialDirection,
+            switchLabelPosition: switchLabelPosition,
+
+            /// If true user is forced to close dial manually
+            closeManually: closeManually,
+
+            /// If false, backgroundOverlay will not be rendered.
+            renderOverlay: renderOverlay,
+            // overlayColor: Colors.black,
+            // overlayOpacity: 0.5,
+            onOpen: () => debugPrint('OPENING DIAL'),
+            onClose: () => debugPrint('DIAL CLOSED'),
+            useRotationAnimation: useRAnimation,
+            tooltip: 'Open Speed Dial',
+            heroTag: 'speed-dial-hero-tag',
+            // foregroundColor: Colors.black,
+            // backgroundColor: Colors.white,
+            // activeForegroundColor: Colors.red,
+            // activeBackgroundColor: Colors.blue,
+            elevation: 8.0,
+            animationCurve: Curves.elasticInOut,
+            isOpenOnStart: false,
+            shape: customDialRoot
+                ? const RoundedRectangleBorder()
+                : const StadiumBorder(),
+            // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            children: [
+              SpeedDialChild(
+                child: !rmicons ? const Icon(Icons.accessibility) : null,
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                label: 'First',
+                onTap: () => setState(() => rmicons = !rmicons),
+                onLongPress: () => debugPrint('FIRST CHILD LONG PRESS'),
+              ),
+              SpeedDialChild(
+                child: !rmicons ? const Icon(Icons.brush) : null,
+                backgroundColor: Colors.deepOrange,
+                foregroundColor: Colors.white,
+                label: 'Second',
+                onTap: () => debugPrint('SECOND CHILD'),
+              ),
+              SpeedDialChild(
+                child: !rmicons ? const Icon(Icons.margin) : null,
+                backgroundColor: Colors.indigo,
+                foregroundColor: Colors.white,
+                label: 'Show Snackbar',
+                visible: true,
+                onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(("Third Child Pressed")))),
+                onLongPress: () => debugPrint('THIRD CHILD LONG PRESS'),
+              ),
+            ],
+          ), */
           appBar: AppBar(
             toolbarHeight: 80.h,
             centerTitle: false,
@@ -90,6 +212,13 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                             context, AddCollectionView.routeName);
                       },
                     ),
+                    /*    IconButton(
+                      icon: Icon(Icons.edit, size: 30),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, UnlimitedCollection.routeName);
+                      },
+                    ), */
                   ],
           ),
           body: Column(
@@ -127,7 +256,7 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                   sortIconColor: AppColors.whiteColor,
                                 ),
                                 child: SfDataGrid(
-                                  rowHeight: 60.h,
+                                  rowHeight: 120.h,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerRowHeight: 80.h,
                                   rowsPerPage: 10,
@@ -199,7 +328,15 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                   } else if (state is GetAllCollectionsError) {
                     return Center(child: Text('Error: ${state.errorMsg}'));
                   }
-                  return SizedBox(height: 30, child: LoadingStateAnimation());
+                  return const Expanded(
+                    child: Column(
+                      children: [
+                        Spacer(),
+                        LoadingStateAnimation(),
+                        Spacer(),
+                      ],
+                    ),
+                  );
                 },
               ),
             ],

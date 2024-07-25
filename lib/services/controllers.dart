@@ -20,26 +20,47 @@ class ControllerManager {
 
   // Private constructor to prevent external instantiation
   ControllerManager._internal() {
-    diffrentFinanaceController.addListener(_updateTotalFinanceController);
+    addCollectionDiffrentFinanaceController
+        .addListener(_updateTotalFinanceController);
+    unlimitedCurrentFinanceController.addListener(calculateAndSetTotal);
+    unlimitedDivisionController.addListener(calculateAndSetTotal);
   }
   final customerCubit = CustomersCubit.customersCubit;
   // Method to update the total finance controller based on other values
   double _originalTotal = 0;
   double _previousDifferentFinance = 0;
+  void calculateAndSetTotal() {
+    try {
+      // Parse the current and division values from the text controllers
+      double current =
+          double.tryParse(unlimitedCurrentFinanceController.text) ?? 0.0;
+      double division =
+          double.tryParse(unlimitedDivisionController.text) ?? 0.0;
+
+      // Calculate the total
+      double total = current + division;
+
+      // Set the total value in the total finance controller
+      unlimitedTotalFinanceController.text = total.toString();
+    } catch (e) {
+      print("Error calculating total: $e");
+      unlimitedTotalFinanceController.text = "Error";
+    }
+  }
 
   void _updateTotalFinanceController() {
     try {
       // Parse the new value of diffrentFinanaceController
       final differentFinance =
-          double.tryParse(diffrentFinanaceController.text) ?? 0;
+          double.tryParse(addCollectionDiffrentFinanaceController.text) ?? 0;
 
       // Reset to the original total and add the current different finance value
       final totalFinance = _originalTotal + differentFinance;
 
       // Update the total finance controller
-      totalFinanceController.text = totalFinance.toString();
+      addCollectionTotalFinanceController.text = totalFinance.toString();
     } catch (e) {
-      totalFinanceController.text = "Error";
+      addCollectionTotalFinanceController.text = "Error";
     }
   }
 
@@ -77,8 +98,73 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController customerDataIdBLController =
       TextEditingController();
+  final TextEditingController addCollectionPhoneNumController =
+      TextEditingController();
+  final TextEditingController addCollectionAddressController =
+      TextEditingController();
+  final TextEditingController addCollectionRegisrtyNumController =
+      TextEditingController();
+  final TextEditingController addCollectionRegistryDateController =
+      TextEditingController();
+  final TextEditingController addCollectionActivityController =
+      TextEditingController();
+  final TextEditingController addCollectionPaymentReceitController =
+      TextEditingController();
+  final TextEditingController addCollectionDivisionController =
+      TextEditingController();
+  final TextEditingController addCollectionCompensationController =
+      TextEditingController();
+  final TextEditingController addCollectionLateFinanceController =
+      TextEditingController();
+  final TextEditingController addCollectionCurrentFinanceController =
+      TextEditingController();
+  final TextEditingController addCollectionDiffrentFinanaceController =
+      TextEditingController();
+  final TextEditingController addCollectionTotalFinanceController =
+      TextEditingController();
+  final TextEditingController unlimitedNameController = TextEditingController();
+
+  final TextEditingController unlimitedActivityController =
+      TextEditingController();
+  final TextEditingController unlimitedAddressController =
+      TextEditingController();
+  final TextEditingController unlimitedPaymentReceitDateController =
+      TextEditingController();
+  final TextEditingController unlimitedPaymentReceitController =
+      TextEditingController();
+  final TextEditingController unlimitedDivisionController =
+      TextEditingController();
+  final TextEditingController unlimitedCurrentFinanceController =
+      TextEditingController();
+  final TextEditingController unlimitedTotalFinanceController =
+      TextEditingController();
+// Method to get the controller by field name
 
   // Getter to return the list of controllers
+  List<TextEditingController> get addCollectionControllers => [
+        addCollectionPhoneNumController,
+        addCollectionAddressController,
+        addCollectionRegisrtyNumController,
+        addCollectionRegistryDateController,
+        addCollectionActivityController,
+        addCollectionPaymentReceitController,
+        addCollectionDivisionController,
+        addCollectionCompensationController,
+        addCollectionLateFinanceController,
+        addCollectionCurrentFinanceController,
+        addCollectionDiffrentFinanaceController,
+        addCollectionTotalFinanceController,
+      ];
+  List<TextEditingController> get unRegestriedCollectionControllers => [
+        unlimitedNameController,
+        unlimitedActivityController,
+        unlimitedAddressController,
+        unlimitedCurrentFinanceController,
+        unlimitedDivisionController,
+        unlimitedPaymentReceitController,
+        unlimitedPaymentReceitDateController,
+        unlimitedTotalFinanceController,
+      ];
   List<TextEditingController> get addCustomerControllers => [
         idBLController,
         brandNameBLController,
@@ -108,25 +194,9 @@ class ControllerManager {
         tradeRegistryTypeBLController,
         customerDataIdBLController,
       ];
-  // List of TextEditingControllers managed by this class
-  final TextEditingController phoneNumController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController regisrtyNumController = TextEditingController();
-  final TextEditingController registryDateController = TextEditingController();
-  final TextEditingController activityController = TextEditingController();
-  final TextEditingController paymentReceitController = TextEditingController();
-  final TextEditingController divisionController = TextEditingController();
-  final TextEditingController compensationController = TextEditingController();
-  final TextEditingController lateFinanceController = TextEditingController();
-  final TextEditingController currentFinanceController =
-      TextEditingController();
-  final TextEditingController diffrentFinanaceController =
-      TextEditingController();
-  final TextEditingController totalFinanceController = TextEditingController();
-// Method to get the controller by field name
   TextEditingController getControllerByName(String name) {
     switch (name) {
-      case 'idBL':
+      case 'idBLController':
         return idBLController;
       case 'brandNameBL':
         return brandNameBLController;
@@ -180,61 +250,50 @@ class ControllerManager {
         return tradeRegistryTypeBLController;
       case 'customerDataIdBL':
         return customerDataIdBLController;
+      case 'addCollectionPhoneNumController':
+        return addCollectionPhoneNumController;
+      case 'addCollectionAddressController':
+        return addCollectionAddressController;
+      case 'addCollectionRegisrtyNumController':
+        return addCollectionRegisrtyNumController;
+      case 'addCollectionRegistryDateController':
+        return addCollectionRegistryDateController;
+      case 'addCollectionActivityController':
+        return addCollectionActivityController;
+      case 'addCollectionPaymentReceitController':
+        return addCollectionPaymentReceitController;
+      case 'addCollectionDivisionController':
+        return addCollectionDivisionController;
+      case 'addCollectionCompensationController':
+        return addCollectionCompensationController;
+      case 'addCollectionLateFinanceController':
+        return addCollectionLateFinanceController;
+      case 'addCollectionCurrentFinanceController':
+        return addCollectionCurrentFinanceController;
+      case 'addCollectionDiffrentFinanaceController':
+        return addCollectionDiffrentFinanaceController;
+      case 'addCollectionTotalFinanceController':
+        return addCollectionTotalFinanceController;
+      case 'unlimitedNameController':
+        return unlimitedNameController;
+      case 'unlimitedAddressController':
+        return unlimitedAddressController;
+      case 'unlimitedPaymentReceitDateController':
+        return unlimitedPaymentReceitDateController;
+      case 'unlimitedActivityController':
+        return unlimitedActivityController;
+      case 'unlimitedPaymentReceitController':
+        return unlimitedPaymentReceitController;
+      case 'unlimitedDivisionController':
+        return unlimitedDivisionController;
+      case 'unlimitedCurrentFinanceController':
+        return unlimitedCurrentFinanceController;
+      case 'unlimitedTotalFinanceController':
+        return unlimitedTotalFinanceController;
       default:
-        throw Exception('Controller not found for $name');
+        throw ArgumentError('Invalid controller name: $name');
     }
   }
-
-  // Getter to return the list of controllers
-  List<TextEditingController> get addCollectionControllers => [
-        phoneNumController,
-        addressController,
-        regisrtyNumController,
-        registryDateController,
-        activityController,
-        paymentReceitController,
-        divisionController,
-        compensationController,
-        lateFinanceController,
-        currentFinanceController,
-        diffrentFinanaceController,
-        totalFinanceController,
-      ];
-
-  /*  CustomerDataModel createCustomerDataModelFromControllers(
-      List<TextEditingController> controllers) {
-    return CustomerDataModel(
-      idBl: tryParseInt(controllers[0].text,
-          defaultValue: 1), // Assuming 1 is the default ID
-      brandNameBl: controllers[1].text,
-      nationalIdBl: controllers[2].text,
-      birthDayBl: controllers[3].text,
-      tradeRegistryBl: controllers[4].text,
-      licenseDateBl: controllers[5].text,
-      licenseYearBl: tryParseInt(controllers[6].text, defaultValue: 2019),
-      capitalBl: double.parse(controllers[7].text),
-      validBl: tryParseInt(controllers[8].text, defaultValue: 1),
-      companyTypeBl: tryParseInt(controllers[9].text, defaultValue: 1),
-      companyTypeNameBl: controllers[10].text,
-      currencyIdBl: tryParseInt(controllers[11].text, defaultValue: 1),
-      tradeOfficeBl: tryParseInt(controllers[12].text, defaultValue: 1),
-      tradeOfficeNameBl: controllers[13].text,
-      activityBl: tryParseInt(controllers[14].text, defaultValue: 1),
-      activityNameBl: controllers[15].text,
-      expiredBl: controllers[16].text.isEmpty ? null : controllers[16].text,
-      divisionBl: controllers[17].text,
-      tradeTypeBl: controllers[18].text,
-      ownerBl: controllers[19].text,
-      addressBl: controllers[20].text,
-      stationBl: tryParseInt(controllers[21].text, defaultValue: 1),
-      stationNameBl: controllers[22].text,
-      phoneBl: controllers[23].text,
-      numExpiredBl: controllers[24].text.isEmpty ? null : controllers[24].text,
-      tradeRegistryTypeBl: tryParseInt(controllers[25].text, defaultValue: 1),
-      /* customerDataIdBl:
-          controllers[26].text.isEmpty ? null : controllers[26].text, */
-    );
-  } */
 
   void updateCurrencyController(CurrencyEntity currencyEntity) {
     currencyIdBLController.text = currencyEntity.currencyNameAr ?? "";
@@ -291,44 +350,51 @@ class ControllerManager {
     required PaymentValuesEntity paymentValuesEntity,
   }) {
     if (paymentValuesEntity.paidYears!.isNotEmpty) {
-      phoneNumController.text = customerDataEntity.phoneBl ?? "";
-      addressController.text = customerDataEntity.addressBl ?? "";
-      regisrtyNumController.text = customerDataEntity.tradeRegistryBl ?? "";
-      registryDateController.text =
+      addCollectionPhoneNumController.text = customerDataEntity.phoneBl ?? "";
+      addCollectionAddressController.text = customerDataEntity.addressBl ?? "";
+      addCollectionRegisrtyNumController.text =
+          customerDataEntity.tradeRegistryBl ?? "";
+      addCollectionRegistryDateController.text =
           DateFormat('yyyy-MM-dd').format(DateTime.now());
-      activityController.text = customerDataEntity.activityNameBl ?? "";
-      divisionController.text = customerDataEntity.divisionBl ?? "";
-      compensationController.text =
+      addCollectionActivityController.text =
+          customerDataEntity.activityNameBl ?? "";
+      addCollectionDivisionController.text =
+          customerDataEntity.divisionBl ?? "";
+      addCollectionCompensationController.text =
           paymentValuesEntity.compensation?.toString() ?? "0";
-      lateFinanceController.text = paymentValuesEntity.late?.toString() ?? "0";
-      currentFinanceController.text =
+      addCollectionLateFinanceController.text =
+          paymentValuesEntity.late?.toString() ?? "0";
+      addCollectionCurrentFinanceController.text =
           paymentValuesEntity.current?.toString() ?? "0";
-      diffrentFinanaceController.text =
+      addCollectionDiffrentFinanaceController.text =
           paymentValuesEntity.different?.toString() ?? "0";
 
       _originalTotal = paymentValuesEntity.total ?? 0;
-      if (diffrentFinanaceController.text.isEmpty) {
+      if (addCollectionDiffrentFinanaceController.text.isEmpty) {
         _previousDifferentFinance = 0;
       } else {
         _previousDifferentFinance =
-            double.tryParse(diffrentFinanaceController.text) ?? 0;
+            double.tryParse(addCollectionDiffrentFinanaceController.text) ?? 0;
       }
 
-      totalFinanceController.text =
+      addCollectionTotalFinanceController.text =
           (_originalTotal + _previousDifferentFinance).toString();
     } else {
-      phoneNumController.text = customerDataEntity.phoneBl ?? "";
-      addressController.text = customerDataEntity.addressBl ?? "";
-      regisrtyNumController.text = customerDataEntity.tradeRegistryBl ?? "";
-      registryDateController.text =
+      addCollectionPhoneNumController.text = customerDataEntity.phoneBl ?? "";
+      addCollectionAddressController.text = customerDataEntity.addressBl ?? "";
+      addCollectionRegisrtyNumController.text =
+          customerDataEntity.tradeRegistryBl ?? "";
+      addCollectionRegistryDateController.text =
           DateFormat('yyyy-MM-dd').format(DateTime.now());
-      activityController.text = customerDataEntity.activityNameBl ?? "";
-      divisionController.text = customerDataEntity.divisionBl ?? "";
-      compensationController.text = "0";
-      lateFinanceController.text = "0";
-      currentFinanceController.text = "0";
-      diffrentFinanaceController.text = "0";
-      totalFinanceController.text = "0";
+      addCollectionActivityController.text =
+          customerDataEntity.activityNameBl ?? "";
+      addCollectionDivisionController.text =
+          customerDataEntity.divisionBl ?? "";
+      addCollectionCompensationController.text = "0";
+      addCollectionLateFinanceController.text = "0";
+      addCollectionCurrentFinanceController.text = "0";
+      addCollectionDiffrentFinanaceController.text = "0";
+      addCollectionTotalFinanceController.text = "0";
       _originalTotal = 0;
       _previousDifferentFinance = 0;
     }
