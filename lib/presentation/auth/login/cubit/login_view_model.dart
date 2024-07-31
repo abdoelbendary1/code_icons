@@ -1,7 +1,6 @@
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_state.dart';
 
-import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,9 +8,12 @@ class LoginViewModel extends Cubit<LoginState> {
   LoginViewModel({required this.loginUseCase}) : super(LoginLoadinState());
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController(text: "admin");
-  TextEditingController passwordController =
-      TextEditingController(text: "admin");
+  TextEditingController emailController = TextEditingController(
+    text: "admin",
+  );
+  TextEditingController passwordController = TextEditingController(
+    text: "admin",
+  );
 
   late void Function()? buttonFunction;
   bool isObsecure = true;

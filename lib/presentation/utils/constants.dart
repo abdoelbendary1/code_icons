@@ -1,14 +1,18 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
+import 'package:code_icons/domain/entities/sectionEntity/sectionEntity.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
+import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
+import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
 import 'package:flutter/material.dart';
 
 class AppAssets {
@@ -19,153 +23,441 @@ class AppAssets {
 }
 
 class AppLocalData {
-  static final menus = {
-    "Main settings": {
-      'icon': Icons.settings,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+  static final Map<String, SectionEntity> menus = {
+    "finance": SectionEntity(
+      name: "المالية",
+      icon: Icons.money,
+      route: CollectionsScreen.routeName,
+      items: [
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Storage": {
-      'icon': Icons.storage,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Storage', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Sales": {
-      'icon': Icons.point_of_sale,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'sales', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Purchases": {
-      'icon': Icons.attach_money,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
       ],
-    },
-    "Contracting": {
-      'icon': Icons.contact_page,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+    ),
+    "cashInOut": SectionEntity(
+      name: "نقدي",
+      icon: Icons.monetization_on_rounded,
+      route: CollectionsScreen.routeName,
+      items: [
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Real Estate Investment": {
-      'icon': Icons.real_estate_agent_outlined,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Import": {
-      'icon': Icons.import_export,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Ship Management": {
-      'icon': Icons.local_shipping,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
       ],
-    },
-    "Hospital management": {
-      'icon': Icons.local_hospital,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+    ),
+    "purchases": SectionEntity(
+      name: "مشتريات",
+      icon: Icons.view_in_ar_sharp,
+      route: PurchaseScreen.routeName,
+      items: [
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Human Resources": {
-      'icon': Icons.how_to_reg_rounded,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'طلبات الشراء',
+          route: AllPurchasesScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Receipts and payments": {
-      'icon': Icons.payment,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
-    "Finance": {
-      'icon': Icons.money,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
         MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
       ],
-    },
-    "Collections": {
+    ),
+    "sales": SectionEntity(
+      name: "مبيعات",
+      icon: Icons.production_quantity_limits,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "costructions": SectionEntity(
+      name: "costructions",
+      icon: Icons.construction,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "charterparty": SectionEntity(
+      name: "charterparty",
+      icon: Icons.mark_chat_read_rounded,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "humanResources": SectionEntity(
+      name: "HR",
+      icon: Icons.group,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "stores": SectionEntity(
+      name: "تسوق",
+      icon: Icons.store,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "reports": SectionEntity(
+      name: "التقارير",
+      icon: Icons.library_books_rounded,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "settings": SectionEntity(
+      name: "الاعدادات",
+      icon: Icons.settings,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "realStateInvestments": SectionEntity(
+      name: "الاستثمار العقاري",
+      icon: Icons.real_estate_agent,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "imports": SectionEntity(
+      name: "الادخالات",
+      icon: Icons.import_export_sharp,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "hospital": SectionEntity(
+      name: "المستشفى",
+      icon: Icons.local_hospital,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    "collections": SectionEntity(
+      name: "التحصيلات",
+      icon: Icons.collections_bookmark_sharp,
+      route: CollectionsScreen.routeName,
+      items: [
+        MenuItem(
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
+        MenuItem(
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ],
+    ),
+    /*  "collections": {
+      'name': "التحصيلات",
       'icon': Icons.collections_bookmark_sharp,
       'route': CollectionsScreen.routeName,
       'items': [
-        MenuItem(title: 'بيانات العملاء', route: CustomerDataScreen.routeName),
         MenuItem(
-            title: 'all Trade Prove', route: AllTradeProveScreen.routeName),
+          title: 'بيانات العملاء',
+          route: CustomerDataScreen.routeName,
+          icon: Icons.person,
+        ),
+        /*   MenuItem(
+            title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-            title: 'بيان التسديدات', route: AllDailyCollectorScreen.routeName),
+          title: 'بيان التسديدات',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
         MenuItem(
-            title: 'حوافظ غير مقيده',
-            route: UnRegisteredCollectionsScreen.routeName),
+          title: 'حوافظ غير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
         MenuItem(
-            title: 'دفاتر الايصالات',
-            route: RecietsCollectionsScreen.routeName),
-      ],
-    },
-    "Reports": {
-      'icon': Icons.request_page_sharp,
-      'route': MainSettingScreen.routeName,
-      'items': [
-        MenuItem(title: 'Settings', route: SettingsScreen.routeName),
-        MenuItem(title: 'System Settings', route: SystemSettings.routeName),
-        MenuItem(
-            title: 'E-commerce Setting', route: EcommerceSetting.routeName),
-      ],
-    },
+          title: 'دفاتر الايصالات',
+          route: AllRecietsScreen.routeName,
+          icon: Icons.receipt,
+        ),
+      ]
+    }, */
   };
 }

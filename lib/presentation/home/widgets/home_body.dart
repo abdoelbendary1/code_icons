@@ -2,6 +2,7 @@ import 'package:code_icons/data/model/data_model/menu_item.dart';
 import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/presentation/home/widgets/custom_card.dart';
+import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,12 +30,9 @@ class _HomeBodyState extends State<HomeBody> {
       bloc: homeScreenViewModel,
       builder: (context, state) {
         if (state is HomeScreenInitial) {
-          return const Center(
-              child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
-          ));
+          return const Center(child: LoadingStateAnimation());
         } else if (state is HomeScreenError) {
-          return const Center(child: Text('Error'));
+          return Center(child: Text(state.message));
         } else if (state is HomeScreenSuccess) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -52,11 +50,11 @@ class _HomeBodyState extends State<HomeBody> {
                     itemBuilder: (context, index) {
                       //! should be enhanced later
 
-                      String title = state.menus.keys.elementAt(index);
-                      IconData icon = state.menus[title]!['icon'] as IconData;
-                      List<MenuItem> menuItem =
-                          state.menus[title]!['items'] as List<MenuItem>;
-                      String routeName = state.menus[title]!['route'] as String;
+                      String sectionName = state.menus.keys.elementAt(index);
+                      String title = state.menus[sectionName]!.name;
+                      IconData icon = state.menus[sectionName]!.icon;
+                      List<MenuItem> menuItem = state.menus[sectionName]!.items;
+                      String routeName = state.menus[sectionName]!.route;
                       //!
 
                       return CustomCard(

@@ -1,9 +1,10 @@
 class ApiConstants {
-  static String baseUrl = "demoapi5.code-icons.com";
+  static String baseUrl = "demoapi1.code-icons.com";
+   static String settingsEndPoint = "api/Settings";
   static String customerDataEndPoint = "/api/CustomerData";
   static String paymentValuesEndPoint = "/api/CustomerData/PaymentValues";
   static String tradeCollectionEndPoint = "/api/TradeCollection";
-  static String UnlimitedTradeCollectionEndPoint =
+  static String unlimitedTradeCollectionEndPoint =
       "/api/TradeCollection/Unlimited";
   static String loginEndPoint = "/api/Users/login";
   static String homeEndPoint = "api/home";

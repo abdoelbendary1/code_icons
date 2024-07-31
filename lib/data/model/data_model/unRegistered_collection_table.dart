@@ -14,7 +14,7 @@ class UnlimitedCollectionsDataSource extends DataGridSource {
   }) {
     _collections = collections.map<DataGridRow>((dataGridRow) {
       return DataGridRow(cells: [
-        DataGridCell<int>(columnName: 'collectionId', value: dataGridRow.idBl),
+        /*  DataGridCell<int>(columnName: 'collectionId', value: dataGridRow.idBl), */
         DataGridCell<String>(
             columnName: 'unlimitedName', value: dataGridRow.brandNameBl),
         DataGridCell<String>(
@@ -88,7 +88,7 @@ class UnlimitedCollectionsDataSource extends DataGridSource {
               alignment: Alignment.center,
               child: Text(
                 dataGridCell.value.toString(),
-                style: const TextStyle(color: Colors.black87, fontSize: 15),
+                style: const TextStyle(color: Colors.black, fontSize: 18),
               ),
             ),
           ),

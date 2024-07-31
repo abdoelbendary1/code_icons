@@ -32,6 +32,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   FetchPaymentValuesUseCase fetchPaymentValuesUseCase;
   PostTradeCollectionUseCase postTradeCollectionUseCase;
   PostPaymentValuesByIdUseCase paymentValuesByIdUseCase;
+  final formKey = GlobalKey<FormState>();
 
   List<CustomerDataEntity> customerData = [
     CustomerDataEntity(),
@@ -48,19 +49,19 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       addressBl: ControllerManager().addCollectionAddressController.text,
       collectionDateBl:
           ControllerManager().addCollectionRegistryDateController.text,
-      compensationBl: double.parse(
+      compensationBl: double.tryParse(
           ControllerManager().addCollectionCompensationController.text),
-      currentBl: double.parse(
+      currentBl: double.tryParse(
           ControllerManager().addCollectionCurrentFinanceController.text),
       customerDataIdBl: selectedCustomer.idBl,
-      differentBl: double.parse(
+      differentBl: double.tryParse(
           ControllerManager().addCollectionDiffrentFinanaceController.text),
       divisionBl: ControllerManager().addCollectionDivisionController.text,
-      lateBl: double.parse(
+      lateBl: double.tryParse(
           ControllerManager().addCollectionLateFinanceController.text),
       paymentReceiptNumBl: 5,
       phoneBl: ControllerManager().addCollectionPhoneNumController.text,
-      totalBl: double.parse(
+      totalBl: double.tryParse(
           ControllerManager().addCollectionTotalFinanceController.text),
       tradeRegistryBl:
           ControllerManager().addCollectionRegisrtyNumController.text,
@@ -220,18 +221,29 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   Future<void> postTradeCollection({
     required String token,
     required TradeCollectionRequest tradeCollectionRequest,
+    required BuildContext context,
   }) async {
     emit(AddCollectionLoading());
+    if (formKey.currentState!.validate()) {
+      var either = await postTradeCollectionUseCase.invoke(
+          token: token, tradeCollectionRequest: tradeCollectionRequest);
 
-    var either = await postTradeCollectionUseCase.invoke(
-        token: token, tradeCollectionRequest: tradeCollectionRequest);
-
-    either.fold((l) {
-      emit(AddCollectionError(errorMsg: l.errorMessege));
-    }, (r) {
-      print("collection Id :$r");
-      emit(AddCollectionSucces(tradeCollectionEntity: r));
-    });
+      either.fold((l) {
+        emit(AddCollectionError(errorMsg: l.errorMessege));
+      }, (r) {
+        print("collection Id :$r");
+        emit(AddCollectionSucces(tradeCollectionEntity: r));
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "برجاء ادخال جميع البيانات",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        backgroundColor: AppColors.redColor,
+        duration: Durations.extralong1,
+      ));
+    }
   }
 
   void postPaymentValuesByID({int? customerId, List<int>? paidYears}) async {

@@ -8,6 +8,7 @@ import 'package:code_icons/presentation/utils/constants.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -32,20 +33,39 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Home Page",
-            style: Theme.of(context).textTheme.titleLarge,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120.h),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: AppBar(
+              toolbarHeight: 120.h,
+              title: Text(
+                "الرئيسيه",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+            ),
           ),
-          centerTitle: true,
-          backgroundColor: AppColors.primaryColor,
         ),
         backgroundColor: AppColors.whiteColor,
         drawer: Theme(
           data: Theme.of(context).copyWith(canvasColor: AppColors.primaryColor),
           child: Drawer(
             child: Container(
-                color: AppColors.primaryColor,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
                 child: ListView(
                   children: [
                     Image.asset(AppAssets.logo),
@@ -53,8 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Center(
                         child: Text(
-                          "Home page",
-                          style: Theme.of(context).textTheme.titleMedium,
+                          "الرئيسيه",
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),
@@ -72,12 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           print('MenuLoaded state received in UI');
                           return Column(
                             children: state.menus.keys.map((menuTitle) {
-                              final menu = state.menus[menuTitle]!;
-                              final icon = menu['icon'] as IconData;
+                              final title = state.menus[menuTitle]!.name;
+                              final section = state.menus[menuTitle]!;
+                              final icon = section.icon;
                               final menuItems =
-                                  List<MenuItem>.from(menu['items']);
+                                  List<MenuItem>.from(section.items);
                               return CustomMenuItem(
-                                title: menuTitle,
+                                title: title,
                                 icon: icon,
                                 menuItems: menuItems,
                               );

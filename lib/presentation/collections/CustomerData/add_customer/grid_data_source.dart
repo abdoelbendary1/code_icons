@@ -2,6 +2,7 @@ import 'package:code_icons/data/model/response/get_customer_data.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 enum CustomerDataEnum {
@@ -92,6 +93,25 @@ class CustomerDataSource extends DataGridSource {
     );
   }
 
+  String convertStringToDate({required String inputString}) {
+    if (inputString.isNotEmpty) {
+      DateFormat inputFormat = DateFormat('yyyy/MM/dd');
+      // Parse the input string into a DateTime object
+      DateTime dateTime = inputFormat.parse(inputString);
+
+      // Define the output format
+      DateFormat outputFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+      // Format the DateTime object into the desired output format
+      String formattedDate = outputFormat.format(dateTime);
+      return formattedDate;
+    }
+    return "";
+  }
+
+  String formatDate(DateTime date) {
+    return '${date.year}/${date.month}/${date.day}';
+  }
+
   Widget buildCell(CustomerDataEnum dataEnum, DataGridCell dataGridCell) {
     switch (dataEnum) {
       case CustomerDataEnum.idBL:
@@ -100,12 +120,12 @@ class CustomerDataSource extends DataGridSource {
         return buildBrandNameCell(dataGridCell.value.toString());
       case CustomerDataEnum.nationalIdBL:
         return buildNationalIdCell(dataGridCell.value.toString());
-      /* case CustomerDataEnum.birthDayBL:
-        return buildBirthDayCell(dataGridCell.value ?? DateTime.now()); */
+      case CustomerDataEnum.birthDayBL:
+        return buildBirthDayCell(dataGridCell.value ?? DateTime.now());
       case CustomerDataEnum.tradeRegistryBL:
         return buildTradeRegistryCell(dataGridCell.value.toString());
-      /* case CustomerDataEnum.licenseDateBL:
-        return buildLicenseDateCell(dataGridCell.value ?? DateTime.now()); */
+      case CustomerDataEnum.licenseDateBL:
+        return buildLicenseDateCell(dataGridCell.value ?? DateTime.now());
       case CustomerDataEnum.licenseYearBL:
         return buildLicenseYearCell(dataGridCell.value.toString());
       case CustomerDataEnum.capitalBL:
@@ -137,7 +157,7 @@ class CustomerDataSource extends DataGridSource {
       padding: EdgeInsets.all(8.0),
       child: Text(
         value,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
       ),
     );
   }
@@ -183,7 +203,8 @@ class CustomerDataSource extends DataGridSource {
         alignment: Alignment.centerRight,
         padding: EdgeInsets.all(8.0),
         child: Text(
-          value.toIso8601String(),
+          formatDate(value),
+          /* value.toIso8601String(), */
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,
@@ -217,7 +238,8 @@ class CustomerDataSource extends DataGridSource {
         alignment: Alignment.centerRight,
         padding: EdgeInsets.all(8.0),
         child: Text(
-          value.toIso8601String(),
+          formatDate(value),
+          /* value.year.toString(), */
           style: TextStyle(
             color: Colors.black,
             fontSize: 16,

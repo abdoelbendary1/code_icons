@@ -138,8 +138,13 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController unlimitedTotalFinanceController =
       TextEditingController();
+  final TextEditingController paperNum = TextEditingController();
+  final TextEditingController totalPapers = TextEditingController();
 // Method to get the controller by field name
-
+  List<TextEditingController> get recietCollectionController => [
+        paperNum,
+        totalPapers,
+      ];
   // Getter to return the list of controllers
   List<TextEditingController> get addCollectionControllers => [
         addCollectionPhoneNumController,
@@ -196,6 +201,10 @@ class ControllerManager {
       ];
   TextEditingController getControllerByName(String name) {
     switch (name) {
+      case 'paperNum':
+        return paperNum;
+      case "totalPapers":
+        return totalPapers;
       case 'idBLController':
         return idBLController;
       case 'brandNameBL':

@@ -49,7 +49,7 @@ class _ReusableSelectActivityState extends State<ReusableSelectActivity> {
                 "اختيار الشعبه",
               ),
               value: widget.selectedActivity != null &&
-                      widget.itemList!.contains(widget.selectedActivity)
+                      widget.itemList.contains(widget.selectedActivity)
                   ? widget.selectedActivity
                   : null,
               icon: const Icon(
@@ -61,9 +61,10 @@ class _ReusableSelectActivityState extends State<ReusableSelectActivity> {
               style: Theme.of(context).textTheme.titleSmall,
               underline: Container(),
               onChanged: widget.onChanged,
-              selectedItemBuilder: (context) => widget.itemList!
+              selectedItemBuilder: (context) => widget.itemList
                   .map<DropdownMenuItem<ActivityEntity>>(
                       (ActivityEntity? value) {
+                //return the shown value
                 return DropdownMenuItem<ActivityEntity>(
                   value: value,
                   child: Text(
@@ -77,6 +78,7 @@ class _ReusableSelectActivityState extends State<ReusableSelectActivity> {
               }).toList(),
               items: widget.itemList.map<DropdownMenuItem<ActivityEntity>>(
                   (ActivityEntity value) {
+                //return the items list
                 return DropdownMenuItem<ActivityEntity>(
                   value: value,
                   child: Text(

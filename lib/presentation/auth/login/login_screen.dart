@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
               message: state.loginRepositoryEntity.name ?? "");
           print(state.loginRepositoryEntity.username);
 
-          /*  var token = SharedPrefrence.saveData(
+          /* var token = SharedPrefrence.saveData(
             key: "token",
             value: state.loginRepositoryEntity.accessToken,
           ); */
@@ -54,16 +54,25 @@ class LoginScreen extends StatelessWidget {
           );
         }
       },
-      child: Scaffold(
-          backgroundColor: AppColors.primaryColor,
-          body: LoginBody(
-            emailController: loginViewModel.emailController,
-            passwordController: loginViewModel.passwordController,
-            formKey: loginViewModel.formKey,
-            buttonFunction: () {
-              loginViewModel.login();
-            },
-          )),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [AppColors.blueColor, AppColors.lightBlueColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: LoginBody(
+              emailController: loginViewModel.emailController,
+              passwordController: loginViewModel.passwordController,
+              formKey: loginViewModel.formKey,
+              buttonFunction: () {
+                loginViewModel.login();
+              },
+            )),
+      ),
     );
   }
 }

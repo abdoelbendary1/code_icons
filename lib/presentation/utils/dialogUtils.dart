@@ -1,4 +1,3 @@
-
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,5 +79,28 @@ class DialogUtils {
         );
       },
     );
+  }
+}
+
+class SnackBarUtils {
+  static void showSnackBar({
+    required BuildContext context,
+    required String label,
+    required Color? backgroundColor,
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        label,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      backgroundColor: backgroundColor,
+      duration: Durations.extralong1,
+    ));
+  }
+
+  static void hideCurrentSnackBar({
+    required BuildContext context,
+  }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 }

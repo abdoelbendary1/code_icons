@@ -10,6 +10,7 @@ import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hawk_fab_menu/hawk_fab_menu.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -50,141 +51,131 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: AppColors.whiteColor),
-            toolbarHeight: 120.h,
-            centerTitle: true,
-            backgroundColor: AppColors.blueColor,
-            title: Text(
-              'قائمة العملاء',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: AppColors.whiteColor),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.add,
-                  size: 30,
-                  color: AppColors.whiteColor,
+    return Scaffold(
+        floatingActionButton: SpeedDial(
+          gradientBoxShape: BoxShape.circle,
+          gradient: const LinearGradient(
+            colors: [AppColors.blueColor, AppColors.lightBlueColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          switchLabelPosition: true,
+          spaceBetweenChildren: 10,
+          icon: Icons.menu,
+          activeIcon: Icons.close,
+          backgroundColor: AppColors.blueColor,
+          foregroundColor: Colors.white,
+          activeBackgroundColor: AppColors.blueColor,
+          activeForegroundColor: Colors.white,
+          buttonSize: const Size(56.0,
+              56.0), // it's the SpeedDial size which defaults to 56 itself
+          childrenButtonSize:
+              const Size(56.0, 56.0), // it's the same as buttonSize by default
+          direction: SpeedDialDirection.up, // default is SpeedDialDirection.up
+          renderOverlay: true, // default is true
+          overlayOpacity: 0.5, // default is 0.5
+          overlayColor: Colors.black, // default is Colors.black
+          tooltip: 'Open Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
+          elevation: 8.0, // default is 6.0
+          shape: const CircleBorder(), // default is CircleBorder
+          children: [
+            SpeedDialChild(
+              /*  child: const Icon(Icons.add, color: Colors.white), */
+              backgroundColor: AppColors.blueColor,
+              labelWidget: Container(
+                padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 24.w),
+                decoration: BoxDecoration(
+                  color: AppColors.blueColor,
+                  gradient: const LinearGradient(
+                    colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, AddCustomerScreen.routeName);
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        ' إضافة عميل',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              onTap: () {
+                Navigator.pushReplacementNamed(
+                    context, AddCustomerScreen.routeName);
+              },
+            ),
+          ],
+        ),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120.h),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: AppBar(
+              toolbarHeight: 120.h,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: Text(
+                "قائمه العملاء ",
+                style: TextStyle(
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.sp,
+                ),
+              ),
+            ),
+          ),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: BlocConsumer<CustomersCubit, CustomersState>(
+                bloc: customersCubit,
+                listener: (context, state) {},
+                builder: (context, state) {
+                  if (state is FetchCustomersSuccess) {
+                    return CustomersDataTable(
+                        dataSource: CustomerDataSource(state.customers));
+                  } else if (state is FetchCustomersError) {
+                    return Center(child: Text('Error: ${state.errorMsg}'));
+                  }
+                  return const Column(
+                    children: [
+                      Spacer(),
+                      LoadingStateAnimation(),
+                      Spacer(),
+                    ],
+                  );
                 },
               ),
-            ],
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: BlocConsumer<CustomersCubit, CustomersState>(
-                  bloc: customersCubit,
-                  listener: (context, state) {},
-                  builder: (context, state) {
-                    if (state is FetchCustomersSuccess) {
-                      return HawkFabMenu(
-                        icon: AnimatedIcons.menu_arrow,
-                        fabColor: Colors.yellow,
-                        iconColor: Colors.green,
-                        hawkFabMenuController: hawkFabMenuController,
-                        items: [
-                          HawkFabMenuItem(
-                            label: 'Menu 1',
-                            ontap: () {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Menu 1 selected')),
-                              );
-                            },
-                            icon: const Icon(Icons.home),
-                            color: Colors.red,
-                            labelColor: Colors.blue,
-                          ),
-                          HawkFabMenuItem(
-                            label: 'Menu 2',
-                            ontap: () {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Menu 2 selected')),
-                              );
-                            },
-                            icon: const Icon(Icons.comment),
-                            labelColor: Colors.white,
-                            labelBackgroundColor: Colors.blue,
-                          ),
-                          HawkFabMenuItem(
-                            label: 'Menu 3 (default)',
-                            ontap: () {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Menu 3 selected')),
-                              );
-                            },
-                            icon: const Icon(Icons.add_a_photo),
-                          ),
-                        ],
-                        body: CustomersDataTable(
-                            dataSource: CustomerDataSource(state.customers)),
-                      );
-
-                      /*  print(state.customers.first.brandNameBl); */
-                    } else if (state is FetchCustomersError) {
-                      return Center(child: Text('Error: ${state.errorMsg}'));
-                    }
-                    return const Column(
-                      children: [
-                        Spacer(),
-                        LoadingStateAnimation(),
-                        Spacer(),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ],
-          )),
-    );
+            ),
+          ],
+        ));
   }
-
-  /* CustomerData convertRowToEntity(DataGridRow? row) {
-    final cells = row!.getCells();
-    return CustomerData(
-      idBL: cells[0].value,
-      brandNameBL: cells[1].value,
-      nationalIdBL: cells[2].value,
-      birthDayBL: cells[3].value,
-      tradeRegistryBL: cells[4].value,
-      licenseDateBL: cells[5].value,
-      licenseYearBL: cells[6].value,
-      capitalBL: cells[7].value,
-      validBL: cells[8].value,
-      companyTypeBL: cells[9].value,
-      companyTypeNameBL: cells[10].value,
-      currencyIdBL: cells[11].value,
-      tradeOfficeBL: cells[12].value,
-      tradeOfficeNameBL: cells[13].value,
-      activityBL: cells[14].value,
-      activityNameBL: cells[15].value,
-      expiredBL: cells[16].value,
-      divisionBL: cells[17].value,
-      tradeTypeBL: cells[18].value,
-      ownerBL: cells[19].value,
-      addressBL: cells[20].value,
-      stationBL: cells[21].value,
-      stationNameBL: cells[22].value,
-      phoneBL: cells[23].value,
-      numExpiredBL: cells[24].value,
-      tradeRegistryTypeBL: cells[25].value,
-      customerDataIdBL: cells[26].value,
-    );
-  } */
 }

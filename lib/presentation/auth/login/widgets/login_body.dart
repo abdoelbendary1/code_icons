@@ -1,6 +1,7 @@
 import 'package:code_icons/presentation/utils/constants.dart';
 import 'package:code_icons/presentation/utils/custom_button.dart';
 import 'package:code_icons/presentation/utils/custom_text_field.dart';
+import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,10 +28,14 @@ class _LoginBodyState extends State<LoginBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(
+              height: 50.h,
+            ),
             //logo
             Padding(
               padding: EdgeInsets.only(
@@ -48,7 +53,10 @@ class _LoginBodyState extends State<LoginBody> {
                   padding: EdgeInsets.only(left: 32.h, right: 32.h),
                   child: Text(
                     "مرحباً بعودتك",
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontSize: 26),
                   ),
                 ),
                 SizedBox(
@@ -61,7 +69,7 @@ class _LoginBodyState extends State<LoginBody> {
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
-                        .copyWith(fontSize: 16),
+                        .copyWith(fontSize: 20),
                   ),
                 ),
               ],
@@ -72,7 +80,7 @@ class _LoginBodyState extends State<LoginBody> {
             ),
             //form
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Form(
                 key: widget.formKey,
                 child: Column(
@@ -86,7 +94,7 @@ class _LoginBodyState extends State<LoginBody> {
                         if (value == null || value.trim().isEmpty) {
                           return "يجب ادخال اسم المستخدم";
                         }
-                       /*  bool emailValid = RegExp(
+                        /*  bool emailValid = RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(value);
                         if (!emailValid) {
@@ -122,7 +130,7 @@ class _LoginBodyState extends State<LoginBody> {
                         if (value == null || value.trim().isEmpty) {
                           return "يجب ادخال كلمه المرور";
                         }
-                      /*   if (value.length < 5 || value.length > 30) {
+                        /*   if (value.length < 5 || value.length > 30) {
                           return "password must be more than 6 char and less than 30 char";
                         } */
                         return null;
@@ -151,6 +159,9 @@ class _LoginBodyState extends State<LoginBody> {
                   ],
                 ),
               ),
+            ),
+            SizedBox(
+              height: 50.h,
             ),
           ],
         ),

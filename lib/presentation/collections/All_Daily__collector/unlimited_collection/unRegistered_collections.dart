@@ -75,154 +75,108 @@ class _UnRegisteredCollectionsScreenState
       bloc: unlimitedCollectionCubit..getAllCollctions(),
       builder: (context, state) {
         return Scaffold(
-          /*  floatingActionButton: SpeedDial(
-              // animatedIcon: AnimatedIcons.menu_close,
-              // animatedIconTheme: IconThemeData(size: 22.0),
-              // / This is ignored if animatedIcon is non null
-              // child: Text("open"),
-              // activeChild: Text("close"),
-              icon: Icons.add,
-              activeIcon: Icons.close,
-              spacing: 3,
-              mini: mini,
-              openCloseDial: isDialOpen,
-              childPadding: const EdgeInsets.all(5),
-              spaceBetweenChildren: 4,
-              dialRoot: customDialRoot
-                  ? (ctx, open, toggleChildren) {
-                      return ElevatedButton(
-                        onPressed: toggleChildren,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue[900],
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 22, vertical: 18),
-                        ),
-                        child: const Text(
-                          "Custom Dial Root",
-                          style: TextStyle(fontSize: 17),
-                        ),
-                      );
-                    }
-                  : null,
-              buttonSize:
-                  buttonSize, // it's the SpeedDial size which defaults to 56 itself
-              // iconTheme: IconThemeData(size: 22),
-              label: extend
-                  ? const Text("Open")
-                  : null, // The label of the main button.
-              /// The active label of the main button, Defaults to label if not specified.
-              activeLabel: extend ? const Text("Close") : null,
-        
-              /// Transition Builder between label and activeLabel, defaults to FadeTransition.
-              // labelTransitionBuilder: (widget, animation) => ScaleTransition(scale: animation,child: widget),
-              /// The below button size defaults to 56 itself, its the SpeedDial childrens size
-              childrenButtonSize: childrenButtonSize,
-              visible: visible,
-              direction: speedDialDirection,
-              switchLabelPosition: switchLabelPosition,
-        
-              /// If true user is forced to close dial manually
-              closeManually: closeManually,
-        
-              /// If false, backgroundOverlay will not be rendered.
-              renderOverlay: renderOverlay,
-              // overlayColor: Colors.black,
-              // overlayOpacity: 0.5,
-              onOpen: () => debugPrint('OPENING DIAL'),
-              onClose: () => debugPrint('DIAL CLOSED'),
-              useRotationAnimation: useRAnimation,
-              tooltip: 'Open Speed Dial',
-              heroTag: 'speed-dial-hero-tag',
-              // foregroundColor: Colors.black,
-              // backgroundColor: Colors.white,
-              // activeForegroundColor: Colors.red,
-              // activeBackgroundColor: Colors.blue,
-              elevation: 8.0,
-              animationCurve: Curves.elasticInOut,
-              isOpenOnStart: false,
-              shape: customDialRoot
-                  ? const RoundedRectangleBorder()
-                  : const StadiumBorder(),
-              // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              children: [
-                SpeedDialChild(
-                  child: !rmicons ? const Icon(Icons.accessibility) : null,
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  label: 'First',
-                  onTap: () => setState(() => rmicons = !rmicons),
-                  onLongPress: () => debugPrint('FIRST CHILD LONG PRESS'),
-                ),
-                SpeedDialChild(
-                  child: !rmicons ? const Icon(Icons.brush) : null,
-                  backgroundColor: Colors.deepOrange,
-                  foregroundColor: Colors.white,
-                  label: 'Second',
-                  onTap: () => debugPrint('SECOND CHILD'),
-                ),
-                SpeedDialChild(
-                  child: !rmicons ? const Icon(Icons.margin) : null,
-                  backgroundColor: Colors.indigo,
-                  foregroundColor: Colors.white,
-                  label: 'Show Snackbar',
-                  visible: true,
-                  onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text(("Third Child Pressed")))),
-                  onLongPress: () => debugPrint('THIRD CHILD LONG PRESS'),
-                ),
-              ],
-            ), */
-          appBar: AppBar(
-            toolbarHeight: 80.h,
-            centerTitle: false,
-            backgroundColor:
-                state is RowSelectedState ? Colors.blue : AppColors.blueColor,
-            title: Text(
-              state is RowSelectedState
-                  ? '1 item selected'
-                  : 'قائمة الحوافظ الغير مقيده',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: Colors.white),
+          floatingActionButton: SpeedDial(
+            gradientBoxShape: BoxShape.circle,
+            gradient: const LinearGradient(
+              colors: [AppColors.blueColor, AppColors.lightBlueColor],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            actions: state is RowSelectedState
-                ? [
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        /*   Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AddCollectionView(data: state.selectedRow),
-                            ),
-                          ); */
-                      },
+            switchLabelPosition: true,
+            spaceBetweenChildren: 10,
+            icon: Icons.menu,
+            activeIcon: Icons.close,
+            backgroundColor: AppColors.blueColor,
+            foregroundColor: Colors.white,
+            activeBackgroundColor: AppColors.blueColor,
+            activeForegroundColor: Colors.white,
+            buttonSize: const Size(56.0,
+                56.0), // it's the SpeedDial size which defaults to 56 itself
+            childrenButtonSize: const Size(
+                56.0, 56.0), // it's the same as buttonSize by default
+            direction:
+                SpeedDialDirection.up, // default is SpeedDialDirection.up
+            renderOverlay: true, // default is true
+            overlayOpacity: 0.5, // default is 0.5
+            overlayColor: Colors.black, // default is Colors.black
+            tooltip: 'Open Speed Dial',
+            heroTag: 'speed-dial-hero-tag',
+            elevation: 8.0, // default is 6.0
+            shape: const CircleBorder(), // default is CircleBorder
+            children: [
+              SpeedDialChild(
+                /*  child: const Icon(Icons.add, color: Colors.white), */
+                backgroundColor: AppColors.blueColor,
+                labelWidget: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 6.h, horizontal: 24.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.blueColor,
+                    gradient: const LinearGradient(
+                      colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    /*    IconButton(
-                        icon: Icon(Icons.cancel),
-                        onPressed: () {
-                          allDailyCollectorCubit.deselectRow();
-                        },
-                      ), */
-                  ]
-                : [
-                    /*   IconButton(
-                        icon: Icon(Icons.add, size: 30),
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, AddCollectionView.routeName);
-                        },
-                      ), */
-                    IconButton(
-                      icon: Icon(Icons.add, size: 30),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, UnlimitedCollection.routeName);
-                      },
-                    ),
-                  ],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ' إضافة حافظه غير مقيده',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacementNamed(
+                      context, UnlimitedCollection.routeName);
+                },
+              ),
+            ],
+          ),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(120.h),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: AppBar(
+                toolbarHeight: 120.h,
+                leading: IconButton(
+                  icon:
+                      const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title: Text(
+                  "الحوافظ الغير مقيده",
+                  style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.sp,
+                  ),
+                ),
+              ),
+            ),
           ),
           body: Column(
             children: [
@@ -244,92 +198,120 @@ class _UnRegisteredCollectionsScreenState
                       child: Column(
                         children: [
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: SfDataGridTheme(
-                                data: SfDataGridThemeData(
-                                  selectionColor: AppColors.lightBlueColor,
-                                  headerColor: AppColors.blueColor,
-                                  filterIconColor: AppColors.whiteColor,
-                                  sortIconColor: AppColors.whiteColor,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.whiteColor,
+                                  /*   gradient: const LinearGradient(
+                                    colors: [
+                                      AppColors.blueColor,
+                                      AppColors.lightBlueColor
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.centerLeft,
+                                  ), */
                                 ),
-                                child: SfDataGrid(
-                                  rowHeight: 120.h,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerRowHeight: 80.h,
-                                  rowsPerPage: 10,
-                                  controller: dataGridController,
-                                  source: _dataSource,
-                                  allowSorting: true,
-                                  allowFiltering: true,
-                                  frozenColumnsCount:
-                                      1, // Freezing the first column
-                                  columns: [
-                                    buildGridColumn(
-                                        columnName: "collectionId",
-                                        label: "Id",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedName",
-                                        label: "الاسم",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedActivity",
-                                        label: "النشاط",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedAddress",
-                                        label: "العنوان",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedPaymentReceipt",
-                                        label: "رقم الايصال",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName:
-                                            "unlimitedPaymentReceiptDate",
-                                        label: "تاريخ الايصال",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedDivision",
-                                        label: "الشعبه",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedCurrentFinance",
-                                        label: "الحالي",
-                                        alignment: Alignment.centerRight),
-                                    buildGridColumn(
-                                        columnName: "unlimitedTotalFinance",
-                                        label: "الاجمالي",
-                                        alignment: Alignment.centerRight),
-                                  ],
-                                  selectionMode: SelectionMode.single,
-                                  onSelectionChanged:
-                                      (List<DataGridRow> addedRows,
-                                          List<DataGridRow> removedRows) {
-                                    if (addedRows.isNotEmpty) {
-                                      Future.delayed(Duration.zero, () {
-                                        if (mounted) {
-                                          setState(() {
-                                            /*   TradeCollectionEntity selectedRow =
-                                                  convertRowToEntity(
-                                                      dataGridController
-                                                          .selectedRow!);
-                                              print(selectedRow.compensationBl);
-                                              print(dataGridController
-                                                  .selectedIndex); */
-                                            /* unlimitedCollectionCubit
-                                                  .selectRow(selectedRow); */
-                                          });
-                                        }
-                                      });
-                                    } else {
-                                      unlimitedCollectionCubit.deselectRow();
-                                    }
-                                  },
+                                child: SfDataGridTheme(
+                                  data: SfDataGridThemeData(
+                                    gridLineColor: AppColors.lightBlueColor,
+                                    filterPopupDisabledTextStyle:
+                                        const TextStyle(
+                                            color: AppColors.blackColor),
+                                    filterPopupTextStyle: const TextStyle(
+                                        decorationColor: AppColors.blueColor,
+                                        color: AppColors.blueColor,
+                                        height: 2,
+                                        fontWeight: FontWeight.bold,
+                                        debugLabel: AutofillHints.addressCity),
+                                    sortOrderNumberColor: AppColors.blueColor,
+                                    gridLineStrokeWidth: 0,
+                                    frozenPaneElevation: 0,
+                                    frozenPaneLineWidth: 0,
+                                    selectionColor: AppColors.lightBlueColor,
+                                    headerColor: AppColors.blueColor,
+                                    filterIconColor: AppColors.whiteColor,
+                                    sortIconColor: AppColors.whiteColor,
+                                    columnDragIndicatorColor:
+                                        AppColors.whiteColor,
+                                  ),
+                                  child: SfDataGrid(
+                                    rowHeight: 120.h,
+                                    gridLinesVisibility:
+                                        GridLinesVisibility.both,
+                                    headerRowHeight: 80.h,
+                                    rowsPerPage: 10,
+                                    controller: dataGridController,
+                                    source: _dataSource,
+                                    allowSorting: true,
+                                    allowFiltering: true,
+                                    frozenColumnsCount:
+                                        1, // Freezing the first column
+                                    columns: [
+                                      /*   buildGridColumn(
+                                          columnName: "collectionId",
+                                          label: "Id",
+                                          alignment: Alignment.centerRight), */
+                                      buildGridColumn(
+                                          columnName: "unlimitedName",
+                                          label: "الاسم",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName: "unlimitedActivity",
+                                          label: "النشاط",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName: "unlimitedAddress",
+                                          label: "العنوان",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName: "unlimitedPaymentReceipt",
+                                          label: "رقم الايصال",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName:
+                                              "unlimitedPaymentReceiptDate",
+                                          label: "تاريخ الايصال",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName: "unlimitedDivision",
+                                          label: "الشعبه",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName: "unlimitedCurrentFinance",
+                                          label: "الحالي",
+                                          alignment: Alignment.centerRight),
+                                      buildGridColumn(
+                                          columnName: "unlimitedTotalFinance",
+                                          label: "الاجمالي",
+                                          alignment: Alignment.centerRight),
+                                    ],
+                                    selectionMode: SelectionMode.single,
+                                    onSelectionChanged:
+                                        (List<DataGridRow> addedRows,
+                                            List<DataGridRow> removedRows) {
+                                      if (addedRows.isNotEmpty) {
+                                        Future.delayed(Duration.zero, () {
+                                          if (mounted) {
+                                            setState(() {
+                                              /*   TradeCollectionEntity selectedRow =
+                                                    convertRowToEntity(
+                                                        dataGridController
+                                                            .selectedRow!);
+                                                print(selectedRow.compensationBl);
+                                                print(dataGridController
+                                                    .selectedIndex); */
+                                              /* unlimitedCollectionCubit
+                                                    .selectRow(selectedRow); */
+                                            });
+                                          }
+                                        });
+                                      } else {
+                                        unlimitedCollectionCubit.deselectRow();
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                             ),

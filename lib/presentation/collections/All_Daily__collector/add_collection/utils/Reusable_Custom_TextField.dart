@@ -15,6 +15,9 @@ class ReusableCustomTextField extends StatelessWidget {
   bool? readOnly;
   void Function(String)? onChanged;
   Key? textKey;
+  int? minLines;
+  int? maxLines;
+  int? maxLength;
 
   ReusableCustomTextField({
     super.key,
@@ -29,6 +32,9 @@ class ReusableCustomTextField extends StatelessWidget {
     this.onTap,
     this.readOnly,
     this.onChanged,
+    this.minLines,
+    this.maxLines,
+    this.maxLength,
   });
 
   @override
@@ -36,6 +42,9 @@ class ReusableCustomTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.w),
       child: TextFormField(
+        maxLines: maxLines,
+        minLines: minLines,
+        maxLength: maxLength,
         mouseCursor: SystemMouseCursors.click,
         /* key: textKey, */
         onChanged: onChanged,

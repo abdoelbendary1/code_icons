@@ -27,6 +27,7 @@ class CollectionDetailsForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: addCollectionCubit.formKey,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         physics: const BouncingScrollPhysics(),
@@ -41,16 +42,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionPhoneNumController'),
               icon: Icons.phone_iphone,
               readOnly: true,
-             onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionPhoneNumController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionPhoneNumController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال رقم الموبايل";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionPhoneNumController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionPhoneNumController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.address_label,
@@ -59,16 +69,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionAddressController'),
               icon: Icons.home,
               readOnly: true,
-              onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionAddressController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionAddressController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال العنوان";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionAddressController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionAddressController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.registration_Number_label,
@@ -77,16 +96,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionRegisrtyNumController'),
               icon: Icons.app_registration,
               readOnly: true,
-             onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionRegisrtyNumController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionRegisrtyNumController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال رقم السجل";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionRegisrtyNumController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionRegisrtyNumController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.registration_Date_label,
@@ -95,16 +123,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionRegistryDateController'),
               icon: Icons.app_registration,
               readOnly: true,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionRegistryDateController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionRegistryDateController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال تاريخ السجل";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionRegistryDateController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionRegistryDateController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.commercial_activities_label,
@@ -113,16 +150,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionActivityController'),
               icon: Icons.local_activity,
               readOnly: true,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionActivityController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionActivityController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال النشاط";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionActivityController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionActivityController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16),
@@ -135,24 +181,28 @@ class CollectionDetailsForm extends StatelessWidget {
             YearsOfPaymentGridView(
               addCollectionCubit: addCollectionCubit,
             ),
-            SizedBox(height: 25.h),
-            BuildTextField(
+            /* SizedBox(height: 25.h), */
+            /*   BuildTextField(
               label: AppLocalizations.of(context)!.payment_receipt_number_label,
               hint: AppLocalizations.of(context)!.payment_receipt_number_hint,
               controller: ControllerManager()
                   .getControllerByName('addCollectionPaymentReceitController'),
               icon: Icons.receipt,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionPaymentReceitController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionPaymentReceitController')
-                          .value
-                          .text
-                          .length);},
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionPaymentReceitController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionPaymentReceitController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
+             */
             BuildTextField(
               label: AppLocalizations.of(context)!.division_label,
               hint: AppLocalizations.of(context)!.division_hint,
@@ -160,16 +210,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionDivisionController'),
               icon: Icons.diversity_3_sharp,
               readOnly: true,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionDivisionController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionDivisionController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال الشعبه";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionDivisionController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionDivisionController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.compensation_label,
@@ -178,16 +237,25 @@ class CollectionDetailsForm extends StatelessWidget {
                   .getControllerByName('addCollectionCompensationController'),
               icon: Icons.attach_money,
               readOnly: true,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionCompensationController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionCompensationController')
-                          .value
-                          .text
-                          .length);},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال التعويض";
+                }
+                return null;
+              },
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionCompensationController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionCompensationController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.financial_arrears_label,
@@ -195,17 +263,26 @@ class CollectionDetailsForm extends StatelessWidget {
               controller: ControllerManager()
                   .getControllerByName('addCollectionLateFinanceController'),
               icon: Icons.attach_money,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال المتأخر";
+                }
+                return null;
+              },
               readOnly: true,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionLateFinanceController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionLateFinanceController')
-                          .value
-                          .text
-                          .length);},
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionLateFinanceController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionLateFinanceController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.current_finance_label,
@@ -213,17 +290,27 @@ class CollectionDetailsForm extends StatelessWidget {
               controller: ControllerManager()
                   .getControllerByName('addCollectionCurrentFinanceController'),
               icon: Icons.attach_money,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال الحالي";
+                }
+                return null;
+              },
               readOnly: true,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionCurrentFinanceController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionCurrentFinanceController')
-                          .value
-                          .text
-                          .length);},
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName(
+                            'addCollectionCurrentFinanceController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionCurrentFinanceController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.finance_Diffrence_label,
@@ -231,18 +318,28 @@ class CollectionDetailsForm extends StatelessWidget {
               controller: ControllerManager().getControllerByName(
                   'addCollectionDiffrentFinanaceController'),
               onChanged: (value) {},
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال المتنوع";
+                }
+                return null;
+              },
               readOnly: false,
               icon: Icons.add_to_photos_sharp,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionDiffrentFinanaceController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionDiffrentFinanaceController')
-                          .value
-                          .text
-                          .length);},
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName(
+                            'addCollectionDiffrentFinanaceController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionDiffrentFinanaceController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             BuildTextField(
               label: AppLocalizations.of(context)!.total_finance_label,
@@ -250,17 +347,26 @@ class CollectionDetailsForm extends StatelessWidget {
               controller: ControllerManager()
                   .getControllerByName('addCollectionTotalFinanceController'),
               readOnly: true,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال الاجمالي";
+                }
+                return null;
+              },
               icon: Icons.money,
-               onTap: () { ControllerManager()
-                      .getControllerByName('addCollectionTotalFinanceController')
-                      .selection =
-                  TextSelection(
-                      baseOffset: 0,
-                      extentOffset: ControllerManager()
-                          .getControllerByName('addCollectionTotalFinanceController')
-                          .value
-                          .text
-                          .length);},
+              onTap: () {
+                ControllerManager()
+                        .getControllerByName('addCollectionTotalFinanceController')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName(
+                                'addCollectionTotalFinanceController')
+                            .value
+                            .text
+                            .length);
+              },
             ),
             SizedBox(height: 10.h),
             Row(
@@ -299,18 +405,20 @@ class CollectionDetailsForm extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      CustomerDataEntity selectedCustomer =
-                          context.read<AddCollectionCubit>().selectedCustomer;
-                      var tradeCollectionRequest =
-                          addCollectionCubit.intializeTradeRequest(
-                              selectedCustomer: selectedCustomer,
-                              context: context);
-                      await addCollectionCubit.postTradeCollection(
-                        token: "token",
-                        tradeCollectionRequest: tradeCollectionRequest,
-                      );
-                      print(
-                          "selected customer ater post ${selectedCustomer.idBl}");
+                      if (addCollectionCubit.formKey.currentState!.validate()) {
+                        CustomerDataEntity selectedCustomer =
+                            context.read<AddCollectionCubit>().selectedCustomer;
+                        var tradeCollectionRequest =
+                            addCollectionCubit.intializeTradeRequest(
+                                selectedCustomer: selectedCustomer,
+                                context: context);
+                        await addCollectionCubit.postTradeCollection(
+                            token: "token",
+                            tradeCollectionRequest: tradeCollectionRequest,
+                            context: context);
+                      }
+
+                     
                     },
                     child: Text(AppLocalizations.of(context)!.save),
                   ),

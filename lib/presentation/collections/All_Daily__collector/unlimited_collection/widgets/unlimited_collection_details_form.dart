@@ -244,6 +244,7 @@ class _UnlimitedCollectionDetailsFormState
               ],
             ),
             BuildTextField(
+                readOnly: true,
                 label: "الاجمالي",
                 hint: "الاجمالي",
                 controller: ControllerManager()
@@ -257,7 +258,7 @@ class _UnlimitedCollectionDetailsFormState
                   return null;
                 },
                 onTap: () {
-                  ControllerManager()
+                  /*  ControllerManager()
                           .getControllerByName('unlimitedTotalFinanceController')
                           .selection =
                       TextSelection(
@@ -267,7 +268,7 @@ class _UnlimitedCollectionDetailsFormState
                                   'unlimitedTotalFinanceController')
                               .value
                               .text
-                              .length);
+                              .length); */
                 }),
             SizedBox(height: 10.h),
             Row(

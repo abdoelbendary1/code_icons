@@ -11,12 +11,17 @@ import 'package:code_icons/presentation/collections/CustomerData/add_customer/ad
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/purchase_request.dart';
+import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
+import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
+import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:code_icons/services/my_observer.dart';
@@ -105,6 +110,7 @@ class MyApp extends StatelessWidget {
               postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
               paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase()),
         ),
+        BlocProvider(create: (context) => PurchasesCubit()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(430, 932),
@@ -134,8 +140,12 @@ class MyApp extends StatelessWidget {
             AllTradeProveScreen.routeName: (context) => AllTradeProveScreen(),
             AllDailyCollectorScreen.routeName: (context) =>
                 AllDailyCollectorScreen(),
+            PurchaseScreen.routeName: (context) => PurchaseScreen(),
+            AllPurchasesScreen.routeName: (context) => AllPurchasesScreen(),
+            PurchaseRequest.routeName: (context) => PurchaseRequest(),
             RecietsCollectionsScreen.routeName: (context) =>
                 RecietsCollectionsScreen(),
+            AllRecietsScreen.routeName: (context) => AllRecietsScreen(),
             UnRegisteredCollectionsScreen.routeName: (context) =>
                 UnRegisteredCollectionsScreen(),
             AddCustomerScreen.routeName: (context) => AddCustomerScreen(),

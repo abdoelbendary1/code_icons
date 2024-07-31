@@ -116,7 +116,7 @@ class CollectionsDataSource extends DataGridSource {
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               child: Text(
                 dataGridCell.value.toString(),
-                style: const TextStyle(color: Colors.black87, fontSize: 15),
+                style: const TextStyle(color: Colors.black, fontSize: 18),
               ),
             ),
           ),

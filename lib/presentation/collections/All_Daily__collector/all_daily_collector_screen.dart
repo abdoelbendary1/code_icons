@@ -169,9 +169,9 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
               ),
             ],
           ), */
-          appBar: AppBar(
+          /*  appBar: AppBar(
             toolbarHeight: 80.h,
-            centerTitle: false,
+            centerTitle: true,
             backgroundColor:
                 state is RowSelectedState ? Colors.blue : AppColors.blueColor,
             title: Text(
@@ -220,6 +220,109 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                       },
                     ), */
                   ],
+          ), */
+          floatingActionButton: SpeedDial(
+            gradientBoxShape: BoxShape.circle,
+            gradient: const LinearGradient(
+              colors: [AppColors.blueColor, AppColors.lightBlueColor],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            switchLabelPosition: true,
+            spaceBetweenChildren: 10,
+            icon: Icons.menu,
+            activeIcon: Icons.close,
+            backgroundColor: AppColors.blueColor,
+            foregroundColor: Colors.white,
+            activeBackgroundColor: AppColors.blueColor,
+            activeForegroundColor: Colors.white,
+            buttonSize: const Size(56.0,
+                56.0), // it's the SpeedDial size which defaults to 56 itself
+            childrenButtonSize: const Size(
+                56.0, 56.0), // it's the same as buttonSize by default
+            direction:
+                SpeedDialDirection.up, // default is SpeedDialDirection.up
+            renderOverlay: true, // default is true
+            overlayOpacity: 0.5, // default is 0.5
+            overlayColor: Colors.black, // default is Colors.black
+            tooltip: 'Open Speed Dial',
+            heroTag: 'speed-dial-hero-tag',
+            elevation: 8.0, // default is 6.0
+            shape: const CircleBorder(), // default is CircleBorder
+            children: [
+              SpeedDialChild(
+                /*  child: const Icon(Icons.add, color: Colors.white), */
+                backgroundColor: AppColors.blueColor,
+                labelWidget: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 6.h, horizontal: 24.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.blueColor,
+                    gradient: const LinearGradient(
+                      colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          ' إضافة تحصيل',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacementNamed(
+                      context, AddCollectionView.routeName);
+                },
+              ),
+            ],
+          ),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(120.h),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: AppBar(
+                toolbarHeight: 120.h,
+                leading: IconButton(
+                  icon:
+                      const Icon(Icons.arrow_back, color: AppColors.whiteColor),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title: Text(
+                  "قائمه المحصلين ",
+                  style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.sp,
+                  ),
+                ),
+              ),
+            ),
           ),
           body: Column(
             children: [
@@ -243,75 +346,104 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                       child: Column(
                         children: [
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: SfDataGridTheme(
-                                data: SfDataGridThemeData(
-                                  selectionColor: AppColors.lightBlueColor,
-                                  headerColor: AppColors.blueColor,
-                                  filterIconColor: AppColors.whiteColor,
-                                  sortIconColor: AppColors.whiteColor,
-                                ),
-                                child: SfDataGrid(
-                                  rowHeight: 120.h,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerRowHeight: 80.h,
-                                  rowsPerPage: 10,
-                                  controller: dataGridController,
-                                  source: _dataSource,
-                                  allowSorting: true,
-                                  allowFiltering: true,
-                                  frozenColumnsCount:
-                                      1, // Freezing the first column
-                                  columns: [
-                                    buildGridColumn('customerName', 'الإسم',
-                                        Alignment.centerRight),
-                                    buildGridColumn('address', 'العنوان ',
-                                        Alignment.centerRight),
-                                    buildGridColumn('collectionDateBl',
-                                        'تاريح السجل', Alignment.centerRight),
-                                    buildGridColumn('paymentReceiptNumBl',
-                                        'رقم الايصال', Alignment.centerRight),
-                                    buildGridColumn('compensationBl', 'تعويض',
-                                        Alignment.centerRight),
-                                    buildGridColumn('lateBl', 'متأخر',
-                                        Alignment.centerRight),
-                                    buildGridColumn('currentBl', 'حالي',
-                                        Alignment.centerRight),
-                                    buildGridColumn('differentBl', 'متنوع',
-                                        Alignment.centerRight),
-                                    buildGridColumn('totalBl', 'إجمالي',
-                                        Alignment.centerRight),
-                                    /*   buildGridColumn('customerDataIdBl', 'ID',
-                                        Alignment.centerRight), */
-                                  ],
-                                  selectionMode: SelectionMode.single,
-                                  onSelectionChanged:
-                                      (List<DataGridRow> addedRows,
-                                          List<DataGridRow> removedRows) {
-                                    if (addedRows.isNotEmpty) {
-                                      Future.delayed(Duration.zero, () {
-                                        if (mounted) {
-                                          setState(() {
-                                            TradeCollectionEntity selectedRow =
-                                                convertRowToEntity(
-                                                    dataGridController
-                                                        .selectedRow!);
-                                            print(selectedRow.compensationBl);
-                                            print(dataGridController
-                                                .selectedIndex);
-                                            allDailyCollectorCubit
-                                                .selectRow(selectedRow);
-                                          });
-                                        }
-                                      });
-                                    } else {
-                                      allDailyCollectorCubit.deselectRow();
-                                    }
-                                  },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: AppColors.whiteColor
+                                    /*  gradient: const LinearGradient(
+                                    colors: [
+                                      AppColors.blueColor,
+                                      AppColors.lightBlueColor
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.centerLeft,
+                                  ), */
+                                    ),
+                                child: SfDataGridTheme(
+                                  data: SfDataGridThemeData(
+                                    gridLineColor: AppColors.lightBlueColor,
+                                    filterPopupDisabledTextStyle:
+                                        const TextStyle(
+                                            color: AppColors.blackColor),
+                                    filterPopupTextStyle: const TextStyle(
+                                        decorationColor: AppColors.blueColor,
+                                        color: AppColors.blueColor,
+                                        height: 2,
+                                        fontWeight: FontWeight.bold,
+                                        debugLabel: AutofillHints.addressCity),
+                                    sortOrderNumberColor: AppColors.blueColor,
+                                    gridLineStrokeWidth: 0,
+                                    frozenPaneElevation: 0,
+                                    frozenPaneLineWidth: 0,
+                                    selectionColor: AppColors.lightBlueColor,
+                                    headerColor: AppColors.blueColor,
+                                    filterIconColor: AppColors.whiteColor,
+                                    sortIconColor: AppColors.whiteColor,
+                                    columnDragIndicatorColor:
+                                        AppColors.whiteColor,
+                                  ),
+                                  child: SfDataGrid(
+                                    rowHeight: 120.h,
+                                    gridLinesVisibility:
+                                        GridLinesVisibility.both,
+                                    headerRowHeight: 80.h,
+                                    rowsPerPage: 10,
+                                    controller: dataGridController,
+                                    source: _dataSource,
+                                    allowSorting: true,
+                                    allowFiltering: true,
+                                    frozenColumnsCount:
+                                        1, // Freezing the first column
+                                    columns: [
+                                      buildGridColumn('customerName', 'الإسم',
+                                          Alignment.centerRight),
+                                      buildGridColumn('address', 'العنوان ',
+                                          Alignment.centerRight),
+                                      buildGridColumn('collectionDateBl',
+                                          'تاريح السجل', Alignment.centerRight),
+                                      buildGridColumn('paymentReceiptNumBl',
+                                          'رقم الايصال', Alignment.centerRight),
+                                      buildGridColumn('compensationBl', 'تعويض',
+                                          Alignment.centerRight),
+                                      buildGridColumn('lateBl', 'متأخر',
+                                          Alignment.centerRight),
+                                      buildGridColumn('currentBl', 'حالي',
+                                          Alignment.centerRight),
+                                      buildGridColumn('differentBl', 'متنوع',
+                                          Alignment.centerRight),
+                                      buildGridColumn('totalBl', 'إجمالي',
+                                          Alignment.centerRight),
+                                      /*   buildGridColumn('customerDataIdBl', 'ID',
+                                          Alignment.centerRight), */
+                                    ],
+                                    selectionMode: SelectionMode.single,
+                                    onSelectionChanged:
+                                        (List<DataGridRow> addedRows,
+                                            List<DataGridRow> removedRows) {
+                                      if (addedRows.isNotEmpty) {
+                                        Future.delayed(Duration.zero, () {
+                                          if (mounted) {
+                                            setState(() {
+                                              TradeCollectionEntity
+                                                  selectedRow =
+                                                  convertRowToEntity(
+                                                      dataGridController
+                                                          .selectedRow!);
+                                              print(selectedRow.compensationBl);
+                                              print(dataGridController
+                                                  .selectedIndex);
+                                              allDailyCollectorCubit
+                                                  .selectRow(selectedRow);
+                                            });
+                                          }
+                                        });
+                                      } else {
+                                        allDailyCollectorCubit.deselectRow();
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                             ),

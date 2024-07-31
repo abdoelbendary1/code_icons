@@ -159,6 +159,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                     }
                     if (state is LoadedCustomerByID) {
                       return ReusableSelectTrader(
+                        label: "يتبع",
                         itemList: customersCubit.customerData,
                         selectedCustomer: customersCubit.selectedCustomer,
                         onChanged: (value) {
@@ -170,6 +171,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                       );
                     }
                     return ReusableSelectTrader(
+                      label: "يتبع",
                       itemList: customersCubit.customerData,
                       selectedCustomer: customersCubit.selectedCustomer,
                       onChanged: (value) {

@@ -34,10 +34,10 @@ class CustomMenuItem extends StatelessWidget {
         ),
         title: Text(
           title ?? "",
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontSize: 20, color: AppColors.whiteColor),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontSize: 20,
+              color: AppColors.whiteColor,
+              fontWeight: FontWeight.bold),
         ),
         children: menuItems.map((menuItem) {
           return ListTile(
@@ -48,12 +48,15 @@ class CustomMenuItem extends StatelessWidget {
                     Icons.keyboard_arrow_down_outlined,
                     color: AppColors.whiteColor,
                   ), */
-            title: Text(
-              menuItem.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(color: AppColors.yellowColor),
+            title: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Text(
+                menuItem.title,
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: AppColors.whiteColor,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           );
         }).toList(),

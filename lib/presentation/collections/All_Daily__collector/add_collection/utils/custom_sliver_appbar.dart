@@ -34,7 +34,14 @@ class CustomSliverAppBar extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               background: Container(
-                color: AppColors.blueColor,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  color: AppColors.blueColor,
+                ),
               )),
           actions: actions,
         ),

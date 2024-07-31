@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
+import 'package:code_icons/data/encryptData.dart';
 import 'package:code_icons/data/model/data_model/unlimited_Data_model.dart';
+import 'package:code_icons/data/pointyCastle.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'package:code_icons/data/model/request/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/TradeCollectionResponse.dart';
@@ -12,12 +15,14 @@ import 'package:code_icons/data/model/response/currency/currency.dart';
 import 'package:code_icons/data/model/response/general_central/general_central_data_model.dart';
 import 'package:code_icons/data/model/response/get_customer_data.dart';
 import 'package:code_icons/data/model/response/payment_values_dm.dart';
+import 'package:code_icons/data/model/response/settings/settings_data_model.dart';
 import 'package:code_icons/data/model/response/station/station_data_model.dart';
 import 'package:code_icons/data/model/response/trade_office/trade_office.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
+
 import 'package:http/http.dart' as http;
 
 class ApiManager {
@@ -54,6 +59,8 @@ class ApiManager {
           await SharedPrefrence.init();
           SharedPrefrence.saveData(
               key: "accessToken", value: loginResponse.accessToken!);
+          String token = SharedPrefrence.getData(key: "accessToken") as String;
+          print(token);
 
           return right(loginResponse);
         } else if (responseString.isEmpty) {
@@ -81,6 +88,7 @@ class ApiManager {
             Uri.https(ApiConstants.baseUrl, ApiConstants.customerDataEndPoint);
         /* var url = Uri.parse("https://demoapi1.code-icons.com/api/CustomerData"); */
         String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
         // Define the headers
         var headers = {
           "Authorization": "Bearer $token",
@@ -120,6 +128,85 @@ class ApiManager {
       }
     } catch (e) {
       print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, SettingsDataModel>> fetchSettingsData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url =
+            Uri.https(ApiConstants.baseUrl, ApiConstants.settingsEndPoint);
+        /* var url = Uri.parse('https://demoapi1.code-icons.com/api/Settings'); */
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          Map<String, dynamic> decodedJson = jsonDecode(responseBody);
+
+          // Decrypt fields
+          /* final key = encrypt.Key.fromUtf8('EncryptionKey');
+
+          final iv = encrypt.IV.fromLength(16); */
+          final key = 'EncryptionKey'; // 32 characters
+          final iv = '1234567890123456';
+
+          List<String> encryptedKeys = [
+            'finance',
+            'cashInOut',
+            'purchases',
+            'sales',
+            'costructions',
+            'charterparty',
+            'humanResources',
+            'stores',
+            'reports',
+            'settings',
+            'realStateInvestments',
+            'imports',
+            'hospital',
+            'collections'
+          ];
+          for (String field in encryptedKeys) {
+            if (decodedJson.containsKey(field)) {
+              decodedJson[field] = decrypt(decodedJson[field]);
+              /*  decodedJson[field] = EncryptData.decryptString(
+                  encryptedString: decodedJson[field],
+                  ivString: iv,
+                  keyString: key,
+                  keyLength: 64); */
+            }
+          }
+
+          SettingsDataModel settingsData =
+              SettingsDataModel.fromJson(decodedJson);
+
+          return right(settingsData);
+        } else {
+          return left(ServerError(errorMessege: 'Server error (Unknown data)'));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: 'Check your internet connection'));
+      }
+    } catch (e) {
+      print('Exception: $e');
       return left(Failures(errorMessege: e.toString()));
     }
   }

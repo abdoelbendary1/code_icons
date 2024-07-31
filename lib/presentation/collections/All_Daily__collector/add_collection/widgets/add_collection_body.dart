@@ -70,6 +70,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   builder: (context, state) {
                     if (state is GetCustomerDataByIDSuccess) {
                       return ReusableSelectTrader(
+                        label: "اسم التاجر",
                         itemList: addCollectionCubit.customerData,
                         selectedCustomer: addCollectionCubit.selectedCustomer,
                         onChanged: (value) {
@@ -83,6 +84,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                       );
                     }
                     return ReusableSelectTrader(
+                      label: "اسم التاجر",
                       itemList: addCollectionCubit.customerData,
                       onChanged: (value) {
                         context.read<AddCollectionCubit>().selectedCustomer =

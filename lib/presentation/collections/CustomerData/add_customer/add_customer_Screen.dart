@@ -6,17 +6,15 @@ import 'package:flutter/material.dart';
 
 class AddCustomerScreen extends StatelessWidget {
   const AddCustomerScreen({super.key});
-  static final String routeName = "AddCustomerScreen";
+  static const String routeName = "AddCustomerScreen";
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.whiteColor,
-        body: CustomSliverAppBar(
-          title: "إضافه عميل",
-          body: AddCustomerCardsForm(),
-        ),
+    return Scaffold(
+      backgroundColor: AppColors.whiteColor,
+      body: CustomSliverAppBar(
+        title: "إضافه عميل",
+        body: const AddCustomerCardsForm(),
       ),
     );
   }

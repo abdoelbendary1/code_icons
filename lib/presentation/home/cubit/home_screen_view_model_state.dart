@@ -6,10 +6,12 @@ sealed class HomeScreenViewModelState {}
 final class HomeScreenInitial extends HomeScreenViewModelState {}
 
 final class HomeScreenSuccess extends HomeScreenViewModelState {
-  Map<String, Map<String, dynamic>> menus;
+  Map<String, SectionEntity> menus;
+  SettingsEntity settingsEntity;
 
   HomeScreenSuccess({
     required this.menus,
+    required this.settingsEntity,
   });
 }
 

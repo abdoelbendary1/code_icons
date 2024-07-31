@@ -16,10 +16,12 @@ class ReusableSelectTrader extends StatefulWidget {
     required this.itemList,
     required this.selectedCustomer,
     required this.onChanged,
+    required this.label,
   });
   CustomerDataEntity? selectedCustomer;
   List<CustomerDataEntity>? itemList;
   void Function(CustomerDataEntity?)? onChanged;
+  String? label;
   @override
   State<ReusableSelectTrader> createState() => _ReusableSelectTraderState();
 }
@@ -33,7 +35,7 @@ class _ReusableSelectTraderState extends State<ReusableSelectTrader> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "يتبع",
+            widget.label ?? "",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: AppColors.blackColor, fontWeight: FontWeight.w600),
           ),
