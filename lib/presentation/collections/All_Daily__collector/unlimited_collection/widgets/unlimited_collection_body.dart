@@ -59,7 +59,6 @@ class _UnlimitedCollectionBodyState extends State<UnlimitedCollectionBody> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 SizedBox(
                   height: 20.h,
                 ),

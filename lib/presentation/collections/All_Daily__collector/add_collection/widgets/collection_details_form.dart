@@ -420,8 +420,6 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                       ));
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (context.mounted) {}
-                        Navigator.pushReplacementNamed(
-                            context, AllDailyCollectorScreen.routeName);
                       });
                     } else if (state is AddCollectionError) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -451,10 +449,15 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                               addCollectionCubit.intializeTradeRequest(
                                   selectedCustomer: selectedCustomer,
                                   context: context);
-                          await addCollectionCubit.postTradeCollection(
-                              token: "token",
-                              tradeCollectionRequest: tradeCollectionRequest,
-                              context: context);
+                          await addCollectionCubit
+                              .postTradeCollection(
+                                  token: "token",
+                                  tradeCollectionRequest:
+                                      tradeCollectionRequest,
+                                  context: context)
+                              .whenComplete(() =>
+                                  Navigator.pushReplacementNamed(context,
+                                      AllDailyCollectorScreen.routeName));
                         }
                       }
                     },

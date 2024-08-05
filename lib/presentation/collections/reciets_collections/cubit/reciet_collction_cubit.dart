@@ -16,7 +16,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
       RecietCollectionDataModel(id: 0, paperNum: 0, totalPapers: 0);
   List<RecietCollectionDataModel> receipts = [];
   RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
-  late int paymentReceipt;
+
   final formKey = GlobalKey<FormState>();
 
   static Future<void> initHive() async {
@@ -27,7 +27,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     await Hive.openBox('receiptsBox');
   }
 
-  void addReciet(BuildContext context) async {
+  Future<void> addReciet(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       try {
         if (int.parse(
@@ -37,7 +37,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
             context: context,
             backgroundColor: AppColors.redColor,
             label:
-                "لا يمكن اضافه اول ورقه اقل من ${lastRecietCollection.paperNum! + 1}",
+                "لا يمكن اضافه اول ورقه اقل من ${lastRecietCollection.paperNum! + lastRecietCollection.totalPapers!}",
           );
           emit(AddRecietCollctionError(
               errorMsg:
@@ -60,6 +60,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
                 ControllerManager().getControllerByName('paperNum').text),
             totalPapers: int.tryParse(
                 ControllerManager().getControllerByName('totalPapers').text),
+            valid: true,
           );
 
           // Add new receipt to the list
@@ -67,6 +68,12 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
 
           // Save the updated receipts list
           receiptsBox.put(token, existingReceipts);
+          var storedPaymentReciet = await getPaymentReceipt();
+          if (storedPaymentReciet == null) {
+            await storePaymentReceipt(receipts
+                .firstWhere((element) => element.valid == true)
+                .paperNum!);
+          }
           emit(AddRecietCollctionSuccess());
         }
       } catch (e) {
@@ -105,6 +112,40 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     return receipts;
   }
 
+  int paymentReceipt = 0;
+  Future<void> storePaymentReceipt(int receipt) async {
+    var userBox = Hive.box('userBox');
+    userBox.put('paymentReceipt', receipt);
+  }
+
+  Future<int?> getPaymentReceipt() async {
+    var userBox = Hive.box('userBox');
+    return userBox.get('paymentReceipt');
+  }
+
+  Future<void> deletePaymentReceipt() async {
+    var userBox = Hive.box('userBox');
+    return userBox.delete('paymentReceipt');
+  }
+
+  RecietCollectionDataModel? selectReciet(int paymentReceipt) {
+    try {
+      for (var reciept in receipts) {
+        if (reciept.paperNum! + reciept.totalPapers! < paymentReceipt) {
+          reciept.valid = false;
+        }
+      }
+      /*   selectedReceit = receipts.firstWhere((receipt) =>
+          paymentReceipt >= receipt.paperNum! &&
+          paymentReceipt < receipt.paperNum! + receipt.totalPapers!); */
+      selectedReceit = receipts.firstWhere((receipt) => receipt.valid == true);
+      return selectedReceit;
+    } catch (e) {
+      /*  emit(RecietSelectionError(errorMsg: "No matching receipt found.")); */
+      return null;
+    }
+  }
+
   Future<RecietCollectionDataModel?> getLastReciet() async {
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
@@ -117,7 +158,10 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
       lastRecietCollection =
           RecietCollectionDataModel.fromJson(existingReceipts.last);
       ControllerManager().getControllerByName('paperNum').text =
-          lastRecietCollection.paperNum.toString();
+          (lastRecietCollection.paperNum! +
+                  lastRecietCollection.totalPapers! +
+                  1)
+              .toString();
       return RecietCollectionDataModel.fromJson(existingReceipts.last);
     }
 
@@ -150,6 +194,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     String token = userBox.get('accessToken') ?? '';
 
     receiptsBox.delete(token);
+    deletePaymentReceipt();
 
     emit(RemoveAllRecietsSuccess());
     getReciets();

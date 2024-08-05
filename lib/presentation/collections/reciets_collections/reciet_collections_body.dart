@@ -88,6 +88,12 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                 if (value == null || value.trim().isEmpty) {
                   return "يجب ادخال رقم اول ورقه";
                 }
+                if (int.tryParse(value)! <
+                    recietCollctionCubit.lastRecietCollection.paperNum! +
+                        recietCollctionCubit
+                            .lastRecietCollection.totalPapers!) {
+                  return "يجب ادخال اول ورقه اكبر من ${recietCollctionCubit.lastRecietCollection.paperNum! + recietCollctionCubit.lastRecietCollection.totalPapers!}";
+                }
                 return null;
               },
             ),
@@ -139,8 +145,8 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                 label: "تمت الإضافه بنجاح",
                 backgroundColor: AppColors.greenColor,
               );
-              Navigator.pushReplacementNamed(
-                  context, AllRecietsScreen.routeName);
+              /* Navigator.pushReplacementNamed(
+                  context, AllRecietsScreen.routeName); */
             } else if (state is AddRecietCollctionError) {
               if (state.errorMsg.contains("400")) {
                 SnackBarUtils.showSnackBar(
@@ -168,7 +174,14 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () async {
-                recietCollctionCubit.addReciet(context);
+                if (recietCollctionCubit.formKey.currentState!.validate()) {
+                  await recietCollctionCubit
+                      .addReciet(context)
+                      .whenComplete(() {
+                    Navigator.pushReplacementNamed(
+                        context, AllRecietsScreen.routeName);
+                  });
+                }
               },
               child: Text(AppLocalizations.of(context)!.save),
             ),

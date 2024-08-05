@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
 import 'package:code_icons/data/model/data_model/unlimited_Data_model.dart';
 import 'package:code_icons/data/model/response/UnRegisteredCollections/un_registered_collections_response.dart';
 import 'package:code_icons/domain/entities/unlimited_Collection_entity/unlimited_collection_entity.dart';
@@ -10,6 +11,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'unlimited_collection_state.dart';
 
@@ -98,14 +100,17 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
     }); */
   }
 
-  void addCustomer(
+  Future<void> addCustomer(
       /* CustomerDataModel customerData, */ BuildContext context) async {
     if (formKey.currentState!.validate()) {
       var either = await postUnRegisteredTradeCollectionUseCase.invoke(
           unRegisteredCollectionEntity: createCollectionDataModel());
       either.fold(
           (l) => emit(AddUnlimitedCollectionError(errorMsg: l.errorMessege)),
-          (r) => emit(AddUnlimitedCollectionSuccess(collectionID: r)));
+          (r) async {
+        await incrementPaymentReceipt();
+        emit(AddUnlimitedCollectionSuccess(collectionID: r));
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -125,5 +130,160 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
 
   void deselectRow() {
     getAllCollctions(); // This is to reset the state to the initial list
+  }
+
+  Future<List<RecietCollectionDataModel>> getReciets() async {
+    var userBox = Hive.box('userBox');
+    var receiptsBox = Hive.box('receiptsBox');
+
+    String token = userBox.get('accessToken') ?? '';
+
+    List<dynamic> existingReceipts = receiptsBox.get(token, defaultValue: []);
+
+    receipts = existingReceipts
+        .map((i) => RecietCollectionDataModel.fromJson(i))
+        .toList();
+
+    return receipts;
+  }
+
+  Future<int?> getPaymentReceipt() async {
+    var userBox = Hive.box('userBox');
+    return userBox.get('paymentReceipt');
+  }
+
+  RecietCollectionDataModel selectReciet(int paymentReceipt) {
+    try {
+      for (var reciept in receipts) {
+        if (reciept.paperNum! + reciept.totalPapers! > paymentReceipt) {
+          reciept.valid = true;
+        } else {
+          reciept.valid = false;
+        }
+      }
+      /*   selectedReceit = receipts.firstWhere((receipt) =>
+          paymentReceipt >= receipt.paperNum! &&
+          paymentReceipt < receipt.paperNum! + receipt.totalPapers!); */
+      selectedReceit = receipts.firstWhere((receipt) => receipt.valid == true);
+      return selectedReceit;
+    } catch (e) {
+      /*  emit(RecietSelectionError(errorMsg: "No matching receipt found.")); */
+      var newReciept = RecietCollectionDataModel(
+          valid: true,
+          id: receipts.last.id! + 1,
+          paperNum: receipts.last.paperNum! + 1,
+          totalPapers: 20);
+          
+      receipts.add(newReciept);
+      return newReciept;
+    }
+  }
+
+  late int paymentReceipt;
+  Future<void> storePaymentReceipt(int receipt) async {
+    var userBox = Hive.box('userBox');
+    userBox.put('paymentReceipt', receipt);
+  }
+
+  int? storedPaymentReceipt;
+  List<RecietCollectionDataModel> receipts = [];
+  RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
+  Future<void> initialize() async {
+    await getReciets();
+    /*  if (storedPaymentReceipt == null) {
+      storePaymentReceipt(
+          receipts.firstWhere((element) => element.valid == true).paperNum!);
+    } */
+
+    storedPaymentReceipt = await getPaymentReceipt();
+    if (storedPaymentReceipt == null) {
+      await storePaymentReceipt(1);
+      storedPaymentReceipt = await getPaymentReceipt();
+    }
+    selectedReceit = selectReciet(storedPaymentReceipt!);
+
+    if (receipts.isNotEmpty) {
+      if (storedPaymentReceipt != null) {
+        if (selectedReceit.valid!) {
+          if (storedPaymentReceipt! <
+                  selectedReceit.paperNum! + selectedReceit.totalPapers! &&
+              storedPaymentReceipt! > selectedReceit.paperNum!) {
+            paymentReceipt = storedPaymentReceipt!;
+            await storePaymentReceipt(paymentReceipt);
+          } else if (storedPaymentReceipt! < selectedReceit.paperNum!) {
+            paymentReceipt = selectedReceit.paperNum!;
+            await storePaymentReceipt(paymentReceipt);
+          } else {
+            selectedReceit = selectReciet(storedPaymentReceipt!);
+            paymentReceipt = selectedReceit.paperNum!;
+
+            await storePaymentReceipt(paymentReceipt);
+            if (storedPaymentReceipt! < selectedReceit.paperNum!) {
+              paymentReceipt = selectedReceit.paperNum!;
+              await storePaymentReceipt(paymentReceipt);
+            } else {
+              paymentReceipt = storedPaymentReceipt!;
+              await storePaymentReceipt(paymentReceipt);
+            }
+          }
+/*           await storePaymentReceipt(paymentReceipt);
+ */
+        } /* else {
+          if (storedPaymentReceipt <
+              selectedReceit.paperNum! + selectedReceit.totalPapers!) {
+            paymentReceipt = storedPaymentReceipt;
+          }
+        } */
+
+        /*  if (paymentReceipt <
+            selectedReceit.paperNum! + selectedReceit.totalPapers!) {
+          paymentReceipt = storedPaymentReceipt;
+        } else {
+          paymentReceipt = selectedReceit.paperNum!;
+        }
+        paymentReceipt = storedPaymentReceipt; */
+      } else {
+        selectedReceit =
+            receipts.firstWhere((element) => element.valid == true);
+        paymentReceipt = selectedReceit.paperNum!;
+        await storePaymentReceipt(paymentReceipt);
+      }
+      updateController();
+    }
+  }
+
+  void updateController() {
+    ControllerManager()
+        .getControllerByName('unlimitedPaymentReceitController')
+        .text = paymentReceipt.toString();
+  }
+
+  Future<void> incrementPaymentReceipt() async {
+    int? storedPaymentReceipt = await getPaymentReceipt();
+    if (storedPaymentReceipt != null) {
+      paymentReceipt = storedPaymentReceipt + 1;
+      /* if (paymentReceipt >=
+          selectedReceit.paperNum! + selectedReceit.totalPapers!) {
+        // Select another receipt
+        int? newPaymentReceipt = selectNextReciet(paymentReceipt);
+        if (newPaymentReceipt != null) {
+          paymentReceipt = newPaymentReceipt;
+        } else {
+          // Handle case where no more receipts are available
+          return;
+        }
+      } */
+      await storePaymentReceipt(paymentReceipt);
+      ControllerManager()
+          .getControllerByName('unlimitedPaymentReceitController')
+          .text = paymentReceipt.toString();
+    } else {
+      // Initialize with the selected receipt's paper number if no payment receipt is stored
+      paymentReceipt = selectedReceit.paperNum!;
+      await storePaymentReceipt(paymentReceipt);
+      ControllerManager()
+          .getControllerByName('unlimitedPaymentReceitController')
+          .text = paymentReceipt.toString();
+    }
   }
 }

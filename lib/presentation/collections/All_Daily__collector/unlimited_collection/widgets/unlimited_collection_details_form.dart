@@ -130,6 +130,8 @@ class _UnlimitedCollectionDetailsFormState
             BuildTextField(
                 label: "رقم الايصال ",
                 hint: "رقم الايصال ",
+                readOnly: true,
+                keyboardType: TextInputType.number,
                 controller: ControllerManager()
                     .getControllerByName('unlimitedPaymentReceitController'),
                 icon: Icons.phone_iphone,
@@ -173,13 +175,6 @@ class _UnlimitedCollectionDetailsFormState
                   dateStorageMap: unlimitedCollectionCubit.dateStorageMap,
                   key: "unlimitedPaymentReceitDateController",
                 );
-                /*   _selectDate(
-                  context: context,
-                  controller: ControllerManager()
-                      .getControllerByName('unlimitedPaymentReceiptDate'),
-                  dateStorageMap: unlimitedCollectionCubit.dateStorageMap,
-                  key: "licenseDateBL",
-                ); */
               },
             ),
             Row(
@@ -276,7 +271,7 @@ class _UnlimitedCollectionDetailsFormState
                 const Spacer(),
                 BlocListener<UnlimitedCollectionCubit,
                     UnlimitedCollectionState>(
-                  bloc: unlimitedCollectionCubit,
+                  bloc: unlimitedCollectionCubit..initialize(),
                   listener: (context, state) {
                     if (state is AddUnlimitedCollectionSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -287,8 +282,6 @@ class _UnlimitedCollectionDetailsFormState
                         backgroundColor: AppColors.greenColor,
                         duration: Durations.extralong1,
                       ));
-                      Navigator.pushReplacementNamed(
-                          context, UnRegisteredCollectionsScreen.routeName);
                     } else if (state is AddUnlimitedCollectionError) {
                       if (state.errorMsg.contains("400")) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -323,7 +316,14 @@ class _UnlimitedCollectionDetailsFormState
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                       onPressed: () async {
-                        unlimitedCollectionCubit.addCustomer(context);
+                        if (unlimitedCollectionCubit.formKey.currentState!
+                            .validate()) {
+                          unlimitedCollectionCubit
+                              .addCustomer(context)
+                              .whenComplete(() =>
+                                  Navigator.pushReplacementNamed(context,
+                                      UnRegisteredCollectionsScreen.routeName));
+                        }
                       },
                       child: Text(AppLocalizations.of(context)!.save),
                     ),

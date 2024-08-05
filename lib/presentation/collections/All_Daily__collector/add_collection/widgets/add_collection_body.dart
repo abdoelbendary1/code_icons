@@ -73,6 +73,8 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BlocBuilder<AddCollectionCubit, AddCollectionState>(
+                  //get the payment reciet
+                  bloc: addCollectionCubit..initialize(),
                   buildWhen: (previous, current) {
                     if (previous is GetCustomerDataByIDSuccess) {
                       return false;
