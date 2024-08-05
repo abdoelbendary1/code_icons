@@ -14,6 +14,7 @@ class TradeCollectionResponse extends TradeCollectionEntity {
     super.totalBl,
     super.notesBl,
     super.customerDataIdBl,
+    super.activityBL,
   });
 
   TradeCollectionResponse.fromJson(Map<String, dynamic> json) {
@@ -35,6 +36,9 @@ class TradeCollectionResponse extends TradeCollectionEntity {
     }
     if (json["lateBL"] is double) {
       lateBl = json["lateBL"];
+    }
+    if (json["activityBL"] is double) {
+      lateBl = json["activityBL"];
     }
     if (json["currentBL"] is double) {
       currentBl = json["currentBL"];
@@ -61,6 +65,7 @@ class TradeCollectionResponse extends TradeCollectionEntity {
     _data["compensationBL"] = compensationBl;
     _data["lateBL"] = lateBl;
     _data["currentBL"] = currentBl;
+    _data["activityBL"] = currentBl;
     _data["differentBL"] = differentBl;
     _data["totalBL"] = totalBl;
     _data["notesBL"] = notesBl;

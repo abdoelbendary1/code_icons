@@ -25,7 +25,7 @@ class LoginViewModel extends Cubit<LoginState> {
 
       var either = await loginUseCase.invoke(
           emailController.text, passwordController.text);
-      print("login");
+
       either.fold((failure) {
         emit(LoginErrorState(errorMessege: failure.errorMessege));
       }, (response) {

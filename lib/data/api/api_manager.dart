@@ -1,11 +1,13 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
-import 'package:code_icons/data/encryptData.dart';
-import 'package:code_icons/data/model/data_model/unlimited_Data_model.dart';
+import 'package:code_icons/data/model/request/add_purchase_request/purchase_request.dart';
+import 'package:code_icons/data/model/response/CostCenter/cost_center_data_model.dart';
+import 'package:code_icons/data/model/response/Uom/uom_data_model.dart';
+import 'package:code_icons/data/model/response/get_all_purchases_request/get_all_purchases_requests.dart';
+import 'package:code_icons/data/model/response/purchase_item/purchase_item.dart';
+import 'package:code_icons/data/model/response/store/store_data_model.dart';
 import 'package:code_icons/data/pointyCastle.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-
 import 'package:code_icons/data/model/request/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/TradeCollectionResponse.dart';
 import 'package:code_icons/data/model/response/UnRegisteredCollections/un_registered_collections_response.dart';
@@ -63,6 +65,9 @@ class ApiManager {
           print(token);
 
           return right(loginResponse);
+        } else if (response.statusCode == 410) {
+          return left(ServerError(
+              errorMessege: "تاكد من صحة بيانات اسم المستخدم وكلمة السر"));
         } else if (responseString.isEmpty) {
           return left(ServerError(errorMessege: "NULL"));
         } else {
@@ -86,7 +91,7 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url =
             Uri.https(ApiConstants.baseUrl, ApiConstants.customerDataEndPoint);
-        /* var url = Uri.parse("https://demoapi1.code-icons.com/api/CustomerData"); */
+
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
         // Define the headers
@@ -125,6 +130,484 @@ class ApiManager {
       } else {
         return left(
             NetworkError(errorMessege: "check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<StoreDataModel>>> fetchStoreData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.storeEndPoint);
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
+
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        var request = http.MultipartRequest('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<StoreDataModel> storeDataList = responseBodyJson
+              .map((json) => StoreDataModel.fromJson(json))
+              .toList();
+          if (storeDataList.isNotEmpty) {
+            return right(storeDataList);
+          } else {
+            return left(ServerError(errorMessege: "List is empty"));
+          }
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<PurchaseItemDataModel>>>
+      fetchPurchaseItemData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.itemEndPoint);
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
+
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        var request = http.MultipartRequest('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<PurchaseItemDataModel> purchaseItemList = responseBodyJson
+              .map((json) => PurchaseItemDataModel.fromJson(json))
+              .toList();
+          if (purchaseItemList.isNotEmpty) {
+            return right(purchaseItemList);
+          } else {
+            return left(ServerError(errorMessege: "List is empty"));
+          }
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, PurchaseItemDataModel>> fetchPurchaseItemDataByID(
+      {required int id}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, '/api/Item/$id');
+        /* var url = Uri.https(ApiConstants.baseUrl, ApiConstants.itemEndPoint); */
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
+
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        var request = http.MultipartRequest('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          var responseBodyJson = jsonDecode(responseBody);
+          PurchaseItemDataModel purchaseItem =
+              PurchaseItemDataModel.fromJson(responseBodyJson);
+
+          return right(purchaseItem);
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, GetAllPurchasesRequests>> deletePurchaseRequestById(
+      {required int id}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, '/api/PurchaseRequest/$id');
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
+
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        var request = http.Request('DELETE', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          var responseBodyJson = jsonDecode(responseBody);
+          GetAllPurchasesRequests deletedItem =
+              GetAllPurchasesRequests.fromJson(responseBodyJson);
+
+          return right(deletedItem);
+        } else {
+          return left(ServerError(
+              errorMessege: "Server error: ${response.reasonPhrase}"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, GetAllPurchasesRequests>> fetchPurchaseRequestById(
+      {required int id}) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, '/api/PurchaseRequest/$id');
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
+
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          var responseBodyJson = jsonDecode(responseBody);
+          GetAllPurchasesRequests purchaseItem =
+              GetAllPurchasesRequests.fromJson(responseBodyJson);
+          return right(purchaseItem);
+        } else {
+          return left(ServerError(
+              errorMessege: "Server error: ${response.reasonPhrase}"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<GetAllPurchasesRequests>>>
+      fetchPurchaseRequests() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(
+            ApiConstants.baseUrl, ApiConstants.purchaseRequestEndPoint);
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        print(token);
+
+        var headers = {
+          "Authorization": "Bearer $token",
+          "Accept": "*/*",
+          "Cache-Control": "no-cache",
+          "User-Agent": "PostmanRuntime/7.39.0",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Connection": "keep-alive"
+        };
+
+        var request = http.MultipartRequest('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        print(response.statusCode);
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<GetAllPurchasesRequests> purchaseRequestList = responseBodyJson
+              .map((json) => GetAllPurchasesRequests.fromJson(json))
+              .toList();
+          if (purchaseRequestList.isNotEmpty) {
+            return right(purchaseRequestList);
+          } else {
+            return left(ServerError(errorMessege: "List is empty"));
+          }
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<CostCenterDataModel>>>
+      fetchCostCenterData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url =
+            Uri.https(ApiConstants.baseUrl, ApiConstants.costCenterAllEndPoint);
+        /* var url =
+            Uri.parse('https://demoapi1.code-icons.com/api/costCenter/All'); */
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<CostCenterDataModel> costCenterDataList = responseBodyJson
+              .map((json) => CostCenterDataModel.fromJson(json))
+              .toList();
+          if (costCenterDataList.isNotEmpty) {
+            return right(costCenterDataList);
+          } else {
+            return left(ServerError(errorMessege: "List is empty"));
+          }
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, String>> postPurchaseRequest(
+      PurchaseRequestDataModel purchaseRequestDataModel) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.postPREndPoint);
+        /*  var url =
+            Uri.parse('https://demoapi1.code-icons.com/api/PurchaseRequest'); */
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        var request = http.Request('POST', url);
+        request.body = json.encode(purchaseRequestDataModel.toJson());
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          String responseBody = await response.stream.bytesToString();
+          return right(responseBody);
+        } else {
+          return left(ServerError(
+              errorMessege: response.reasonPhrase ?? "Unknown server error"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<GetAllPurchasesRequests>>>
+      fetchAllPurchaseRequests() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.getPREndPoint);
+        /*   var url =
+            Uri.parse('https://demoapi1.code-icons.com/api/PurchaseRequest'); */
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<GetAllPurchasesRequests> purchaseRequestList = responseBodyJson
+              .map((json) => GetAllPurchasesRequests.fromJson(json))
+              .toList();
+          if (purchaseRequestList.isNotEmpty) {
+            return right(purchaseRequestList);
+          } else {
+            return left(ServerError(errorMessege: "List is empty"));
+          }
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, List<UomDataModel>>> fetchUOMData() async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.parse('https://demoapi1.code-icons.com/api/uoms');
+
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+
+        var headers = {
+          'Authorization': 'Bearer $token',
+          'Accept': '*/*',
+          'Cache-Control': 'no-cache',
+          'User-Agent': 'PostmanRuntime/7.39.0',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Connection': 'keep-alive'
+        };
+
+        var request = http.Request('GET', url);
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = await response.stream.bytesToString();
+          List<dynamic> responseBodyJson = jsonDecode(responseBody);
+          List<UomDataModel> uomDataList = responseBodyJson
+              .map((json) => UomDataModel.fromJson(json))
+              .toList();
+          if (uomDataList.isNotEmpty) {
+            return right(uomDataList);
+          } else {
+            return left(ServerError(errorMessege: "List is empty"));
+          }
+        } else {
+          return left(ServerError(errorMessege: "Server error (Unknown data)"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -701,7 +1184,7 @@ class ApiManager {
     }
   }
 
-  Future<Either<Failures, PaymentValuesDM>> fetchPaymentValuesByID(
+  Future<Either<Failures, PaymenValuesDM>> fetchPaymentValuesByID(
       {String? customerId}) async {
     try {
       var connectivityResult =
@@ -735,11 +1218,12 @@ class ApiManager {
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();
           var responseBodyJson = jsonDecode(responseBody);
-          var paymentValuesResponse =
-              PaymentValuesDM.fromJson(responseBodyJson);
+          var paymentValuesResponse = PaymenValuesDM.fromJson(responseBodyJson);
 
           print("Payment total data from api: ${paymentValuesResponse.total}");
           print("payment  : ${paymentValuesResponse.late}");
+          print("payment  : ${paymentValuesResponse.paidYears}");
+
           print(
               "years of payment  : ${paymentValuesResponse.yearsOfRepayment}");
 
@@ -839,6 +1323,52 @@ class ApiManager {
           var tradeCollectionResponse =
               TradeCollectionResponse(idBl: collectionID);
           print("trade collection ID : ${tradeCollectionResponse.idBl}");
+          return right(tradeCollectionResponse);
+        } else {
+          print(
+              "Server error: ${response.statusCode} - ${response.reasonPhrase}");
+          return left(ServerError(
+              errorMessege: "Server error: ${response.reasonPhrase}"));
+        }
+      } else {
+        return left(
+            NetworkError(errorMessege: "Check your internet connection"));
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+
+  Future<Either<Failures, TradeCollectionResponse>> getTradeCollectionDataByID({
+    required int id,
+  }) async {
+    try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi) {
+        /* var url = Uri.https(
+            ApiConstants.baseUrl, ApiConstants.tradeCollectionEndPoint); */
+        var url = Uri.parse(
+            "https://${ApiConstants.baseUrl}/api/TradeCollection/$id");
+        String token = SharedPrefrence.getData(key: "accessToken") as String;
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        /* var body = json.encode(tradeCollectionRequest.toJson()); */
+
+        var response = await http.get(
+          url,
+          headers: headers,
+        );
+
+        if (response.statusCode >= 200 && response.statusCode <= 300) {
+          String responseBody = response.body;
+          var responseBodyJson = jsonDecode(responseBody);
+          var tradeCollectionResponse =
+              TradeCollectionResponse.fromJson(responseBodyJson);
           return right(tradeCollectionResponse);
         } else {
           print(
@@ -987,7 +1517,7 @@ class ApiManager {
     }
   }
 
-  Future<Either<Failures, PaymentValuesDM>> postPaymenValuesByID(
+  Future<Either<Failures, PaymenValuesDM>> postPaymenValuesByID(
       {int? customerId, List<int>? paidYears}) async {
     try {
       var connectivityResult =
@@ -1015,8 +1545,7 @@ class ApiManager {
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();
           var responseBodyJson = jsonDecode(responseBody);
-          var paymentValuesResponse =
-              PaymentValuesDM.fromJson(responseBodyJson);
+          var paymentValuesResponse = PaymenValuesDM.fromJson(responseBodyJson);
 
           print(
               "Payment total data from api request= ==============: ${paymentValuesResponse.total}");

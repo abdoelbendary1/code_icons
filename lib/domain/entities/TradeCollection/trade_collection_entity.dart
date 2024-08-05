@@ -5,6 +5,7 @@ class TradeCollectionEntity {
   dynamic yearsOfRepaymentLstBl;
   String? paymentReceiptNumBl;
   double? compensationBl;
+  double? activityBL;
   double? lateBl;
   double? currentBl;
   double? differentBl;
@@ -26,8 +27,10 @@ class TradeCollectionEntity {
     this.differentBl,
     this.totalBl,
     this.notesBl,
-    this.customerDataIdBl, String? cutomerName, String? address,
-   /*  this.cutomerName,
+    this.customerDataIdBl,this.activityBL,
+    String? cutomerName,
+    String? address,
+    /*  this.cutomerName,
     this.address, */
   });
 }

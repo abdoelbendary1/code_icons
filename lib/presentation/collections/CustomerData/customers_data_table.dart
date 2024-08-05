@@ -40,7 +40,7 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.symmetric(vertical: 0.0),
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.lightBlueColor.withOpacity(0.2),
@@ -48,12 +48,12 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
               ),
               child: SfDataGridTheme(
                 data: SfDataGridThemeData(
-                  gridLineColor: AppColors.lightBlueColor,
+                  gridLineColor: AppColors.blackColor,
                   filterPopupDisabledTextStyle:
                       const TextStyle(color: AppColors.blackColor),
                   filterPopupTextStyle: const TextStyle(
                       decorationColor: AppColors.blueColor,
-                      color: AppColors.blueColor,
+                      color: AppColors.blackColor,
                       height: 2,
                       fontWeight: FontWeight.bold,
                       debugLabel: AutofillHints.addressCity),
@@ -61,133 +61,99 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
                   gridLineStrokeWidth: 0,
                   frozenPaneElevation: 0,
                   frozenPaneLineWidth: 0,
-                  selectionColor: AppColors.lightBlueColor,
+                  /*  selectionColor: AppColors.lightBlueColor, */
                   headerColor: AppColors.blueColor,
                   filterIconColor: AppColors.whiteColor,
                   sortIconColor: AppColors.whiteColor,
                   columnDragIndicatorColor: AppColors.whiteColor,
                 ),
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.whiteColor,
-                    /*  gradient: LinearGradient(
-                      colors: [AppColors.blueColor, AppColors.lightBlueColor],
-                      begin: Alignment.topLeft,
-                      end: Alignment.centerLeft,
-                    ), */
+                  decoration: BoxDecoration(
+                    color: AppColors.lightBlueColor.withOpacity(0.1),
+                   
                   ),
                   child: SfDataGrid(
                     isScrollbarAlwaysShown: false,
                     headerGridLinesVisibility: GridLinesVisibility.none,
                     /*   showCheckboxColumn: true,
                       showSortNumbers: true, */
-                    rowHeight: 100.h,
+                    rowHeight: 120.h,
                     gridLinesVisibility: GridLinesVisibility.horizontal,
                     headerRowHeight: 100.h,
-                    rowsPerPage: 15,
+                    /* rowsPerPage: 15, */
                     controller: dataGridController,
                     source: widget.dataSource,
                     allowSorting: true,
                     allowFiltering: true,
-                    frozenColumnsCount: 1, // Freezing the first column
+                    frozenColumnsCount: 0, // Freezing the first column
                     columns: [
-                      /*  buildGridColumn(
-                                        maxWidth: 100.w,
-                                        'idBL',
-                                        'ID',
-                                        Alignment.centerRight), */
                       buildGridColumn(
                           columnName: 'brandNameBL',
                           labelUp: 'الإسم',
-                          maxWidth: MediaQuery.of(context).size.width * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'nationalIdBL',
-                          labelUp: "الرقم القومي",
-                          labelDown: "",
-                          maxWidth: MediaQuery.of(context).size.width * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'birthDayBL',
-                          labelUp: 'تاريخ الميلاد',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'tradeRegistryBL',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          labelUp: 'السجل التجاري',
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'licenseDateBL',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          labelUp: 'تاريخ الترخيص',
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'licenseYearBL',
-                          labelUp: 'سنة الترخيص',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'capitalBL',
-                          labelUp: 'رأس المال',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          columnName: 'validBL',
-                          labelUp: 'صالح',
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'companyTypeNameBL',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          labelUp: 'نوع الشركة',
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'tradeOfficeNameBL',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          labelUp: 'مكتب التجارة',
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'activityNameBL',
-                          labelUp: 'النشاط',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'divisionBL',
-                          labelUp: 'القسم',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          columnName: 'tradeTypeBL',
-                          labelUp: 'نوع التجارة',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          alignment: Alignment.centerRight),
-                      buildGridColumn(
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          columnName: 'ownerBL',
-                          labelUp: 'المالك',
+                          labelDown: 'التجاري',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
                           alignment: Alignment.centerRight),
                       buildGridColumn(
                           columnName: 'addressBL',
                           labelUp: 'العنوان',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
+                          labelDown: '',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
                           alignment: Alignment.centerRight),
                       buildGridColumn(
-                          columnName: 'stationNameBL',
-                          labelUp: 'المحطة',
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
+                          columnName: 'nationalIdBL',
+                          labelUp: 'الرقم',
+                          labelDown: 'القومي',
+                          maxWidth: MediaQuery.of(context).size.width * 0.5.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
                           alignment: Alignment.centerRight),
                       buildGridColumn(
-                          maxWidth: MediaQuery.of(context).size.width.w * 0.5.w,
-                          columnName: 'phoneBL',
-                          labelUp: 'الهاتف',
+                          columnName: 'tradeRegistryBL',
+                          labelUp: 'رقم',
+                          labelDown: 'السجل',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
+                          alignment: Alignment.centerRight),
+                      buildGridColumn(
+                          columnName: 'licenseDateBL',
+                          labelUp: 'تاريخ',
+                          labelDown: 'الترخيص',
+                          maxWidth: MediaQuery.of(context).size.width * 0.45.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
+                          alignment: Alignment.centerRight),
+                      buildGridColumn(
+                          columnName: 'activityNameBL',
+                          labelUp: 'النشاط',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
+                          alignment: Alignment.centerRight),
+                      buildGridColumn(
+                          columnName: 'tradeOfficeNameBL',
+                          labelUp: 'المكتب',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
+                          alignment: Alignment.centerRight),
+                      buildGridColumn(
+                          columnName: 'capitalBL',
+                          labelUp: 'رأس',
+                          labelDown: 'المال',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
+                          alignment: Alignment.centerRight),
+                      buildGridColumn(
+                          columnName: 'tradeTypeBl',
+                          labelUp: 'المركز',
+                          labelDown: 'العام',
+                          maxWidth: MediaQuery.of(context).size.width * 0.4.w,
+                          minWidth: MediaQuery.of(context).size.width * 0.2.w,
                           alignment: Alignment.centerRight),
                     ],
                     selectionMode: SelectionMode.single,
                     onSelectionChanged: (List<DataGridRow> addedRows,
                         List<DataGridRow> removedRows) {
                       if (addedRows.isNotEmpty) {
-                        Future.delayed(Duration.zero, () {
+                        /*  Future.delayed(Duration.zero, () {
                           if (mounted) {
                             setState(() {
                               /*    CustomerData selectedRow = convertRowToEntity(dataGridController.selectedRow!);
@@ -195,7 +161,7 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
                                             print(dataGridController.selectedIndex); */
                             });
                           }
-                        });
+                        }); */
                       }
                     },
                   ),
@@ -204,12 +170,12 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
             ),
           ),
         ),
-        SfDataPager(
+        /*   SfDataPager(
           availableRowsPerPage: [10, 20, 30],
           delegate: widget.dataSource,
           pageCount: 7,
           initialPageIndex: 1,
-        ),
+        ), */
       ],
     );
   }
@@ -221,8 +187,10 @@ GridColumn buildGridColumn({
   String? labelDown,
   required Alignment alignment,
   required double maxWidth,
+  required double minWidth,
 }) {
   return GridColumn(
+    minimumWidth: minWidth,
     maximumWidth: maxWidth,
     columnWidthMode: ColumnWidthMode.auto,
     columnName: columnName,
@@ -231,27 +199,30 @@ GridColumn buildGridColumn({
       alignment: alignment,
       child: Wrap(
         children: [
-          Column(
-            children: [
-              Text(
-                labelUp,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: AppColors.whiteColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Column(
+              children: [
+                Text(
+                  labelUp,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              /*   Text(
-                labelDown ?? "",
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: AppColors.whiteColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                Text(
+                  labelDown ?? "",
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ), */
-            ],
+              ],
+            ),
           ),
         ],
       ),

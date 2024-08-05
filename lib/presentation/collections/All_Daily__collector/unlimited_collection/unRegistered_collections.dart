@@ -200,7 +200,7 @@ class _UnRegisteredCollectionsScreenState
                           Expanded(
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                                  const EdgeInsets.symmetric(vertical: 0.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: AppColors.whiteColor,
@@ -237,17 +237,22 @@ class _UnRegisteredCollectionsScreenState
                                         AppColors.whiteColor,
                                   ),
                                   child: SfDataGrid(
+                                    isScrollbarAlwaysShown: false,
+                                    headerGridLinesVisibility:
+                                        GridLinesVisibility.none,
+                                    /*   showCheckboxColumn: true,
+                      showSortNumbers: true, */
                                     rowHeight: 120.h,
                                     gridLinesVisibility:
-                                        GridLinesVisibility.both,
-                                    headerRowHeight: 80.h,
-                                    rowsPerPage: 10,
+                                        GridLinesVisibility.horizontal,
+                                    headerRowHeight: 100.h,
+                                    /* rowsPerPage: 15, */
                                     controller: dataGridController,
                                     source: _dataSource,
                                     allowSorting: true,
                                     allowFiltering: true,
                                     frozenColumnsCount:
-                                        1, // Freezing the first column
+                                        0, // Freezing the first column
                                     columns: [
                                       /*   buildGridColumn(
                                           columnName: "collectionId",
@@ -316,12 +321,12 @@ class _UnRegisteredCollectionsScreenState
                               ),
                             ),
                           ),
-                          SfDataPager(
+                          /*  SfDataPager(
                             availableRowsPerPage: [10, 20, 30],
                             delegate: _dataSource,
                             pageCount: 7,
                             initialPageIndex: 1,
-                          ),
+                          ), */
                         ],
                       ),
                     );

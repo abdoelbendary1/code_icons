@@ -6,7 +6,7 @@ class TradeCollectionRequest {
   String? addressBl;
   String? divisionBl;
   String? yearsOfRepaymentBl;
-  double? paymentReceiptNumBl;
+  int? paymentReceiptNumBl;
   double? activityBl;
   double? compensationBl;
   double? lateBl;
@@ -76,8 +76,6 @@ class TradeCollectionRequest {
     }
   }
 
-  
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["collectionDateBL"] = collectionDateBl;
@@ -96,8 +94,4 @@ class TradeCollectionRequest {
     _data["totalBL"] = totalBl;
     return _data;
   }
-
-
-
-  
 }

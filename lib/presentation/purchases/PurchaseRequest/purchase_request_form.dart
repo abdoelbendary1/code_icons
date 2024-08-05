@@ -1,11 +1,10 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:code_icons/domain/entities/purchase_item/purchase_item_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/select_store.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
+import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
 import 'package:code_icons/presentation/utils/Date_picker.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
@@ -15,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_swipe_action_cell/core/cell.dart';
 
 class PurchaseRequestForm extends StatefulWidget {
   const PurchaseRequestForm({super.key});
@@ -25,16 +25,21 @@ class PurchaseRequestForm extends StatefulWidget {
 
 class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
   PurchasesCubit purchasesCubit = PurchasesCubit();
-  bool isVisable = true;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    /* ControllerManager().recietCollectionController.last.clear(); */
+    ControllerManager().clearControllers(
+        controllers: ControllerManager().purchaseRequestControllers);
     /* ControllerManager().clearControllers(
         controllers: ControllerManager().recietCollectionController);
     PurchasesCubit.petLastReciet(); */
+    purchasesCubit.selectedItem = PurchaseItemEntity();
+    purchasesCubit.fetchProductInfoDatalists();
+
+    purchasesCubit.getItemsData();
+    purchasesCubit.fetchUom();
+    Future.delayed(Duration(seconds: 1));
   }
 
   @override
@@ -73,12 +78,47 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
               title: AppLocalizations.of(context)!.save,
               context: context,
               onPressed: () async {
-                purchasesCubit.addPurchaseRequest();
+                purchasesCubit.addPurchaseRequest(context: context);
               },
             ),
             SizedBox(height: 30.h),
           ],
         ),
+      ),
+    );
+  }
+
+  AccordionSection buildItemInfoSection(BuildContext context) {
+    return AccordionSection(
+      accordionId: "2",
+      leftIcon: Icon(
+        Icons.work,
+        color: AppColors.whiteColor,
+        size: 30.r,
+      ),
+      isOpen: false,
+      header: const Text('بيانات المنتج',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          )),
+      content: BlocConsumer<PurchasesCubit, PurchasesState>(
+        bloc: purchasesCubit,
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is AddPurchasesItemloading ||
+              state is PurchasesItemSelected) {
+            return buildProductInfoWhileSelecting(context);
+          } else if (state is PurchasesInitial) {
+            return buildAddFirstProduct(context);
+          } else if (state is AddPurchasesItemSuccess) {
+            return buildItemsListWithAddition(context);
+          } else if (state is AddPurchasesItemError) {
+            return LoadingStateAnimation();
+          }
+          return Container();
+        },
       ),
     );
   }
@@ -96,24 +136,21 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
           bloc: purchasesCubit,
           listener: (context, state) {
             if (state is AddPurchasesRequestSuccess) {
-              /* SnackBarUtils.hideCurrentSnackBar(context: context); */
               SnackBarUtils.showSnackBar(
                 context: context,
                 label: "تمت الإضافه بنجاح",
                 backgroundColor: AppColors.greenColor,
               );
-              /*  Navigator.pushReplacementNamed(
-                        context, AllRecietsScreen.routeName); */
+              Navigator.pushReplacementNamed(
+                  context, AllPurchasesScreen.routeName);
             } else if (state is AddPurchasesRequestError) {
               if (state.errorMsg.contains("400")) {
-                SnackBarUtils.hideCurrentSnackBar(context: context);
                 SnackBarUtils.showSnackBar(
                   context: context,
                   label: "برجاء ادخال البيانات صحيحه",
                   backgroundColor: AppColors.redColor,
                 );
               } else if (state.errorMsg.contains("500")) {
-                SnackBarUtils.hideCurrentSnackBar(context: context);
                 SnackBarUtils.showSnackBar(
                   context: context,
                   label: "حدث خطأ ما",
@@ -144,197 +181,430 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
     );
   }
 
-  AccordionSection buildItemInfoSection(BuildContext context) {
-    return AccordionSection(
-      accordionId: "2",
-      leftIcon: Icon(
-        Icons.work,
-        color: AppColors.whiteColor,
-        size: 30.r,
-      ),
-      isOpen: false,
-      header: const Text('بيانات المنتج',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          )),
-      content: BlocConsumer<PurchasesCubit, PurchasesState>(
-        bloc: purchasesCubit,
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (state is AddPurchasesItemloading) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+  Column buildItemsListWithAddition(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 20.h,
+        ),
+        buildSaveButton(
+            mainAxisAlignment: MainAxisAlignment.center,
+            title: "إضافه منتج جديد",
+            context: context,
+            onPressed: () async {
+              purchasesCubit.addItem();
+            }),
+        SizedBox(
+          height: 10.h,
+        ),
+        SizedBox(
+          height: 300.h,
+          child: ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+            itemCount: purchasesCubit.selectedfilterdItemList.length,
+            itemBuilder: (context, index) {
+              final request = purchasesCubit.selectedfilterdItemList[index];
+              return SwipeActionCell(
+                leadingActions: [
+                  SwipeAction(
+                    nestedAction: SwipeNestedAction(
+                      content: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.blueColor,
+                              AppColors.lightBlueColor
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          color: Colors.red,
+                        ),
+                        width: 80.sp,
+                        height: 50.sp,
+                        child: const OverflowBox(
+                          maxWidth: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('حذف',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    color: Colors.transparent,
+                    content:
+                        purchasesCubit.getIconButton(Colors.red, Icons.delete),
+                    onTap: (handler) async {
+                      // Implement delete functionality
+                    },
+                  ),
+                ],
+                key: ValueKey(index),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Card(
+                    color: AppColors.blueColor,
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.blueColor,
+                            AppColors.lightBlueColor
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(16.w),
+                        leading: const CircleAvatar(
+                          backgroundColor: AppColors.lightBlueColor,
+                          child: Icon(
+                            Icons.receipt,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(
+                          "كود ${request.itemCode1}",
+                          style: TextStyle(
+                            color: AppColors.whiteColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        subtitle: Padding(
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Wrap(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "id: ${request.itemId}",
+                                    style: TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "itemNameAr: ${request.itemNameAr}",
+                                    style: TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w, vertical: 12.h),
+                              decoration: BoxDecoration(
+                                color: AppColors.greenColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                "تم التأكيد",
+                                style: TextStyle(
+                                  color: AppColors.whiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+      ],
+    );
+  }
+
+  Widget buildAddFirstProduct(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 60.h,
+        ),
+        buildSaveButton(
+            mainAxisAlignment: MainAxisAlignment.center,
+            title: "إضافه منتج جديد",
+            context: context,
+            onPressed: () async {
+              purchasesCubit.addItem();
+            }),
+        SizedBox(
+          height: 60.h,
+        ),
+      ],
+    );
+  }
+
+  Column buildProductInfoWhileSelecting(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              height: 15.h,
+            ),
+            Row(
               children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: BlocConsumer<PurchasesCubit, PurchasesState>(
-                          bloc: purchasesCubit
-                            ..tradeList.clear()
-                            ..fetchTradeList(),
-                          listener: (context, state) {},
-                          builder: (context, state) {
-                            return SelectableDropDownlist(
-                              title: "الكود",
-                              hintText: "اختيار الكود",
-                              itemList: purchasesCubit.tradeList,
-                              onChanged: (value) {
-                                print(value);
-                                context
-                                    .read<PurchasesCubit>()
-                                    .updateTradeRegistryType(value!);
-                              },
-                            );
-                          },
-                        )),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: BlocConsumer<PurchasesCubit, PurchasesState>(
-                          bloc: purchasesCubit
-                            ..tradeList.clear()
-                            ..fetchTradeList(),
-                          listener: (context, state) {},
-                          builder: (context, state) {
-                            return SelectableDropDownlist(
-                              title: "الاسم",
-                              hintText: "اختيار الاسم",
-                              itemList: purchasesCubit.tradeList,
-                              onChanged: (value) {
-                                print(value);
-                                context
-                                    .read<PurchasesCubit>()
-                                    .updateTradeRegistryType(value!);
-                              },
-                            );
-                          },
-                        )),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: BlocConsumer<PurchasesCubit, PurchasesState>(
-                          bloc: purchasesCubit
-                            ..tradeList.clear()
-                            ..fetchTradeList(),
-                          listener: (context, state) {},
-                          builder: (context, state) {
-                            return SelectableDropDownlist(
-                              title: "وحدة القياس",
-                              hintText: "اختيار وحدة القياس",
-                              itemList: purchasesCubit.tradeList,
-                              onChanged: (value) {
-                                print(value);
-                                context
-                                    .read<PurchasesCubit>()
-                                    .updateTradeRegistryType(value!);
-                              },
-                            );
-                          },
-                        )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    BuildTextField(
-                        label: "الكميه",
-                        hint: "الكميه",
-                        controller: ControllerManager()
-                            .getControllerByName('divisionBL'),
-                        icon: Icons.diversity_3_sharp,
+                Expanded(
+                    child: BlocConsumer<PurchasesCubit, PurchasesState>(
+                  bloc: purchasesCubit,
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is PurchasesItemSelected) {
+                      return SelectableDropDownlist(
                         validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "يجب ادخال النشاط";
+                          if (value == null) {
+                            return "يجب ادخال الكود";
                           }
                           return null;
                         },
-                        onTap: () {
-                          ControllerManager()
-                                  .getControllerByName('divisionBL')
-                                  .selection =
-                              TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: ControllerManager()
-                                      .getControllerByName('divisionBL')
-                                      .value
-                                      .text
-                                      .length);
-                        }),
-                    BuildTextField(
-                        label: "الوصف",
-                        hint: "الوصف",
-                        controller:
-                            ControllerManager().getControllerByName('ownerBL'),
-                        icon: Icons.phone_iphone,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "يجب ادخال اسم المالك";
-                          }
-                          return null;
+                        initialItem: state.selectedItem.itemCode1,
+                        title: "الكود",
+                        hintText: "اختيار الكود",
+                        itemList: purchasesCubit.itemsCodesList,
+                        onChanged: (value) {
+                          purchasesCubit.selectItem(code: value);
                         },
-                        onTap: () {
-                          ControllerManager()
-                                  .getControllerByName('ownerBL')
-                                  .selection =
-                              TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset: ControllerManager()
-                                      .getControllerByName('ownerBL')
-                                      .value
-                                      .text
-                                      .length);
-                        }),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    buildSaveButton(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      title: " اضافه المنتج",
-                      context: context,
-                      onPressed: () async {
-                        purchasesCubit.saveItem();
+                      );
+                    }
+                    return SelectableDropDownlist(
+                      validator: (value) {
+                        if (value == null) {
+                          return "يجب ادخال الكود";
+                        }
+                        return null;
                       },
-                    ),
-                  ],
-                ),
+                      title: "الكود",
+                      hintText: "اختيار الكود",
+                      itemList: purchasesCubit.itemsCodesList,
+                      onChanged: (value) {
+                        purchasesCubit.selectItem(code: value);
+                      },
+                    );
+                  },
+                )),
               ],
-            );
-          } else if (state is PurchasesInitial) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            ),
+            Row(
               children: [
-                SizedBox(
-                  height: 60.h,
-                ),
-                buildSaveButton(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    title: "إضافه منتج جديد",
-                    context: context,
-                    onPressed: () async {
-                      purchasesCubit.addItem();
-                    }),
-                SizedBox(
-                  height: 60.h,
-                ),
+                Expanded(
+                    child: BlocConsumer<PurchasesCubit, PurchasesState>(
+                  bloc: purchasesCubit,
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is PurchasesItemSelected) {
+                      return SelectableDropDownlist(
+                        validator: (value) {
+                          if (value == null) {
+                            return "يجب ادخال الاسم";
+                          }
+                          return null;
+                        },
+                        initialItem: state.selectedItem.itemNameAr,
+                        title: "الاسم",
+                        hintText: "اختيار الاسم",
+                        itemList: purchasesCubit.itemsNamesList,
+                        onChanged: (value) {
+                          /* purchasesCubit.selectItem(
+                              code: state.selectedItem.itemCode1!); */
+                          /* state.selectedItem.itemNameAr = value; */
+                          purchasesCubit.selectItem(name: value);
+                        },
+                      );
+                    }
+
+                    return SelectableDropDownlist(
+                      validator: (value) {
+                        if (value == null) {
+                          return "يجب ادخال الاسم";
+                        }
+                        return null;
+                      },
+                      title: "الاسم",
+                      hintText: "اختيار الاسم",
+                      itemList: purchasesCubit.itemsNamesList,
+                      onChanged: (value) {
+                        purchasesCubit.selectItem(name: value);
+                      },
+                    );
+                  },
+                )),
               ],
-            );
-          } else if (state is AddPurchasesItemError) {
-            return LoadingStateAnimation();
-          }
-          return Container();
-        },
-      ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: BlocConsumer<PurchasesCubit, PurchasesState>(
+                  bloc: purchasesCubit,
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is PurchasesItemSelected) {
+                      return SelectableDropDownlist(
+                        validator: (value) {
+                          if (value == null) {
+                            return "يجب ادخال الوحده";
+                          }
+                          return null;
+                        },
+                        initialItem: state.selectedItem.itemUom?.first.uom,
+                        title: "وحدة القياس",
+                        hintText: "اختيار وحدة القياس",
+                        itemList: purchasesCubit.uomNamesList,
+                        onChanged: (value) {
+                          purchasesCubit.selectUom(name: value);
+                        },
+                      );
+                    }
+                    return SelectableDropDownlist(
+                      title: "وحدة القياس",
+                      hintText: "اختيار وحدة القياس",
+                      itemList: purchasesCubit.uomNamesList,
+                      onChanged: (value) {
+                        purchasesCubit.selectUom(name: value);
+                      },
+                    );
+                  },
+                )),
+              ],
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            BlocBuilder<PurchasesCubit, PurchasesState>(
+              bloc: purchasesCubit,
+              builder: (context, state) {
+                if (state is PurchasesItemSelected) {
+                  return BuildTextField(
+                      label: "الكميه",
+                      hint: "الكميه",
+                      controller: ControllerManager().getControllerByName(
+                          'purchaseItemQuantitytemController'),
+                      icon: Icons.diversity_3_sharp,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return "يجب ادخال الكميه";
+                        }
+                        return null;
+                      },
+                      onTap: () {
+                        ControllerManager()
+                                .getControllerByName(
+                                    'purchaseItemQuantitytemController')
+                                .selection =
+                            TextSelection(
+                                baseOffset: 0,
+                                extentOffset: ControllerManager()
+                                    .getControllerByName(
+                                        'purchaseItemQuantitytemController')
+                                    .value
+                                    .text
+                                    .length);
+                      });
+                }
+
+                return BuildTextField(
+                    label: "الكميه",
+                    hint: "الكميه",
+                    controller: ControllerManager().getControllerByName(
+                        'purchaseItemQuantitytemController'),
+                    icon: Icons.diversity_3_sharp,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "يجب ادخال الكميه";
+                      }
+                      return null;
+                    },
+                    onTap: () {
+                      ControllerManager()
+                              .getControllerByName(
+                                  'purchaseItemQuantitytemController')
+                              .selection =
+                          TextSelection(
+                              baseOffset: 0,
+                              extentOffset: ControllerManager()
+                                  .getControllerByName(
+                                      'purchaseItemQuantitytemController')
+                                  .value
+                                  .text
+                                  .length);
+                    });
+              },
+            ),
+            BuildTextField(
+                label: "الوصف",
+                hint: "الوصف",
+                controller: ControllerManager()
+                    .getControllerByName('purchaseItemDiscriptionController'),
+                icon: Icons.phone_iphone,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "يجب ادخال الوصف";
+                  }
+                  return null;
+                },
+                onTap: () {
+                  ControllerManager()
+                          .getControllerByName('purchaseItemDiscriptionController')
+                          .selection =
+                      TextSelection(
+                          baseOffset: 0,
+                          extentOffset: ControllerManager()
+                              .getControllerByName(
+                                  'purchaseItemDiscriptionController')
+                              .value
+                              .text
+                              .length);
+                }),
+            SizedBox(
+              height: 20.h,
+            ),
+            buildSaveButton(
+              mainAxisAlignment: MainAxisAlignment.center,
+              title: " اضافه المنتج",
+              context: context,
+              onPressed: () async {
+                purchasesCubit.saveSelectedItem();
+                
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -365,8 +635,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                   label: "كود",
                   hint: "كود",
                   keyboardType: TextInputType.number,
-                  controller:
-                      ControllerManager().getControllerByName('divisionBL'),
+                  controller: ControllerManager()
+                      .getControllerByName('purchaseCodeController'),
                   icon: Icons.diversity_3_sharp,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -376,12 +646,12 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                   },
                   onTap: () {
                     ControllerManager()
-                            .getControllerByName('divisionBL')
+                            .getControllerByName('purchaseCodeController')
                             .selection =
                         TextSelection(
                             baseOffset: 0,
                             extentOffset: ControllerManager()
-                                .getControllerByName('divisionBL')
+                                .getControllerByName('purchaseCodeController')
                                 .value
                                 .text
                                 .length);
@@ -389,21 +659,21 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
               BuildTextField(
                 label: "التاريخ",
                 hint: "التاريخ ",
-                controller:
-                    ControllerManager().getControllerByName('birthDayBL'),
+                controller: ControllerManager()
+                    .getControllerByName('purchaseDateController'),
                 readOnly: true,
                 icon: Icons.app_registration,
                 onTap: () {
                   AppDatePicker.selectDate(
                       context: context,
-                      controller:
-                          ControllerManager().getControllerByName('birthDayBL'),
+                      controller: ControllerManager()
+                          .getControllerByName('purchaseDateController'),
                       dateStorageMap: purchasesCubit.dateStorageMap,
-                      key: "birthDayBL");
+                      key: "purchaseDateController");
                 },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return "يجب ادخال تاريخ الميلاد";
+                    return "يجب ادخال تاريخ ";
                   }
                   return null;
                 },
@@ -412,20 +682,21 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                 children: [
                   Expanded(
                       child: BlocConsumer<PurchasesCubit, PurchasesState>(
-                    bloc: purchasesCubit
-                      ..tradeList.clear()
-                      ..fetchTradeList(),
+                    bloc: purchasesCubit,
                     listener: (context, state) {},
                     builder: (context, state) {
                       return SelectableDropDownlist(
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال المركز";
+                          }
+                          return null;
+                        },
                         title: "المركز",
                         hintText: "اختيار المركز",
-                        itemList: purchasesCubit.tradeList,
+                        itemList: purchasesCubit.storeNamesList,
                         onChanged: (value) {
-                          print(value);
-                          context
-                              .read<PurchasesCubit>()
-                              .updateTradeRegistryType(value!);
+                          purchasesCubit.selectStore(name: value);
                         },
                       );
                     },
@@ -438,18 +709,21 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                       child: BlocConsumer<PurchasesCubit, PurchasesState>(
                     bloc: purchasesCubit
                       ..tradeList.clear()
-                      ..fetchTradeList(),
+                      ..fetchStatusList(),
                     listener: (context, state) {},
                     builder: (context, state) {
                       return SelectableDropDownlist(
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال الحاله";
+                          }
+                          return null;
+                        },
                         title: "الحاله",
                         hintText: "اختيار الحاله",
                         itemList: purchasesCubit.tradeList,
                         onChanged: (value) {
-                          print(value);
-                          context
-                              .read<PurchasesCubit>()
-                              .updateTradeRegistryType(value!);
+                          purchasesCubit.selectedStatus = value;
                         },
                       );
                     },
@@ -460,21 +734,20 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                 children: [
                   Expanded(
                       child: BlocConsumer<PurchasesCubit, PurchasesState>(
-                    bloc: purchasesCubit
-                      ..tradeList.clear()
-                      ..fetchTradeList(),
+                    bloc: purchasesCubit,
                     listener: (context, state) {},
                     builder: (context, state) {
                       return SelectableDropDownlist(
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "يجب ادخال الاسم";
+                          }
+                          return null;
+                        },
                         title: "cost center",
                         hintText: "اختيار الاسم",
-                        itemList: purchasesCubit.tradeList,
-                        onChanged: (value) {
-                          print(value);
-                          context
-                              .read<PurchasesCubit>()
-                              .updateTradeRegistryType(value!);
-                        },
+                        itemList: purchasesCubit.costCenterNamesList,
+                        onChanged: (value) {},
                       );
                     },
                   )),
@@ -486,17 +759,17 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
               BuildTextField(
                 label: "تاريخ الرد",
                 hint: "تاريخ الرد",
-                controller:
-                    ControllerManager().getControllerByName('birthDayBL'),
+                controller: ControllerManager()
+                    .getControllerByName('purchaseAnswerDateController'),
                 readOnly: true,
                 icon: Icons.app_registration,
                 onTap: () {
                   AppDatePicker.selectDate(
                       context: context,
-                      controller:
-                          ControllerManager().getControllerByName('birthDayBL'),
+                      controller: ControllerManager()
+                          .getControllerByName('purchaseAnswerDateController'),
                       dateStorageMap: purchasesCubit.dateStorageMap,
-                      key: "birthDayBL");
+                      key: "purchaseAnswerDateController");
                 },
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -513,8 +786,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                   hint: "ملاحظات",
                   minLines: 1,
                   maxLines: 5,
-                  controller:
-                      ControllerManager().getControllerByName('addressBL'),
+                  controller: ControllerManager()
+                      .getControllerByName('purchaseNotesController'),
                   icon: Icons.phone_iphone,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -524,12 +797,12 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                   },
                   onTap: () {
                     ControllerManager()
-                            .getControllerByName('addressBL')
+                            .getControllerByName('purchaseNotesController')
                             .selection =
                         TextSelection(
                             baseOffset: 0,
                             extentOffset: ControllerManager()
-                                .getControllerByName('addressBL')
+                                .getControllerByName('purchaseNotesController')
                                 .value
                                 .text
                                 .length);

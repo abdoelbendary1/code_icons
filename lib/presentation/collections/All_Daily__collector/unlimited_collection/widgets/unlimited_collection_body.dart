@@ -59,59 +59,7 @@ class _UnlimitedCollectionBodyState extends State<UnlimitedCollectionBody> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /*   BlocBuilder<AddCollectionCubit, AddCollectionState>(
-                  buildWhen: (previous, current) {
-                    if (previous is GetCustomerDataByIDSuccess) {
-                      return false;
-                    }
-                    if (current is YearsUpdatedState) {
-                      return false;
-                    } else {
-                      return true;
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is GetCustomerDataByIDSuccess) {
-                      return ReusableSelectTrader(
-                        itemList: addCollectionCubit.customerData,
-                        selectedCustomer: addCollectionCubit.selectedCustomer,
-                        onChanged: (value) {
-                          context.read<AddCollectionCubit>().selectedCustomer =
-                              value!;
-                          context
-                              .read<AddCollectionCubit>()
-                              .fetchCustomerDataByID(
-                                  customerId: value.idBl.toString());
-                        }, //! bug
-                      );
-                    }
-                    return ReusableSelectTrader(
-                      itemList: addCollectionCubit.customerData,
-                      onChanged: (value) {
-                        context.read<AddCollectionCubit>().selectedCustomer =
-                            value!;
-                        context
-                            .read<AddCollectionCubit>()
-                            .fetchCustomerDataByID(
-                                customerId: value.idBl.toString());
-                      },
-                      selectedCustomer: null,
-                    );
-                  },
-                ), */
-                /*   SizedBox(
-                  height: 20.h,
-                ), */
-                /*   Padding(
-                  padding: EdgeInsets.only(left: 10.0.w),
-                  child: Text(
-                    "إضافه حافظه غير مقيده",
-                    /* AppLocalizations.of(context)!.collection_Details_title, */
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: AppColors.blackColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ), */
+                
                 SizedBox(
                   height: 20.h,
                 ),

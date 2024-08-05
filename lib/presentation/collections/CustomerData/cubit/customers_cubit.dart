@@ -87,6 +87,23 @@ class CustomersCubit extends Cubit<CustomersState> {
     {'id': 4, 'type': "فرع محافظة اخري"},
     {'id': 5, 'type': "رئيسي محافظة اخري"},
   ];
+  String getTypeById(int key) {
+    final List<Map<String, dynamic>> tradeRegistryTypes = [
+      {'id': 1, 'type': "رئيسي"},
+      {'id': 2, 'type': "فرعي"},
+      {'id': 3, 'type': "رئيسي اخر"},
+      {'id': 4, 'type': "فرع محافظة اخري"},
+      {'id': 5, 'type': "رئيسي محافظة اخري"},
+    ];
+
+    for (var trade in tradeRegistryTypes) {
+      if (trade['id'] == key) {
+        return trade['type'];
+      }
+    }
+    return 'ID not found';
+  }
+
   final List<Map<String, dynamic>> companyTypeList = [
     {"idBL": 1, "companyTypeBL": "شركة"},
     {"idBL": 2, "companyTypeBL": "فردي"},

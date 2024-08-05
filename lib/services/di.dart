@@ -8,6 +8,8 @@ import 'package:code_icons/data/repository/dataSource/auth_remote_data_source_im
 import 'package:code_icons/data/repository/dataSource/fetchTradeCollectionsDataSource_Impl.dart';
 import 'package:code_icons/data/repository/dataSource/get_customer_data_remote_impl.dart';
 import 'package:code_icons/data/repository/dataSource/post_trade_collection_data_source_impl.dart';
+import 'package:code_icons/data/repository/dataSource/purcase_request_remote_impl.dart';
+import 'package:code_icons/data/repository/repository/Purchase_requset_repo_impl.dart';
 import 'package:code_icons/data/repository/repository/auth_repository_impl.dart';
 import 'package:code_icons/data/repository/repository/fetchTradeCollectionsRepo_Impl.dart';
 import 'package:code_icons/data/repository/repository/get_customer_data_repo_impl.dart';
@@ -16,6 +18,8 @@ import 'package:code_icons/domain/repository/data_source/auth_remote_data_source
 import 'package:code_icons/domain/repository/data_source/fetchTradeCollectionsDataSource.dart';
 import 'package:code_icons/domain/repository/data_source/get_customer_data_remote.dart';
 import 'package:code_icons/domain/repository/data_source/post_trade_collection_data_source.dart';
+import 'package:code_icons/domain/repository/data_source/purchase_request_remote_data_source.dart';
+import 'package:code_icons/domain/repository/repository/Purchase_request_dart.dart';
 import 'package:code_icons/domain/repository/repository/auth_repository.dart';
 import 'package:code_icons/domain/repository/repository/fetchTradeCollectionsRepo.dart';
 import 'package:code_icons/domain/repository/repository/get_customer_data_repo.dart';
@@ -38,6 +42,7 @@ import 'package:code_icons/domain/use_cases/post-payment_values_by_ID_usecase.da
 import 'package:code_icons/domain/use_cases/post_UnRegistered_trade_collection_use_case%20.dart';
 import 'package:code_icons/domain/use_cases/post_customer_data.dart';
 import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart';
+import 'package:code_icons/domain/use_cases/purchase_request_usecase/purchase_request.useCase.dart';
 
 LoginUseCase injectLoginUseCase() {
   return LoginUseCase(authRepository: injectAuthRepository());
@@ -49,6 +54,21 @@ AuthRepository injectAuthRepository() {
 
 AuthRemoteDataSource injectAuthDataSource() {
   return AuthRemoteDataSourceImpl(apiManager: ApiManager.getInstance());
+}
+
+PurchaseRequestsUseCases injectPurchaseRequestsUseCases() {
+  return PurchaseRequestsUseCases(
+      purchaseRequestRepo: injectPurchaseRequestRepo());
+}
+
+PurchaseRequestRepo injectPurchaseRequestRepo() {
+  return PurchaseRequestRepoImpl(
+      purchaseRequestRemoteDataSource: injectPurchaseRequestRemoteDataSource());
+}
+
+PurchaseRequestRemoteDataSource injectPurchaseRequestRemoteDataSource() {
+  return PurchaseRequestRemoteDataSourceImpl(
+      apiManager: ApiManager.getInstance());
 }
 
 PostCustomerDataUseCase injectPostCustomerDataUseCase() {
@@ -132,7 +152,8 @@ PostUnRegisteredTradeCollectionUseCase
       postTradeCollectionRepo: injectPostTradeCollectionRepo());
 }
 
-GetUnRegisteredTradeCollectionUseCase injectGetUnRegisteredTradeCollectionUseCase() {
+GetUnRegisteredTradeCollectionUseCase
+    injectGetUnRegisteredTradeCollectionUseCase() {
   return GetUnRegisteredTradeCollectionUseCase(
       postTradeCollectionRepo: injectPostTradeCollectionRepo());
 }

@@ -107,7 +107,6 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
           bloc: customersCubit,
           listener: (context, state) {
             if (state is AddCustomerSuccess) {
-              SnackBarUtils.hideCurrentSnackBar(context: context);
               SnackBarUtils.showSnackBar(
                 context: context,
                 label: "تمت الإضافه بنجاح",
@@ -118,14 +117,12 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
                   context, CustomerDataScreen.routeName);
             } else if (state is AddCustomerError) {
               if (state.errorMsg.contains("400")) {
-                SnackBarUtils.hideCurrentSnackBar(context: context);
                 SnackBarUtils.showSnackBar(
                   context: context,
                   label: "برجاء ادخال البيانات صحيحه",
                   backgroundColor: AppColors.redColor,
                 );
               } else if (state.errorMsg.contains("500")) {
-                SnackBarUtils.hideCurrentSnackBar(context: context);
                 SnackBarUtils.showSnackBar(
                   context: context,
                   label: "حدث خطأ ما",
@@ -645,8 +642,8 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
               if (value == null || value.trim().isEmpty) {
                 return "يجب ادخال الرقم القومي";
               }
-              if (value.length > 14) {
-                return "يجب الا يزيد الرقم القومي عن 14 رقم";
+              if (value.length < 14) {
+                return "يجب الا يقل الرقم القومي عن 14 رقم";
               }
               return null;
             },

@@ -1,5 +1,6 @@
 import 'package:code_icons/data/model/response/get_customer_data.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -30,15 +31,44 @@ class CustomerDataSource extends DataGridSource {
   CustomerDataSource(this.customers) {
     buildDataGridRows();
   }
+  var customersCubit = CustomersCubit.customersCubit;
 
   List<DataGridRow> dataGridRows = [];
 
   void buildDataGridRows() {
     dataGridRows = customers.map<DataGridRow>((dataGridRow) {
       return DataGridRow(cells: [
-        /* DataGridCell<int>(columnName: 'idBL', value: dataGridRow.idBl), */
         DataGridCell<String>(
             columnName: 'brandNameBL', value: dataGridRow.brandNameBl),
+        DataGridCell<String>(
+            columnName: 'addressBL', value: dataGridRow.addressBl),
+        DataGridCell<String>(
+            columnName: 'nationalIdBL', value: dataGridRow.nationalIdBl),
+        DataGridCell<String>(
+            columnName: 'tradeRegistryBL', value: dataGridRow.tradeRegistryBl),
+        DataGridCell<DateTime>(
+            columnName: 'licenseDateBL',
+            value: DateTime.tryParse(dataGridRow.licenseDateBl ?? "")),
+        DataGridCell<String>(
+            columnName: 'activityNameBL', value: dataGridRow.activityNameBl),
+        DataGridCell<String>(
+            columnName: 'tradeOfficeNameBL',
+            value: dataGridRow.tradeOfficeNameBl),
+        DataGridCell<double>(
+            columnName: 'capitalBL', value: dataGridRow.capitalBl),
+        DataGridCell<String>(
+            columnName: 'tradeRegistryTypeBl',
+            value:
+                customersCubit.getTypeById(dataGridRow.tradeRegistryTypeBl!)),
+
+        /* DataGridCell<int>(columnName: 'idBL', value: dataGridRow.idBl), */
+        /*  DataGridCell<String>(
+            columnName: 'brandNameBL', value: dataGridRow.brandNameBl),
+        DataGridCell<String>(
+            columnName: 'addressBL', value: dataGridRow.addressBl),
+        DataGridCell<int>(
+            columnName: 'licenseYearBL', value: dataGridRow.licenseYearBl),
+        DataGridCell<String>(columnName: 'phoneBL', value: dataGridRow.phoneBl),
         DataGridCell<String>(
             columnName: 'nationalIdBL', value: dataGridRow.nationalIdBl),
         DataGridCell<DateTime>(
@@ -49,8 +79,6 @@ class CustomerDataSource extends DataGridSource {
         DataGridCell<DateTime>(
             columnName: 'licenseDateBL',
             value: DateTime.tryParse(dataGridRow.licenseDateBl ?? "")),
-        DataGridCell<int>(
-            columnName: 'licenseYearBL', value: dataGridRow.licenseYearBl),
         DataGridCell<double>(
             columnName: 'capitalBL', value: dataGridRow.capitalBl),
         DataGridCell<int>(columnName: 'validBL', value: dataGridRow.validBl),
@@ -68,10 +96,7 @@ class CustomerDataSource extends DataGridSource {
             columnName: 'tradeTypeBL', value: dataGridRow.tradeTypeBl),
         DataGridCell<String>(columnName: 'ownerBL', value: dataGridRow.ownerBl),
         DataGridCell<String>(
-            columnName: 'addressBL', value: dataGridRow.addressBl),
-        DataGridCell<String>(
-            columnName: 'stationNameBL', value: dataGridRow.stationNameBl),
-        DataGridCell<String>(columnName: 'phoneBL', value: dataGridRow.phoneBl),
+            columnName: 'stationNameBL', value: dataGridRow.stationNameBl), */
       ]);
     }).toList();
   }
@@ -170,10 +195,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -187,10 +210,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -205,10 +226,8 @@ class CustomerDataSource extends DataGridSource {
         child: Text(
           formatDate(value),
           /* value.toIso8601String(), */
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -222,10 +241,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -240,10 +257,8 @@ class CustomerDataSource extends DataGridSource {
         child: Text(
           formatDate(value),
           /* value.year.toString(), */
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -257,10 +272,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -274,10 +287,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -291,10 +302,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -308,10 +317,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -325,10 +332,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -342,10 +347,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -359,10 +362,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -376,10 +377,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -393,10 +392,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -410,10 +407,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -427,10 +422,8 @@ class CustomerDataSource extends DataGridSource {
         padding: EdgeInsets.all(8.0),
         child: Text(
           value,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );

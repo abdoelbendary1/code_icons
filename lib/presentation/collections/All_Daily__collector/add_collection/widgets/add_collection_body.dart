@@ -1,6 +1,7 @@
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/collection_details_form.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
@@ -33,6 +34,20 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
     addCollectionCubit.fetchCustomerData();
     ControllerManager().clearControllers(
         controllers: ControllerManager().addCollectionControllers);
+    /* addCollectionCubit.getReciets(); */
+    /*  RecietCollctionCubit.recietCubit.selectRecietCollection(); */
+  }
+
+  @override
+  void didChangeDependencies() {
+    Navigator.of(context);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant AddCollectionBody oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -49,7 +64,8 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
         child: BlocConsumer<AddCollectionCubit, AddCollectionState>(
           listener: (context, state) {
             if (state is GetAllCustomerDataSuccess) {
-              addCollectionCubit.customerData = state.customerData;
+              addCollectionCubit.customerData = state.customerData!;
+              addCollectionCubit.receipts = state.receipts ?? [];
             }
           },
           builder: (context, state) {
@@ -122,7 +138,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   builder: (context, state) {
                     print("Builder State: $state");
                     if (state is GetCustomerDataByIDInitial) {
-                      return Center(
+                      return const Center(
                           child: SizedBox(
                               height: 30, child: LoadingStateAnimation()));
                     } else if (state is GetCustomerDataByIDError) {

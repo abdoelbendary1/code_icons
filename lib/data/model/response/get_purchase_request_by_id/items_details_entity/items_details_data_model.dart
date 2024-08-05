@@ -1,14 +1,12 @@
 import 'package:code_icons/domain/entities/get_purchase_request_by_id/items_details_entity/items_details_entity.dart';
 
 class ItemsDetailsDataModel extends ItemsDetailsEntity {
-  
-
   ItemsDetailsDataModel(
       {super.itemCode1,
       super.itemNameAr,
       super.uom,
       super.qty,
-      super.description,
+     /*  super.prprice, */
       super.id});
 
   ItemsDetailsDataModel.fromJson(Map<String, dynamic> json) {
@@ -24,9 +22,9 @@ class ItemsDetailsDataModel extends ItemsDetailsEntity {
     if (json["qty"] is int) {
       qty = json["qty"];
     }
-    if (json["description"] is String) {
-      description = json["description"];
-    }
+   /*  if (json["prprice"] is String) {
+      prprice = json["prprice"];
+    } */
     if (json["id"] is String) {
       id = json["id"];
     }
@@ -38,7 +36,7 @@ class ItemsDetailsDataModel extends ItemsDetailsEntity {
     _data["itemNameAr"] = itemNameAr;
     _data["uom"] = uom;
     _data["qty"] = qty;
-    _data["description"] = description;
+   /*  _data["prprice"] = prprice; */
     _data["id"] = id;
     return _data;
   }

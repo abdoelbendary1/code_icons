@@ -13,7 +13,12 @@ import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CollectionDetailsForm extends StatelessWidget {
+class CollectionDetailsForm extends StatefulWidget {
+  @override
+  State<CollectionDetailsForm> createState() => _CollectionDetailsFormState();
+}
+
+class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
   AddCollectionCubit addCollectionCubit = AddCollectionCubit(
     fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
     fetchCustomerDataByIDUseCase: injectFetchCustomerByIdDataUseCase(),
@@ -23,6 +28,30 @@ class CollectionDetailsForm extends StatelessWidget {
   );
 
   final addCollectionControllers = ControllerManager().addCollectionControllers;
+
+  /*  @override
+  void didChangeDependencies() {
+    Navigator.of(context);
+    super.didChangeDependencies();
+  } */
+
+  /*  @override
+  void didUpdateWidget(covariant CollectionDetailsForm oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+ */
+  /*  @override
+  void dispose() {
+    // Perform any cleanup before navigating
+    Future.delayed(Duration.zero, () {
+      if (mounted) {
+        Navigator.pushReplacementNamed(
+            context, AllDailyCollectorScreen.routeName);
+      }
+    });
+    super.dispose();
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -170,24 +199,19 @@ class CollectionDetailsForm extends StatelessWidget {
                             .length);
               },
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Text(
-                AppLocalizations.of(context)!.years_of_Payment,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: AppColors.blackColor, fontWeight: FontWeight.w600),
-              ),
-            ),
-            YearsOfPaymentGridView(
-              addCollectionCubit: addCollectionCubit,
-            ),
-            /* SizedBox(height: 25.h), */
-            /*   BuildTextField(
-              label: AppLocalizations.of(context)!.payment_receipt_number_label,
-              hint: AppLocalizations.of(context)!.payment_receipt_number_hint,
+            BuildTextField(
+              label: "رقم الايصال",
+              hint: "رقم الايصال",
               controller: ControllerManager()
                   .getControllerByName('addCollectionPaymentReceitController'),
-              icon: Icons.receipt,
+              icon: Icons.local_activity,
+              readOnly: true,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return "يجب ادخال النشاط";
+                }
+                return null;
+              },
               onTap: () {
                 ControllerManager()
                         .getControllerByName('addCollectionPaymentReceitController')
@@ -202,7 +226,17 @@ class CollectionDetailsForm extends StatelessWidget {
                             .length);
               },
             ),
-             */
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                AppLocalizations.of(context)!.years_of_Payment,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: AppColors.blackColor, fontWeight: FontWeight.w600),
+              ),
+            ),
+            YearsOfPaymentGridView(
+              addCollectionCubit: addCollectionCubit,
+            ),
             BuildTextField(
               label: AppLocalizations.of(context)!.division_label,
               hint: AppLocalizations.of(context)!.division_hint,
@@ -384,8 +418,11 @@ class CollectionDetailsForm extends StatelessWidget {
                         backgroundColor: AppColors.greenColor,
                         duration: Durations.extralong1,
                       ));
-                      Navigator.pushReplacementNamed(
-                          context, AllDailyCollectorScreen.routeName);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (context.mounted) {}
+                        Navigator.pushReplacementNamed(
+                            context, AllDailyCollectorScreen.routeName);
+                      });
                     } else if (state is AddCollectionError) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
@@ -406,19 +443,20 @@ class CollectionDetailsForm extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
                       if (addCollectionCubit.formKey.currentState!.validate()) {
-                        CustomerDataEntity selectedCustomer =
-                            context.read<AddCollectionCubit>().selectedCustomer;
-                        var tradeCollectionRequest =
-                            addCollectionCubit.intializeTradeRequest(
-                                selectedCustomer: selectedCustomer,
-                                context: context);
-                        await addCollectionCubit.postTradeCollection(
-                            token: "token",
-                            tradeCollectionRequest: tradeCollectionRequest,
-                            context: context);
+                        if (mounted) {
+                          CustomerDataEntity selectedCustomer = context
+                              .read<AddCollectionCubit>()
+                              .selectedCustomer;
+                          var tradeCollectionRequest =
+                              addCollectionCubit.intializeTradeRequest(
+                                  selectedCustomer: selectedCustomer,
+                                  context: context);
+                          await addCollectionCubit.postTradeCollection(
+                              token: "token",
+                              tradeCollectionRequest: tradeCollectionRequest,
+                              context: context);
+                        }
                       }
-
-                     
                     },
                     child: Text(AppLocalizations.of(context)!.save),
                   ),

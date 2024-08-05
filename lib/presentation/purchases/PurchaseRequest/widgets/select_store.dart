@@ -10,10 +10,14 @@ class SelectableDropDownlist extends StatelessWidget {
     required this.onChanged,
     this.title = "",
     this.hintText = "",
+    this.initialItem,
+    this.validator,
   });
   String title;
   String hintText;
   final List<dynamic> itemList;
+  dynamic initialItem;
+  String? Function(dynamic)? validator;
 
   dynamic Function(dynamic)? onChanged;
 
@@ -34,6 +38,10 @@ class SelectableDropDownlist extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           CustomDropdown.search(
+            validator: validator,
+            closeDropDownOnClearFilterSearch: true,
+            canCloseOutsideBounds: true,
+            initialItem: initialItem,
             hintText: hintText,
             hideSelectedFieldWhenExpanded: true,
             noResultFoundText: "لا يوجد بيانات",

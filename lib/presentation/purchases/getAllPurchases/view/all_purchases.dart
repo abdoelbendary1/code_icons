@@ -9,11 +9,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 
-class AllPurchasesScreen extends StatelessWidget {
+class AllPurchasesScreen extends StatefulWidget {
   AllPurchasesScreen({super.key});
   static const String routeName = "AllPurchasesScreen";
+
+  @override
+  State<AllPurchasesScreen> createState() => _AllPurchasesScreenState();
+}
+
+class _AllPurchasesScreenState extends State<AllPurchasesScreen> {
   /* final RecietCollctionCubit recietCollctionCubit = RecietCollctionCubit(); */
   PurchasesCubit purchasesCubit = PurchasesCubit();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    purchasesCubit.fetchAllPurchaseRequests();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +177,7 @@ class AllPurchasesScreen extends StatelessWidget {
         ),
       ),
       body: BlocBuilder<PurchasesCubit, PurchasesState>(
-        bloc: purchasesCubit..getPurchasesList(),
+        bloc: purchasesCubit,
         builder: (context, state) {
           if (state is GetPurchasesListSuccess) {
             if (state.purchases.isEmpty) {
@@ -178,53 +190,47 @@ class AllPurchasesScreen extends StatelessWidget {
             }
             return ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              itemCount: state.purchases.length,
               itemBuilder: (context, index) {
+                final request = state.purchases[index];
                 return SwipeActionCell(
                   leadingActions: [
                     SwipeAction(
-                        nestedAction: SwipeNestedAction(
-                          /// customize your nested action content
-                          content: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.blueColor,
-                                  AppColors.lightBlueColor
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              color: Colors.red,
+                      nestedAction: SwipeNestedAction(
+                        content: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.blueColor,
+                                AppColors.lightBlueColor
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                            width: 80.sp,
-                            height: 50.sp,
-                            child: const OverflowBox(
-                              maxWidth: double.infinity,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  /* Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                  ), */
-                                  Text('حذف',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20)),
-                                ],
-                              ),
+                            color: Colors.red,
+                          ),
+                          width: 80.sp,
+                          height: 50.sp,
+                          child: const OverflowBox(
+                            maxWidth: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('حذف',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20)),
+                              ],
                             ),
                           ),
                         ),
-
-                        /// you should set the default  bg color to transparent
-                        color: Colors.transparent,
-
-                        /// set content instead of title of icon
-                        content: _getIconButton(Colors.red, Icons.delete),
-                        onTap: (handler) async {
-                          /*  recietCollctionCubit.removeReciet(index + 1); */
-                        }),
+                      ),
+                      color: Colors.transparent,
+                      content: purchasesCubit.getIconButton(Colors.red, Icons.delete),
+                      onTap: (handler) async {
+                        // Implement delete functionality
+                      },
+                    ),
                   ],
                   key: ValueKey(index),
                   child: Padding(
@@ -256,36 +262,36 @@ class AllPurchasesScreen extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                          /*  title: Text(
-                            "اول ورقه :  ${state.reciets[index].paperNum}",
+                          title: Text(
+                            "تاريخ الطلب: ${purchasesCubit.convertToDateString(request.date!)}",
                             style: TextStyle(
                               color: AppColors.whiteColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
+                              fontSize: 16.sp,
                             ),
-                          ), */
-                          /*  subtitle: Padding(
+                          ),
+                          subtitle: Padding(
                             padding: EdgeInsets.only(top: 8.h),
                             child: Text(
-                              "عدد الورقات : ${state.reciets[index].totalPapers}",
+                              "id: ${request.id}",
                               style: TextStyle(
                                   color: AppColors.whiteColor,
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold),
                             ),
-                          ), */
+                          ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 14.w, vertical: 6.h),
+                                    horizontal: 16.w, vertical: 12.h),
                                 decoration: BoxDecoration(
                                   color: AppColors.greenColor,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  "تم التأكيد", // Example status
+                                  "تم التأكيد",
                                   style: TextStyle(
                                     color: AppColors.whiteColor,
                                     fontWeight: FontWeight.bold,
@@ -301,7 +307,6 @@ class AllPurchasesScreen extends StatelessWidget {
                   ),
                 );
               },
-              itemCount: state.purchases.length,
             );
           } else if (state is GetPurchasesListError) {
             return Center(
@@ -325,25 +330,5 @@ class AllPurchasesScreen extends StatelessWidget {
     );
   }
 
-  Widget _getIconButton(color, icon) {
-    return Container(
-      width: 80.sp,
-      height: 50.sp,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        gradient: const LinearGradient(
-          colors: [AppColors.redColor, AppColors.lightRedColor],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-
-        /// set you real bg color in your content
-        color: color,
-      ),
-      child: Icon(
-        icon,
-        color: Colors.white,
-      ),
-    );
-  }
+ 
 }

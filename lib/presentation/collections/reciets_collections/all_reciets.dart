@@ -175,6 +175,7 @@ class AllRecietsScreen extends StatelessWidget {
                 ),
               );
             }
+            recietCollctionCubit.receipts = state.reciets;
             return ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               itemBuilder: (context, index) {

@@ -1,26 +1,62 @@
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';
 
-class PaymentValuesDM extends PaymentValuesEntity {
-  PaymentValuesDM({
+class PaymenValuesDM extends PaymentValuesEntity {
+  PaymenValuesDM({
     super.yearsOfRepayment,
     super.paidYears,
     super.compensation,
+    super.activity,
     super.late,
     super.current,
     super.different,
     super.total,
+    super.clientId,
+    super.tradeRegistryTypeBl,
+    super.clientName,
+    super.clientAddress,
+    super.capital,
   });
 
-  factory PaymentValuesDM.fromJson(Map<String, dynamic> json) {
-    return PaymentValuesDM(
-      yearsOfRepayment: json['yearsOfRepayment'] as String,
-      paidYears: List<int>.from(json['paidYears']),
-      compensation: json['compensation'].toDouble(),
-      late: json['late'].toDouble(),
-      current: json['current'].toDouble(),
-      different: json['different'].toDouble(),
-      total: json['total'].toDouble(),
-    );
+  PaymenValuesDM.fromJson(Map<String, dynamic> json) {
+    if (json["yearsOfRepayment"] is String) {
+      yearsOfRepayment = json["yearsOfRepayment"];
+    }
+
+    paidYears = json["paidYears"] ?? [];
+
+    if (json["compensation"] is double) {
+      compensation = json["compensation"];
+    }
+    if (json["activity"] is double) {
+      activity = json["activity"];
+    }
+    if (json["late"] is double) {
+      late = json["late"];
+    }
+    if (json["current"] is double) {
+      current = json["current"];
+    }
+    if (json["different"] is double) {
+      different = json["different"];
+    }
+    if (json["total"] is double) {
+      total = json["total"];
+    }
+    if (json["clientId"] is double) {
+      clientId = json["clientId"];
+    }
+    if (json["tradeRegistryTypeBL"] is double) {
+      tradeRegistryTypeBl = json["tradeRegistryTypeBL"];
+    }
+    if (json["clientName"] is String) {
+      clientName = json["clientName"];
+    }
+    if (json["clientAddress"] is String) {
+      clientAddress = json["clientAddress"];
+    }
+    if (json["capital"] is double) {
+      capital = json["capital"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -30,10 +66,16 @@ class PaymentValuesDM extends PaymentValuesEntity {
       _data["paidYears"] = paidYears;
     }
     _data["compensation"] = compensation;
+    _data["activity"] = activity;
     _data["late"] = late;
     _data["current"] = current;
     _data["different"] = different;
     _data["total"] = total;
+    _data["clientId"] = clientId;
+    _data["tradeRegistryTypeBL"] = tradeRegistryTypeBl;
+    _data["clientName"] = clientName;
+    _data["clientAddress"] = clientAddress;
+    _data["capital"] = capital;
     return _data;
   }
 }

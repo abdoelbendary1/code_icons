@@ -16,7 +16,57 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
   RecietCollectionDataModel lastRecietCollection =
       RecietCollectionDataModel(id: 0, paperNum: 0, totalPapers: 0);
   List<RecietCollectionDataModel> receipts = [];
-  
+  RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
+  late int paymentReceipt;
+
+// Function to select a receipt based on the conditions
+  void selectReceitBasedOnConditions(List<RecietCollectionDataModel> receipts) {
+    for (var receipt in receipts) {
+      if (paymentReceipt >= selectedReceit.paymentReceipt! &&
+          paymentReceipt <
+              selectedReceit.paperNum! + selectedReceit.totalPapers!) {
+        selectedReceit = receipt;
+        break;
+      }
+    }
+  } // Function to set paymentReceipt to selectedReceit's paperNum and save it locally
+
+  Future<void> setPaymentReceiptAndSave() async {
+    paymentReceipt = selectedReceit.paperNum ?? 1;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('paymentReceipt', paymentReceipt);
+  }
+
+// Function to increase paymentReceipt by 1 and update it locally
+  Future<void> increasePaymentReceiptAndSave() async {
+    paymentReceipt += 1;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('paymentReceipt', paymentReceipt);
+  }
+
+// Function to retrieve paymentReceipt from local storage
+  Future<void> retrievePaymentReceipt() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    paymentReceipt = prefs.getInt('paymentReceipt') ?? 0;
+  }
+
+// Function to save the selected receipt to local storage
+  Future<void> saveSelectedReceit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedReceit', json.encode(selectedReceit.toJson()));
+  }
+
+// Function to retrieve the selected receipt from local storage
+  Future<void> retrieveSelectedReceit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? selectedReceitJson = prefs.getString('selectedReceit');
+    if (selectedReceitJson != null) {
+      selectedReceit =
+          RecietCollectionDataModel.fromJson(json.decode(selectedReceitJson));
+    } else {
+      selectedReceit = RecietCollectionDataModel();
+    }
+  }
 
   final formKey = GlobalKey<FormState>();
   void addReciet(BuildContext context) async {
@@ -25,7 +75,6 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
         if (int.parse(
                 ControllerManager().getControllerByName('paperNum').text) <=
             lastRecietCollection.paperNum!) {
-          SnackBarUtils.hideCurrentSnackBar(context: context);
           SnackBarUtils.showSnackBar(
             context: context,
             backgroundColor: AppColors.redColor,
@@ -96,7 +145,6 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
 
     String? existingReceiptsMap = prefs.getString('receiptsMap');
     if (existingReceiptsMap != null) {
-      
       Map<String, List<dynamic>> receiptsMap =
           Map<String, List<dynamic>>.from(json.decode(existingReceiptsMap));
       List<dynamic> existingReceipts = receiptsMap[token] ?? [];
@@ -112,7 +160,6 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
       emit(GetRecietCollctionSuccess(reciets: receipts));
       return receipts;
     } else {
-      
       emit(GetRecietCollctionError(errorMsg: "لا يوجد ايصالات حاليا"));
       return [];
     }
@@ -183,64 +230,4 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
       emit(RemoveAllRecietsError(errorMsg: "لا يوجد ايصالات حاليا"));
     }
   }
-
-  /* void addReciet(BuildContext context) async {
-    if (formKey.currentState!.validate()) {
-      try {
-        // Retrieve existing receipts
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        String? existingReceipts = prefs.getString('receipts');
-        List<RecietCollectionDataModel> receipts = existingReceipts != null
-            ? (json.decode(existingReceipts) as List)
-                .map((i) => RecietCollectionDataModel.fromJson(i))
-                .toList()
-            : [];
-
-        // Create new receipt
-        RecietCollectionDataModel newReciet = RecietCollectionDataModel(
-          paperNum: int.tryParse(
-              ControllerManager().getControllerByName('paperNum').text),
-          totalPapers: int.tryParse(
-              ControllerManager().getControllerByName('totalPapers').text),
-        );
-
-        // Add new receipt to the list
-        receipts.add(newReciet);
-
-        // Save the updated list
-        prefs.setString('receipts', json.encode(receipts));
-
-        emit(AddRecietCollctionSuccess());
-      } catch (e) {
-        emit(AddRecietCollctionError(errorMsg: e.toString()));
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          "برجاء ادخال جميع البيانات",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        backgroundColor: AppColors.redColor,
-        duration: Duration(seconds: 3),
-      ));
-    }
-  }
- */
-  /*  Future<List<RecietCollectionDataModel>> getReciets() async {
-    emit(GetRecietCollctionLoading());
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? existingReceipts = prefs.getString('receipts');
-    if (existingReceipts != null) {
-      List<RecietCollectionDataModel> receipts =
-          (json.decode(existingReceipts) as List)
-              .map((i) => RecietCollectionDataModel.fromJson(i))
-              .toList();
-      lastRecietCollection = receipts.last;
-      emit(GetRecietCollctionSuccess(reciets: receipts));
-      return receipts;
-    } else {
-      emit(GetRecietCollctionError(errorMsg: "There is no Reciets."));
-      return [];
-    }
-  } */
 }

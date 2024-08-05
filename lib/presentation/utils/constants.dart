@@ -285,7 +285,7 @@ class AppLocalData {
         ),
       ],
     ),
-    "settings": SectionEntity(
+    /*   "settings": SectionEntity(
       name: "الاعدادات",
       icon: Icons.settings,
       route: CollectionsScreen.routeName,
@@ -313,7 +313,7 @@ class AppLocalData {
           icon: Icons.receipt,
         ),
       ],
-    ),
+    ), */
     "realStateInvestments": SectionEntity(
       name: "الاستثمار العقاري",
       icon: Icons.real_estate_agent,

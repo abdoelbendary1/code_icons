@@ -34,6 +34,26 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
   }
 
   @override
+  void didChangeDependencies() {
+    Navigator.of(context);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didUpdateWidget(covariant RecietScreenBody oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
+  /* @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    ControllerManager().totalPapers.dispose();
+    ControllerManager().paperNum.dispose();
+  } */
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: recietCollctionCubit.formKey,
@@ -113,7 +133,6 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
           bloc: recietCollctionCubit,
           listener: (context, state) {
             if (state is AddRecietCollctionSuccess) {
-              SnackBarUtils.hideCurrentSnackBar(context: context);
               SnackBarUtils.showSnackBar(
                 context: context,
                 label: "تمت الإضافه بنجاح",
@@ -123,14 +142,12 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                   context, AllRecietsScreen.routeName);
             } else if (state is AddRecietCollctionError) {
               if (state.errorMsg.contains("400")) {
-                SnackBarUtils.hideCurrentSnackBar(context: context);
                 SnackBarUtils.showSnackBar(
                   context: context,
                   label: "برجاء ادخال البيانات صحيحه",
                   backgroundColor: AppColors.redColor,
                 );
               } else if (state.errorMsg.contains("500")) {
-                SnackBarUtils.hideCurrentSnackBar(context: context);
                 SnackBarUtils.showSnackBar(
                   context: context,
                   label: "حدث خطأ ما",

@@ -72,155 +72,6 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
       bloc: allDailyCollectorCubit,
       builder: (context, state) {
         return Scaffold(
-          /*  floatingActionButton: SpeedDial(
-            // animatedIcon: AnimatedIcons.menu_close,
-            // animatedIconTheme: IconThemeData(size: 22.0),
-            // / This is ignored if animatedIcon is non null
-            // child: Text("open"),
-            // activeChild: Text("close"),
-            icon: Icons.add,
-            activeIcon: Icons.close,
-            spacing: 3,
-            mini: mini,
-            openCloseDial: isDialOpen,
-            childPadding: const EdgeInsets.all(5),
-            spaceBetweenChildren: 4,
-            dialRoot: customDialRoot
-                ? (ctx, open, toggleChildren) {
-                    return ElevatedButton(
-                      onPressed: toggleChildren,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[900],
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 22, vertical: 18),
-                      ),
-                      child: const Text(
-                        "Custom Dial Root",
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    );
-                  }
-                : null,
-            buttonSize:
-                buttonSize, // it's the SpeedDial size which defaults to 56 itself
-            // iconTheme: IconThemeData(size: 22),
-            label: extend
-                ? const Text("Open")
-                : null, // The label of the main button.
-            /// The active label of the main button, Defaults to label if not specified.
-            activeLabel: extend ? const Text("Close") : null,
-
-            /// Transition Builder between label and activeLabel, defaults to FadeTransition.
-            // labelTransitionBuilder: (widget, animation) => ScaleTransition(scale: animation,child: widget),
-            /// The below button size defaults to 56 itself, its the SpeedDial childrens size
-            childrenButtonSize: childrenButtonSize,
-            visible: visible,
-            direction: speedDialDirection,
-            switchLabelPosition: switchLabelPosition,
-
-            /// If true user is forced to close dial manually
-            closeManually: closeManually,
-
-            /// If false, backgroundOverlay will not be rendered.
-            renderOverlay: renderOverlay,
-            // overlayColor: Colors.black,
-            // overlayOpacity: 0.5,
-            onOpen: () => debugPrint('OPENING DIAL'),
-            onClose: () => debugPrint('DIAL CLOSED'),
-            useRotationAnimation: useRAnimation,
-            tooltip: 'Open Speed Dial',
-            heroTag: 'speed-dial-hero-tag',
-            // foregroundColor: Colors.black,
-            // backgroundColor: Colors.white,
-            // activeForegroundColor: Colors.red,
-            // activeBackgroundColor: Colors.blue,
-            elevation: 8.0,
-            animationCurve: Curves.elasticInOut,
-            isOpenOnStart: false,
-            shape: customDialRoot
-                ? const RoundedRectangleBorder()
-                : const StadiumBorder(),
-            // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            children: [
-              SpeedDialChild(
-                child: !rmicons ? const Icon(Icons.accessibility) : null,
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                label: 'First',
-                onTap: () => setState(() => rmicons = !rmicons),
-                onLongPress: () => debugPrint('FIRST CHILD LONG PRESS'),
-              ),
-              SpeedDialChild(
-                child: !rmicons ? const Icon(Icons.brush) : null,
-                backgroundColor: Colors.deepOrange,
-                foregroundColor: Colors.white,
-                label: 'Second',
-                onTap: () => debugPrint('SECOND CHILD'),
-              ),
-              SpeedDialChild(
-                child: !rmicons ? const Icon(Icons.margin) : null,
-                backgroundColor: Colors.indigo,
-                foregroundColor: Colors.white,
-                label: 'Show Snackbar',
-                visible: true,
-                onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(("Third Child Pressed")))),
-                onLongPress: () => debugPrint('THIRD CHILD LONG PRESS'),
-              ),
-            ],
-          ), */
-          /*  appBar: AppBar(
-            toolbarHeight: 80.h,
-            centerTitle: true,
-            backgroundColor:
-                state is RowSelectedState ? Colors.blue : AppColors.blueColor,
-            title: Text(
-              state is RowSelectedState
-                  ? '1 item selected'
-                  : 'قائمة المحصلين اليومية',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: Colors.white),
-            ),
-            actions: state is RowSelectedState
-                ? [
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                AddCollectionView(data: state.selectedRow),
-                          ),
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.cancel),
-                      onPressed: () {
-                        allDailyCollectorCubit.deselectRow();
-                      },
-                    ),
-                  ]
-                : [
-                    IconButton(
-                      icon: Icon(Icons.add, size: 30),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, AddCollectionView.routeName);
-                      },
-                    ),
-                    /*    IconButton(
-                      icon: Icon(Icons.edit, size: 30),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, UnlimitedCollection.routeName);
-                      },
-                    ), */
-                  ],
-          ), */
           floatingActionButton: SpeedDial(
             gradientBoxShape: BoxShape.circle,
             gradient: const LinearGradient(
@@ -348,7 +199,7 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                           Expanded(
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                                  const EdgeInsets.symmetric(vertical: 0.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                     color: AppColors.whiteColor
@@ -363,12 +214,12 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                     ),
                                 child: SfDataGridTheme(
                                   data: SfDataGridThemeData(
-                                    gridLineColor: AppColors.lightBlueColor,
+                                    gridLineColor: AppColors.blackColor,
                                     filterPopupDisabledTextStyle:
                                         const TextStyle(
                                             color: AppColors.blackColor),
                                     filterPopupTextStyle: const TextStyle(
-                                        decorationColor: AppColors.blueColor,
+                                        decorationColor: AppColors.blackColor,
                                         color: AppColors.blueColor,
                                         height: 2,
                                         fontWeight: FontWeight.bold,
@@ -385,17 +236,22 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                         AppColors.whiteColor,
                                   ),
                                   child: SfDataGrid(
+                                    isScrollbarAlwaysShown: false,
+                                    headerGridLinesVisibility:
+                                        GridLinesVisibility.none,
+                                    /*   showCheckboxColumn: true,
+                      showSortNumbers: true, */
                                     rowHeight: 120.h,
                                     gridLinesVisibility:
-                                        GridLinesVisibility.both,
-                                    headerRowHeight: 80.h,
-                                    rowsPerPage: 10,
+                                        GridLinesVisibility.horizontal,
+                                    headerRowHeight: 100.h,
+                                    /* rowsPerPage: 15, */
                                     controller: dataGridController,
                                     source: _dataSource,
                                     allowSorting: true,
                                     allowFiltering: true,
                                     frozenColumnsCount:
-                                        1, // Freezing the first column
+                                        0, // Freezing the first column
                                     columns: [
                                       buildGridColumn('customerName', 'الإسم',
                                           Alignment.centerRight),
@@ -448,12 +304,12 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                               ),
                             ),
                           ),
-                          SfDataPager(
+                          /*    SfDataPager(
                             availableRowsPerPage: [10, 20, 30],
                             delegate: _dataSource,
                             pageCount: 7,
                             initialPageIndex: 1,
-                          ),
+                          ), */
                         ],
                       ),
                     );

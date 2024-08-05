@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
+import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,6 +20,7 @@ import 'package:code_icons/domain/use_cases/post-payment_values_by_ID_usecase.da
 import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'add_collection_state.dart';
 
@@ -32,7 +37,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   FetchPaymentValuesUseCase fetchPaymentValuesUseCase;
   PostTradeCollectionUseCase postTradeCollectionUseCase;
   PostPaymentValuesByIdUseCase paymentValuesByIdUseCase;
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<CustomerDataEntity> customerData = [
     CustomerDataEntity(),
@@ -59,7 +64,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       divisionBl: ControllerManager().addCollectionDivisionController.text,
       lateBl: double.tryParse(
           ControllerManager().addCollectionLateFinanceController.text),
-      paymentReceiptNumBl: 5,
+      paymentReceiptNumBl: int.tryParse(
+          ControllerManager().addCollectionPaymentReceitController.text),
       phoneBl: ControllerManager().addCollectionPhoneNumController.text,
       totalBl: double.tryParse(
           ControllerManager().addCollectionTotalFinanceController.text),
@@ -97,11 +103,13 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
           await fetchPaymentValues(customerId: customerId);
       print("customer ID : $customerId");
       updateYearsOfPayment(paymentValuesEntity);
+/*       getSavedPaymentReceiept();
+ */
       print(years);
       ControllerManager().updateAddCollectionControllers(
-        customerDataEntity: customerDataEntity,
-        paymentValuesEntity: paymentValuesEntity,
-      );
+          customerDataEntity: customerDataEntity,
+          paymentValuesEntity: paymentValuesEntity,
+          payementReceipt: 0);
       selectedCustomer.idBl = customerDataEntity.idBl;
 
       emit(GetCustomerDataByIDSuccess(
@@ -132,12 +140,15 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
 
   List<Map<String, dynamic>> updateCheckedStatus(
       {required List<Map<String, dynamic>> years,
-      required List<int> paidYears}) {
-    for (var year in years) {
-      if (paidYears.contains(int.parse(year['year']))) {
-        year['isPaid'] = true;
+      required List<dynamic> paidYears}) {
+    if (paidYears.isNotEmpty) {
+      for (var year in years) {
+        if (paidYears.contains(int.parse(year['year']))) {
+          year['isPaid'] = true;
+        }
       }
     }
+
     return years;
   }
 
@@ -153,6 +164,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
         Map<String, dynamic> yearsMap = {'year': year.trim(), 'isPaid': false};
         years.add(yearsMap);
       });
+    } else {
+      years.clear();
     }
   }
 
@@ -168,7 +181,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       paymentValuesEntity.yearsOfRepayment!,
     );
     years = updateCheckedStatus(
-        years: years, paidYears: paymentValuesEntity.paidYears!);
+        years: years,
+        paidYears: paymentValuesEntity.paidYears ?? [] as dynamic);
   }
 
   void toggleYearSelection(int index, bool isSelected) {
@@ -218,33 +232,112 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
         );
   }
 
+  /*  Future<List<RecietCollectionDataModel>> getReciets() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('accessToken') ?? '';
+
+    String? existingReceiptsMap = prefs.getString('receiptsMap');
+    if (existingReceiptsMap != null) {
+      Map<String, List<dynamic>> receiptsMap =
+          Map<String, List<dynamic>>.from(json.decode(existingReceiptsMap));
+      List<dynamic> existingReceipts = receiptsMap[token] ?? [];
+
+      var receipts = existingReceipts
+          .map((i) => RecietCollectionDataModel.fromJson(i))
+          .toList();
+
+      if (receipts.isNotEmpty) {
+/*         lastRecietCollection = receipts.last;
+ */
+      }
+      emit(GetAllCustomerDataSuccess(receipts: receipts));
+/*       emit(GetRecietCollctionSuccess(reciets: receipts));
+ */
+      return receipts;
+    } else {
+/*       emit(GetRecietCollctionError(errorMsg: "لا يوجد ايصالات حاليا"));
+ */
+      return [];
+    }
+  }
+
+  RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
+
+  // Function to select a receipt based on the conditions
+
+  void selectReceitBasedOnConditions(List<RecietCollectionDataModel> receipts) {
+    for (var receipt in receipts) {
+      if (paymentReceipt >= selectedReceit.paymentReceipt! &&
+          paymentReceipt <
+              selectedReceit.paperNum! + selectedReceit.totalPapers!) {
+        selectedReceit = receipt;
+        break;
+      }
+    }
+  } // Function to set paymentReceipt to selectedReceit's paperNum and save it locally
+
+  // Function to save the selected receipt to local storage
+  Future<void> saveSelectedReceit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedReceit', json.encode(selectedReceit.toJson()));
+  }
+
+// Function to retrieve the selected receipt from local storage
+  Future<void> retrieveSelectedReceit() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? selectedReceitJson = prefs.getString('selectedReceit');
+    if (selectedReceitJson != null) {
+      selectedReceit =
+          RecietCollectionDataModel.fromJson(json.decode(selectedReceitJson));
+    } else {
+      selectedReceit = RecietCollectionDataModel();
+    }
+  }
+
+  late int paymentReceipt = 1;
+  Future<void> getSavedPaymentReceiept() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    paymentReceipt = prefs.getInt('paymentReceipt') ?? 0;
+  }
+
+  Future<void> increasePaymentReceiptAndSave() async {
+    paymentReceipt += 1;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('paymentReceipt', paymentReceipt);
+  }
+ */
   Future<void> postTradeCollection({
     required String token,
     required TradeCollectionRequest tradeCollectionRequest,
     required BuildContext context,
   }) async {
-    emit(AddCollectionLoading());
-    if (formKey.currentState!.validate()) {
-      var either = await postTradeCollectionUseCase.invoke(
-          token: token, tradeCollectionRequest: tradeCollectionRequest);
+    try {
+      emit(AddCollectionLoading());
+      if (formKey.currentState!.validate()) {
+        var either = await postTradeCollectionUseCase.invoke(
+            token: token, tradeCollectionRequest: tradeCollectionRequest);
 
-      either.fold((l) {
-        emit(AddCollectionError(errorMsg: l.errorMessege));
-      }, (r) {
-        print("collection Id :$r");
-        emit(AddCollectionSucces(tradeCollectionEntity: r));
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          "برجاء ادخال جميع البيانات",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        backgroundColor: AppColors.redColor,
-        duration: Durations.extralong1,
-      ));
+        either.fold((l) {
+          emit(AddCollectionError(errorMsg: l.errorMessege));
+        }, (r) async {
+          emit(AddCollectionSucces(tradeCollectionEntity: r));
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "برجاء ادخال جميع البيانات",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          backgroundColor: AppColors.redColor,
+          duration: Durations.extralong1,
+        ));
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
+
+  List<RecietCollectionDataModel> receipts = [];
 
   void postPaymentValuesByID({int? customerId, List<int>? paidYears}) async {
     if (paidYears!.isNotEmpty) {
@@ -254,21 +347,15 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       either.fold(
           (l) => Left(emit(GetCustomerDataByIDError(errorMsg: l.errorMessege))),
           (r) {
-        /*     if (paidYears!.isEmpty) {
-        var emptyPaymentValues = PaymentValuesEntity(
-            compensation: 0,
-            current: 0,
-            different: 0,
-            late: 0,
-            paidYears: [],
-            total: 0,
-            yearsOfRepayment: "");
+        /*   getReciets();
+        selectReceitBasedOnConditions(receipts);
+        saveSelectedReceit();
+        retrieveSelectedReceit();
+        getSavedPaymentReceiept(); */
         ControllerManager().updateAddCollectionControllers(
             customerDataEntity: selectedCustomer,
-            paymentValuesEntity: emptyPaymentValues);
-      } else {} */
-        ControllerManager().updateAddCollectionControllers(
-            customerDataEntity: selectedCustomer, paymentValuesEntity: r);
+            paymentValuesEntity: r,
+            payementReceipt: 0);
         emit(GetCustomerDataByIDSuccess(
             customerData: selectedCustomer,
             controllers: ControllerManager().addCollectionControllers));
@@ -299,10 +386,13 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
               paidYears: [],
               total: 0,
               yearsOfRepayment: "");
+/*           getSavedPaymentReceiept();
+ */
           ControllerManager().updateAddCollectionControllers(
               customerDataEntity:
                   context.read<AddCollectionCubit>().selectedCustomer,
-              paymentValuesEntity: emptyPaymentValues);
+              paymentValuesEntity: emptyPaymentValues,
+              payementReceipt: 0);
         }
       } else {
         // Show SnackBar if previous years are not paid
@@ -370,9 +460,12 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
                       paidYears: [],
                       total: 0,
                       yearsOfRepayment: "");
+/*                   getSavedPaymentReceiept();
+ */
                   ControllerManager().updateAddCollectionControllers(
                       customerDataEntity:
                           context.read<AddCollectionCubit>().selectedCustomer,
+                      payementReceipt: 0,
                       paymentValuesEntity: emptyPaymentValues);
                 }
               },
@@ -405,9 +498,12 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
               paidYears: [],
               total: 0,
               yearsOfRepayment: "");
+/*           getSavedPaymentReceiept();
+ */
           ControllerManager().updateAddCollectionControllers(
               customerDataEntity:
                   context.read<AddCollectionCubit>().selectedCustomer,
+              payementReceipt: 0,
               paymentValuesEntity: emptyPaymentValues);
         }
       }

@@ -1,13 +1,18 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:convert';
+
+import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
 import 'package:code_icons/data/model/response/get_customer_data.dart';
 import 'package:code_icons/domain/entities/Currency/currency.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ControllerManager {
   // Static variable to hold the single instance of ControllerManager
@@ -122,6 +127,7 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController addCollectionTotalFinanceController =
       TextEditingController();
+  //unreqistered
   final TextEditingController unlimitedNameController = TextEditingController();
 
   final TextEditingController unlimitedActivityController =
@@ -138,8 +144,30 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController unlimitedTotalFinanceController =
       TextEditingController();
+
+  // reciets
   final TextEditingController paperNum = TextEditingController();
   final TextEditingController totalPapers = TextEditingController();
+
+//purchase request
+  final TextEditingController purchaseCodeController = TextEditingController();
+  final TextEditingController purchaseDateController = TextEditingController();
+  final TextEditingController purchaseAnswerDateController =
+      TextEditingController();
+  final TextEditingController purchaseNotesController = TextEditingController();
+  final TextEditingController purchaseItemQuantitytemController =
+      TextEditingController();
+  final TextEditingController purchaseItemDiscriptionController =
+      TextEditingController();
+// Method to get the controller by field name
+  List<TextEditingController> get purchaseRequestControllers => [
+        purchaseCodeController,
+        purchaseDateController,
+        purchaseAnswerDateController,
+        purchaseNotesController,
+        purchaseItemQuantitytemController,
+        purchaseItemDiscriptionController,
+      ];
 // Method to get the controller by field name
   List<TextEditingController> get recietCollectionController => [
         paperNum,
@@ -201,6 +229,18 @@ class ControllerManager {
       ];
   TextEditingController getControllerByName(String name) {
     switch (name) {
+      case 'purchaseCodeController':
+        return purchaseCodeController;
+      case 'purchaseDateController':
+        return purchaseDateController;
+      case 'purchaseAnswerDateController':
+        return purchaseAnswerDateController;
+      case 'purchaseItemQuantitytemController':
+        return purchaseItemQuantitytemController;
+      case 'purchaseItemDiscriptionController':
+        return purchaseItemDiscriptionController;
+      case 'purchaseNotesController':
+        return purchaseNotesController;
       case 'paperNum':
         return paperNum;
       case "totalPapers":
@@ -353,11 +393,25 @@ class ControllerManager {
         customerDataEntity.customerDataIdBl?.toString() ?? ""; */
   }
 
+  /*  Future<void> updateCollectionPaymentReceitController() async {
+    List<RecietCollectionDataModel> receipts =
+        await RecietCollctionCubit.recietCubit.getReciets();
+    if (receipts.isNotEmpty) {
+      RecietCollectionDataModel firstReciet = receipts.first;
+      addCollectionPaymentReceitController.text =
+          firstReciet.paperNum.toString();
+    } else {
+      addCollectionPaymentReceitController.text = '1';
+    }
+  }
+ */
+
   // Method to update controllers with data
   void updateAddCollectionControllers({
     required CustomerDataEntity customerDataEntity,
     required PaymentValuesEntity paymentValuesEntity,
-  }) {
+    required int payementReceipt,
+  }) async {
     if (paymentValuesEntity.paidYears!.isNotEmpty) {
       addCollectionPhoneNumController.text = customerDataEntity.phoneBl ?? "";
       addCollectionAddressController.text = customerDataEntity.addressBl ?? "";
@@ -367,8 +421,9 @@ class ControllerManager {
           DateFormat('yyyy-MM-dd').format(DateTime.now());
       addCollectionActivityController.text =
           customerDataEntity.activityNameBl ?? "";
+      addCollectionPaymentReceitController.text = payementReceipt.toString();
       addCollectionDivisionController.text =
-          customerDataEntity.divisionBl ?? "";
+          paymentValuesEntity.activity.toString();
       addCollectionCompensationController.text =
           paymentValuesEntity.compensation?.toString() ?? "0";
       addCollectionLateFinanceController.text =

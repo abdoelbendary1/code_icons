@@ -49,9 +49,9 @@ class HomeScreenViewModel extends Cubit<HomeScreenViewModelState> {
     if (settingsEntity.reports!.toLowerCase() == 'reports yes') {
       targetMap['reports'] = sourceMap['reports']!;
     }
-    if (settingsEntity.settings!.toLowerCase() == 'settings yes') {
+    /*  if (settingsEntity.settings!.toLowerCase() == 'settings yes') {
       targetMap['settings'] = sourceMap['settings']!;
-    }
+    } */
     if (settingsEntity.realStateInvestments!.toLowerCase() ==
         'realStateInvestments yes') {
       targetMap['realStateInvestments'] = sourceMap['realStateInvestments']!;
