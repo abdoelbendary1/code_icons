@@ -8,10 +8,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 
-class AllRecietsScreen extends StatelessWidget {
+class AllRecietsScreen extends StatefulWidget {
   AllRecietsScreen({super.key});
   static const String routeName = "AllRecietsScreen";
+
+  @override
+  State<AllRecietsScreen> createState() => _AllRecietsScreenState();
+}
+
+class _AllRecietsScreenState extends State<AllRecietsScreen> {
   final RecietCollctionCubit recietCollctionCubit = RecietCollctionCubit();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    RecietCollctionCubit.initHive();
+  }
 
   @override
   Widget build(BuildContext context) {

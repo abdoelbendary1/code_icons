@@ -35,6 +35,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +48,11 @@ void main() async {
   } else {
     route = HomeScreen.routeName;
   } */
+  await Hive.initFlutter();
+/*     Hive.registerAdapter(RecietCollectionDataModelAdapter());
+ */
+  await Hive.openBox('userBox');
+  await Hive.openBox('receiptsBox');
   setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(

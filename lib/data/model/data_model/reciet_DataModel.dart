@@ -1,26 +1,28 @@
+import 'package:hive/hive.dart';
+
+@HiveType(typeId: 0)
 class RecietCollectionDataModel {
+  @HiveField(0)
   int? id;
+
+  @HiveField(1)
   int? paperNum;
-  int? paymentReceipt;
+
+  @HiveField(2)
   int? totalPapers;
-  RecietCollectionDataModel({
-    this.id,
-    this.paperNum = 0,
-    this.totalPapers = 0,
-    this.paymentReceipt = 0,
-  });
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'paperNum': paperNum,
-        'paymentReceipt ': paymentReceipt,
-        'totalPapers': totalPapers,
-      };
+
+  RecietCollectionDataModel({this.id, this.paperNum, this.totalPapers});
 
   factory RecietCollectionDataModel.fromJson(Map<String, dynamic> json) =>
       RecietCollectionDataModel(
-        id: json['id'],
-        paperNum: json['paperNum'],
-        paymentReceipt: json['paymentReceipt '],
-        totalPapers: json['totalPapers'],
+        id: json["id"],
+        paperNum: json["paperNum"],
+        totalPapers: json["totalPapers"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "paperNum": paperNum,
+        "totalPapers": totalPapers,
+      };
 }
