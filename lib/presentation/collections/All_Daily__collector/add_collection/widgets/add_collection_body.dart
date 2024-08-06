@@ -1,6 +1,7 @@
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/collection_details_form.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/ReceiptManager%20.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
@@ -69,12 +70,24 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
             }
           },
           builder: (context, state) {
+            if (state is GetAllCustomerDataLoading) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 50.h,
+                  ),
+                  LoadingStateAnimation(),
+                ],
+              );
+            }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BlocBuilder<AddCollectionCubit, AddCollectionState>(
                   //get the payment reciet
-                  bloc: addCollectionCubit..initialize(),
+                  bloc: addCollectionCubit
+                    ..initialize(
+                        controller: 'addCollectionPaymentReceitController'),
                   buildWhen: (previous, current) {
                     if (previous is GetCustomerDataByIDSuccess) {
                       return false;
@@ -116,21 +129,6 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                     );
                   },
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0.w),
-                  child: Text(
-                    AppLocalizations.of(context)!.collection_Details_title,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: AppColors.blackColor,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
                 BlocConsumer<AddCollectionCubit, AddCollectionState>(
                   bloc: addCollectionCubit,
                   listener: (context, state) {
@@ -142,13 +140,38 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                     if (state is GetCustomerDataByIDInitial) {
                       return const Center(
                           child: SizedBox(
-                              height: 30, child: LoadingStateAnimation()));
+                              height: 200, child: LoadingStateAnimation()));
                     } else if (state is GetCustomerDataByIDError) {
+                      print(state.errorMsg);
                       return Center(child: Text(state.errorMsg));
                     } else if (state is GetCustomerDataByIDSuccess) {
-                      return CollectionDetailsForm();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .collection_Details_title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      color: AppColors.blackColor,
+                                      fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          CollectionDetailsForm(),
+                        ],
+                      );
                     } else {
-                      return CollectionDetailsForm();
+                      return Container();
                     }
                   },
                 ),

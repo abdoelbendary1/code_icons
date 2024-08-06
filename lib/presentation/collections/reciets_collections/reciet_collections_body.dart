@@ -32,6 +32,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
         controllers: ControllerManager().recietCollectionController);
     recietCollctionCubit.getLastReciet();
     RecietCollctionCubit.initHive();
+    Future.delayed(Durations.medium1);
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -201,17 +202,8 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 0.0),
                               child: Container(
-                                decoration: BoxDecoration(
-                                    color: AppColors.whiteColor
-                                    /*  gradient: const LinearGradient(
-                                    colors: [
-                                      AppColors.blueColor,
-                                      AppColors.lightBlueColor
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.centerLeft,
-                                  ), */
-                                    ),
+                                decoration: const BoxDecoration(
+                                    color: AppColors.whiteColor),
                                 child: SfDataGridTheme(
                                   data: SfDataGridThemeData(
                                     gridLineColor: AppColors.blackColor,
@@ -239,13 +231,12 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                     isScrollbarAlwaysShown: false,
                                     headerGridLinesVisibility:
                                         GridLinesVisibility.none,
-                                    /*   showCheckboxColumn: true,
-                      showSortNumbers: true, */
+
                                     rowHeight: 120.h,
                                     gridLinesVisibility:
                                         GridLinesVisibility.horizontal,
                                     headerRowHeight: 100.h,
-                                    /* rowsPerPage: 15, */
+                                    rowsPerPage: 30,
                                     controller: dataGridController,
                                     source: _dataSource,
                                     allowSorting: true,
@@ -278,7 +269,7 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                     onSelectionChanged:
                                         (List<DataGridRow> addedRows,
                                             List<DataGridRow> removedRows) {
-                                      if (addedRows.isNotEmpty) {
+                                      /*     if (addedRows.isNotEmpty) {
                                         Future.delayed(Duration.zero, () {
                                           if (mounted) {
                                             setState(() {
@@ -297,19 +288,35 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                         });
                                       } else {
                                         allDailyCollectorCubit.deselectRow();
-                                      }
+                                      } */
                                     },
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          /*    SfDataPager(
-                            availableRowsPerPage: [10, 20, 30],
-                            delegate: _dataSource,
-                            pageCount: 7,
-                            initialPageIndex: 1,
-                          ), */
+                          SfDataPagerTheme(
+                            data: SfDataPagerThemeData(
+                                backgroundColor: Colors.transparent,
+                                selectedItemColor: AppColors.blueColor,
+                                selectedItemTextStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.whiteColor),
+                                itemBorderRadius: BorderRadius.circular(20)),
+                            child: SizedBox(
+                              height: 60.h,
+                              child: SfDataPager(
+                                itemHeight: 40.h,
+                                availableRowsPerPage: const [10, 20, 30],
+                                delegate: _dataSource,
+                                pageCount:
+                                    (_dataSource.collections.length.toDouble() /
+                                            30)
+                                        .ceilToDouble(),
+                                initialPageIndex: 1,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );

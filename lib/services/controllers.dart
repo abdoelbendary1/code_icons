@@ -136,7 +136,7 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController unlimitedPaymentReceitDateController =
       TextEditingController();
-  final TextEditingController unlimitedPaymentReceitController =
+  final TextEditingController unlimitedPaymentReceiptController =
       TextEditingController();
   final TextEditingController unlimitedDivisionController =
       TextEditingController();
@@ -194,7 +194,7 @@ class ControllerManager {
         unlimitedAddressController,
         unlimitedCurrentFinanceController,
         unlimitedDivisionController,
-        unlimitedPaymentReceitController,
+        unlimitedPaymentReceiptController,
         unlimitedPaymentReceitDateController,
         unlimitedTotalFinanceController,
       ];
@@ -331,8 +331,8 @@ class ControllerManager {
         return unlimitedPaymentReceitDateController;
       case 'unlimitedActivityController':
         return unlimitedActivityController;
-      case 'unlimitedPaymentReceitController':
-        return unlimitedPaymentReceitController;
+      case 'unlimitedPaymentReceiptController':
+        return unlimitedPaymentReceiptController;
       case 'unlimitedDivisionController':
         return unlimitedDivisionController;
       case 'unlimitedCurrentFinanceController':

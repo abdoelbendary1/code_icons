@@ -133,17 +133,17 @@ class _UnlimitedCollectionDetailsFormState
                 readOnly: true,
                 keyboardType: TextInputType.number,
                 controller: ControllerManager()
-                    .getControllerByName('unlimitedPaymentReceitController'),
+                    .getControllerByName('unlimitedPaymentReceiptController'),
                 icon: Icons.phone_iphone,
                 onTap: () {
                   ControllerManager()
-                          .getControllerByName('unlimitedPaymentReceitController')
+                          .getControllerByName('unlimitedPaymentReceiptController')
                           .selection =
                       TextSelection(
                           baseOffset: 0,
                           extentOffset: ControllerManager()
                               .getControllerByName(
-                                  'unlimitedPaymentReceitController')
+                                  'unlimitedPaymentReceiptController')
                               .value
                               .text
                               .length);
@@ -271,7 +271,9 @@ class _UnlimitedCollectionDetailsFormState
                 const Spacer(),
                 BlocListener<UnlimitedCollectionCubit,
                     UnlimitedCollectionState>(
-                  bloc: unlimitedCollectionCubit..initialize(),
+                  bloc: unlimitedCollectionCubit
+                    ..initialize(
+                        controller: 'unlimitedPaymentReceiptController'),
                   listener: (context, state) {
                     if (state is AddUnlimitedCollectionSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -41,17 +41,17 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
     super.didUpdateWidget(oldWidget);
   }
  */
-  /*  @override
+  @override
   void dispose() {
     // Perform any cleanup before navigating
-    Future.delayed(Duration.zero, () {
+    /*  Future.delayed(Duration.zero, () {
       if (mounted) {
         Navigator.pushReplacementNamed(
             context, AllDailyCollectorScreen.routeName);
       }
-    });
+    }); */
     super.dispose();
-  } */
+  }
 
   @override
   Widget build(BuildContext context) {

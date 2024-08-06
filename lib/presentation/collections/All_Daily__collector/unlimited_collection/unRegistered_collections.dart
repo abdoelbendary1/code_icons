@@ -203,24 +203,17 @@ class _UnRegisteredCollectionsScreenState
                                   const EdgeInsets.symmetric(vertical: 0.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: AppColors.whiteColor,
-                                  /*   gradient: const LinearGradient(
-                                    colors: [
-                                      AppColors.blueColor,
-                                      AppColors.lightBlueColor
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.centerLeft,
-                                  ), */
+                                  color:
+                                      AppColors.lightBlueColor.withOpacity(0.2),
                                 ),
                                 child: SfDataGridTheme(
                                   data: SfDataGridThemeData(
-                                    gridLineColor: AppColors.lightBlueColor,
+                                    gridLineColor: AppColors.blackColor,
                                     filterPopupDisabledTextStyle:
                                         const TextStyle(
                                             color: AppColors.blackColor),
                                     filterPopupTextStyle: const TextStyle(
-                                        decorationColor: AppColors.blueColor,
+                                        decorationColor: AppColors.blackColor,
                                         color: AppColors.blueColor,
                                         height: 2,
                                         fontWeight: FontWeight.bold,
@@ -240,13 +233,12 @@ class _UnRegisteredCollectionsScreenState
                                     isScrollbarAlwaysShown: false,
                                     headerGridLinesVisibility:
                                         GridLinesVisibility.none,
-                                    /*   showCheckboxColumn: true,
-                      showSortNumbers: true, */
+
                                     rowHeight: 120.h,
                                     gridLinesVisibility:
                                         GridLinesVisibility.horizontal,
                                     headerRowHeight: 100.h,
-                                    /* rowsPerPage: 15, */
+                                    rowsPerPage: 30,
                                     controller: dataGridController,
                                     source: _dataSource,
                                     allowSorting: true,
@@ -321,12 +313,28 @@ class _UnRegisteredCollectionsScreenState
                               ),
                             ),
                           ),
-                          /*  SfDataPager(
-                            availableRowsPerPage: [10, 20, 30],
-                            delegate: _dataSource,
-                            pageCount: 7,
-                            initialPageIndex: 1,
-                          ), */
+                          SfDataPagerTheme(
+                            data: SfDataPagerThemeData(
+                                backgroundColor: Colors.transparent,
+                                selectedItemColor: AppColors.blueColor,
+                                selectedItemTextStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.whiteColor),
+                                itemBorderRadius: BorderRadius.circular(20)),
+                            child: SizedBox(
+                              height: 60.h,
+                              child: SfDataPager(
+                                itemHeight: 40.h,
+                                availableRowsPerPage: const [10, 20, 30],
+                                delegate: _dataSource,
+                                pageCount:
+                                    (_dataSource.collections.length.toDouble() /
+                                            30)
+                                        .ceilToDouble(),
+                                initialPageIndex: 1,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );

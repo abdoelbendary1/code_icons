@@ -70,7 +70,6 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.lightBlueColor.withOpacity(0.1),
-                   
                   ),
                   child: SfDataGrid(
                     isScrollbarAlwaysShown: false,
@@ -80,7 +79,7 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
                     rowHeight: 120.h,
                     gridLinesVisibility: GridLinesVisibility.horizontal,
                     headerRowHeight: 100.h,
-                    /* rowsPerPage: 15, */
+                    rowsPerPage: 30,
                     controller: dataGridController,
                     source: widget.dataSource,
                     allowSorting: true,
@@ -170,12 +169,25 @@ class _CustomersDataTableState extends State<CustomersDataTable> {
             ),
           ),
         ),
-        /*   SfDataPager(
-          availableRowsPerPage: [10, 20, 30],
-          delegate: widget.dataSource,
-          pageCount: 7,
-          initialPageIndex: 1,
-        ), */
+        SfDataPagerTheme(
+          data: SfDataPagerThemeData(
+              backgroundColor: Colors.transparent,
+              selectedItemColor: AppColors.blueColor,
+              selectedItemTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold, color: AppColors.whiteColor),
+              itemBorderRadius: BorderRadius.circular(20)),
+          child: SizedBox(
+            height: 60.h,
+            child: SfDataPager(
+              itemHeight: 40.h,
+              availableRowsPerPage: const [10, 20, 30],
+              delegate: widget.dataSource,
+              pageCount: (widget.dataSource.customers.length.toDouble() / 30)
+                  .ceilToDouble(),
+              initialPageIndex: 1,
+            ),
+          ),
+        ),
       ],
     );
   }
