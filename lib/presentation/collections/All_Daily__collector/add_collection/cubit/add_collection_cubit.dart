@@ -36,14 +36,16 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   PostPaymentValuesByIdUseCase paymentValuesByIdUseCase;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  List<CustomerDataEntity> customerData = [
+  /*  List<CustomerDataEntity> customerData = [
     CustomerDataEntity(),
-  ];
+  ]; */
+  late List<CustomerDataEntity> customerData;
 /*   final ReceiptManager receiptManager;
  */
+  late List<String> customersNames;
   //! check the selectedCustomer ID
   CustomerDataEntity selectedCustomer = CustomerDataEntity();
-  String yearsOfRepaymentBl = "";
+  String yearsOfRepaymentBL = '';
   late int paymentReceipt;
 
   TradeCollectionRequest intializeTradeRequest(
@@ -72,7 +74,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
           ControllerManager().addCollectionTotalFinanceController.text),
       tradeRegistryBl:
           ControllerManager().addCollectionRegisrtyNumController.text,
-      yearsOfRepaymentBl: context.read<AddCollectionCubit>().yearsOfRepaymentBl,
+      yearsOfRepaymentLstBL: /* context.read<AddCollectionCubit>(). */
+          updatePaidYears(years),
     );
   }
 
@@ -84,10 +87,43 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       print(failure.errorMessege);
       emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
     }, (response) {
+      customersNames = response.map((e) => e.brandNameBl!).toList();
       emit(GetAllCustomerDataSuccess(
           customerData: response, selectedCustomer: response.first));
       customerData = response;
     });
+  }
+
+// Function to get registry numbers by id
+  String getRegistryNumbersById(
+      String id, List<CustomerDataEntity> customerData) {
+    CustomerDataEntity? selectedCustomer;
+    for (var customer in customerData) {
+      if (customer.idBl.toString() == id) {
+        selectedCustomer = customer;
+        break;
+      }
+    }
+    return selectedCustomer?.tradeRegistryBl ?? '';
+  }
+
+// Function to get CustomerDataEntity by tradeRegistryBl
+  CustomerDataEntity? getCustomerByTradeRegistryBl(
+      String tradeRegistryBl, List<CustomerDataEntity> customerData) {
+    for (var customer in customerData) {
+      if (customer.tradeRegistryBl == tradeRegistryBl) {
+        selectedCustomer = customer;
+        emit(GetCustomerDataByIDSuccess(
+            customerData: selectedCustomer,
+            controllers: ControllerManager().addCollectionControllers));
+        return customer;
+      }
+    }
+    return null; // Return null if not found
+  }
+
+  CustomerDataEntity getCustomerByName({required String name}) {
+    return customerData.firstWhere((element) => element.brandNameBl == name);
   }
 
   void fetchCustomerDataByID({required String customerId}) async {
@@ -103,12 +139,13 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       PaymentValuesEntity paymentValuesEntity =
           await fetchPaymentValues(customerId: customerId);
       updateYearsOfPayment(paymentValuesEntity);
+
 /*       getSavedPaymentReceiept();
  */
       ControllerManager().updateAddCollectionControllers(
           customerDataEntity: customerDataEntity,
           paymentValuesEntity: paymentValuesEntity,
-          payementReceipt: 0);
+          payementReceipt: paymentReceipt);
       selectedCustomer.idBl = customerDataEntity.idBl;
 
       emit(GetCustomerDataByIDSuccess(
@@ -127,11 +164,13 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
 
   List<int> updatePaidYears(List<Map<String, dynamic>> years) {
     List<int> paidYears = [];
+
     for (var element in years) {
       if (element['isPaid'] == true) {
         paidYears.add(int.parse(element['year']));
       }
-      yearsOfRepaymentBl = paidYears.join();
+      yearsOfRepaymentBL = paidYears.join(",").toString();
+      print('yearsOfRepaymentBL : ${yearsOfRepaymentBL}');
       print('paid years join : ${paidYears.join()}');
     }
     return paidYears;
@@ -176,12 +215,19 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       {'year': "2023", 'isPaid': false}, */
       {'year': DateTime.now().year.toString(), 'isPaid': false},
     ];
-    updateYearsList(
-      paymentValuesEntity.yearsOfRepayment!,
-    );
-    years = updateCheckedStatus(
-        years: years,
-        paidYears: paymentValuesEntity.paidYears ?? [] as dynamic);
+    if (paymentValuesEntity.paidYears!.isNotEmpty ||
+        paymentValuesEntity.yearsOfRepayment!.trim().isNotEmpty) {
+      updateYearsList(
+        paymentValuesEntity.yearsOfRepayment!,
+      );
+      years = updateCheckedStatus(
+          years: years, paidYears: paymentValuesEntity.paidYears!);
+    } else {
+      updateYearsList(
+        DateTime.now().year.toString(),
+      );
+      years = updateCheckedStatus(years: years, paidYears: []);
+    }
   }
 
   void toggleYearSelection(int index, bool isSelected) {
@@ -268,7 +314,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       if (!receipts.any((element) => element.valid == true)) {
         addReciet();
       }
-      await getReciets();
+      /*  await getReciets(); */
       selectedReceit = receipts.firstWhere((receipt) => receipt.valid == true);
       /* await addReciet(); */
       return selectedReceit;
@@ -409,9 +455,13 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
 
             await storePaymentReceipt(paymentReceipt);
             if (storedPaymentReceipt! < selectedReceit.paperNum!) {
+              selectedReceit = await selectReciet(storedPaymentReceipt!);
+
               paymentReceipt = selectedReceit.paperNum!;
               await storePaymentReceipt(paymentReceipt);
             } else {
+              selectedReceit = await selectReciet(storedPaymentReceipt!);
+
               paymentReceipt = storedPaymentReceipt!;
               await storePaymentReceipt(paymentReceipt);
             }
@@ -716,7 +766,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
         ControllerManager().updateAddCollectionControllers(
             customerDataEntity: selectedCustomer,
             paymentValuesEntity: r,
-            payementReceipt: 0);
+            payementReceipt: paymentReceipt);
         emit(GetCustomerDataByIDSuccess(
             customerData: selectedCustomer,
             controllers: ControllerManager().addCollectionControllers));

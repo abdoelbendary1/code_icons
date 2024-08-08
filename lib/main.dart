@@ -22,6 +22,7 @@ import 'package:code_icons/presentation/purchases/PurchaseRequest/purchase_reque
 import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
 import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
+import 'package:code_icons/presentation/utils/GlobalVariables.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:code_icons/services/my_observer.dart';
@@ -123,9 +124,10 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         child: MaterialApp(
+          navigatorKey: GlobalVariable.navigatorState,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          useInheritedMediaQuery: true,
+          /* useInheritedMediaQuery: true, */
           locale: const Locale("ar"),
           builder: DevicePreview.appBuilder,
           theme: AppTheme.mainTheme,

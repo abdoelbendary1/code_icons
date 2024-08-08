@@ -116,6 +116,8 @@ class _AddCustomerCardsFormState extends State<AddCustomerCardsForm> {
               Navigator.pushReplacementNamed(
                   context, CustomerDataScreen.routeName);
             } else if (state is AddCustomerError) {
+              DialogUtils.showMessage(
+                  context: context, message: state.errorMsg);
               if (state.errorMsg.contains("400")) {
                 SnackBarUtils.showSnackBar(
                   context: context,

@@ -5,7 +5,7 @@ class TradeCollectionRequest {
   String? tradeRegistryBl;
   String? addressBl;
   String? divisionBl;
-  String? yearsOfRepaymentBl;
+  List<int>? yearsOfRepaymentLstBL;
   int? paymentReceiptNumBl;
   double? activityBl;
   double? compensationBl;
@@ -21,7 +21,7 @@ class TradeCollectionRequest {
     this.tradeRegistryBl,
     this.addressBl,
     this.divisionBl,
-    this.yearsOfRepaymentBl,
+    this.yearsOfRepaymentLstBL,
     this.paymentReceiptNumBl,
     this.activityBl,
     this.compensationBl,
@@ -50,8 +50,8 @@ class TradeCollectionRequest {
     if (json["divisionBL"] is String) {
       divisionBl = json["divisionBL"];
     }
-    if (json["yearsOfRepaymentBL"] is String) {
-      yearsOfRepaymentBl = json["yearsOfRepaymentBL"];
+    if (json["yearsOfRepaymentLstBL"] is String) {
+      yearsOfRepaymentLstBL = json["yearsOfRepaymentLstBL"];
     }
     if (json["paymentReceiptNumBL"] is double) {
       paymentReceiptNumBl = json["paymentReceiptNumBL"];
@@ -84,7 +84,7 @@ class TradeCollectionRequest {
     _data["tradeRegistryBL"] = tradeRegistryBl;
     _data["addressBL"] = addressBl;
     _data["divisionBL"] = divisionBl;
-    _data["yearsOfRepaymentBL"] = yearsOfRepaymentBl;
+    _data["yearsOfRepaymentLstBL"] = yearsOfRepaymentLstBL;
     _data["paymentReceiptNumBL"] = paymentReceiptNumBl;
     _data["activityBL"] = activityBl;
     _data["compensationBL"] = compensationBl;

@@ -3,6 +3,8 @@ import 'package:code_icons/presentation/collections/All_Daily__collector/add_col
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/collection_details_form.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/ReceiptManager%20.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectableDropDownlist.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/ex.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
@@ -85,9 +87,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
               children: [
                 BlocBuilder<AddCollectionCubit, AddCollectionState>(
                   //get the payment reciet
-                  bloc: addCollectionCubit
-                    ..initialize(
-                        controller: 'addCollectionPaymentReceitController'),
+                  bloc: addCollectionCubit,
                   buildWhen: (previous, current) {
                     if (previous is GetCustomerDataByIDSuccess) {
                       return false;
@@ -100,7 +100,48 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   },
                   builder: (context, state) {
                     if (state is GetCustomerDataByIDSuccess) {
-                      return ReusableSelectTrader(
+                      return Column(
+                        children: [
+                          SelectCustomerEntity(
+                            initialItem: addCollectionCubit.selectedCustomer,
+                            itemList: addCollectionCubit.customerData,
+                            title: "اسم التاجر",
+                            hintText: "اسم التاجر",
+                            /*  headerFontSize: 25.sp, */
+                            onChanged: (value) {
+                              context
+                                  .read<AddCollectionCubit>()
+                                  .selectedCustomer = value;
+                              context
+                                  .read<AddCollectionCubit>()
+                                  .fetchCustomerDataByID(
+                                      customerId: context
+                                          .read<AddCollectionCubit>()
+                                          .selectedCustomer
+                                          .idBl
+                                          .toString());
+                            },
+                          ),
+                          SelectableDropDownlist(
+                            initialItem: state.customerData.tradeRegistryBl,
+                            itemList: addCollectionCubit.customerData
+                                .map((e) => e.tradeRegistryBl)
+                                .toList(),
+                            title: "رقم السجل",
+                            hintText: "رقم السجل",
+                            /*  headerFontSize: 25.sp, */
+                            onChanged: (value) {
+                              addCollectionCubit.getRegistryNumbersById(
+                                  addCollectionCubit.selectedCustomer.idBl
+                                      .toString(),
+                                  addCollectionCubit.customerData);
+                              addCollectionCubit.getCustomerByTradeRegistryBl(
+                                  value, addCollectionCubit.customerData);
+                            },
+                          ),
+                        ],
+                      );
+                      /*  return ReusableSelectTrader(
                         label: "اسم التاجر",
                         itemList: addCollectionCubit.customerData,
                         selectedCustomer: addCollectionCubit.selectedCustomer,
@@ -112,9 +153,55 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                               .fetchCustomerDataByID(
                                   customerId: value.idBl.toString());
                         }, //! bug
-                      );
+                      ); */
                     }
-                    return ReusableSelectTrader(
+                    return Column(
+                      children: [
+                        SelectCustomerEntity(
+                          itemList: addCollectionCubit.customerData,
+                          title: "اسم التاجر",
+                          hintText: "اسم التاجر",
+                          onChanged: (value) {
+                            context
+                                .read<AddCollectionCubit>()
+                                .selectedCustomer = value;
+                            context
+                                .read<AddCollectionCubit>()
+                                .fetchCustomerDataByID(
+                                    customerId: context
+                                        .read<AddCollectionCubit>()
+                                        .selectedCustomer
+                                        .idBl
+                                        .toString());
+                            /*   context
+                                .read<AddCollectionCubit>()
+                                .fetchCustomerDataByID(
+                                    customerId: context
+                                        .read<AddCollectionCubit>()
+                                        .selectedCustomer
+                                        .idBl
+                                        .toString()); */
+                          },
+                        ),
+                        SelectableDropDownlist(
+                          itemList: addCollectionCubit.customerData
+                              .map((e) => e.tradeRegistryBl)
+                              .toList(),
+                          title: "رقم السجل",
+                          hintText: "رقم السجل",
+                          /*  headerFontSize: 25.sp, */
+                          onChanged: (value) {
+                            addCollectionCubit.getRegistryNumbersById(
+                                addCollectionCubit.selectedCustomer.idBl
+                                    .toString(),
+                                addCollectionCubit.customerData);
+                            addCollectionCubit.getCustomerByTradeRegistryBl(
+                                value, addCollectionCubit.customerData);
+                          },
+                        ),
+                      ],
+                    );
+                    /*  return ReusableSelectTrader(
                       label: "اسم التاجر",
                       itemList: addCollectionCubit.customerData,
                       onChanged: (value) {
@@ -126,11 +213,13 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                                 customerId: value.idBl.toString());
                       },
                       selectedCustomer: null,
-                    );
+                    ); */
                   },
                 ),
                 BlocConsumer<AddCollectionCubit, AddCollectionState>(
-                  bloc: addCollectionCubit,
+                  bloc: addCollectionCubit
+                    ..initialize(
+                        controller: 'addCollectionPaymentReceitController'),
                   listener: (context, state) {
                     // Add debug print
                     print("Listener State: $state");
@@ -144,11 +233,12 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                     } else if (state is GetCustomerDataByIDError) {
                       print(state.errorMsg);
                       return Center(child: Text(state.errorMsg));
-                    } else if (state is GetCustomerDataByIDSuccess) {
+                    } else if (state is GetCustomerDataByIDSuccess ||
+                        state is YearsUpdatedState) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
+                          /*   SizedBox(
                             height: 20.h,
                           ),
                           Padding(
@@ -163,7 +253,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                                       color: AppColors.blackColor,
                                       fontWeight: FontWeight.w600),
                             ),
-                          ),
+                          ), */
                           SizedBox(
                             height: 20.h,
                           ),

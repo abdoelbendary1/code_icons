@@ -208,7 +208,6 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
       if (!receipts.any((element) => element.valid == true)) {
         addReciet();
       }
-      await getReciets();
       selectedReceit = receipts.firstWhere((receipt) => receipt.valid == true);
       /* await addReciet(); */
       return selectedReceit;

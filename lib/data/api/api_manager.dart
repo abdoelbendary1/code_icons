@@ -1170,6 +1170,11 @@ class ApiManager {
           String responseBody = await response.stream.bytesToString();
           print("customer response id $responseBody");
           return right(responseBody);
+        } else if (response.statusCode == 410) {
+          String responseBody = await response.stream.bytesToString();
+          var messsage = CustomerDataModel.fromJson(jsonDecode(responseBody));
+          print(messsage.message);
+          return Left(ServerError(errorMessege: messsage.message!));
         } else {
           print("error ${response.statusCode}");
           return left(ServerError(errorMessege: "Server error (Unknown data)"));

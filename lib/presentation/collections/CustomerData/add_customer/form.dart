@@ -570,7 +570,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
     return Column(
       children: [
         ReusableCustomTextField(
-          labelText: label,
+          /*  labelText: label, */
           hintText: hint,
           controller: controller,
           prefixIcon: icon,

@@ -43,6 +43,14 @@ class PurchaseItemEntity {
   String? insertDate;
   dynamic matrixId;
   dynamic matrix;
+  @override
+  String toString() {
+    return itemNameAr ?? "غير محدد";
+  }
+
+  int toInt() {
+    return itemCode1 ?? 0;
+  }
 
   PurchaseItemEntity({
     this.itemId,

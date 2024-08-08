@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,10 +19,10 @@ class YearsOfPaymentGridView extends StatefulWidget {
 }
 
 class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
-  bool isPaid = false;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      padding: EdgeInsets.all(4),
       shrinkWrap: true, // This is important to make GridView wrap its content
       physics:
           const NeverScrollableScrollPhysics(), // Disable scrolling inside GridView
@@ -35,6 +36,7 @@ class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
       itemBuilder: (context, index) {
         var year = context.read<AddCollectionCubit>().years[index];
         return FilterChip(
+          showCheckmark: false,
           visualDensity: VisualDensity.comfortable,
           selectedColor: Colors.blue, // Replace AppColors.blueColor
           labelStyle: TextStyle(
@@ -42,8 +44,8 @@ class _YearsOfPaymentGridViewState extends State<YearsOfPaymentGridView> {
                 year['isPaid'] ? Colors.white : Colors.black.withOpacity(0.8),
             fontSize: 18,
           ),
-          checkmarkColor: Colors.white, // Replace AppColors.whiteColor
-          backgroundColor: Colors.lightBlue[50],
+          /* checkmarkColor: Colors.white, */ // Replace AppColors.whiteColor
+          backgroundColor: AppColors.whiteColor,
           label: Text(
             year['year'],
             style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.normal),

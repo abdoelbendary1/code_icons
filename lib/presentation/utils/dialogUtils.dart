@@ -139,6 +139,8 @@ class SnackBarUtils {
     required String label,
     required Color? backgroundColor,
   }) {
+    /* showSnackBar(
+        context: context, label: label, backgroundColor: backgroundColor); */
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         label,
@@ -152,6 +154,6 @@ class SnackBarUtils {
   static void hideCurrentSnackBar({
     required BuildContext context,
   }) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    hideCurrentSnackBar(context: context);
   }
 }

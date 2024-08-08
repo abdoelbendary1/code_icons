@@ -9,11 +9,13 @@ class LoginViewModel extends Cubit<LoginState> {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController(
-    text: "admin",
-  );
+/*     text: "admin",
+ */
+      );
   TextEditingController passwordController = TextEditingController(
-    text: "admin",
-  );
+/*     text: "admin",
+ */
+      );
 
   late void Function()? buttonFunction;
   bool isObsecure = true;

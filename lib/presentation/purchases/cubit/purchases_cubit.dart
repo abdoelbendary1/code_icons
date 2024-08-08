@@ -11,6 +11,8 @@ import 'package:code_icons/domain/entities/purchase_item/purchase_item_entity.da
 import 'package:code_icons/domain/entities/store/store_entity.dart';
 import 'package:code_icons/domain/use_cases/purchase_request_usecase/purchase_request.useCase.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/cubit/purchase_request_cubit.dart';
+import 'package:code_icons/presentation/utils/GlobalVariables.dart';
+import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
@@ -24,6 +26,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
   PurchasesCubit() : super(PurchasesInitial());
   PurchaseRequestsUseCases purchaseRequestsUseCases = PurchaseRequestsUseCases(
       purchaseRequestRepo: injectPurchaseRequestRepo());
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final formKey = GlobalKey<FormState>();
   Map<String, String> dateStorageMap = {
@@ -131,6 +134,8 @@ class PurchasesCubit extends Cubit<PurchasesState> {
 
   void saveSelectedItem() {
     var selectedItemDetails = ItemsDetails(
+      description: ControllerManager().purchaseItemDiscriptionController.text,
+      id: selectedItem.itemId.toString(),
       itemCode1: selectedItem.itemCode1,
       itemNameAr: selectedItem.itemId,
       qty: int.tryParse(
@@ -199,7 +204,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
   }
 
   void selectUom({required String name}) {
-    selectedUom = uomlist.where((element) => element.uom == name).first.uomId!;
+    selectedUom = uomlist.firstWhere((element) => element.uom == name).uomId!;
   }
 
   void getStoreData() async {
@@ -237,9 +242,11 @@ class PurchasesCubit extends Cubit<PurchasesState> {
   }
 
   void getItemsData() async {
+    emit(PurchasesItemSelectedLoading());
     var either = await purchaseRequestsUseCases.fetchPurchaseItemData();
     either.fold((l) => emit(getStoreDataError(errorMsg: l.errorMessege)), (r) {
       itemsList = r;
+      emit(PurchasesItemSelected(selectedItem));
 
       /* emit(PurchasesInitial()); */
     });
@@ -327,14 +334,19 @@ class PurchasesCubit extends Cubit<PurchasesState> {
           purchaseRequestDataModel: savePR());
       emit(AddPurchasesRequestSuccess());
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      SnackBarUtils.showSnackBar(
+        context: context,
+        label: "برجاء ادخال جميع البيانات",
+        backgroundColor: AppColors.redColor,
+      );
+      /*  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           "برجاء ادخال جميع البيانات",
           style: Theme.of(context).textTheme.titleMedium,
         ),
         backgroundColor: AppColors.redColor,
         duration: Durations.extralong1,
-      ));
+      )); */
     }
   }
 

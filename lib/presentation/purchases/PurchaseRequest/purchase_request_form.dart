@@ -2,10 +2,11 @@ import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:code_icons/domain/entities/purchase_item/purchase_item_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
-import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/select_store.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectableDropDownlist.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
 import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
 import 'package:code_icons/presentation/utils/Date_picker.dart';
+import 'package:code_icons/presentation/utils/GlobalVariables.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
@@ -25,6 +26,7 @@ class PurchaseRequestForm extends StatefulWidget {
 
 class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
   PurchasesCubit purchasesCubit = PurchasesCubit();
+  StatefulWidget? myInheritedWidget;
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
 
     purchasesCubit.getItemsData();
     purchasesCubit.fetchUom();
-    Future.delayed(Duration(seconds: 1));
+    Future.delayed(const Duration(seconds: 1));
   }
 
   @override
@@ -70,6 +72,7 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
               children: [
                 buildRequestInfoSection(context),
                 buildItemInfoSection(context),
+                buildSelectedItemsList(context),
               ],
             ),
             SizedBox(height: 10.h),
@@ -115,7 +118,7 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
           } else if (state is AddPurchasesItemSuccess) {
             return buildItemsListWithAddition(context);
           } else if (state is AddPurchasesItemError) {
-            return LoadingStateAnimation();
+            return const LoadingStateAnimation();
           }
           return Container();
         },
@@ -137,22 +140,22 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
           listener: (context, state) {
             if (state is AddPurchasesRequestSuccess) {
               SnackBarUtils.showSnackBar(
-                context: context,
+                context: GlobalVariable.navigatorState.currentContext!,
                 label: "تمت الإضافه بنجاح",
                 backgroundColor: AppColors.greenColor,
               );
               Navigator.pushReplacementNamed(
-                  context, AllPurchasesScreen.routeName);
+                  super.context, AllPurchasesScreen.routeName);
             } else if (state is AddPurchasesRequestError) {
               if (state.errorMsg.contains("400")) {
                 SnackBarUtils.showSnackBar(
-                  context: context,
+                  context: GlobalVariable.navigatorState.currentContext!,
                   label: "برجاء ادخال البيانات صحيحه",
                   backgroundColor: AppColors.redColor,
                 );
               } else if (state.errorMsg.contains("500")) {
                 SnackBarUtils.showSnackBar(
-                  context: context,
+                  context: GlobalVariable.navigatorState.currentContext!,
                   label: "حدث خطأ ما",
                   backgroundColor: AppColors.redColor,
                 );
@@ -195,150 +198,6 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
             onPressed: () async {
               purchasesCubit.addItem();
             }),
-        SizedBox(
-          height: 10.h,
-        ),
-        SizedBox(
-          height: 300.h,
-          child: ListView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-            itemCount: purchasesCubit.selectedfilterdItemList.length,
-            itemBuilder: (context, index) {
-              final request = purchasesCubit.selectedfilterdItemList[index];
-              return SwipeActionCell(
-                leadingActions: [
-                  SwipeAction(
-                    nestedAction: SwipeNestedAction(
-                      content: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.blueColor,
-                              AppColors.lightBlueColor
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          color: Colors.red,
-                        ),
-                        width: 80.sp,
-                        height: 50.sp,
-                        child: const OverflowBox(
-                          maxWidth: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('حذف',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    color: Colors.transparent,
-                    content:
-                        purchasesCubit.getIconButton(Colors.red, Icons.delete),
-                    onTap: (handler) async {
-                      // Implement delete functionality
-                    },
-                  ),
-                ],
-                key: ValueKey(index),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
-                  child: Card(
-                    color: AppColors.blueColor,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        gradient: const LinearGradient(
-                          colors: [
-                            AppColors.blueColor,
-                            AppColors.lightBlueColor
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.all(16.w),
-                        leading: const CircleAvatar(
-                          backgroundColor: AppColors.lightBlueColor,
-                          child: Icon(
-                            Icons.receipt,
-                            color: Colors.white,
-                          ),
-                        ),
-                        title: Text(
-                          "كود ${request.itemCode1}",
-                          style: TextStyle(
-                            color: AppColors.whiteColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: EdgeInsets.only(top: 8.h),
-                          child: Wrap(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "id: ${request.itemId}",
-                                    style: TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "itemNameAr: ${request.itemNameAr}",
-                                    style: TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.w, vertical: 12.h),
-                              decoration: BoxDecoration(
-                                color: AppColors.greenColor,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                "تم التأكيد",
-                                style: TextStyle(
-                                  color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
         SizedBox(
           height: 10.h,
         ),
@@ -599,7 +458,6 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
               context: context,
               onPressed: () async {
                 purchasesCubit.saveSelectedItem();
-                
               },
             ),
           ],
@@ -811,6 +669,176 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                 height: 20.h,
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  AccordionSection buildSelectedItemsList(BuildContext context) {
+    return AccordionSection(
+      accordionId: "3",
+      leftIcon: Icon(
+        Icons.work,
+        color: AppColors.whiteColor,
+        size: 30.r,
+      ),
+      isOpen: false,
+      header: const Text('المنتجات المختاره',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          )),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BlocConsumer<PurchasesCubit, PurchasesState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              return SizedBox(
+                height: 250.h * purchasesCubit.selectedItemsList.length,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                  itemCount: purchasesCubit.selectedItemsList.length,
+                  itemBuilder: (context, index) {
+                    final request = purchasesCubit.selectedItemsList[index];
+                    return SwipeActionCell(
+                      leadingActions: [
+                        SwipeAction(
+                          nestedAction: SwipeNestedAction(
+                            content: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    AppColors.blueColor,
+                                    AppColors.lightBlueColor
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                color: Colors.red,
+                              ),
+                              width: 80.sp,
+                              height: 50.sp,
+                              child: const OverflowBox(
+                                maxWidth: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('حذف',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          color: Colors.transparent,
+                          content: purchasesCubit.getIconButton(
+                              Colors.red, Icons.delete),
+                          onTap: (handler) async {
+                            // Implement delete functionality
+                          },
+                        ),
+                      ],
+                      key: ValueKey(index),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
+                        child: Card(
+                          color: AppColors.blueColor,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.blueColor,
+                                  AppColors.lightBlueColor
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(16.w),
+                              leading: const CircleAvatar(
+                                backgroundColor: AppColors.lightBlueColor,
+                                child: Icon(
+                                  Icons.receipt,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              title: Text(
+                                "كود ${request.itemCode1}",
+                                style: TextStyle(
+                                  color: AppColors.whiteColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              subtitle: Padding(
+                                padding: EdgeInsets.only(top: 8.h),
+                                child: Wrap(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "id: ${request.id}",
+                                          style: TextStyle(
+                                              color: AppColors.whiteColor,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          "itemNameAr: ${request.itemNameAr}",
+                                          style: TextStyle(
+                                              color: AppColors.whiteColor,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w, vertical: 12.h),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.greenColor,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      "تم التأكيد",
+                                      style: TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),

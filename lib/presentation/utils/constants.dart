@@ -406,11 +406,11 @@ class AppLocalData {
       icon: Icons.collections_bookmark_sharp,
       route: CollectionsScreen.routeName,
       items: [
-        MenuItem(
+        /*   MenuItem(
           title: 'بيانات العملاء',
           route: CustomerDataScreen.routeName,
           icon: Icons.person,
-        ),
+        ), */
         /*   MenuItem(
             title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(

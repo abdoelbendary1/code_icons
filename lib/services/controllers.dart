@@ -453,12 +453,12 @@ class ControllerManager {
       addCollectionActivityController.text =
           customerDataEntity.activityNameBl ?? "";
       addCollectionDivisionController.text =
-          customerDataEntity.divisionBl ?? "";
-      addCollectionCompensationController.text = "0";
-      addCollectionLateFinanceController.text = "0";
-      addCollectionCurrentFinanceController.text = "0";
-      addCollectionDiffrentFinanaceController.text = "0";
-      addCollectionTotalFinanceController.text = "0";
+          paymentValuesEntity.activity.toString();
+      addCollectionCompensationController.text = "0.0";
+      addCollectionLateFinanceController.text = "0.0";
+      addCollectionCurrentFinanceController.text = "0.0";
+      addCollectionDiffrentFinanaceController.text = "0.0";
+      addCollectionTotalFinanceController.text = "0.0";
       _originalTotal = 0;
       _previousDifferentFinance = 0;
     }

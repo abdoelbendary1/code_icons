@@ -1,23 +1,25 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SelectableDropDownlist extends StatelessWidget {
-  SelectableDropDownlist({
-    super.key,
-    required this.itemList,
-    required this.onChanged,
-    this.title = "",
-    this.hintText = "",
-    this.initialItem,
-    this.validator,
-  });
+class SelectCustomerEntity extends StatelessWidget {
+  SelectCustomerEntity(
+      {super.key,
+      required this.itemList,
+      required this.onChanged,
+      this.title = "",
+      this.hintText = "",
+      this.initialItem,
+      this.validator,
+      this.headerFontSize = 14});
   String title;
   String hintText;
-  final List<dynamic> itemList;
+  final List<CustomerDataEntity> itemList;
   dynamic initialItem;
   String? Function(dynamic)? validator;
+  double? headerFontSize;
 
   dynamic Function(dynamic)? onChanged;
 
@@ -36,18 +38,20 @@ class SelectableDropDownlist extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: AppColors.primaryColor, fontWeight: FontWeight.w600),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 20.h),
           CustomDropdown.search(
+            excludeSelected: true,
             validator: validator,
             closeDropDownOnClearFilterSearch: true,
             canCloseOutsideBounds: true,
             initialItem: initialItem,
             hintText: hintText,
-            hideSelectedFieldWhenExpanded: true,
+            hideSelectedFieldWhenExpanded: false,
             noResultFoundText: "لا يوجد بيانات",
-            decoration: const CustomDropdownDecoration(
-                noResultFoundStyle: TextStyle(color: AppColors.whiteColor),
-                searchFieldDecoration: SearchFieldDecoration(
+            decoration: CustomDropdownDecoration(
+                noResultFoundStyle:
+                    const TextStyle(color: AppColors.whiteColor),
+                searchFieldDecoration: const SearchFieldDecoration(
                     prefixIcon: Icon(
                       Icons.search,
                       color: AppColors.greyColor,
@@ -70,27 +74,27 @@ class SelectableDropDownlist extends StatelessWidget {
                 headerStyle: TextStyle(
                   color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: headerFontSize,
                 ),
-                expandedSuffixIcon: Icon(
+                expandedSuffixIcon: const Icon(
                   Icons.keyboard_arrow_up_rounded,
                   color: AppColors.whiteColor,
                 ),
-                closedSuffixIcon: Icon(
+                closedSuffixIcon: const Icon(
                   Icons.keyboard_arrow_down_outlined,
                   color: AppColors.whiteColor,
                 ),
-                closedFillColor: AppColors.lightBlueColor,
+                closedFillColor: AppColors.blueColor,
                 expandedFillColor: AppColors.blueColor,
-                listItemStyle: TextStyle(
+                listItemStyle: const TextStyle(
                   color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 16,
                 )),
             items: itemList,
             onChanged: onChanged,

@@ -33,24 +33,38 @@ class BuildTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ReusableCustomTextField(
-          labelText: label ?? "",
-          hintText: hint ?? "",
-          controller: controller,
-          prefixIcon: icon,
-          onTap: onTap,
-          readOnly: readOnly,
-          onChanged: onChanged,
-          validator: validator,
-          keyboardType: keyboardType,
-          minLines: minLines,
-          maxLines: maxLines,
-          maxLength: maxLength,
-        ),
-        SizedBox(height: 10.h),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label ?? "",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 20.h,
+          ),
+          ReusableCustomTextField(
+            /* labelText: label ?? "", */
+            hintText: hint ?? "",
+            controller: controller,
+            prefixIcon: icon,
+            onTap: onTap,
+            readOnly: readOnly,
+            onChanged: onChanged,
+            validator: validator,
+            keyboardType: keyboardType,
+            minLines: minLines,
+            maxLines: maxLines,
+            maxLength: maxLength,
+          ),
+          SizedBox(height: 10.h),
+        ],
+      ),
     );
   }
 }
