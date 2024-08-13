@@ -1,4 +1,3 @@
-
 class PaymentValuesEntity {
   String? yearsOfRepayment;
   List<dynamic>? paidYears;
@@ -13,8 +12,22 @@ class PaymentValuesEntity {
   String? clientName;
   String? clientAddress;
   double? capital;
+  String? message;
 
-  PaymentValuesEntity({this.yearsOfRepayment, this.paidYears, this.compensation, this.activity, this.late, this.current, this.different, this.total, this.clientId, this.tradeRegistryTypeBl, this.clientName, this.clientAddress, this.capital});
-
-  
+  PaymentValuesEntity({
+    this.yearsOfRepayment,
+    this.paidYears,
+    this.compensation,
+    this.activity,
+    this.late,
+    this.current,
+    this.different,
+    this.total,
+    this.clientId,
+    this.tradeRegistryTypeBl,
+    this.clientName,
+    this.clientAddress,
+    this.capital,
+    this.message,
+  });
 }

@@ -54,6 +54,12 @@ final class GetCustomerDataByIDError extends AddCollectionState {
   GetCustomerDataByIDError({required this.errorMsg});
 }
 
+
+final class GetpaymentValuesByIDError extends AddCollectionState {
+  String errorMsg;
+  GetpaymentValuesByIDError({required this.errorMsg});
+}
+
 final class GetCustomerDataByIDLoading extends AddCollectionState {}
 
 // ignore: must_be_immutable

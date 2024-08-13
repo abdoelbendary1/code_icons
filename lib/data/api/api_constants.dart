@@ -1,5 +1,7 @@
 class ApiConstants {
-  static String baseUrl = "demoapi5.code-icons.com";
+  static String chamberApi = "demoapi5.code-icons.com";
+  static String elreedyApi = "elreedy-api.code-icons.com";
+  static String baseUrl = "demoapi1.code-icons.com";
   static String settingsEndPoint = "api/Settings";
   static String customerDataEndPoint = "/api/CustomerData";
   static String paymentValuesEndPoint = "/api/CustomerData/PaymentValues";

@@ -31,6 +31,7 @@ dependencies:
   accordion: ^2.6.0
   action_slider: ^0.7.0
   animated_custom_dropdown: ^3.1.1
+  arabic_font: ^0.0.9
   bloc: ^8.1.4
   connectivity_plus: ^5.0.2
   cupertino_icons: ^1.0.6
@@ -53,21 +54,23 @@ dependencies:
   flutter_swipe_action_cell: ^3.1.3
   get_it: ^7.7.0
   hawk_fab_menu: ^1.2.0
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
   http: ^1.2.1
   intl: any
   loading_animation_widget: ^1.2.1
+  motion_toast: ^2.11.0
+  quickalert: ^1.1.0
   readmore: ^2.2.0
   shared_preferences: ^2.2.3
   syncfusion_flutter_datagrid: ^24.1.42
-  hive: ^2.0.4
-  hive_flutter: ^1.1.0
 dev_dependencies:
-  hive_generator: ^1.1.0
   build_runner: ^2.1.4
-  
+
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  hive_generator: ^1.1.0
 
 flutter_icons:
   android: true

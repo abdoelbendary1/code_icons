@@ -1,10 +1,9 @@
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/collection_details_form.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/ReceiptManager%20.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
-import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectableDropDownlist.dart';
-import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/ex.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectCustomerEntity.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectCustomerEntityName.dart';
+import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectCustomerEntityRegistryNum.dart';
+import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
@@ -12,9 +11,9 @@ import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:quickalert/models/quickalert_animtype.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class AddCollectionBody extends StatefulWidget {
   AddCollectionBody({super.key});
@@ -69,6 +68,53 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
             if (state is GetAllCustomerDataSuccess) {
               addCollectionCubit.customerData = state.customerData!;
               addCollectionCubit.receipts = state.receipts ?? [];
+            } else if (state is GetAllCustomerDataError) {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.error,
+                showConfirmBtn: false,
+                title: state.errorMsg,
+                titleColor: AppColors.redColor,
+              );
+              /*   DialogUtils.showMessage(
+                  context: context, message: state.errorMsg); */
+              /*   SnackBarUtils.showSnackBar(
+                  context: context,
+                  label: state.errorMsg,
+                  backgroundColor: AppColors.redColor); */
+            } else if (state is GetCustomerDataByIDError) {
+              if (state.errorMsg == "تأكد من اتصالك بالانترنت") {
+                QuickAlert.show(
+                  animType: QuickAlertAnimType.slideInUp,
+                  context: context,
+                  type: QuickAlertType.error,
+                  showConfirmBtn: false,
+                  title: state.errorMsg,
+                  titleColor: AppColors.redColor,
+                );
+                /*  DialogUtils.showMessage(
+                    context: context, message: "تأكد من اتصالك بالانترنت"); */
+                /*  SnackBarUtils.showSnackBar(
+                    context: context,
+                    label: "تأكد من اتصالك بالانترنت",
+                    backgroundColor: AppColors.redColor); */
+              }
+            } else if (state is GetpaymentValuesByIDError) {
+              QuickAlert.show(
+                animType: QuickAlertAnimType.slideInUp,
+                context: context,
+                type: QuickAlertType.error,
+                showConfirmBtn: false,
+                title: state.errorMsg,
+                titleColor: AppColors.redColor,
+                /* text: state.errorMsg, */
+              );
+              /*     DialogUtils.showMessage(
+                  context: context, message: state.errorMsg); */
+              /*   SnackBarUtils.showSnackBar(
+                  context: context,
+                  label: state.errorMsg,
+                  backgroundColor: AppColors.redColor); */
             }
           },
           builder: (context, state) {
@@ -78,14 +124,43 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                   SizedBox(
                     height: 50.h,
                   ),
-                  LoadingStateAnimation(),
+                  const LoadingStateAnimation(),
                 ],
               );
             }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BlocBuilder<AddCollectionCubit, AddCollectionState>(
+                BlocConsumer<AddCollectionCubit, AddCollectionState>(
+                  /*  listenWhen: (previous, current) {
+                    if (previous is GetCustomerDataByIDLoading) {
+                      return true;
+                    }
+                    if (current is GetCustomerDataByIDError) {
+                      return false;
+                    } else {
+                      return false;
+                    }
+                  }, */
+                  listener: (context, state) {
+                    /*   if (state is GetCustomerDataByIDError) {
+                      if (state.errorMsg == "check your internet connection") {
+                        /*       DialogUtils.showMessage(
+                    context: context, message: "تأكد من اتصالك بالانترنت"); */
+                        SnackBarUtils.showSnackBar(
+                            context: context,
+                            label: "تأكد من اتصالك بالانترنت",
+                            backgroundColor: AppColors.redColor);
+                      }
+                    } else if (state is GetpaymentValuesByIDError) {
+                      DialogUtils.showMessage(
+                          context: context, message: state.errorMsg);
+                      /*   SnackBarUtils.showSnackBar(
+                  context: context,
+                  label: state.errorMsg,
+                  backgroundColor: AppColors.redColor); */
+                    } */
+                  },
                   //get the payment reciet
                   bloc: addCollectionCubit,
                   buildWhen: (previous, current) {
@@ -102,7 +177,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                     if (state is GetCustomerDataByIDSuccess) {
                       return Column(
                         children: [
-                          SelectCustomerEntity(
+                          SelectCustomerEntityName(
                             initialItem: addCollectionCubit.selectedCustomer,
                             itemList: addCollectionCubit.customerData,
                             title: "اسم التاجر",
@@ -122,45 +197,41 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                                           .toString());
                             },
                           ),
-                          SelectableDropDownlist(
-                            initialItem: state.customerData.tradeRegistryBl,
-                            itemList: addCollectionCubit.customerData
-                                .map((e) => e.tradeRegistryBl)
-                                .toList(),
+                          SelectCustomerEntityRegistryNum(
+                            initialItem: addCollectionCubit.selectedCustomer,
+                            itemList: addCollectionCubit.customerData,
                             title: "رقم السجل",
                             hintText: "رقم السجل",
                             /*  headerFontSize: 25.sp, */
                             onChanged: (value) {
-                              addCollectionCubit.getRegistryNumbersById(
-                                  addCollectionCubit.selectedCustomer.idBl
-                                      .toString(),
-                                  addCollectionCubit.customerData);
-                              addCollectionCubit.getCustomerByTradeRegistryBl(
-                                  value, addCollectionCubit.customerData);
+                              context
+                                  .read<AddCollectionCubit>()
+                                  .selectedCustomer = value;
+                              context
+                                  .read<AddCollectionCubit>()
+                                  .fetchCustomerDataByID(
+                                      customerId: context
+                                          .read<AddCollectionCubit>()
+                                          .selectedCustomer
+                                          .idBl
+                                          .toString());
                             },
                           ),
                         ],
                       );
-                      /*  return ReusableSelectTrader(
-                        label: "اسم التاجر",
-                        itemList: addCollectionCubit.customerData,
-                        selectedCustomer: addCollectionCubit.selectedCustomer,
-                        onChanged: (value) {
-                          context.read<AddCollectionCubit>().selectedCustomer =
-                              value!;
-                          context
-                              .read<AddCollectionCubit>()
-                              .fetchCustomerDataByID(
-                                  customerId: value.idBl.toString());
-                        }, //! bug
-                      ); */
+                    } else if (state is GetCustomerDataByIDLoading) {
+                      return Center(
+                          child: SizedBox(
+                              height: 400.h,
+                              child: const LoadingStateAnimation()));
                     }
                     return Column(
                       children: [
-                        SelectCustomerEntity(
+                        SelectCustomerEntityName(
                           itemList: addCollectionCubit.customerData,
                           title: "اسم التاجر",
                           hintText: "اسم التاجر",
+                          /*  headerFontSize: 25.sp, */
                           onChanged: (value) {
                             context
                                 .read<AddCollectionCubit>()
@@ -173,47 +244,33 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                                         .selectedCustomer
                                         .idBl
                                         .toString());
-                            /*   context
-                                .read<AddCollectionCubit>()
-                                .fetchCustomerDataByID(
-                                    customerId: context
-                                        .read<AddCollectionCubit>()
-                                        .selectedCustomer
-                                        .idBl
-                                        .toString()); */
                           },
                         ),
-                        SelectableDropDownlist(
-                          itemList: addCollectionCubit.customerData
-                              .map((e) => e.tradeRegistryBl)
-                              .toList(),
+                        SelectCustomerEntityRegistryNum(
+/*                             initialItem: addCollectionCubit.selectedCustomer,
+ */
+                          itemList: addCollectionCubit.customerData,
                           title: "رقم السجل",
                           hintText: "رقم السجل",
                           /*  headerFontSize: 25.sp, */
                           onChanged: (value) {
-                            addCollectionCubit.getRegistryNumbersById(
-                                addCollectionCubit.selectedCustomer.idBl
-                                    .toString(),
-                                addCollectionCubit.customerData);
-                            addCollectionCubit.getCustomerByTradeRegistryBl(
-                                value, addCollectionCubit.customerData);
+                            if (value != null) {
+                              context
+                                  .read<AddCollectionCubit>()
+                                  .selectedCustomer = value;
+                              context
+                                  .read<AddCollectionCubit>()
+                                  .fetchCustomerDataByID(
+                                      customerId: context
+                                          .read<AddCollectionCubit>()
+                                          .selectedCustomer
+                                          .idBl
+                                          .toString());
+                            }
                           },
                         ),
                       ],
                     );
-                    /*  return ReusableSelectTrader(
-                      label: "اسم التاجر",
-                      itemList: addCollectionCubit.customerData,
-                      onChanged: (value) {
-                        context.read<AddCollectionCubit>().selectedCustomer =
-                            value!;
-                        context
-                            .read<AddCollectionCubit>()
-                            .fetchCustomerDataByID(
-                                customerId: value.idBl.toString());
-                      },
-                      selectedCustomer: null,
-                    ); */
                   },
                 ),
                 BlocConsumer<AddCollectionCubit, AddCollectionState>(
@@ -222,7 +279,20 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                         controller: 'addCollectionPaymentReceitController'),
                   listener: (context, state) {
                     // Add debug print
-                    print("Listener State: $state");
+                    if (state is GetpaymentValuesByIDError) {
+                      /*  MotionToast(
+                        icon: Icons.zoom_out,
+                        primaryColor: Colors.deepOrange,
+                        title: Text("Top Motion Toast"),
+                        description: Text("Another motion toast example"),
+                        position: MotionToastPosition.top,
+                        animationType: AnimationType.fromTop,
+                      ).show(context); */
+                      /*  MotionToast.error(
+                              title: Text("Error"),
+                              description: Text(state.errorMsg))
+                          .show(context); */
+                    }
                   },
                   builder: (context, state) {
                     print("Builder State: $state");
@@ -230,30 +300,15 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                       return const Center(
                           child: SizedBox(
                               height: 200, child: LoadingStateAnimation()));
-                    } else if (state is GetCustomerDataByIDError) {
+                    } /* else if (state is GetCustomerDataByIDError) {
                       print(state.errorMsg);
                       return Center(child: Text(state.errorMsg));
-                    } else if (state is GetCustomerDataByIDSuccess ||
+                    }  */
+                    else if (state is GetCustomerDataByIDSuccess ||
                         state is YearsUpdatedState) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          /*   SizedBox(
-                            height: 20.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                            child: Text(
-                              AppLocalizations.of(context)!
-                                  .collection_Details_title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                      color: AppColors.blackColor,
-                                      fontWeight: FontWeight.w600),
-                            ),
-                          ), */
                           SizedBox(
                             height: 20.h,
                           ),

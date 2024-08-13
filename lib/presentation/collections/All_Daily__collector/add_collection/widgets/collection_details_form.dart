@@ -4,7 +4,11 @@ import 'package:accordion/controllers.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/home/home_screen.dart';
+import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
@@ -14,6 +18,9 @@ import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:quickalert/models/quickalert_animtype.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class CollectionDetailsForm extends StatefulWidget {
   @override
@@ -272,10 +279,11 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                           child: BuildTextField(
                             label: AppLocalizations.of(context)!.division_label,
                             hint: AppLocalizations.of(context)!.division_hint,
+                            keyboardType: TextInputType.number,
                             controller: ControllerManager().getControllerByName(
                                 'addCollectionDivisionController'),
                             icon: Icons.diversity_3_sharp,
-                            readOnly: true,
+                            /* readOnly: true, */
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return "يجب ادخال الشعبه";
@@ -405,6 +413,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                           child: BuildTextField(
                             label: AppLocalizations.of(context)!
                                 .finance_Diffrence_label,
+                            keyboardType: TextInputType.number,
                             hint: AppLocalizations.of(context)!
                                 .finance_Diffrence_hint,
                             controller: ControllerManager().getControllerByName(
@@ -514,26 +523,87 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                   bloc: addCollectionCubit,
                   listener: (context, state) {
                     if (state is AddCollectionSucces) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      Navigator.pushReplacementNamed(
+                          context, HomeScreen.routeName);
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        showConfirmBtn: false,
+                        confirmBtnText: "الذهاب الى الصفحه الرئيسيه",
+                        title: "تمت الإضافه بنجاح",
+                        titleColor: AppColors.lightBlueColor,
+                        /*   onConfirmBtnTap: () {}, */
+                      );
+                      /*  DialogUtils.showMessage(
+                        context: context,
+                        barrierDismissible: true,
+                        message: "",
+                        posActionName: "تأكيد",
+                        posAction: () {
+                          Navigator.pushReplacementNamed(
+                              context, HomeScreen.routeName);
+                        },
+                        title: "تمت الإضافه بنجاح",
+                      ); */
+                      /*  DialogUtils.showMessage(
+                          context: context, message: "تمت الإضافه بنجاح");
+                      /*   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           "تمت الإضافه بنجاح",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         backgroundColor: AppColors.greenColor,
                         duration: Durations.extralong1,
-                      ));
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (context.mounted) {}
-                      });
+                      )); */
+                      Navigator.pushReplacementNamed(
+                          context, HomeScreen.routeName); */
+                      /* Navigator.pushReplacementNamed(
+                          context, HomeScreen.routeName);
+                       */
                     } else if (state is AddCollectionError) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          "حدث خطأ ما",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        backgroundColor: AppColors.redColor,
-                        duration: Durations.extralong1,
-                      ));
+                      if (context
+                          .read<AddCollectionCubit>()
+                          .yearsOfRepaymentBL
+                          .isEmpty) {
+                        QuickAlert.show(
+                          animType: QuickAlertAnimType.slideInUp,
+                          context: context,
+                          type: QuickAlertType.error,
+                          showConfirmBtn: false,
+                          title: "يجب اضافه سنوات السداد",
+                          titleColor: AppColors.redColor,
+                        );
+                        /*   DialogUtils.showMessage(
+                            context: context,
+                            message: "يجب اضافه سنوات السداد"); */
+                        /*  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "يجب اضافه سنوات السداد",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Durations.extralong1,
+                        )); */
+                      } else {
+                        QuickAlert.show(
+                          animType: QuickAlertAnimType.slideInUp,
+                          context: context,
+                          type: QuickAlertType.error,
+                          showConfirmBtn: false,
+                          title: "حدث خطأ ما",
+                          titleColor: AppColors.redColor,
+                        );
+                        /*  DialogUtils.showMessage(
+                            context: context, message: "حدث خطأ ما"); */
+                        /*    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "حدث خطأ ما",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Durations.extralong1,
+                        )); */
+                      }
                     }
                   },
                   child: ElevatedButton(
@@ -554,15 +624,13 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                               .intializeTradeRequest(
                                   selectedCustomer: selectedCustomer,
                                   context: context);
-                          await addCollectionCubit
-                              .postTradeCollection(
-                                  token: "token",
-                                  tradeCollectionRequest:
-                                      tradeCollectionRequest,
-                                  context: context)
-                              .whenComplete(() =>
+                          await addCollectionCubit.postTradeCollection(
+                              token: "token",
+                              tradeCollectionRequest: tradeCollectionRequest,
+                              context: context);
+                          /*  .whenComplete(() =>
                                   Navigator.pushReplacementNamed(context,
-                                      AllDailyCollectorScreen.routeName));
+                                      AllDailyCollectorScreen.routeName)); */
                         }
                       }
                     },

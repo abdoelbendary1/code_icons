@@ -6,6 +6,7 @@ import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/a
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_state.dart';
+import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
@@ -182,7 +183,16 @@ class _UnRegisteredCollectionsScreenState
             children: [
               BlocConsumer<UnlimitedCollectionCubit, UnlimitedCollectionState>(
                 bloc: unlimitedCollectionCubit,
-                listener: (context, state) {},
+                listener: (context, state) {
+                  if (state is GetUnlimitedCollectionsError) {
+                    if (state.errorMsg == "check your internet connection") {
+                      SnackBarUtils.showSnackBar(
+                          context: context,
+                          label: "تأكد من اتصالك بالانترنت",
+                          backgroundColor: AppColors.redColor);
+                    }
+                  }
+                },
                 builder: (context, state) {
                   if (state is GetUnlimitedCollectionsSuccess) {
                     if (state.collectiion.isNotEmpty) {
@@ -339,7 +349,15 @@ class _UnRegisteredCollectionsScreenState
                       ),
                     );
                   } else if (state is GetUnlimitedCollectionsError) {
-                    return Center(child: Text('Error: ${state.errorMsg}'));
+                    return Expanded(
+                      child: Column(
+                        children: [
+                          const Spacer(),
+                          Center(child: Text(' ${state.errorMsg}')),
+                          const Spacer(),
+                        ],
+                      ),
+                    );
                   } else if (state is GetCollectionsLoading) {
                     return const Expanded(
                       child: Column(

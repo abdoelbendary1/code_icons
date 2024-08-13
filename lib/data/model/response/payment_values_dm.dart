@@ -15,6 +15,7 @@ class PaymenValuesDM extends PaymentValuesEntity {
     super.clientName,
     super.clientAddress,
     super.capital,
+    super.message,
   });
 
   PaymenValuesDM.fromJson(Map<String, dynamic> json) {
@@ -57,6 +58,9 @@ class PaymenValuesDM extends PaymentValuesEntity {
     if (json["capital"] is double) {
       capital = json["capital"];
     }
+    if (json["message"] is String) {
+      message = json["message"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +80,8 @@ class PaymenValuesDM extends PaymentValuesEntity {
     _data["clientName"] = clientName;
     _data["clientAddress"] = clientAddress;
     _data["capital"] = capital;
+    _data["message"] = message;
+
     return _data;
   }
 }

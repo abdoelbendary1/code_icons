@@ -27,6 +27,23 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     await Hive.openBox('receiptsBox');
   }
 
+  int? paymentReceipt;
+  int? storedPaymentReciet;
+  Future<void> storePaymentReceipt(int receipt) async {
+    var userBox = Hive.box('userBox');
+    userBox.put('paymentReceipt', receipt);
+  }
+
+  Future<int?> getPaymentReceipt() async {
+    var userBox = Hive.box('userBox');
+    return userBox.get('paymentReceipt');
+  }
+
+  Future<void> deletePaymentReceipt() async {
+    var userBox = Hive.box('userBox');
+    return userBox.delete('paymentReceipt');
+  }
+
   Future<void> addReciet(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       try {
@@ -68,11 +85,13 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
 
           // Save the updated receipts list
           receiptsBox.put(token, existingReceipts);
-          var storedPaymentReciet = await getPaymentReceipt();
+          storedPaymentReciet = await getPaymentReceipt();
           if (storedPaymentReciet == null) {
             await storePaymentReceipt(receipts
                 .firstWhere((element) => element.valid == true)
                 .paperNum!);
+
+            /*  storedPaymentReciet = await getPaymentReceipt(); */
           }
           emit(AddRecietCollctionSuccess());
         }
@@ -106,26 +125,22 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
 
     if (receipts.isNotEmpty) {
       lastRecietCollection = receipts.last;
+      paymentReceipt = await getPaymentReceipt();
+      if (paymentReceipt != null) {
+        for (var reciept in receipts) {
+          if (reciept.paperNum! + reciept.totalPapers! > paymentReceipt!) {
+            reciept.valid = true;
+          } else {
+            reciept.valid = false;
+          }
+        }
+      }
+      emit(GetRecietCollctionSuccess(reciets: receipts));
+    } else if (receipts.isEmpty) {
+      emit(GetRecietCollctionError(errorMsg: "لا يوجد دفاتر حاليه"));
     }
 
-    emit(GetRecietCollctionSuccess(reciets: receipts));
     return receipts;
-  }
-
-  int paymentReceipt = 0;
-  Future<void> storePaymentReceipt(int receipt) async {
-    var userBox = Hive.box('userBox');
-    userBox.put('paymentReceipt', receipt);
-  }
-
-  Future<int?> getPaymentReceipt() async {
-    var userBox = Hive.box('userBox');
-    return userBox.get('paymentReceipt');
-  }
-
-  Future<void> deletePaymentReceipt() async {
-    var userBox = Hive.box('userBox');
-    return userBox.delete('paymentReceipt');
   }
 
   RecietCollectionDataModel? selectReciet(int paymentReceipt) {
@@ -158,9 +173,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
       lastRecietCollection =
           RecietCollectionDataModel.fromJson(existingReceipts.last);
       ControllerManager().getControllerByName('paperNum').text =
-          (lastRecietCollection.paperNum! +
-                  lastRecietCollection.totalPapers! +
-                  1)
+          (lastRecietCollection.paperNum! + lastRecietCollection.totalPapers!)
               .toString();
       return RecietCollectionDataModel.fromJson(existingReceipts.last);
     }

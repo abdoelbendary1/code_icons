@@ -25,8 +25,8 @@ class ControllerManager {
 
   // Private constructor to prevent external instantiation
   ControllerManager._internal() {
-    addCollectionDiffrentFinanaceController
-        .addListener(_updateTotalFinanceController);
+    addCollectionDiffrentFinanaceController.addListener(_updateTotalFinance);
+    addCollectionDivisionController.addListener(_updateTotalFinance);
     unlimitedCurrentFinanceController.addListener(calculateAndSetTotal);
     unlimitedDivisionController.addListener(calculateAndSetTotal);
   }
@@ -34,6 +34,26 @@ class ControllerManager {
   // Method to update the total finance controller based on other values
   double _originalTotal = 0;
   double _previousDifferentFinance = 0;
+  double _previousDivisionFinance = 0;
+  void calculateDivisionAndSetTotal() {
+    try {
+      // Parse the current and division values from the text controllers
+      double current = 0.0;
+      double division =
+          double.tryParse(addCollectionDivisionController.text) ?? 0.0;
+
+      // Calculate the total
+      double total = double.parse(addCollectionTotalFinanceController.text);
+      total = current + division;
+
+      // Set the total value in the total finance controller
+      addCollectionTotalFinanceController.text = total.toString();
+    } catch (e) {
+      print("Error calculating total: $e");
+      addCollectionTotalFinanceController.text = "Error";
+    }
+  }
+
   void calculateAndSetTotal() {
     try {
       // Parse the current and division values from the text controllers
@@ -53,9 +73,32 @@ class ControllerManager {
     }
   }
 
-  void _updateTotalFinanceController() {
+  void _updateTotalFinance() {
+    try {
+      // Parse the different finance and division values from the text controllers
+      final differentFinance =
+          double.tryParse(addCollectionDiffrentFinanaceController.text) ?? 0;
+      final division =
+          double.tryParse(addCollectionDivisionController.text) ?? 0;
+
+      // Reset to the original total and add the current different finance value
+      double totalFinance = _originalTotal + differentFinance;
+
+      // Update the total with division
+      totalFinance += division;
+
+      // Update the total finance controller
+      addCollectionTotalFinanceController.text = totalFinance.toString();
+    } catch (e) {
+      addCollectionTotalFinanceController.text = "Error";
+    }
+  }
+
+  /* void _updateTotalFinanceController() {
     try {
       // Parse the new value of diffrentFinanaceController
+      /*   final divisonFinance =
+          double.tryParse(addCollectionDivisionController.text) ?? 0; */
       final differentFinance =
           double.tryParse(addCollectionDiffrentFinanaceController.text) ?? 0;
 
@@ -68,7 +111,7 @@ class ControllerManager {
       addCollectionTotalFinanceController.text = "Error";
     }
   }
-
+ */
 // List of TextEditingControllers managed by this class
   final TextEditingController idBLController = TextEditingController();
   final TextEditingController brandNameBLController = TextEditingController();
@@ -393,19 +436,6 @@ class ControllerManager {
         customerDataEntity.customerDataIdBl?.toString() ?? ""; */
   }
 
-  /*  Future<void> updateCollectionPaymentReceitController() async {
-    List<RecietCollectionDataModel> receipts =
-        await RecietCollctionCubit.recietCubit.getReciets();
-    if (receipts.isNotEmpty) {
-      RecietCollectionDataModel firstReciet = receipts.first;
-      addCollectionPaymentReceitController.text =
-          firstReciet.paperNum.toString();
-    } else {
-      addCollectionPaymentReceitController.text = '1';
-    }
-  }
- */
-
   // Method to update controllers with data
   void updateAddCollectionControllers({
     required CustomerDataEntity customerDataEntity,
@@ -420,7 +450,7 @@ class ControllerManager {
       addCollectionRegistryDateController.text =
           DateFormat('yyyy-MM-dd').format(DateTime.now());
       addCollectionActivityController.text =
-          customerDataEntity.activityNameBl ?? "";
+          customerDataEntity.divisionBl ?? "";
       addCollectionPaymentReceitController.text = payementReceipt.toString();
       addCollectionDivisionController.text =
           paymentValuesEntity.activity.toString();
@@ -432,17 +462,27 @@ class ControllerManager {
           paymentValuesEntity.current?.toString() ?? "0";
       addCollectionDiffrentFinanaceController.text =
           paymentValuesEntity.different?.toString() ?? "0";
-
-      _originalTotal = paymentValuesEntity.total ?? 0;
+//calcualte original total without divison and different
+      _originalTotal = (paymentValuesEntity.total! -
+          paymentValuesEntity.activity! -
+          paymentValuesEntity.different!);
       if (addCollectionDiffrentFinanaceController.text.isEmpty) {
         _previousDifferentFinance = 0;
       } else {
         _previousDifferentFinance =
             double.tryParse(addCollectionDiffrentFinanaceController.text) ?? 0;
       }
+      if (addCollectionDivisionController.text.isEmpty) {
+        _previousDivisionFinance = 0;
+      } else {
+        _previousDivisionFinance =
+            double.tryParse(addCollectionDivisionController.text) ?? 0;
+      }
 
-      addCollectionTotalFinanceController.text =
-          (_originalTotal + _previousDifferentFinance).toString();
+      addCollectionTotalFinanceController.text = (_originalTotal +
+              _previousDifferentFinance +
+              _previousDivisionFinance)
+          .toString();
     } else {
       addCollectionPhoneNumController.text = customerDataEntity.phoneBl ?? "";
       addCollectionAddressController.text = customerDataEntity.addressBl ?? "";
@@ -452,8 +492,7 @@ class ControllerManager {
           DateFormat('yyyy-MM-dd').format(DateTime.now());
       addCollectionActivityController.text =
           customerDataEntity.activityNameBl ?? "";
-      addCollectionDivisionController.text =
-          paymentValuesEntity.activity.toString();
+      addCollectionDivisionController.text = "0.0";
       addCollectionCompensationController.text = "0.0";
       addCollectionLateFinanceController.text = "0.0";
       addCollectionCurrentFinanceController.text = "0.0";

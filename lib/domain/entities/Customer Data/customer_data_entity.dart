@@ -31,10 +31,9 @@ class CustomerDataEntity {
   String? message;
   @override
   String toString() {
-    return brandNameBl.toString();
+    return "${tradeRegistryBl.toString()} ${brandNameBl}";
   }
 
-  
   String toTradeRegistryBl() {
     return tradeRegistryBl.toString();
   }

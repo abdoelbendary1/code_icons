@@ -45,6 +45,7 @@ class DialogUtils {
     Function? posAction,
     String? negActionName,
     Function? negAction,
+    bool? barrierDismissible,
   }) {
     List<Widget> actions = [];
     if (posActionName != null) {
@@ -53,10 +54,19 @@ class DialogUtils {
             Navigator.pop(context);
             posAction?.call();
           },
-          child: Text(
-            posActionName,
-            style: const TextStyle(
-                color: AppColors.blueColor, fontWeight: FontWeight.bold),
+          child: Column(
+            children: [
+              Text(
+                posActionName,
+                style: const TextStyle(
+                    color: AppColors.blueColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              SizedBox(
+                height: 20,
+              )
+            ],
           )));
     }
     if (negActionName != null) {
@@ -73,6 +83,7 @@ class DialogUtils {
     }
 
     showDialog(
+      barrierDismissible: barrierDismissible ?? true,
       context: context,
       builder: (context) {
         return AlertDialog(

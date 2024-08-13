@@ -18,6 +18,11 @@ final class AddUnlimitedCollectionSuccess extends UnlimitedCollectionState {
   });
 }
 
+final class GetPaymentRecietValueError extends UnlimitedCollectionState {
+  int paymentReciept;
+  GetPaymentRecietValueError({required this.paymentReciept});
+}
+
 final class GetCollectionsLoading extends UnlimitedCollectionState {}
 
 final class GetUnlimitedCollectionsError extends UnlimitedCollectionState {

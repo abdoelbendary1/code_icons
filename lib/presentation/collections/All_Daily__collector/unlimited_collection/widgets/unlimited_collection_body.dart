@@ -2,12 +2,17 @@ import 'package:code_icons/presentation/collections/All_Daily__collector/add_col
 import 'package:code_icons/presentation/collections/All_Daily__collector/Unlimited_collection/widgets/Unlimited_collection_details_form.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_state.dart';
+import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
+import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickalert/models/quickalert_animtype.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class UnlimitedCollectionBody extends StatefulWidget {
   UnlimitedCollectionBody({super.key});
@@ -74,7 +79,10 @@ class _UnlimitedCollectionBodyState extends State<UnlimitedCollectionBody> {
                     if (state is UnlimitedCollectionInitial) {
                       return UnlimitedCollectionDetailsForm();
                     } else if (state is AddUnlimitedCollectionError) {
-                      return Center(child: Text(state.errorMsg));
+                      return Align(
+                        alignment: Alignment.center,
+                        child: Container(child: Text(state.errorMsg)),
+                      );
                     } else if (state is AddUnlimitedCollectionSuccess) {}
                     return Container();
                   },

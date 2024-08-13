@@ -3,6 +3,7 @@ import 'package:code_icons/presentation/collections/reciets_collections/reciets_
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -81,7 +82,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          ' إضافة إيصال',
+                          ' إضافة دفتر',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.sp,
@@ -120,7 +121,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                ' حذف جميع الإيصالات',
+                                ' حذف جميع الدفاتر',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20.sp,
@@ -165,7 +166,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             title: Text(
-              "سجل الايصالات",
+              "دفاتر الإيصالات",
               style: TextStyle(
                 color: AppColors.whiteColor,
                 fontWeight: FontWeight.bold,
@@ -179,143 +180,252 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
         bloc: recietCollctionCubit..getReciets(),
         builder: (context, state) {
           if (state is GetRecietCollctionSuccess) {
-            if (state.reciets.isEmpty) {
-              return Center(
-                child: Text(
-                  "لا يوجد ايصالات حاليا",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              );
-            }
             recietCollctionCubit.receipts = state.reciets;
-            return ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              itemBuilder: (context, index) {
-                return SwipeActionCell(
-                  leadingActions: [
-                    SwipeAction(
-                        nestedAction: SwipeNestedAction(
-                          /// customize your nested action content
-                          content: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.blueColor,
-                                  AppColors.lightBlueColor
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              color: Colors.red,
-                            ),
-                            width: 80.sp,
-                            height: 50.sp,
-                            child: const OverflowBox(
-                              maxWidth: double.infinity,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  /* Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                  ), */
-                                  Text('حذف',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        /// you should set the default  bg color to transparent
-                        color: Colors.transparent,
-
-                        /// set content instead of title of icon
-                        content: _getIconButton(Colors.red, Icons.delete),
-                        onTap: (handler) async {
-                          /*   list.removeAt(index);
-                          setState(() {},); */
-                          recietCollctionCubit.removeReciet(index + 1);
-                        }),
-                  ],
-                  key: ValueKey(index),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.h),
-                    child: Card(
-                      color: AppColors.blueColor,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.blueColor,
-                              AppColors.lightBlueColor
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.all(16.w),
-                          leading: const CircleAvatar(
-                            backgroundColor: AppColors.lightBlueColor,
-                            child: Icon(
-                              Icons.receipt,
-                              color: Colors.white,
-                            ),
-                          ),
-                          title: Text(
-                            "اول ورقه :  ${state.reciets[index].paperNum}",
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "سجل الدفاتر",
                             style: TextStyle(
-                              color: AppColors.whiteColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
+                              color: AppColors.blackColor.withOpacity(0.8),
+                              fontSize: 25,
                             ),
                           ),
-                          subtitle: Padding(
-                            padding: EdgeInsets.only(top: 8.h),
-                            child: Text(
-                              "عدد الورقات : ${state.reciets[index].totalPapers}",
-                              style: TextStyle(
-                                  color: AppColors.whiteColor,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold),
+                          const Text(
+                            "لكل محصل الدفاتر الخاصه به",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: AppColors.greyColor,
+                              fontSize: 18,
                             ),
                           ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 14.w, vertical: 6.h),
-                                decoration: BoxDecoration(
-                                  color: AppColors.greenColor,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  "تم التأكيد", // Example status
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        var reciept = state.reciets[index];
+                        return ExpansionTile(
+                          iconColor: AppColors.lightBlueColor,
+                          collapsedIconColor: AppColors.lightBlueColor,
+                          maintainState: true,
+                          collapsedShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+
+                          /* collapsedBackgroundColor: AppColors.blueColor, */
+                          title: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12.0, horizontal: 16.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "دفتر : ",
                                   style: TextStyle(
-                                    color: AppColors.whiteColor,
+                                    color: Colors.black54,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14.sp,
+                                    fontSize: 22.sp,
+                                  ),
+                                ),
+                                Text(
+                                  "${state.reciets[index].id}",
+                                  style: TextStyle(
+                                    color: AppColors.blackColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22.sp,
+                                  ),
+                                ),
+                                const Spacer(),
+                                reciept.valid!
+                                    ? Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w, vertical: 8.h),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.greenColor
+                                              .withOpacity(0.8),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          "متاح",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w, vertical: 8.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          "منتهي",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ),
+                          children: [
+                            SwipeActionCell(
+                              leadingActions: [
+                                SwipeAction(
+                                  nestedAction: SwipeNestedAction(
+                                    content: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        gradient: const LinearGradient(
+                                          colors: [
+                                            AppColors.blueColor,
+                                            AppColors.lightBlueColor
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                      ),
+                                      width: 80.sp,
+                                      height: 50.sp,
+                                      child: const OverflowBox(
+                                        maxWidth: double.infinity,
+                                        child: Center(
+                                          child: Text(
+                                            'حذف',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  color: Colors.transparent,
+                                  content:
+                                      _getIconButton(Colors.red, Icons.delete),
+                                  onTap: (handler) async {
+                                    recietCollctionCubit
+                                        .removeReciet(reciept.id!);
+                                  },
+                                ),
+                              ],
+                              key: ValueKey(index),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12.h, horizontal: 8.w),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 8,
+                                        spreadRadius: 2,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 16.h, horizontal: 16.w),
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Wrap(
+                                          spacing: 10.w,
+                                          runSpacing: 20.h,
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 12.w,
+                                                  vertical: 10.h),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.lightBlueColor
+                                                    .withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.filter_1_outlined,
+                                                      size: 20.sp),
+                                                  SizedBox(width: 8.w),
+                                                  Text(
+                                                    "الورقه الاولى: ${state.reciets[index].paperNum}",
+                                                    style: TextStyle(
+                                                      color: Colors.black87,
+                                                      fontSize: 16.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 12.w,
+                                                  vertical: 10.h),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blueGrey
+                                                    .withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.file_copy_outlined,
+                                                      size: 20.sp),
+                                                  SizedBox(width: 8.w),
+                                                  Text(
+                                                    "عدد الورقات: ${state.reciets[index].totalPapers}",
+                                                    style: TextStyle(
+                                                      color: Colors.black87,
+                                                      fontSize: 16.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
+                            ),
+                          ],
+                        );
+                      },
+                      itemCount: state.reciets.length,
                     ),
-                  ),
-                );
-              },
-              itemCount: state.reciets.length,
+                  ],
+                ),
+              ),
             );
           } else if (state is GetRecietCollctionError) {
             return Center(
@@ -323,7 +433,10 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   state.errorMsg,
-                  style: TextStyle(fontSize: 18.sp, color: AppColors.redColor),
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
                 ),
               ),

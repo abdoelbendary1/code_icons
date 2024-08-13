@@ -12,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:quickalert/models/quickalert_animtype.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class RecietScreenBody extends StatefulWidget {
   const RecietScreenBody({super.key});
@@ -33,6 +36,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
     recietCollctionCubit.getLastReciet();
     RecietCollctionCubit.initHive();
     Future.delayed(Durations.medium1);
+    
   }
 
   @override
@@ -93,7 +97,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                     recietCollctionCubit.lastRecietCollection.paperNum! +
                         recietCollctionCubit
                             .lastRecietCollection.totalPapers!) {
-                  return "يجب ادخال اول ورقه اكبر من ${recietCollctionCubit.lastRecietCollection.paperNum! + recietCollctionCubit.lastRecietCollection.totalPapers!}";
+                  return "يجب ادخال اول ورقه اكبر من ${recietCollctionCubit.lastRecietCollection.paperNum! + recietCollctionCubit.lastRecietCollection.totalPapers! - 1}";
                 }
                 return null;
               },
@@ -141,26 +145,51 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
           bloc: recietCollctionCubit,
           listener: (context, state) {
             if (state is AddRecietCollctionSuccess) {
-              SnackBarUtils.showSnackBar(
+              Navigator.pushReplacementNamed(
+                  context, AllRecietsScreen.routeName);
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                showConfirmBtn: false,
+                title: "تمت الإضافه بنجاح",
+                titleColor: AppColors.lightBlueColor,
+              );
+              /*   SnackBarUtils.showSnackBar(
                 context: context,
                 label: "تمت الإضافه بنجاح",
                 backgroundColor: AppColors.greenColor,
-              );
+              ); */
               /* Navigator.pushReplacementNamed(
                   context, AllRecietsScreen.routeName); */
             } else if (state is AddRecietCollctionError) {
               if (state.errorMsg.contains("400")) {
-                SnackBarUtils.showSnackBar(
+                QuickAlert.show(
+                  animType: QuickAlertAnimType.slideInUp,
+                  context: context,
+                  type: QuickAlertType.error,
+                  showConfirmBtn: false,
+                  title: "برجاء ادخال البيانات صحيحه",
+                  titleColor: AppColors.redColor,
+                );
+                /*   SnackBarUtils.showSnackBar(
                   context: context,
                   label: "برجاء ادخال البيانات صحيحه",
                   backgroundColor: AppColors.redColor,
-                );
+                ); */
               } else if (state.errorMsg.contains("500")) {
-                SnackBarUtils.showSnackBar(
+                QuickAlert.show(
+                  animType: QuickAlertAnimType.slideInUp,
+                  context: context,
+                  type: QuickAlertType.error,
+                  showConfirmBtn: false,
+                  title: "حدث خطأ ما",
+                  titleColor: AppColors.redColor,
+                );
+                /*      SnackBarUtils.showSnackBar(
                   context: context,
                   label: "حدث خطأ ما",
                   backgroundColor: AppColors.redColor,
-                );
+                ); */
                 print(state.errorMsg);
               }
             }
@@ -176,12 +205,17 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () async {
                 if (recietCollctionCubit.formKey.currentState!.validate()) {
-                  await recietCollctionCubit
-                      .addReciet(context)
-                      .whenComplete(() {
-                    Navigator.pushReplacementNamed(
-                        context, AllRecietsScreen.routeName);
-                  });
+                  /* DialogUtils.showLoading(context: context, message: ""); */
+                  await recietCollctionCubit.addReciet(context);
+                  Navigator.pushReplacementNamed(
+                      context, AllRecietsScreen.routeName);
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    showConfirmBtn: false,
+                    title: "تمت الإضافه بنجاح",
+                    titleColor: AppColors.lightBlueColor,
+                  );
                 }
               },
               child: Text(AppLocalizations.of(context)!.save),

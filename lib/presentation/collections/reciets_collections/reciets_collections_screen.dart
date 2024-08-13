@@ -11,8 +11,7 @@ class RecietsCollectionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      body: CustomSliverAppBar(
-          body: RecietScreenBody(), title: "دفاتر الايصالات"),
+      body: CustomSliverAppBar(body: RecietScreenBody(), title: "إضافه دفتر"),
     );
   }
 }

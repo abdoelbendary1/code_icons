@@ -5,8 +5,10 @@ import 'package:code_icons/presentation/collections/All_Daily__collector/unlimit
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_state.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
+import 'package:code_icons/presentation/home/home_screen.dart';
 
 import 'package:code_icons/presentation/utils/Date_picker.dart';
+import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,7 @@ import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:quickalert/quickalert.dart';
 
 class UnlimitedCollectionDetailsForm extends StatefulWidget {
   UnlimitedCollectionDetailsForm({super.key});
@@ -38,8 +41,12 @@ class _UnlimitedCollectionDetailsFormState
   void initState() {
     // TODO: implement initState
     super.initState();
-    ControllerManager().clearControllers(
-        controllers: ControllerManager().unRegestriedCollectionControllers);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ControllerManager().clearControllers(
+          controllers: ControllerManager().unRegestriedCollectionControllers);
+      unlimitedCollectionCubit.paymentReceipt =
+          unlimitedCollectionCubit.storedPaymentReceipt;
+    });
   }
 
   @override
@@ -276,35 +283,95 @@ class _UnlimitedCollectionDetailsFormState
                         controller: 'unlimitedPaymentReceiptController'),
                   listener: (context, state) {
                     if (state is AddUnlimitedCollectionSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          "تمت الإضافه بنجاح",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+                      /*   DialogUtils.showLoading(context: context, message: "");
+                      DialogUtils.hideLoading(context); */
+                      Navigator.pushReplacementNamed(
+                          context, HomeScreen.routeName);
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        showConfirmBtn: false,
+                        confirmBtnText: "الذهاب الى الصفحه الرئيسيه",
+                        title: "تمت الإضافه بنجاح",
+                        titleColor: AppColors.lightBlueColor,
+                        /*   onConfirmBtnTap: () {}, */
+                      );
+                      /*  DialogUtils.showMessage(
+                        context: context,
+                        barrierDismissible: true,
+                        message: "",
+                        posActionName: "تأكيد",
+                        posAction: () {
+                          Navigator.pushReplacementNamed(
+                              context, HomeScreen.routeName);
+                        },
+                        title: "تمت الإضافه بنجاح",
+                      ); */
+                      /*  SnackBarUtils.showSnackBar(
+                        context: context,
+                        label: "تمت الإضافه بنجاح",
                         backgroundColor: AppColors.greenColor,
-                        duration: Durations.extralong1,
-                      ));
+                      ); */
                     } else if (state is AddUnlimitedCollectionError) {
                       if (state.errorMsg.contains("400")) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            "برجاء ادخال البيانات صحيحه",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
+                        QuickAlert.show(
+                          animType: QuickAlertAnimType.slideInUp,
+                          context: context,
+                          type: QuickAlertType.error,
+                          showConfirmBtn: false,
+                          title: state.errorMsg,
+                          titleColor: AppColors.redColor,
+                        );
+                        /*  DialogUtils.showMessage(
+                            context: context,
+                            message: "برجاء ادخال البيانات صحيحه"); */
+                        /* SnackBarUtils.showSnackBar(
+                          context: context,
+                          label: "برجاء ادخال البيانات صحيحه",
                           backgroundColor: AppColors.redColor,
-                          duration: Durations.extralong1,
-                        ));
+                        ); */
+
                         print(state.errorMsg);
                       } else if (state.errorMsg.contains("500")) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        QuickAlert.show(
+                          animType: QuickAlertAnimType.slideInUp,
+                          context: context,
+                          type: QuickAlertType.error,
+                          showConfirmBtn: false,
+                          title: state.errorMsg,
+                          titleColor: AppColors.redColor,
+                        );
+                        /*   DialogUtils.showMessage(
+                            context: context, message: "حدث خطأ ما"); */
+                        /*  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
                             "حدث خطأ ما",
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           backgroundColor: AppColors.redColor,
                           duration: Durations.extralong1,
-                        ));
+                        )); */
                         print(state.errorMsg);
+                      } else {
+                        QuickAlert.show(
+                          animType: QuickAlertAnimType.slideInUp,
+                          context: context,
+                          type: QuickAlertType.error,
+                          showConfirmBtn: false,
+                          title: "تأكد من اتصالك بالانترنت",
+                          titleColor: AppColors.redColor,
+                        );
+                        /* DialogUtils.showMessage(
+                            context: context,
+                            message: "تأكد من اتصالك بالانترنت"); */
+                        /*  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "تأكد من اتصالك بالانترنت",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Durations.extralong1,
+                        )); */
                       }
                     }
                   },
@@ -320,11 +387,12 @@ class _UnlimitedCollectionDetailsFormState
                       onPressed: () async {
                         if (unlimitedCollectionCubit.formKey.currentState!
                             .validate()) {
+                          DialogUtils.showLoading(
+                              context: context, message: "");
                           unlimitedCollectionCubit
                               .addCustomer(context)
-                              .whenComplete(() =>
-                                  Navigator.pushReplacementNamed(context,
-                                      UnRegisteredCollectionsScreen.routeName));
+                              .whenComplete(
+                                  () => DialogUtils.hideLoading(context));
                         }
                       },
                       child: Text(AppLocalizations.of(context)!.save),

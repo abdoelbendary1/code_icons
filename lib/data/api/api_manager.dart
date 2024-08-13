@@ -45,7 +45,8 @@ class ApiManager {
           await Connectivity().checkConnectivity(); // User defined class
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.loginEndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
 
         var request = http.MultipartRequest('POST', url);
         request.fields['UserName'] = username;
@@ -75,8 +76,7 @@ class ApiManager {
               errorMessege: loginResponse.message ?? "Server error"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return Left(Failures(errorMessege: e.toString()));
@@ -89,8 +89,8 @@ class ApiManager {
           await Connectivity().checkConnectivity(); // User defined class
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.customerDataEndPoint);
+        var url = Uri.https(
+            ApiConstants.chamberApi, ApiConstants.customerDataEndPoint);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -103,6 +103,7 @@ class ApiManager {
           "Accept-Encoding": "gzip, deflate, br",
           "Connection": "keep-alive"
         };
+        print(token);
 
         // Create the MultipartRequest
         var request = http.MultipartRequest('GET', url);
@@ -124,12 +125,15 @@ class ApiManager {
           } else {
             return left(ServerError(errorMessege: "list is empty"));
           }
+        } else if (response.statusCode == 403) {
+          return left(ServerError(errorMessege: "Access is denied"));
+        } else if (response.statusCode == 401) {
+          return left(ServerError(errorMessege: "Access is denied"));
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -142,7 +146,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.storeEndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -177,8 +182,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -192,7 +196,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.itemEndPoint);
+        var url = Uri.https(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -227,8 +231,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -242,8 +245,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, '/api/Item/$id');
-        /* var url = Uri.https(ApiConstants.baseUrl, ApiConstants.itemEndPoint); */
+        var url = Uri.https(ApiConstants.chamberApi, '/api/Item/$id');
+        /* var url = Uri.https(ApiConstants.chamberApi, ApiConstants.itemEndPoint); */
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -274,8 +277,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -289,7 +291,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, '/api/PurchaseRequest/$id');
+        var url =
+            Uri.https(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -321,8 +324,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -336,7 +338,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, '/api/PurchaseRequest/$id');
+        var url =
+            Uri.https(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -367,8 +370,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -383,7 +385,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
-            ApiConstants.baseUrl, ApiConstants.purchaseRequestEndPoint);
+            ApiConstants.chamberApi, ApiConstants.purchaseRequestEndPoint);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -418,8 +420,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -433,8 +434,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.costCenterAllEndPoint);
+        var url = Uri.https(
+            ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
         /* var url =
             Uri.parse('https://demoapi1.code-icons.com/api/costCenter/All'); */
 
@@ -469,8 +470,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -484,7 +484,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.postPREndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.postPREndPoint);
         /*  var url =
             Uri.parse('https://demoapi1.code-icons.com/api/PurchaseRequest'); */
 
@@ -509,8 +510,7 @@ class ApiManager {
               errorMessege: response.reasonPhrase ?? "Unknown server error"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -524,7 +524,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.getPREndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
         /*   var url =
             Uri.parse('https://demoapi1.code-icons.com/api/PurchaseRequest'); */
 
@@ -559,8 +560,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -606,8 +606,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -621,7 +620,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.settingsEndPoint);
+            Uri.https(ApiConstants.chamberApi, ApiConstants.settingsEndPoint);
         /* var url = Uri.parse('https://demoapi1.code-icons.com/api/Settings'); */
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
@@ -685,8 +684,7 @@ class ApiManager {
           return left(ServerError(errorMessege: 'Server error (Unknown data)'));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: 'Check your internet connection'));
+        return left(NetworkError(errorMessege: 'تأكد من اتصالك بالانترنت'));
       }
     } catch (e) {
       print('Exception: $e');
@@ -701,7 +699,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/api/Currency/$currencyId');
+            'https://${ApiConstants.chamberApi}/api/Currency/$currencyId');
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 
         var headers = {
@@ -729,8 +727,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -743,7 +740,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.currencyEndPoint);
+            Uri.https(ApiConstants.chamberApi, ApiConstants.currencyEndPoint);
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -773,8 +770,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -787,8 +783,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.tradeOfficeEndPoint);
+        var url = Uri.https(
+            ApiConstants.chamberApi, ApiConstants.tradeOfficeEndPoint);
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -818,8 +814,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -833,7 +828,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/${ApiConstants.tradeOfficeEndPoint}/$tradeOfficeID');
+            'https://${ApiConstants.chamberApi}/${ApiConstants.tradeOfficeEndPoint}/$tradeOfficeID');
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -862,8 +857,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -875,7 +869,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl, ApiConstants.stationEndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.stationEndPoint);
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -905,8 +900,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -920,7 +914,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/${ApiConstants.stationEndPoint}/$stationId');
+            'https://${ApiConstants.chamberApi}/${ApiConstants.stationEndPoint}/$stationId');
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -949,8 +943,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -964,7 +957,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
-            ApiConstants.baseUrl, ApiConstants.generalCentersEndPoint);
+            ApiConstants.chamberApi, ApiConstants.generalCentersEndPoint);
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -995,8 +988,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -1010,7 +1002,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/${ApiConstants.generalCentersEndPoint}/$generalCentralId');
+            'https://${ApiConstants.chamberApi}/${ApiConstants.generalCentersEndPoint}/$generalCentralId');
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
         var headers = {
@@ -1038,8 +1030,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -1052,7 +1043,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.activityEndPoint);
+            Uri.https(ApiConstants.chamberApi, ApiConstants.activityEndPoint);
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -1082,8 +1073,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -1097,7 +1087,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/${ApiConstants.activityEndPoint}/$activityId');
+            'https://${ApiConstants.chamberApi}/${ApiConstants.activityEndPoint}/$activityId');
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 
@@ -1126,8 +1116,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
@@ -1141,8 +1130,8 @@ class ApiManager {
           await Connectivity().checkConnectivity(); // User defined class
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.https(ApiConstants.baseUrl, ApiConstants.customerDataEndPoint);
+        var url = Uri.https(
+            ApiConstants.chamberApi, ApiConstants.customerDataEndPoint);
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 
         // Define the headers
@@ -1180,8 +1169,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1196,7 +1184,7 @@ class ApiManager {
           await Connectivity().checkConnectivity(); // User defined class
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl,
+        var url = Uri.https(ApiConstants.chamberApi,
             "${ApiConstants.paymentValuesEndPoint}/$customerId");
         /*  var url = Uri.parse(
             "https://demoapi1.code-icons.com/api/CustomerData/PaymentValues/$customerId"); */
@@ -1233,13 +1221,17 @@ class ApiManager {
               "years of payment  : ${paymentValuesResponse.yearsOfRepayment}");
 
           return right(paymentValuesResponse);
+        } else if (response.statusCode == 410) {
+          String responseBody = await response.stream.bytesToString();
+          var messsage = PaymenValuesDM.fromJson(jsonDecode(responseBody));
+          print(messsage.message);
+          return Left(ServerError(errorMessege: messsage.message!));
         } else {
           print("server error");
         }
         return left(ServerError(errorMessege: "Server error (Unknown data)"));
       } else {
-        return left(
-            NetworkError(errorMessege: "check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1254,7 +1246,7 @@ class ApiManager {
           await Connectivity().checkConnectivity(); // User defined class
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl,
+        var url = Uri.https(ApiConstants.chamberApi,
             "${ApiConstants.customerDataEndPoint}/$customerId");
         /* var url = Uri.parse(
             "https://demoapi1.code-icons.com/api/CustomerData/${customerId}"); */
@@ -1292,8 +1284,7 @@ class ApiManager {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1310,7 +1301,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
-            ApiConstants.baseUrl, ApiConstants.tradeCollectionEndPoint);
+            ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
         /*   var url =
             Uri.parse("https://demoapi1.code-icons.com/api/TradeCollection"); */
         String token = SharedPrefrence.getData(key: "accessToken") as String;
@@ -1336,8 +1327,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1353,9 +1343,9 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         /* var url = Uri.https(
-            ApiConstants.baseUrl, ApiConstants.tradeCollectionEndPoint); */
+            ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint); */
         var url = Uri.parse(
-            "https://${ApiConstants.baseUrl}/api/TradeCollection/$id");
+            "https://${ApiConstants.chamberApi}/api/TradeCollection/$id");
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
           'Content-Type': 'application/json',
@@ -1382,8 +1372,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1399,7 +1388,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/api/TradeCollection/UnRegistered');
+            'https://${ApiConstants.chamberApi}/api/TradeCollection/UnRegistered');
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
@@ -1425,8 +1414,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1441,7 +1429,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.parse(
-            'https://${ApiConstants.baseUrl}/api/TradeCollection/UnRegistered');
+            'https://${ApiConstants.chamberApi}/api/TradeCollection/UnRegistered');
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
@@ -1468,8 +1456,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1484,7 +1471,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
-            ApiConstants.baseUrl, ApiConstants.tradeCollectionEndPoint);
+            ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
         /*   var url =
             Uri.parse("https://demoapi1.code-icons.com/api/TradeCollection"); */
         String token = SharedPrefrence.getData(key: "accessToken") as String;
@@ -1513,8 +1500,7 @@ class ApiManager {
               errorMessege: "Server error: ${response.reasonPhrase}"));
         }
       } else {
-        return left(
-            NetworkError(errorMessege: "Check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");
@@ -1529,7 +1515,7 @@ class ApiManager {
           await Connectivity().checkConnectivity(); // User defined class
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.https(ApiConstants.baseUrl,
+        var url = Uri.https(ApiConstants.chamberApi,
             "${ApiConstants.paymentValuesEndPoint}/$customerId");
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
@@ -1540,7 +1526,7 @@ class ApiManager {
         var request = http.Request(
             'POST',
             Uri.parse(
-                'https://${ApiConstants.baseUrl}/api/CustomerData/PaymentValues/$customerId'));
+                'https://${ApiConstants.chamberApi}/api/CustomerData/PaymentValues/$customerId'));
 
         request.body = json.encode(paidYears);
         request.headers.addAll(headers);
@@ -1564,8 +1550,7 @@ class ApiManager {
         }
         return left(ServerError(errorMessege: "Server error (Unknown data)"));
       } else {
-        return left(
-            NetworkError(errorMessege: "check your internet connection"));
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
     } catch (e) {
       print("Exception: $e");

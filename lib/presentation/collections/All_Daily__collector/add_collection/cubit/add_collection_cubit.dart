@@ -1,4 +1,5 @@
 import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
+import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +16,8 @@ import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart'
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/receiptManager%20.dart';
-
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 part 'add_collection_state.dart';
 
 class AddCollectionCubit extends Cubit<AddCollectionState> {
@@ -39,7 +40,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   /*  List<CustomerDataEntity> customerData = [
     CustomerDataEntity(),
   ]; */
-  late List<CustomerDataEntity> customerData;
+  List<CustomerDataEntity> customerData = [];
 /*   final ReceiptManager receiptManager;
  */
   late List<String> customersNames;
@@ -80,7 +81,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   }
 
   void fetchCustomerData() async {
-    emit(GetAllCustomerDataInitial());
+    /* emit(GetAllCustomerDataInitial()); */
     emit(GetAllCustomerDataLoading());
     var either = await fetchCustomerDataUseCase.invoke();
     either.fold((failure) {
@@ -126,31 +127,46 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     return customerData.firstWhere((element) => element.brandNameBl == name);
   }
 
-  void fetchCustomerDataByID({required String customerId}) async {
+  void selectCustomer({required int id}) {
     final addCollectionControllers =
         ControllerManager().addCollectionControllers;
     emit(GetCustomerDataByIDInitial(controllers: addCollectionControllers));
+  }
+
+  void fetchCustomerDataByID({required String customerId}) async {
+    final addCollectionControllers =
+        ControllerManager().addCollectionControllers;
+    emit(GetAllCustomerDataLoading());
+    /*  emit(GetCustomerDataByIDInitial(controllers: addCollectionControllers)); */
+
     var either =
         await fetchCustomerDataByIDUseCase.invoke(customerId: customerId);
 
     either.fold((failure) {
+      print(failure.errorMessege);
       emit(GetCustomerDataByIDError(errorMsg: failure.errorMessege));
     }, (customerDataEntity) async {
-      PaymentValuesEntity paymentValuesEntity =
+      PaymentValuesEntity paymentValuesEntity;
+      Either<Failures, PaymentValuesEntity> either =
           await fetchPaymentValues(customerId: customerId);
-      updateYearsOfPayment(paymentValuesEntity);
+      either.fold(
+          (l) => emit(GetpaymentValuesByIDError(errorMsg: l.errorMessege)),
+          (r) {
+        paymentValuesEntity = r;
+        updateYearsOfPayment(paymentValuesEntity);
 
 /*       getSavedPaymentReceiept();
  */
-      ControllerManager().updateAddCollectionControllers(
-          customerDataEntity: customerDataEntity,
-          paymentValuesEntity: paymentValuesEntity,
-          payementReceipt: paymentReceipt);
-      selectedCustomer.idBl = customerDataEntity.idBl;
+        ControllerManager().updateAddCollectionControllers(
+            customerDataEntity: customerDataEntity,
+            paymentValuesEntity: paymentValuesEntity,
+            payementReceipt: paymentReceipt);
+        selectedCustomer.idBl = customerDataEntity.idBl;
 
-      emit(GetCustomerDataByIDSuccess(
-          customerData: customerDataEntity,
-          controllers: addCollectionControllers));
+        emit(GetCustomerDataByIDSuccess(
+            customerData: customerDataEntity,
+            controllers: addCollectionControllers));
+      });
     });
   }
 
@@ -282,10 +298,10 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
             valid: true,
             id: receipts.last.id! + 1,
             paperNum: storedPaymentReceipt,
-            totalPapers: 20);
+            totalPapers: 50);
       } else {
         newReciept = RecietCollectionDataModel(
-            valid: true, id: 1, paperNum: 1, totalPapers: 20);
+            valid: true, id: 1, paperNum: 1, totalPapers: 50);
       }
 
       // Add new receipt to the list
@@ -466,6 +482,11 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
               await storePaymentReceipt(paymentReceipt);
             }
           }
+        } else {
+          await getReciets();
+          selectedReceit = await selectReciet(storedPaymentReceipt!);
+          paymentReceipt = selectedReceit.paperNum!;
+          updateController();
         }
       } else {
         selectedReceit = receipts.firstWhere(
@@ -496,228 +517,25 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     }
   }
 
-  /* Future<void> initialize({required String controller}) async {
-    /*    await receiptManager.initialize(); */
-    await getReciets();
-    /*  if (storedPaymentReceipt == null) {
-      storePaymentReceipt(
-          receipts.firstWhere((element) => element.valid == true).paperNum!);
-    } */
-
-    storedPaymentReceipt = await getPaymentReceipt();
-    if (storedPaymentReceipt == null) {
-      await storePaymentReceipt(1);
-      storedPaymentReceipt = await getPaymentReceipt();
-    }
-    selectedReceit = selectReciet(storedPaymentReceipt!);
-
-    if (receipts.isNotEmpty) {
-      if (storedPaymentReceipt != null) {
-        if (selectedReceit.valid!) {
-          if (storedPaymentReceipt! <
-                  selectedReceit.paperNum! + selectedReceit.totalPapers! &&
-              storedPaymentReceipt! > selectedReceit.paperNum!) {
-            paymentReceipt = storedPaymentReceipt!;
-            await storePaymentReceipt(paymentReceipt);
-          } else if (storedPaymentReceipt! < selectedReceit.paperNum!) {
-            paymentReceipt = selectedReceit.paperNum!;
-            await storePaymentReceipt(paymentReceipt);
-          } else {
-            selectedReceit = selectReciet(storedPaymentReceipt!);
-            paymentReceipt = selectedReceit.paperNum!;
-
-            await storePaymentReceipt(paymentReceipt);
-            if (storedPaymentReceipt! < selectedReceit.paperNum!) {
-              paymentReceipt = selectedReceit.paperNum!;
-              await storePaymentReceipt(paymentReceipt);
-            } else {
-              paymentReceipt = storedPaymentReceipt!;
-              await storePaymentReceipt(paymentReceipt);
-            }
-          }
-/*           await storePaymentReceipt(paymentReceipt);
- */
-        } /* else {
-          if (storedPaymentReceipt <
-              selectedReceit.paperNum! + selectedReceit.totalPapers!) {
-            paymentReceipt = storedPaymentReceipt;
-          }
-        } */
-
-        /*  if (paymentReceipt <
-            selectedReceit.paperNum! + selectedReceit.totalPapers!) {
-          paymentReceipt = storedPaymentReceipt;
-        } else {
-          paymentReceipt = selectedReceit.paperNum!;
-        }
-        paymentReceipt = storedPaymentReceipt; */
-      } else {
-        selectedReceit =
-            receipts.firstWhere((element) => element.valid == true);
-        paymentReceipt = selectedReceit.paperNum!;
-        await storePaymentReceipt(paymentReceipt);
-      }
-      updateController();
-    }
-  } */
-
-  /*  Future<void> initialize() async {
-    await getReciets();
-
-    if (storedPaymentReceipt == null) {
-      storePaymentReceipt(
-          receipts.firstWhere((element) => element.valid == true).paperNum!);
-      storedPaymentReceipt = await getPaymentReceipt();
-    }
-    storedPaymentReceipt = await getPaymentReceipt();
-    selectedReceit = selectReciet(storedPaymentReceipt!);
-    if (storedPaymentReceipt == null) {
-      await storePaymentReceipt(1);
-      storedPaymentReceipt = await getPaymentReceipt();
-    }
-    selectedReceit = selectReciet(storedPaymentReceipt!);
-
-    if (receipts.isNotEmpty) {
-      if (storedPaymentReceipt != null) {
-        if (selectedReceit.valid!) {
-          if (storedPaymentReceipt! <
-                  selectedReceit.paperNum! + selectedReceit.totalPapers! &&
-              storedPaymentReceipt! > selectedReceit.paperNum!) {
-            paymentReceipt = storedPaymentReceipt!;
-            await storePaymentReceipt(paymentReceipt);
-          } else if (storedPaymentReceipt! < selectedReceit.paperNum!) {
-            paymentReceipt = selectedReceit.paperNum!;
-            await storePaymentReceipt(paymentReceipt);
-          } else {
-            selectedReceit = selectReciet(storedPaymentReceipt!);
-            paymentReceipt = selectedReceit.paperNum!;
-
-            await storePaymentReceipt(paymentReceipt);
-            if (storedPaymentReceipt! < selectedReceit.paperNum!) {
-              paymentReceipt = selectedReceit.paperNum!;
-              await storePaymentReceipt(paymentReceipt);
-            } else {
-              paymentReceipt = storedPaymentReceipt!;
-              await storePaymentReceipt(paymentReceipt);
-            }
-          }
-          await storePaymentReceipt(paymentReceipt);
-        } else {
-          if (storedPaymentReceipt <
-              selectedReceit.paperNum! + selectedReceit.totalPapers!) {
-            paymentReceipt = storedPaymentReceipt;
-          }
-        }
-
-        if (paymentReceipt <
-            selectedReceit.paperNum! + selectedReceit.totalPapers!) {
-          paymentReceipt = storedPaymentReceipt;
-        } else {
-          paymentReceipt = selectedReceit.paperNum!;
-        }
-        paymentReceipt = storedPaymentReceipt;
-      } else {
-        selectedReceit =
-            receipts.firstWhere((element) => element.valid == true);
-        paymentReceipt = selectedReceit.paperNum!;
-        await storePaymentReceipt(paymentReceipt);
-      }
-      updateController();
-    }
-  }
- */
   void updateController() {
     ControllerManager()
         .getControllerByName('addCollectionPaymentReceitController')
         .text = paymentReceipt.toString();
   }
 
-  Future<PaymentValuesEntity> fetchPaymentValues(
+  Future<Either<Failures, PaymentValuesEntity>> fetchPaymentValues(
       {required String customerId}) async {
     var either = await fetchPaymentValuesUseCase.invoke(customerId: customerId);
-    return either.fold(
-        (failure) => Future.error(
-            failure), // Handle the error case by returning a Future with an error
+    return either.fold((failure) {
+      emit(GetCustomerDataByIDError(errorMsg: failure.errorMessege));
+      return Left(failure);
+    }, // Handle the error case by returning a Future with an error
         (paymentValues) {
-      return paymentValues;
+      return right(paymentValues);
     } // Handle the success case by returning a Future with the value
         );
   }
 
-  /*  Future<List<RecietCollectionDataModel>> getReciets() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('accessToken') ?? '';
-
-    String? existingReceiptsMap = prefs.getString('receiptsMap');
-    if (existingReceiptsMap != null) {
-      Map<String, List<dynamic>> receiptsMap =
-          Map<String, List<dynamic>>.from(json.decode(existingReceiptsMap));
-      List<dynamic> existingReceipts = receiptsMap[token] ?? [];
-
-      var receipts = existingReceipts
-          .map((i) => RecietCollectionDataModel.fromJson(i))
-          .toList();
-
-      if (receipts.isNotEmpty) {
-        lastRecietCollection = receipts.last;
-      }
-      emit(GetAllCustomerDataSuccess(receipts: receipts));
-      emit(GetRecietCollctionSuccess(reciets: receipts));
-
-      return receipts;
-    } else {
-      emit(GetRecietCollctionError(errorMsg: "لا يوجد ايصالات حاليا"));
-
-      return [];
-    }
-  }
-
-  RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
-
-  // Function to select a receipt based on the conditions
-
-  void selectReceitBasedOnConditions(List<RecietCollectionDataModel> receipts) {
-    for (var receipt in receipts) {
-      if (paymentReceipt >= selectedReceit.paymentReceipt! &&
-          paymentReceipt <
-              selectedReceit.paperNum! + selectedReceit.totalPapers!) {
-        selectedReceit = receipt;
-        break;
-      }
-    }
-  } // Function to set paymentReceipt to selectedReceit's paperNum and save it locally
-
-  // Function to save the selected receipt to local storage
-  Future<void> saveSelectedReceit() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('selectedReceit', json.encode(selectedReceit.toJson()));
-  }
-
-// Function to retrieve the selected receipt from local storage
-  Future<void> retrieveSelectedReceit() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? selectedReceitJson = prefs.getString('selectedReceit');
-    if (selectedReceitJson != null) {
-      selectedReceit =
-          RecietCollectionDataModel.fromJson(json.decode(selectedReceitJson));
-    } else {
-      selectedReceit = RecietCollectionDataModel();
-    }
-  }
-
-  late int paymentReceipt = 1;
-  Future<void> getSavedPaymentReceiept() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    paymentReceipt = prefs.getInt('paymentReceipt') ?? 0;
-  }
-
-  Future<void> increasePaymentReceiptAndSave() async {
-    paymentReceipt += 1;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('paymentReceipt', paymentReceipt);
-  }
-
-   */
   Future<void> postTradeCollection({
     required String token,
     required TradeCollectionRequest tradeCollectionRequest,
@@ -806,14 +624,42 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
               payementReceipt: 0);
         }
       } else {
+        QuickAlert.show(
+          showCancelBtn: true,
+          cancelBtnText: "رجوع",
+          context: context,
+          type: QuickAlertType.error,
+          confirmBtnColor: AppColors.greenColor,
+          title:
+              AppLocalizations.of(context)!.snackBar_error_year_of_payment_pay,
+          titleColor: AppColors.redColor,
+          confirmBtnText: AppLocalizations.of(context)!
+              .snackBar_label_year_of_payment_pay_action,
+          onConfirmBtnTap: () {
+            markAllYearsAsPaid(index);
+            List<int> paidYears =
+                updatePaidYears(context.read<AddCollectionCubit>().years);
+
+            if (paidYears.isNotEmpty) {
+              postPaymentValuesByID(
+                customerId:
+                    context.read<AddCollectionCubit>().selectedCustomer.idBl,
+                paidYears: paidYears,
+              );
+              Navigator.pop(context);
+            }
+          },
+        );
         // Show SnackBar if previous years are not paid
-        ScaffoldMessenger.of(context).showSnackBar(
+        /*  ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             action: SnackBarAction(
               label: AppLocalizations.of(context)!
                   .snackBar_label_year_of_payment_pay_action,
               textColor: AppColors.whiteColor,
-              backgroundColor: AppColors.lightBlueColor,
+              backgroundColor: AppColors.greenColor,
               onPressed: () {
                 markAllYearsAsPaid(index);
                 List<int> paidYears =
@@ -831,24 +677,69 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
               },
             ),
             duration: const Duration(milliseconds: 2000),
-            backgroundColor: AppColors.blueColor,
+            backgroundColor: AppColors.lightBlueColor,
             content: Text(
               AppLocalizations.of(context)!.snackBar_error_year_of_payment_pay,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
         );
+       */
       }
     } else {
       // When marking a year as unpaid
       if (anyForwardYearsChecked(index)) {
         // Show SnackBar if forward years are paid
-        ScaffoldMessenger.of(context).showSnackBar(
+        QuickAlert.show(
+          showCancelBtn: true,
+          cancelBtnText: "رجوع",
+          context: context,
+          type: QuickAlertType.info,
+          confirmBtnColor: AppColors.greenColor,
+          title: "هل تريد وضع علامة على هذه السنة كغير مدفوعة؟",
+          text: "سيتم حذف السنين المدفوعه بعد هذه السنه",
+          titleAlignment: TextAlign.center,
+          textAlignment: TextAlign.center,
+          textColor: AppColors.greyColor,
+          titleColor: AppColors.redColor,
+          confirmBtnText: "نعم",
+          onConfirmBtnTap: () {
+            toggleYearSelection(index, value);
+            List<int> paidYears =
+                updatePaidYears(context.read<AddCollectionCubit>().years);
+
+            if (paidYears.isNotEmpty) {
+              postPaymentValuesByID(
+                customerId:
+                    context.read<AddCollectionCubit>().selectedCustomer.idBl,
+                paidYears: paidYears,
+              );
+            } else {
+              var emptyPaymentValues = PaymentValuesEntity(
+                  compensation: 0,
+                  current: 0,
+                  different: 0,
+                  late: 0,
+                  paidYears: [],
+                  total: 0,
+                  yearsOfRepayment: "");
+/*                   getSavedPaymentReceiept();
+ */
+              ControllerManager().updateAddCollectionControllers(
+                  customerDataEntity:
+                      context.read<AddCollectionCubit>().selectedCustomer,
+                  payementReceipt: 0,
+                  paymentValuesEntity: emptyPaymentValues);
+            }
+            Navigator.pop(context);
+          },
+        );
+        /*  ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             action: SnackBarAction(
               label: "تأكيد الإلغاء",
               textColor: AppColors.whiteColor,
-              backgroundColor: AppColors.lightBlueColor,
+              backgroundColor: AppColors.lightRedColor,
               onPressed: () {
                 toggleYearSelection(index, value);
                 List<int> paidYears =
@@ -889,6 +780,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
             ),
           ),
         );
+       */
       } else {
         toggleYearSelection(index, value);
         List<int> paidYears =

@@ -1,5 +1,6 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,10 +17,11 @@ class SelectCustomerEntity extends StatelessWidget {
       this.headerFontSize = 14});
   String title;
   String hintText;
-  final List<CustomerDataEntity> itemList;
+  final List<dynamic> itemList;
   dynamic initialItem;
   String? Function(dynamic)? validator;
   double? headerFontSize;
+  dynamic entityType;
 
   dynamic Function(dynamic)? onChanged;
 
@@ -40,7 +42,45 @@ class SelectCustomerEntity extends StatelessWidget {
           ),
           SizedBox(height: 20.h),
           CustomDropdown.search(
-            excludeSelected: true,
+            headerBuilder: (context, selectedItem, enabled) {
+              selectedItem as CustomerDataEntity;
+              return Text(
+                selectedItem.brandNameBl!,
+                style: const TextStyle(
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              );
+            },
+            listItemBuilder: (context, item, isSelected, onItemSelect) {
+              item as CustomerDataEntity;
+              return ListTile(
+                contentPadding: const EdgeInsets.all(8),
+                subtitleTextStyle: const TextStyle(
+                  color: AppColors.whiteColor,
+                ),
+                subtitle: Text(item.tradeOfficeNameBl!),
+                leading: const Icon(
+                  Icons.person,
+                  color: AppColors.whiteColor,
+                ),
+                titleTextStyle: const TextStyle(
+                    color: AppColors.whiteColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(item.brandNameBl!),
+                    Text(CustomersCubit.customersCubit
+                        .getTypeById(item.tradeRegistryTypeBl!)),
+                  ],
+                ),
+              );
+            },
+/*             excludeSelected: true,
+ */
             validator: validator,
             closeDropDownOnClearFilterSearch: true,
             canCloseOutsideBounds: true,

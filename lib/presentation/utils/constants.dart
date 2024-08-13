@@ -1,7 +1,9 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
 import 'package:code_icons/domain/entities/sectionEntity/sectionEntity.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
@@ -414,13 +416,13 @@ class AppLocalData {
         /*   MenuItem(
             title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-          title: 'بيان التسديدات',
-          route: AllDailyCollectorScreen.routeName,
+          title: 'إضافه حافظة مقيده',
+          route: AddCollectionView.routeName,
           icon: Icons.payment,
         ),
         MenuItem(
           title: 'حوافظ غير مقيده',
-          route: UnRegisteredCollectionsScreen.routeName,
+          route: UnlimitedCollection.routeName,
           icon: Icons.unpublished_outlined,
         ),
         MenuItem(

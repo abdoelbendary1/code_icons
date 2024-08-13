@@ -34,7 +34,8 @@ class UnlimitedCollection extends StatelessWidget {
               backgroundColor: AppColors.greenColor,
               duration: Durations.extralong1,
             ));
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(
+                context, UnlimitedCollection.routeName);
           } else if (state is AddCollectionError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
