@@ -107,7 +107,10 @@ final class AddPurchasesItemError extends PurchasesState {
 
 final class AddPurchasesItemloading extends PurchasesState {}
 
-final class AddPurchasesItemSuccess extends PurchasesState {}
+final class AddPurchasesItemSuccess extends PurchasesState {
+  List<ItemsDetails> selectedItemsList;
+  AddPurchasesItemSuccess({required this.selectedItemsList});
+}
 
 final class GetPurchasesListloading extends PurchasesState {}
 

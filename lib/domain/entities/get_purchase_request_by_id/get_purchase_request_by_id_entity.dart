@@ -1,5 +1,5 @@
 
-import 'package:code_icons/data/model/response/get_purchase_request_by_id/items_details_entity/items_details_data_model.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/get_purchase_request_by_id/items_details_entity/items_details_data_model.dart';
 
 class GetPurchaseRequestByIdEntity {
   List<ItemsDetailsDataModel>? itemsDetails;

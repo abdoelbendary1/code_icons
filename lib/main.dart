@@ -1,3 +1,4 @@
+import 'package:code_icons/core/adapters/auth_entity.dart';
 import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
@@ -18,6 +19,8 @@ import 'package:code_icons/presentation/home/side_menu/screens/main_settings/ite
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
+import 'package:code_icons/presentation/purchases/PurchaseInvoice/purchase_Invoice.dart';
+import 'package:code_icons/presentation/purchases/PurchaseOrder/purchase_order.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/purchase_request.dart';
 import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
@@ -52,6 +55,8 @@ void main() async {
   await Hive.initFlutter();
 /*     Hive.registerAdapter(RecietCollectionDataModelAdapter());
  */
+  Hive.registerAdapter(AuthResponseDMAdapter()); // Register the adapter
+
   await Hive.openBox('userBox');
   await Hive.openBox('receiptsBox');
   setupLocator();
@@ -124,7 +129,6 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         child: MaterialApp(
-         
           navigatorKey: GlobalVariable.navigatorState,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -137,27 +141,30 @@ class MyApp extends StatelessWidget {
           routes: {
             LoginScreen.routeName: (context) => LoginScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
-            SettingsScreen.routeName: (context) => SettingsScreen(),
-            SystemSettings.routeName: (context) => SystemSettings(),
-            EcommerceSetting.routeName: (context) => EcommerceSetting(),
+            SettingsScreen.routeName: (context) => const SettingsScreen(),
+            SystemSettings.routeName: (context) => const SystemSettings(),
+            EcommerceSetting.routeName: (context) => const EcommerceSetting(),
             MainSettingScreen.routeName: (context) => MainSettingScreen(),
             CollectionsScreen.routeName: (context) => CollectionsScreen(),
             UnlimitedCollection.routeName: (context) => UnlimitedCollection(
                   data: TradeCollectionEntity(),
                 ),
             CustomerDataScreen.routeName: (context) => CustomerDataScreen(),
-            AllTradeProveScreen.routeName: (context) => AllTradeProveScreen(),
+            AllTradeProveScreen.routeName: (context) =>
+                const AllTradeProveScreen(),
             AllDailyCollectorScreen.routeName: (context) =>
                 AllDailyCollectorScreen(),
             PurchaseScreen.routeName: (context) => PurchaseScreen(),
             AllPurchasesScreen.routeName: (context) => AllPurchasesScreen(),
             PurchaseRequest.routeName: (context) => PurchaseRequest(),
+            PurchaseOrder.routeName: (context) => PurchaseOrder(),
+            PurchaseInvoice.routeName: (context) => PurchaseInvoice(),
             RecietsCollectionsScreen.routeName: (context) =>
                 RecietsCollectionsScreen(),
             AllRecietsScreen.routeName: (context) => AllRecietsScreen(),
             UnRegisteredCollectionsScreen.routeName: (context) =>
                 UnRegisteredCollectionsScreen(),
-            AddCustomerScreen.routeName: (context) => AddCustomerScreen(),
+            AddCustomerScreen.routeName: (context) => const AddCustomerScreen(),
             AddCollectionView.routeName: (context) => AddCollectionView(
                   data: TradeCollectionEntity(),
                 ),

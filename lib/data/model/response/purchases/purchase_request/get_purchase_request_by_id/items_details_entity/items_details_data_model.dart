@@ -6,7 +6,7 @@ class ItemsDetailsDataModel extends ItemsDetailsEntity {
       super.itemNameAr,
       super.uom,
       super.qty,
-     /*  super.prprice, */
+    
       super.id});
 
   ItemsDetailsDataModel.fromJson(Map<String, dynamic> json) {
@@ -22,9 +22,7 @@ class ItemsDetailsDataModel extends ItemsDetailsEntity {
     if (json["qty"] is int) {
       qty = json["qty"];
     }
-   /*  if (json["prprice"] is String) {
-      prprice = json["prprice"];
-    } */
+  
     if (json["id"] is String) {
       id = json["id"];
     }
@@ -36,7 +34,7 @@ class ItemsDetailsDataModel extends ItemsDetailsEntity {
     _data["itemNameAr"] = itemNameAr;
     _data["uom"] = uom;
     _data["qty"] = qty;
-   /*  _data["prprice"] = prprice; */
+  
     _data["id"] = id;
     return _data;
   }

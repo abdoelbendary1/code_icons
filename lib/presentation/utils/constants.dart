@@ -13,6 +13,8 @@ import 'package:code_icons/presentation/home/side_menu/screens/main_settings/ite
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
+import 'package:code_icons/presentation/purchases/PurchaseInvoice/purchase_Invoice.dart';
+import 'package:code_icons/presentation/purchases/PurchaseOrder/purchase_order.dart';
 import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
 import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
 import 'package:flutter/material.dart';
@@ -97,13 +99,13 @@ class AppLocalData {
         /*   MenuItem(
             title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-          title: 'بيان التسديدات',
-          route: AllDailyCollectorScreen.routeName,
+          title: 'بيان امر الشراء',
+          route: PurchaseOrder.routeName,
           icon: Icons.payment,
         ),
         MenuItem(
-          title: 'حوافظ غير مقيده',
-          route: UnRegisteredCollectionsScreen.routeName,
+          title: 'فواتير المشتريات',
+          route: PurchaseInvoice.routeName,
           icon: Icons.unpublished_outlined,
         ),
         MenuItem(

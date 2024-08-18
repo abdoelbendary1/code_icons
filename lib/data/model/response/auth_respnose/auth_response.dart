@@ -1,15 +1,13 @@
 import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 
 class AuthResponseDM extends AuthRepoEntity {
-  List<dynamic>? screens;
-
   AuthResponseDM(
       {super.id,
       super.username,
       super.name,
       super.accessToken,
       super.message,
-      this.screens});
+      super.screens});
 
   AuthResponseDM.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {

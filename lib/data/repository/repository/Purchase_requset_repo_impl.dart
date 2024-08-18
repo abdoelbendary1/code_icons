@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:code_icons/data/model/response/purchase_item/purchase_item.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/purchase_item/purchase_item.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:code_icons/data/model/request/add_purchase_request/purchase_request.dart';

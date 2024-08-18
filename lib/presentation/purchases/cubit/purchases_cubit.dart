@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:code_icons/data/api/api_manager.dart';
 import 'package:code_icons/data/model/request/add_purchase_request/Purchase_item_request.dart';
 import 'package:code_icons/data/model/request/add_purchase_request/purchase_request.dart';
-import 'package:code_icons/data/model/response/get_all_purchases_request/get_all_purchases_requests.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/get_all_purchases_request/get_all_purchases_requests.dart';
 import 'package:code_icons/domain/Uom/uom_entity.dart';
 import 'package:code_icons/domain/entities/CostCenter/cost_center_entity.dart';
 import 'package:code_icons/domain/entities/get_all_purchases_request/all_purchases_request_entity.dart';
@@ -144,7 +144,7 @@ class PurchasesCubit extends Cubit<PurchasesState> {
     );
     selectedItemsList.add(selectedItemDetails);
 
-    emit(AddPurchasesItemSuccess());
+    emit(AddPurchasesItemSuccess(selectedItemsList: selectedItemsList));
     /*  emit(PurchasesInitial()); */
   }
 
@@ -177,10 +177,10 @@ class PurchasesCubit extends Cubit<PurchasesState> {
     emit(GetPurchasesListSuccess(purchases: purchases));
   }
  */
-  void saveItem() {
+  /*  void saveItem() {
     emit(AddPurchasesItemSuccess());
     emit(PurchasesInitial());
-  }
+  } */
 
   void updateTradeStatusType(String value) {
     emit(UpdateTradeStatusTypeLoading());
@@ -203,13 +203,21 @@ class PurchasesCubit extends Cubit<PurchasesState> {
         .itemNameAr!;
   }
 
+  void clearItemConroller() {
+    ControllerManager().purchaseItemQuantitytemController.clear();
+    ControllerManager().purchaseItemDiscriptionController.clear();
+  }
+
   void selectUom({required String name}) {
     selectedUom = uomlist.firstWhere((element) => element.uom == name).uomId!;
   }
 
   void getStoreData() async {
     var either = await purchaseRequestsUseCases.fetchStoreData();
-    either.fold((l) => emit(getStoreDataError(errorMsg: l.errorMessege)), (r) {
+    either.fold((l) {
+      print(l.errorMessege);
+      emit(getStoreDataError(errorMsg: l.errorMessege));
+    }, (r) {
       storeList = r;
 
       emit(getStoreDataSuccess(storeDataList: r));

@@ -8,6 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
+import 'package:quickalert/models/quickalert_animtype.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class AllRecietsScreen extends StatefulWidget {
   AllRecietsScreen({super.key});
@@ -176,7 +179,28 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
           ),
         ),
       ),
-      body: BlocBuilder<RecietCollctionCubit, RecietCollctionState>(
+      body: BlocConsumer<RecietCollctionCubit, RecietCollctionState>(
+        listener: (context, state) {
+          if (state is RemoveRecietError) {
+            QuickAlert.show(
+              animType: QuickAlertAnimType.slideInUp,
+              context: context,
+              type: QuickAlertType.error,
+              showConfirmBtn: false,
+              title: state.errorMsg,
+              titleColor: AppColors.redColor,
+            );
+          } else if (state is RemoveRecietSuccess) {
+            QuickAlert.show(
+              animType: QuickAlertAnimType.slideInUp,
+              context: context,
+              type: QuickAlertType.success,
+              showConfirmBtn: false,
+              title: "تم حذف الدفتر بنجاح",
+              titleColor: AppColors.lightBlueColor,
+            );
+          }
+        },
         bloc: recietCollctionCubit..getReciets(),
         builder: (context, state) {
           if (state is GetRecietCollctionSuccess) {

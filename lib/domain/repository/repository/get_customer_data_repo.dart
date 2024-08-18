@@ -1,4 +1,4 @@
-import 'package:code_icons/data/model/response/get_customer_data.dart';
+import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
 import 'package:code_icons/domain/entities/Currency/currency.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';

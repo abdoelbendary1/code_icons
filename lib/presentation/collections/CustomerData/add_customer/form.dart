@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:code_icons/data/model/response/get_customer_data.dart';
+import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/selectCurrency.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/select_Station.dart';

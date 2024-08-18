@@ -17,8 +17,13 @@ class ApiConstants {
   static String generalCentersEndPoint = "api/GeneralCenters";
   static String storeEndPoint = "api/Store";
   static String itemEndPoint = "api/Item";
+  static String uoms = "api/uoms";
+
   static String purchaseRequestEndPoint = "api/PurchaseRequest";
   static String costCenterAllEndPoint = "api/costCenter/All";
   static String postPREndPoint = "api/PurchaseRequest";
   static String getPREndPoint = "api/PurchaseRequest";
+  static String postPurchaseOrderEndPoint = "api/PurchaseOrder";
+  static String taxes = "/api/Tax/All";
+  static String vendors = "/api/Vendor";
 }

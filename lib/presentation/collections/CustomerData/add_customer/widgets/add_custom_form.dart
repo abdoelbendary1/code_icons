@@ -1,5 +1,5 @@
 import 'package:accordion/controllers.dart';
-import 'package:code_icons/data/model/response/get_customer_data.dart';
+import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_DropDown_TextField.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/widgets/selectCurrency.dart';

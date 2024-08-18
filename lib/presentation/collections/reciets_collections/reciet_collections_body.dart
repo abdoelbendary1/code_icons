@@ -36,7 +36,6 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
     recietCollctionCubit.getLastReciet();
     RecietCollctionCubit.initHive();
     Future.delayed(Durations.medium1);
-    
   }
 
   @override
@@ -191,6 +190,15 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                   backgroundColor: AppColors.redColor,
                 ); */
                 print(state.errorMsg);
+              } else {
+                QuickAlert.show(
+                  animType: QuickAlertAnimType.slideInUp,
+                  context: context,
+                  type: QuickAlertType.error,
+                  showConfirmBtn: false,
+                  title: state.errorMsg,
+                  titleColor: AppColors.redColor,
+                );
               }
             }
           },
@@ -207,7 +215,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                 if (recietCollctionCubit.formKey.currentState!.validate()) {
                   /* DialogUtils.showLoading(context: context, message: ""); */
                   await recietCollctionCubit.addReciet(context);
-                  Navigator.pushReplacementNamed(
+                  /*  Navigator.pushReplacementNamed(
                       context, AllRecietsScreen.routeName);
                   QuickAlert.show(
                     context: context,
@@ -215,7 +223,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                     showConfirmBtn: false,
                     title: "تمت الإضافه بنجاح",
                     titleColor: AppColors.lightBlueColor,
-                  );
+                  ); */
                 }
               },
               child: Text(AppLocalizations.of(context)!.save),

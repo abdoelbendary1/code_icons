@@ -239,7 +239,7 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
               children: [
                 Expanded(
                     child: BlocConsumer<PurchasesCubit, PurchasesState>(
-                  bloc: purchasesCubit,
+                  bloc: purchasesCubit..clearItemConroller(),
                   listener: (context, state) {},
                   builder: (context, state) {
                     if (state is PurchasesItemSelected) {
@@ -677,6 +677,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
 
   AccordionSection buildSelectedItemsList(BuildContext context) {
     return AccordionSection(
+      contentBorderColor: Colors.white,
+      contentBorderWidth: 0,
       accordionId: "3",
       leftIcon: Icon(
         Icons.work,
@@ -690,158 +692,375 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
             fontSize: 22,
             fontWeight: FontWeight.bold,
           )),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BlocConsumer<PurchasesCubit, PurchasesState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              return SizedBox(
-                height: 250.h * purchasesCubit.selectedItemsList.length,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-                  itemCount: purchasesCubit.selectedItemsList.length,
-                  itemBuilder: (context, index) {
-                    final request = purchasesCubit.selectedItemsList[index];
-                    return SwipeActionCell(
-                      leadingActions: [
-                        SwipeAction(
-                          nestedAction: SwipeNestedAction(
-                            content: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    AppColors.blueColor,
-                                    AppColors.lightBlueColor
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                color: Colors.red,
-                              ),
-                              width: 80.sp,
-                              height: 50.sp,
-                              child: const OverflowBox(
-                                maxWidth: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('حذف',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20)),
-                                  ],
-                                ),
-                              ),
+      content: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "سجل الطلبات",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.blackColor.withOpacity(0.8),
+                      fontSize: 25,
+                    ),
+                  ),
+                  const Text(
+                    "تفاصيل الطلبات المختارة",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: AppColors.greyColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              BlocConsumer<PurchasesCubit, PurchasesState>(
+                bloc: purchasesCubit,
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                builder: (context, state) {
+                  if (state is AddPurchasesItemSuccess) {
+                    if (state.selectedItemsList.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20.h,
                             ),
-                          ),
-                          color: Colors.transparent,
-                          content: purchasesCubit.getIconButton(
-                              Colors.red, Icons.delete),
-                          onTap: (handler) async {
-                            // Implement delete functionality
-                          },
+                            const Text(
+                              "لا يوجد طلبات",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 18),
+                            ),
+                          ],
                         ),
-                      ],
-                      key: ValueKey(index),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.h),
-                        child: Card(
-                          color: AppColors.blueColor,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.blueColor,
-                                  AppColors.lightBlueColor
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(16.w),
-                              leading: const CircleAvatar(
-                                backgroundColor: AppColors.lightBlueColor,
-                                child: Icon(
-                                  Icons.receipt,
-                                  color: Colors.white,
+                      );
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.selectedItemsList.length,
+                        itemBuilder: (context, index) {
+                          final request = state.selectedItemsList[index];
+                          return ExpansionTile(
+                            iconColor: AppColors.lightBlueColor,
+                            collapsedIconColor: AppColors.lightBlueColor,
+                            maintainState: true,
+                            collapsedShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            title: Row(
+                              children: [
+                                Text(
+                                  "كود : ",
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22.sp,
+                                  ),
                                 ),
-                              ),
-                              title: Text(
-                                "كود ${request.itemCode1}",
-                                style: TextStyle(
-                                  color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp,
+                                Text(
+                                  "${request.itemCode1}",
+                                  style: TextStyle(
+                                    color: AppColors.blackColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22.sp,
+                                  ),
                                 ),
-                              ),
-                              subtitle: Padding(
-                                padding: EdgeInsets.only(top: 8.h),
-                                child: Wrap(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "id: ${request.id}",
-                                          style: TextStyle(
-                                              color: AppColors.whiteColor,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold),
+                                const Spacer(),
+                                request.id == null
+                                    ? Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w, vertical: 8.h),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.greenColor
+                                              .withOpacity(0.8),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                        Text(
-                                          "itemNameAr: ${request.itemNameAr}",
+                                        child: Text(
+                                          "تم التأكيد",
                                           style: TextStyle(
-                                              color: AppColors.whiteColor,
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold),
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w, vertical: 8.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.orange,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          "في الانتظار",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                            children: [
+                              SwipeActionCell(
+                                leadingActions: [
+                                  SwipeAction(
+                                    nestedAction: SwipeNestedAction(
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              AppColors.blueColor,
+                                              AppColors.lightBlueColor
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                        width: 80.sp,
+                                        height: 50.sp,
+                                        child: const OverflowBox(
+                                          maxWidth: double.infinity,
+                                          child: Center(
+                                            child: Text(
+                                              'حذف',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    color: Colors.transparent,
+                                    content: purchasesCubit.getIconButton(
+                                        Colors.red, Icons.delete),
+                                    onTap: (handler) async {
+                                      // Implement delete functionality
+                                    },
+                                  ),
+                                ],
+                                key: ValueKey(index),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 12.h, horizontal: 8.w),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                          offset: const Offset(0, 4),
                                         ),
                                       ],
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w, vertical: 12.h),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.greenColor,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      "تم التأكيد",
-                                      style: TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14.sp,
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 16.h, horizontal: 16.w),
+                                      title: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Wrap(
+                                            spacing: 10.w,
+                                            runSpacing: 20.h,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12.w,
+                                                    vertical: 10.h),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .lightBlueColor
+                                                      .withOpacity(0.1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                        Icons.filter_1_outlined,
+                                                        size: 20.sp),
+                                                    SizedBox(width: 8.w),
+                                                    Text(
+                                                      "اسم المنتج: ${purchasesCubit.itemsList.firstWhere((element) => element.itemCode1 == request.itemCode1).itemNameAr}",
+                                                      style: TextStyle(
+                                                        color: Colors.black87,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12.w,
+                                                    vertical: 10.h),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueGrey
+                                                      .withOpacity(0.1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                        Icons
+                                                            .file_copy_outlined,
+                                                        size: 20.sp),
+                                                    SizedBox(width: 8.w),
+                                                    Text(
+                                                      "الكميه : ${request.qty}",
+                                                      style: TextStyle(
+                                                        color: Colors.black87,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12.w,
+                                                    vertical: 10.h),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors
+                                                      .lightBlueColor
+                                                      .withOpacity(0.1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                        Icons
+                                                            .file_copy_outlined,
+                                                        size: 20.sp),
+                                                    SizedBox(width: 8.w),
+                                                    Text(
+                                                      "وحدة القياس : ${purchasesCubit.uomlist.firstWhere((element) => element.uomId == request.uom).uom}",
+                                                      style: TextStyle(
+                                                        color: Colors.black87,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12.w,
+                                                    vertical: 10.h),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueGrey
+                                                      .withOpacity(0.1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                        Icons
+                                                            .file_copy_outlined,
+                                                        size: 20.sp),
+                                                    SizedBox(width: 8.w),
+                                                    Text(
+                                                      "الوصف : ${request.description}",
+                                                      style: TextStyle(
+                                                        color: Colors.black87,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 20.h,
                         ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "لا يوجد طلبات",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      /* Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BlocConsumer<PurchasesCubit, PurchasesState>(
+            bloc: purchasesCubit,
+            listener: (context, state) {},
+            builder: (context, state) {
+              if (state is AddPurchasesItemSuccess) {
+                if (state.selectedItemsList.isEmpty) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 20.h,
                       ),
-                    );
-                  },
-                ),
-              );
+                      const Text(
+                        "القائمة فارغه",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 18),
+                      ),
+                    ],
+                  );
+                } else {}
+              }
             },
           ),
         ],
-      ),
+      ), */
     );
   }
 }

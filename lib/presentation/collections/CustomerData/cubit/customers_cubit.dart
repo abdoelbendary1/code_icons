@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:code_icons/data/model/response/get_customer_data.dart';
+import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
 import 'package:code_icons/domain/entities/Currency/currency.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/General_central/general_central_entity.dart';
@@ -71,7 +71,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   Map<String, dynamic>? selectedTradeRegistryType;
   Map<String, dynamic>? selectedCopmanyyType;
   Map<String, dynamic>? selectedValidType;
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String section_one_id = "1";
   String section_two_id = "2";
   String section_three_id = "3";
@@ -80,7 +80,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   bool isSectionThreeOpen = false;
   //! check the selectedCustomer ID
   CustomerDataEntity selectedCustomer = CustomerDataEntity();
-  final List<Map<String, dynamic>> tradeRegistryTypes = [
+  List<Map<String, dynamic>> tradeRegistryTypes = [
     {'id': 1, 'type': "رئيسي"},
     {'id': 2, 'type': "فرعي"},
     {'id': 3, 'type': "رئيسي اخر"},
@@ -88,7 +88,7 @@ class CustomersCubit extends Cubit<CustomersState> {
     {'id': 5, 'type': "رئيسي محافظة اخري"},
   ];
   String getTypeById(int key) {
-    final List<Map<String, dynamic>> tradeRegistryTypes = [
+    List<Map<String, dynamic>> tradeRegistryTypes = [
       {'id': 1, 'type': "رئيسي"},
       {'id': 2, 'type': "فرعي"},
       {'id': 3, 'type': "رئيسي اخر"},
@@ -104,12 +104,12 @@ class CustomersCubit extends Cubit<CustomersState> {
     return 'ID not found';
   }
 
-  final List<Map<String, dynamic>> companyTypeList = [
+  List<Map<String, dynamic>> companyTypeList = [
     {"idBL": 1, "companyTypeBL": "شركة"},
     {"idBL": 2, "companyTypeBL": "فردي"},
     {'idBL': 3, "companyTypeBL": "إستثمار"}
   ];
-  final List<Map<String, dynamic>> validtypes = [
+  List<Map<String, dynamic>> validtypes = [
     {"id": 1, "type": "ساري"},
     {"id": 2, "type": "مشطوب"}
   ];
@@ -494,7 +494,7 @@ class CustomersCubit extends Cubit<CustomersState> {
 
   String getCurrencyNameById(int currencyId) {
     try {
-      final currency =
+      CurrencyEntity currency =
           currencyData.firstWhere((currency) => currency.id == currencyId);
       return currency.currencyNameAr ?? "Unknown Currency";
     } catch (e) {

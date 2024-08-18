@@ -15,7 +15,7 @@ class AppTheme {
     primaryColor: AppColors.primaryColor,
     textTheme: const TextTheme(
         titleLarge: ArabicTextStyle(
-          arabicFont: ArabicFont.aalooBhaijaan,
+          arabicFont: ArabicFont.dinNextLTArabic,
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: AppColors.whiteColor,

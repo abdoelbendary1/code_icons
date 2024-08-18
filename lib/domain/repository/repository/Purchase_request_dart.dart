@@ -1,5 +1,5 @@
 import 'package:code_icons/data/model/request/add_purchase_request/purchase_request.dart';
-import 'package:code_icons/data/model/response/purchase_item/purchase_item.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/purchase_item/purchase_item.dart';
 import 'package:code_icons/domain/Uom/uom_entity.dart';
 import 'package:code_icons/domain/entities/CostCenter/cost_center_entity.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';

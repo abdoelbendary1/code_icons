@@ -2,29 +2,29 @@
 import 'dart:convert';
 import 'package:code_icons/data/api/api_constants.dart';
 import 'package:code_icons/data/model/request/add_purchase_request/purchase_request.dart';
-import 'package:code_icons/data/model/response/CostCenter/cost_center_data_model.dart';
-import 'package:code_icons/data/model/response/Uom/uom_data_model.dart';
-import 'package:code_icons/data/model/response/get_all_purchases_request/get_all_purchases_requests.dart';
-import 'package:code_icons/data/model/response/purchase_item/purchase_item.dart';
-import 'package:code_icons/data/model/response/store/store_data_model.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/CostCenter/cost_center_data_model.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/Uom/uom_data_model.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/get_all_purchases_request/get_all_purchases_requests.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/purchase_item/purchase_item.dart';
+import 'package:code_icons/data/model/response/purchases/purchase_request/store/store_data_model.dart';
 import 'package:code_icons/data/pointyCastle.dart';
 import 'package:code_icons/data/model/request/trade_collection_request.dart';
-import 'package:code_icons/data/model/response/TradeCollectionResponse.dart';
-import 'package:code_icons/data/model/response/UnRegisteredCollections/un_registered_collections_response.dart';
-import 'package:code_icons/data/model/response/activity/activity_data_model.dart';
+import 'package:code_icons/data/model/response/collections/TradeCollectionResponse.dart';
+import 'package:code_icons/data/model/response/collections/UnRegisteredCollections/un_registered_collections_response.dart';
+import 'package:code_icons/data/model/response/collections/activity/activity_data_model.dart';
 import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
-import 'package:code_icons/data/model/response/currency/currency.dart';
-import 'package:code_icons/data/model/response/general_central/general_central_data_model.dart';
-import 'package:code_icons/data/model/response/get_customer_data.dart';
-import 'package:code_icons/data/model/response/payment_values_dm.dart';
+import 'package:code_icons/data/model/response/collections/currency/currency.dart';
+import 'package:code_icons/data/model/response/collections/general_central/general_central_data_model.dart';
+import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
+import 'package:code_icons/data/model/response/collections/payment_values_dm.dart';
 import 'package:code_icons/data/model/response/settings/settings_data_model.dart';
-import 'package:code_icons/data/model/response/station/station_data_model.dart';
-import 'package:code_icons/data/model/response/trade_office/trade_office.dart';
+import 'package:code_icons/data/model/response/collections/station/station_data_model.dart';
+import 'package:code_icons/data/model/response/collections/trade_office/trade_office.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
-
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 class ApiManager {
@@ -59,9 +59,15 @@ class ApiManager {
         var loginResponse = AuthResponseDM.fromJson(jsonDecode(responseString));
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
+          var userBox = await Hive.openBox('userBox');
+          await userBox.put(
+              'user', loginResponse); // Save the user with a key, e.g., 'user'
           await SharedPrefrence.init();
           SharedPrefrence.saveData(
               key: "accessToken", value: loginResponse.accessToken!);
+          SharedPrefrence.saveData(
+              key: "username", value: loginResponse.username!);
+
           String token = SharedPrefrence.getData(key: "accessToken") as String;
           print(token);
 
@@ -173,11 +179,7 @@ class ApiManager {
           List<StoreDataModel> storeDataList = responseBodyJson
               .map((json) => StoreDataModel.fromJson(json))
               .toList();
-          if (storeDataList.isNotEmpty) {
-            return right(storeDataList);
-          } else {
-            return left(ServerError(errorMessege: "List is empty"));
-          }
+          return right(storeDataList);
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
@@ -246,7 +248,6 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(ApiConstants.chamberApi, '/api/Item/$id');
-        /* var url = Uri.https(ApiConstants.chamberApi, ApiConstants.itemEndPoint); */
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         print(token);
@@ -436,8 +437,6 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
             ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
-        /* var url =
-            Uri.parse('https://demoapi1.code-icons.com/api/costCenter/All'); */
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 
@@ -461,11 +460,7 @@ class ApiManager {
           List<CostCenterDataModel> costCenterDataList = responseBodyJson
               .map((json) => CostCenterDataModel.fromJson(json))
               .toList();
-          if (costCenterDataList.isNotEmpty) {
-            return right(costCenterDataList);
-          } else {
-            return left(ServerError(errorMessege: "List is empty"));
-          }
+          return right(costCenterDataList);
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
@@ -486,8 +481,6 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url =
             Uri.https(ApiConstants.chamberApi, ApiConstants.postPREndPoint);
-        /*  var url =
-            Uri.parse('https://demoapi1.code-icons.com/api/PurchaseRequest'); */
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 
@@ -526,8 +519,6 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url =
             Uri.https(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
-        /*   var url =
-            Uri.parse('https://demoapi1.code-icons.com/api/PurchaseRequest'); */
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 
@@ -551,11 +542,7 @@ class ApiManager {
           List<GetAllPurchasesRequests> purchaseRequestList = responseBodyJson
               .map((json) => GetAllPurchasesRequests.fromJson(json))
               .toList();
-          if (purchaseRequestList.isNotEmpty) {
-            return right(purchaseRequestList);
-          } else {
-            return left(ServerError(errorMessege: "List is empty"));
-          }
+          return right(purchaseRequestList);
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
@@ -573,7 +560,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.parse('https://demoapi1.code-icons.com/api/uoms');
+        var url = Uri.https(ApiConstants.chamberApi, ApiConstants.uoms);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 
@@ -597,11 +584,7 @@ class ApiManager {
           List<UomDataModel> uomDataList = responseBodyJson
               .map((json) => UomDataModel.fromJson(json))
               .toList();
-          if (uomDataList.isNotEmpty) {
-            return right(uomDataList);
-          } else {
-            return left(ServerError(errorMessege: "List is empty"));
-          }
+          return right(uomDataList);
         } else {
           return left(ServerError(errorMessege: "Server error (Unknown data)"));
         }
@@ -621,7 +604,7 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url =
             Uri.https(ApiConstants.chamberApi, ApiConstants.settingsEndPoint);
-        /* var url = Uri.parse('https://demoapi1.code-icons.com/api/Settings'); */
+
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
           'Authorization': 'Bearer $token',
@@ -643,9 +626,7 @@ class ApiManager {
           Map<String, dynamic> decodedJson = jsonDecode(responseBody);
 
           // Decrypt fields
-          /* final key = encrypt.Key.fromUtf8('EncryptionKey');
 
-          final iv = encrypt.IV.fromLength(16); */
           final key = 'EncryptionKey'; // 32 characters
           final iv = '1234567890123456';
 
@@ -668,11 +649,6 @@ class ApiManager {
           for (String field in encryptedKeys) {
             if (decodedJson.containsKey(field)) {
               decodedJson[field] = decrypt(decodedJson[field]);
-              /*  decodedJson[field] = EncryptData.decryptString(
-                  encryptedString: decodedJson[field],
-                  ivString: iv,
-                  keyString: key,
-                  keyLength: 64); */
             }
           }
 
@@ -1186,8 +1162,7 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(ApiConstants.chamberApi,
             "${ApiConstants.paymentValuesEndPoint}/$customerId");
-        /*  var url = Uri.parse(
-            "https://demoapi1.code-icons.com/api/CustomerData/PaymentValues/$customerId"); */
+
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         // Define the headers
         var headers = {
@@ -1248,8 +1223,7 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(ApiConstants.chamberApi,
             "${ApiConstants.customerDataEndPoint}/$customerId");
-        /* var url = Uri.parse(
-            "https://demoapi1.code-icons.com/api/CustomerData/${customerId}"); */
+
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         // Define the headers
         var headers = {
@@ -1302,8 +1276,7 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
             ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
-        /*   var url =
-            Uri.parse("https://demoapi1.code-icons.com/api/TradeCollection"); */
+
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
           'Content-Type': 'application/json',
@@ -1342,8 +1315,6 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        /* var url = Uri.https(
-            ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint); */
         var url = Uri.parse(
             "https://${ApiConstants.chamberApi}/api/TradeCollection/$id");
         String token = SharedPrefrence.getData(key: "accessToken") as String;
@@ -1351,8 +1322,6 @@ class ApiManager {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         };
-
-        /* var body = json.encode(tradeCollectionRequest.toJson()); */
 
         var response = await http.get(
           url,
@@ -1472,8 +1441,7 @@ class ApiManager {
           connectivityResult == ConnectivityResult.wifi) {
         var url = Uri.https(
             ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
-        /*   var url =
-            Uri.parse("https://demoapi1.code-icons.com/api/TradeCollection"); */
+
         String token = SharedPrefrence.getData(key: "accessToken") as String;
         var headers = {
           'Content-Type': 'application/json',

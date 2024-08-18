@@ -11,7 +11,7 @@ part 'home_screen_view_model_state.dart';
 class HomeScreenViewModel extends Cubit<HomeScreenViewModelState> {
   HomeScreenViewModel() : super(HomeScreenInitial());
   Map<String, SectionEntity> menus = AppLocalData.menus;
-  static final Map<String, SectionEntity> updatedSectionsMap = {};
+  static Map<String, SectionEntity> updatedSectionsMap = {};
 
   void updateSectionsMapBasedOnSettings({
     required Map<String, SectionEntity> sourceMap,

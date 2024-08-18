@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
+import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
@@ -7,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 
 part 'reciet_collction_state.dart';
 
@@ -27,22 +31,74 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     await Hive.openBox('receiptsBox');
   }
 
+  Future<int> getUserId() async {
+    var userBox = Hive.box('userBox');
+    AuthRepoEntity? user = userBox.get('user');
+    int userId = user!.id!;
+    return userId;
+  }
+
   int? paymentReceipt;
   int? storedPaymentReciet;
-  Future<void> storePaymentReceipt(int receipt) async {
+  Future<void> storePaymentReceipt(
+      {required int userId, required int receipt}) async {
+    var userBox = Hive.box('userBox');
+
+    // Get existing user data or create a new map
+    Map<dynamic, dynamic> userData = userBox
+        .get(userId.toString(), defaultValue: {}) as Map<dynamic, dynamic>;
+
+    // Update the paymentReceipt
+    userData['paymentReceipt'] = receipt;
+      
+    // Save the updated user data
+    userBox.put(userId.toString(), userData);
+  }
+
+  /*  Future<void> storePaymentReceipt(int receipt) async {
     var userBox = Hive.box('userBox');
     userBox.put('paymentReceipt', receipt);
+  } */
+  Future<int?> getPaymentReceipt({required int userId}) async {
+    var userBox = Hive.box('userBox');
+
+    // Get the user's data
+    Map<dynamic, dynamic>? userData =
+        userBox.get(userId.toString()) as Map<dynamic, dynamic>?;
+
+    // Return the paymentReceipt if it exists
+    return userData?['paymentReceipt'];
   }
 
-  Future<int?> getPaymentReceipt() async {
+  /*  Future<int?> getPaymentReceipt() async {
     var userBox = Hive.box('userBox');
     return userBox.get('paymentReceipt');
+  } */
+
+  Future<void> deletePaymentReceipt({required int userId}) async {
+    var userBox = Hive.box('userBox');
+
+    // Get existing user data
+    Map<dynamic, dynamic>? userData =
+        userBox.get(userId.toString()) as Map<dynamic, dynamic>?;
+
+    if (userData != null) {
+      // Remove the paymentReceipt entry
+      userData.remove('paymentReceipt');
+
+      // Update the user data or delete the user if no other data exists
+      if (userData.isEmpty) {
+        userBox.delete(userId.toString());
+      } else {
+        userBox.put(userId.toString(), userData);
+      }
+    }
   }
 
-  Future<void> deletePaymentReceipt() async {
+/*   Future<void> deletePaymentReceipt() async {
     var userBox = Hive.box('userBox');
     return userBox.delete('paymentReceipt');
-  }
+  } */
 
   Future<void> addReciet(BuildContext context) async {
     if (formKey.currentState!.validate()) {
@@ -64,11 +120,15 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
           var receiptsBox = Hive.box('receiptsBox');
 
           // Retrieve user token
-          String token = userBox.get('accessToken') ?? '';
+          /*  String token = userBox.get('accessToken') ?? ''; */
+          /*   String token = SharedPrefrence.getData(key: "accessToken") as String; */
 
           // Retrieve existing receipts list
+          AuthRepoEntity? user = userBox.get('user');
+          int userID = user!.id!;
+
           List<dynamic> existingReceipts =
-              receiptsBox.get(token, defaultValue: []);
+              receiptsBox.get(userID, defaultValue: []);
 
           // Create new receipt
           RecietCollectionDataModel newReciet = RecietCollectionDataModel(
@@ -84,12 +144,19 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
           existingReceipts.add(newReciet.toJson());
 
           // Save the updated receipts list
-          receiptsBox.put(token, existingReceipts);
-          storedPaymentReciet = await getPaymentReceipt();
+          receiptsBox.put(userID, existingReceipts);
+
+          storedPaymentReciet = await getPaymentReceipt(userId: userID);
+          receipts = existingReceipts
+              .map((e) => RecietCollectionDataModel.fromJson(e))
+              .toList();
+
           if (storedPaymentReciet == null) {
-            await storePaymentReceipt(receipts
-                .firstWhere((element) => element.valid == true)
-                .paperNum!);
+            await storePaymentReceipt(
+                receipt: receipts
+                    .firstWhere((element) => element.valid == true)
+                    .paperNum!,
+                userId: userID);
 
             /*  storedPaymentReciet = await getPaymentReceipt(); */
           }
@@ -115,9 +182,11 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
 
-    String token = userBox.get('accessToken') ?? '';
+    /*   String token = userBox.get('accessToken') ?? ''; */
+    AuthRepoEntity? user = userBox.get('user');
+    int userID = user!.id!;
 
-    List<dynamic> existingReceipts = receiptsBox.get(token, defaultValue: []);
+    List<dynamic> existingReceipts = receiptsBox.get(userID, defaultValue: []);
 
     receipts = existingReceipts
         .map((i) => RecietCollectionDataModel.fromJson(i))
@@ -125,7 +194,7 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
 
     if (receipts.isNotEmpty) {
       lastRecietCollection = receipts.last;
-      paymentReceipt = await getPaymentReceipt();
+      paymentReceipt = await getPaymentReceipt(userId: userID);
       if (paymentReceipt != null) {
         for (var reciept in receipts) {
           if (reciept.paperNum! + reciept.totalPapers! > paymentReceipt!) {
@@ -165,9 +234,10 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
 
-    String token = userBox.get('accessToken') ?? '';
+    AuthRepoEntity? user = userBox.get('user');
+    int userID = user!.id!;
 
-    List<dynamic> existingReceipts = receiptsBox.get(token, defaultValue: []);
+    List<dynamic> existingReceipts = receiptsBox.get(userID, defaultValue: []);
 
     if (existingReceipts.isNotEmpty) {
       lastRecietCollection =
@@ -183,31 +253,49 @@ class RecietCollctionCubit extends Cubit<RecietCollctionState> {
   }
 
   Future<void> removeReciet(int id) async {
-    emit(RemoveRecietLoading());
-    var userBox = Hive.box('userBox');
-    var receiptsBox = Hive.box('receiptsBox');
+    try {
+      emit(RemoveRecietLoading());
+      var userBox = Hive.box('userBox');
+      var receiptsBox = Hive.box('receiptsBox');
 
-    String token = userBox.get('accessToken') ?? '';
+      AuthRepoEntity? user = userBox.get('user');
+      int userID = user!.id!;
 
-    List<dynamic> existingReceipts = receiptsBox.get(token, defaultValue: []);
+      List<dynamic> existingReceipts =
+          receiptsBox.get(userID, defaultValue: []);
 
-    existingReceipts.removeWhere((receipt) => receipt['id'] == id);
+      RecietCollectionDataModel selectedReciept =
+          RecietCollectionDataModel.fromJson(
+              existingReceipts.firstWhere((receipt) => receipt['id'] == id));
+      if (selectedReciept.valid == true &&
+          paymentReceipt! >= selectedReciept.paperNum! &&
+          paymentReceipt! <
+              selectedReciept.paperNum! + selectedReciept.totalPapers!) {
+        emit(RemoveRecietError(
+            errorMsg: " لا يمكن هذف هذا الدفتر حاليا لانه مستخدم"));
+      } else {
+        existingReceipts.removeWhere((receipt) => receipt['id'] == id);
+        emit(RemoveRecietSuccess());
+      }
 
-    receiptsBox.put(token, existingReceipts);
+      receiptsBox.put(userID, existingReceipts);
 
-    emit(RemoveRecietSuccess());
-    getReciets();
+      /* emit(RemoveRecietSuccess()); */
+      getReciets();
+    } catch (e) {
+      emit(RemoveRecietError(errorMsg: e.toString()));
+    }
   }
 
   Future<void> removeAllReciets() async {
     emit(RemoveAllRecietsLoading());
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
+    AuthRepoEntity? user = userBox.get('user');
+    int userID = user!.id!;
 
-    String token = userBox.get('accessToken') ?? '';
-
-    receiptsBox.delete(token);
-    deletePaymentReceipt();
+    receiptsBox.delete(userID);
+    deletePaymentReceipt(userId: userID);
 
     emit(RemoveAllRecietsSuccess());
     getReciets();

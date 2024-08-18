@@ -1,4 +1,4 @@
-import 'package:code_icons/data/model/response/get_customer_data.dart';
+import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
 import 'package:code_icons/domain/use_cases/fetch_customer_data.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/add_customer_Screen.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/grid_data_source.dart';

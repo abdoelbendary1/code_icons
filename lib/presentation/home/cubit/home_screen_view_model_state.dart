@@ -3,9 +3,9 @@ part of 'home_screen_view_model_cubit.dart';
 
 sealed class HomeScreenViewModelState {}
 
-final class HomeScreenInitial extends HomeScreenViewModelState {}
+ class HomeScreenInitial extends HomeScreenViewModelState {}
 
-final class HomeScreenSuccess extends HomeScreenViewModelState {
+ class HomeScreenSuccess extends HomeScreenViewModelState {
   Map<String, SectionEntity> menus;
   SettingsEntity settingsEntity;
 
@@ -15,8 +15,8 @@ final class HomeScreenSuccess extends HomeScreenViewModelState {
   });
 }
 
-final class HomeScreenError extends HomeScreenViewModelState {
-  final String message;
+ class HomeScreenError extends HomeScreenViewModelState {
+   String message;
 
   HomeScreenError({required this.message});
 }

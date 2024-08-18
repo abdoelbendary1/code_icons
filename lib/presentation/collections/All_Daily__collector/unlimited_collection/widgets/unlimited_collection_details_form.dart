@@ -313,7 +313,9 @@ class _UnlimitedCollectionDetailsFormState
                         backgroundColor: AppColors.greenColor,
                       ); */
                     } else if (state is AddUnlimitedCollectionError) {
-                      if (state.errorMsg.contains("400")) {
+                      if (state.errorMsg.contains("400") ||
+                          state.errorMsg.contains("401") ||
+                          state.errorMsg.contains("403")) {
                         QuickAlert.show(
                           animType: QuickAlertAnimType.slideInUp,
                           context: context,
