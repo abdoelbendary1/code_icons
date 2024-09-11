@@ -1,22 +1,18 @@
 import 'package:bloc/bloc.dart';
+import 'package:code_icons/data/api/auth/auth_manager_interface.dart';
 import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
-import 'package:code_icons/data/model/data_model/unlimited_Data_model.dart';
 import 'package:code_icons/data/model/response/collections/UnRegisteredCollections/un_registered_collections_response.dart';
 import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 import 'package:code_icons/domain/entities/unlimited_Collection_entity/unlimited_collection_entity.dart';
 import 'package:code_icons/domain/use_cases/get_UnRegistered_trade_collection_use_case%20.dart';
 import 'package:code_icons/domain/use_cases/post_UnRegistered_trade_collection_use_case%20.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/ReceiptManager%20.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
-import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:code_icons/services/controllers.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'unlimited_collection_state.dart';
 
@@ -25,9 +21,11 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
   UnlimitedCollectionCubit({
     required this.postUnRegisteredTradeCollectionUseCase,
     required this.getUnRegisteredTradeCollectionUseCase,
+    required this.authManager,
   }) : super(UnlimitedCollectionInitial());
   PostUnRegisteredTradeCollectionUseCase postUnRegisteredTradeCollectionUseCase;
   GetUnRegisteredTradeCollectionUseCase getUnRegisteredTradeCollectionUseCase;
+  AuthManagerInterface authManager;
 
   final formKey = GlobalKey<FormState>();
   Map<String, String> dateStorageMap = {
@@ -123,7 +121,7 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
           (l) => emit(AddUnlimitedCollectionError(errorMsg: l.errorMessege)),
           (r) async {
         await incrementPaymentReceipt();
-        emit(AddUnlimitedCollectionSuccess(collectionID: r));
+        emit(AddUnlimitedCollectionSuccess(collectionID: r.toString()));
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -211,7 +209,6 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
 
-    String username = SharedPrefrence.getData(key: "username") as String;
     AuthRepoEntity? user = userBox.get('user');
     int userID = user!.id!;
 
@@ -235,7 +232,6 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
       var receiptsBox = Hive.box('receiptsBox');
 
       // Retrieve user token
-      String username = SharedPrefrence.getData(key: "username") as String;
 
       AuthRepoEntity? user = userBox.get('user');
       int userID = user!.id!;

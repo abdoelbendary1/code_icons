@@ -1,42 +1,91 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:hive/hive.dart';
 
-class CustomerDataEntity {
+@HiveType(typeId: 2)
+// Assign a unique typeId
+class CustomerDataEntity extends HiveObject {
+  @HiveField(0)
   int? idBl;
-  String? brandNameBl;
-  String? nationalIdBl;
-  String? birthDayBl;
-  String? tradeRegistryBl;
-  String? licenseDateBl;
-  int? licenseYearBl;
-  double? capitalBl;
-  int? validBl;
-  int? companyTypeBl;
-  String? companyTypeNameBl;
-  int? currencyIdBl;
-  int? tradeOfficeBl;
-  String? tradeOfficeNameBl;
-  int? activityBl;
-  String? activityNameBl;
-  dynamic expiredBl;
-  String? divisionBl;
-  String? tradeTypeBl;
-  String? ownerBl;
-  String? addressBl;
-  int? stationBl;
-  String? stationNameBl;
-  String? phoneBl;
-  dynamic numExpiredBl;
-  int? tradeRegistryTypeBl;
-  int? customerDataIdBl;
-  String? message;
-  @override
-  String toString() {
-    return "${tradeRegistryBl.toString()} ${brandNameBl}";
-  }
 
-  String toTradeRegistryBl() {
-    return tradeRegistryBl.toString();
-  }
+  @HiveField(1)
+  String? brandNameBl;
+
+  @HiveField(2)
+  String? nationalIdBl;
+
+  @HiveField(3)
+  String? birthDayBl;
+
+  @HiveField(4)
+  String? tradeRegistryBl;
+
+  @HiveField(5)
+  String? licenseDateBl;
+
+  @HiveField(6)
+  int? licenseYearBl;
+
+  @HiveField(7)
+  double? capitalBl;
+
+  @HiveField(8)
+  int? validBl;
+
+  @HiveField(9)
+  int? companyTypeBl;
+
+  @HiveField(10)
+  String? companyTypeNameBl;
+
+  @HiveField(11)
+  int? currencyIdBl;
+
+  @HiveField(12)
+  int? tradeOfficeBl;
+
+  @HiveField(13)
+  String? tradeOfficeNameBl;
+
+  @HiveField(14)
+  int? activityBl;
+
+  @HiveField(15)
+  String? activityNameBl;
+
+  @HiveField(16)
+  dynamic expiredBl;
+
+  @HiveField(17)
+  String? divisionBl;
+
+  @HiveField(18)
+  String? tradeTypeBl;
+
+  @HiveField(19)
+  String? ownerBl;
+
+  @HiveField(20)
+  String? addressBl;
+
+  @HiveField(21)
+  int? stationBl;
+
+  @HiveField(22)
+  String? stationNameBl;
+
+  @HiveField(23)
+  String? phoneBl;
+
+  @HiveField(24)
+  dynamic numExpiredBl;
+
+  @HiveField(25)
+  int? tradeRegistryTypeBl;
+
+  @HiveField(26)
+  int? customerDataIdBl;
+
+  @HiveField(27)
+  String? message;
 
   CustomerDataEntity({
     this.idBl,

@@ -23,6 +23,14 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginViewModel(loginUseCase: injectLoginUseCase());
 
   @override
+  void initState() {
+    loginViewModel.auth.isDeviceSupported().then((value) => setState(() {
+          loginViewModel.authState = value;
+        }));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<LoginViewModel, LoginState>(
       bloc: loginViewModel,
@@ -34,23 +42,12 @@ class _LoginScreenState extends State<LoginScreen> {
           DialogUtils.hideLoading(context);
           DialogUtils.showMessage(
               context: context, message: state.errorMessege!);
-          print(state.errorMessege);
         } else if (state is LoginSuccesState) {
           DialogUtils.hideLoading(context);
           DialogUtils.showMessage(
               context: context,
               message: state.loginRepositoryEntity.name ?? "");
-          print(state.loginRepositoryEntity.username);
 
-          /* var token = SharedPrefrence.saveData(
-            key: "token",
-            value: state.loginRepositoryEntity.accessToken,
-          ); */
-
-          /*   SharedPrefrence.saveData(
-            key: "username",
-            value: state.loginRepositoryEntity.username,
-          ); */
           Navigator.pushNamedAndRemoveUntil(
             context,
             HomeScreen.routeName,
@@ -61,8 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
             colors: [AppColors.blueColor, AppColors.lightBlueColor],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -74,8 +71,13 @@ class _LoginScreenState extends State<LoginScreen> {
               emailController: loginViewModel.emailController,
               passwordController: loginViewModel.passwordController,
               formKey: loginViewModel.formKey,
-              buttonFunction: () {
+              buttonFunctionReg: () {
                 loginViewModel.login();
+                /*  loginViewModel.login(); */
+              },
+              buttonFunctionFingerPrint: () {
+                loginViewModel.loginWithFingerPrint();
+                /*  loginViewModel.login(); */
               },
             )),
       ),

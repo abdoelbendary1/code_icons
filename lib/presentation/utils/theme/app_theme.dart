@@ -4,11 +4,20 @@ import 'package:arabic_font/arabic_font.dart';
 
 class AppTheme {
   static ThemeData mainTheme = ThemeData(
-    canvasColor: AppColors.whiteColor,
+    scaffoldBackgroundColor: AppColors.whiteColor,
+    canvasColor: AppColors.primaryColor,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: AppColors.primaryColor,
+        selectedIconTheme: IconThemeData(
+          color: AppColors.whiteColor,
+        ),
+        selectedItemColor: AppColors.whiteColor,
+        type: BottomNavigationBarType.shifting),
     appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.whiteColor,
         iconTheme: IconThemeData(
-      color: AppColors.whiteColor,
-    )),
+          color: AppColors.whiteColor,
+        )),
     fontFamily: ArabicThemeData.font(arabicFont: ArabicFont.dinNextLTArabic),
     package: ArabicThemeData.package,
     primarySwatch: Colors.blue,

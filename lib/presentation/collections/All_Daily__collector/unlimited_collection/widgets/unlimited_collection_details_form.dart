@@ -35,6 +35,7 @@ class _UnlimitedCollectionDetailsFormState
         injectPostUnRegisteredTradeCollectionUseCase(),
     getUnRegisteredTradeCollectionUseCase:
         injectGetUnRegisteredTradeCollectionUseCase(),
+    authManager: injectAuthManagerInterface(),
   );
 
   @override
@@ -360,7 +361,7 @@ class _UnlimitedCollectionDetailsFormState
                           context: context,
                           type: QuickAlertType.error,
                           showConfirmBtn: false,
-                          title: "تأكد من اتصالك بالانترنت",
+                          title: state.errorMsg,
                           titleColor: AppColors.redColor,
                         );
                         /* DialogUtils.showMessage(

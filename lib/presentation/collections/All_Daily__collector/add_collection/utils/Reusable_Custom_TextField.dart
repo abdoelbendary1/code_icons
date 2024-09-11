@@ -19,6 +19,7 @@ class ReusableCustomTextField extends StatelessWidget {
   int? minLines;
   int? maxLines;
   int? maxLength;
+  void Function(PointerDownEvent)? onTapOutside;
 
   ReusableCustomTextField({
     super.key,
@@ -37,11 +38,13 @@ class ReusableCustomTextField extends StatelessWidget {
     this.minLines,
     this.maxLines,
     this.maxLength,
+    this.onTapOutside,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTapOutside: (event) {},
       maxLines: maxLines,
       minLines: minLines,
       maxLength: maxLength,

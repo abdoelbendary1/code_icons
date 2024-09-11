@@ -14,14 +14,13 @@ class PostTradeCollectionRepoImpl implements PostTradeCollectionRepo {
   PostTradeCollectionRepoImpl({required this.postTradeCollectionDataSource});
   @override
   Future<Either<Failures, TradeCollectionEntity>> postTradeCollectionData(
-      {required String token,
-      required TradeCollectionRequest tradeCollectionRequest}) {
+      {required TradeCollectionRequest tradeCollectionRequest}) {
     return postTradeCollectionDataSource.postTradeCollectionData(
-        token: token, tradeCollectionRequest: tradeCollectionRequest);
+        tradeCollectionRequest: tradeCollectionRequest);
   }
 
   @override
-  Future<Either<Failures, String>> postUnRegisteredTradeCollectionData(
+  Future<Either<Failures, int>> postUnRegisteredTradeCollectionData(
       {required UnRegisteredCollectionsResponse
           unRegisteredTradeCollectionRequest}) {
     return postTradeCollectionDataSource.postUnRegisteredTradeCollectionData(

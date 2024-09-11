@@ -467,12 +467,12 @@ class CustomersCubit extends Cubit<CustomersState> {
   }
 
   void fetchCustomers() async {
-    var either = await fetchCustomerDataUseCase.invoke();
+   /*  var either = await fetchCustomerDataUseCase.invoke();
     either.fold((l) => emit(FetchCustomersError(errorMsg: l.errorMessege)),
         (r) {
       customerData = r;
       emit(FetchCustomersSuccess(customers: r));
-    });
+    }); */
   }
 
   Future<void> fetchCustomerDataByID({required String customerId}) async {

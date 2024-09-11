@@ -14,7 +14,7 @@ class PostUnRegisteredTradeCollectionUseCase {
   PostUnRegisteredTradeCollectionUseCase({
     required this.postTradeCollectionRepo,
   });
-  Future<Either<Failures, String>> invoke({
+  Future<Either<Failures, int>> invoke({
     required UnRegisteredCollectionsResponse unRegisteredCollectionEntity,
   }) async {
     return await postTradeCollectionRepo.postUnRegisteredTradeCollectionData(

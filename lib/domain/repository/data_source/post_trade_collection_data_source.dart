@@ -9,10 +9,10 @@ import 'package:dartz/dartz.dart';
 
 abstract class PostTradeCollectionDataSource {
   Future<Either<Failures, TradeCollectionEntity>> postTradeCollectionData({
-    required String token,
+  
     required TradeCollectionRequest tradeCollectionRequest,
   });
-  Future<Either<Failures, String>> postUnRegisteredTradeCollectionData({
+  Future<Either<Failures, int>> postUnRegisteredTradeCollectionData({
     required UnRegisteredCollectionsResponse unRegisteredTradeCollectionRequest,
   });
   Future<Either<Failures, List<UnRegisteredCollectionEntity>>>

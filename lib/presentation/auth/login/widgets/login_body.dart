@@ -1,9 +1,9 @@
 import 'package:code_icons/presentation/utils/constants.dart';
 import 'package:code_icons/presentation/utils/custom_button.dart';
 import 'package:code_icons/presentation/utils/custom_text_field.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:local_auth/local_auth.dart';
 
 class LoginBody extends StatefulWidget {
   LoginBody({
@@ -11,12 +11,14 @@ class LoginBody extends StatefulWidget {
     required this.emailController,
     required this.passwordController,
     required this.formKey,
-    required this.buttonFunction,
+    required this.buttonFunctionReg,
+    this.buttonFunctionFingerPrint,
   });
   late GlobalKey formKey;
   late TextEditingController emailController;
   late TextEditingController passwordController;
-  late void Function()? buttonFunction;
+  late void Function()? buttonFunctionReg;
+  late void Function()? buttonFunctionFingerPrint;
 
   bool isObsecure = true;
 
@@ -26,6 +28,12 @@ class LoginBody extends StatefulWidget {
 
 class _LoginBodyState extends State<LoginBody> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -34,7 +42,7 @@ class _LoginBodyState extends State<LoginBody> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: 50.h,
+              height: 30.h,
             ),
             //logo
             Padding(
@@ -56,7 +64,7 @@ class _LoginBodyState extends State<LoginBody> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(fontSize: 26),
+                        .copyWith(fontSize: 26.sp),
                   ),
                 ),
                 SizedBox(
@@ -69,7 +77,7 @@ class _LoginBodyState extends State<LoginBody> {
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
-                        .copyWith(fontSize: 20),
+                        .copyWith(fontSize: 20.sp),
                   ),
                 ),
               ],
@@ -136,25 +144,29 @@ class _LoginBodyState extends State<LoginBody> {
                         return null;
                       },
                     ),
-                    Padding(
+                    /*   Padding(
                       padding: EdgeInsets.only(top: 16.h, right: 16.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
+                          Text(س
                             "هل نسيت كلمه المرور؟",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
-                                .copyWith(fontSize: 16),
+                                .copyWith(fontSize: 16.sp),
                           ),
                         ],
                       ),
-                    ),
+                    ), */
                     // login button
                     CustomButton(
                       buttonText: "تسجيل الدخول",
-                      buttonFunction: widget.buttonFunction,
+                      buttonFunction: widget.buttonFunctionReg,
+                    ),
+                    CustomButton(
+                      buttonText: "تسجيل الدخول بالبصمة",
+                      buttonFunction: widget.buttonFunctionFingerPrint,
                     ),
                   ],
                 ),

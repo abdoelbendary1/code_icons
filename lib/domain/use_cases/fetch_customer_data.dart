@@ -10,7 +10,12 @@ class FetchCustomerDataUseCase {
     required this.getCustomerDataRepo,
   });
 
-  Future<Either<Failures, List<CustomerDataEntity>>> invoke() async {
-    return await getCustomerDataRepo.fetchCustomerData();
+  Future<Either<Failures, List<CustomerDataEntity>>> fetchCustomerData({
+    required int skip,
+    required int take,
+    String? filter, // Optional filter parameter
+  }) async {
+    return await getCustomerDataRepo.fetchCustomerData(
+        skip: skip, take: take, filter: filter);
   }
 }

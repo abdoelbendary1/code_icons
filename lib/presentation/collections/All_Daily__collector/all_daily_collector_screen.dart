@@ -3,6 +3,7 @@ import 'package:code_icons/domain/entities/TradeCollection/trade_collection_enti
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
+import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
@@ -139,43 +140,7 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
               ),
             ],
           ),
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(120.h),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.blueColor, AppColors.lightBlueColor],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: AppBar(
-                toolbarHeight: 120.h,
-                leading: IconButton(
-                  icon:
-                      const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                title: Text(
-                  "قائمه المحصلين ",
-                  style: TextStyle(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24.sp,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          appBar: buildAppBar(context: context, title: "قائمه المحصلين"),
           body: Column(
             children: [
               BlocConsumer<AllDailyCollectorCubit, AllDailyCollectorState>(

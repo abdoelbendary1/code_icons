@@ -1,18 +1,12 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'dart:convert';
-
-import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
-import 'package:code_icons/data/model/response/collections/get_customer_data.dart';
+import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:code_icons/domain/entities/Currency/currency.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ControllerManager {
   // Static variable to hold the single instance of ControllerManager
@@ -29,7 +23,32 @@ class ControllerManager {
     addCollectionDivisionController.addListener(_updateTotalFinance);
     unlimitedCurrentFinanceController.addListener(calculateAndSetTotal);
     unlimitedDivisionController.addListener(calculateAndSetTotal);
+    /*   vacationDaysController.addListener(
+      () {},
+    ); */
   }
+  /*  DateTime convertStringToDateTime({required String input}) {
+    DateFormat inputFormat = DateFormat('yyyy/MM/dd');
+    // Parse the input string into a DateTime object
+    DateTime dateTime = inputFormat.parse(input);
+    return dateTime;
+    /*  // Define the output format
+    DateFormat outputFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+    return outputFormat.parse(input); */
+  }
+
+  int calculateVacationDays({String? startDate, String? returnDate}) {
+    DateTime startDateTime = convertStringToDateTime(input: startDate!);
+    DateTime returnDateTime = convertStringToDateTime(input: returnDate!);
+    return returnDateTime.difference(startDateTime).inDays;
+  }
+
+  void updateVacationDaysController({String? startDate, String? returnDate}) {
+    int vacationDays =
+        calculateVacationDays(startDate: startDate, returnDate: returnDate);
+    vacationDaysController.text = vacationDays.toString();
+  }
+ */
   final customerCubit = CustomersCubit.customersCubit;
   // Method to update the total finance controller based on other values
   double _originalTotal = 0;
@@ -202,6 +221,141 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController purchaseItemDiscriptionController =
       TextEditingController();
+
+  //PrOrderControllers
+  final TextEditingController prOrderCodeController = TextEditingController();
+  final TextEditingController prOrderSourceCodeController =
+      TextEditingController();
+  final TextEditingController prOrderDateController = TextEditingController();
+  final TextEditingController prOrderFactoryController =
+      TextEditingController();
+  final TextEditingController prOrderNotesController = TextEditingController();
+  final TextEditingController prOrderItemPriceController =
+      TextEditingController();
+  final TextEditingController prOrderQtyController = TextEditingController();
+  final TextEditingController prOrderTotalQtyController =
+      TextEditingController();
+  final TextEditingController prOrderExpireDateController =
+      TextEditingController();
+  final TextEditingController prOrderDiscountPercentageController =
+      TextEditingController();
+  final TextEditingController prOrderDiscountValueController =
+      TextEditingController();
+  final TextEditingController prOrderItemLengthController =
+      TextEditingController();
+  final TextEditingController prOrderItemWidthController =
+      TextEditingController();
+  final TextEditingController prOrderItemheightController =
+      TextEditingController();
+  final TextEditingController prOrderDiscriptionController =
+      TextEditingController();
+  List<TextEditingController> get purchaseOrderControllers => [
+        prOrderCodeController,
+        prOrderDateController,
+        prOrderSourceCodeController,
+        prOrderFactoryController,
+        prOrderNotesController,
+        prOrderItemPriceController,
+        prOrderQtyController,
+        prOrderTotalQtyController,
+        prOrderExpireDateController,
+        prOrderDiscountPercentageController,
+        prOrderDiscountValueController,
+        prOrderItemheightController,
+        prOrderItemWidthController,
+        prOrderItemLengthController,
+        prOrderDiscriptionController,
+      ];
+  final TextEditingController employeeCodeController = TextEditingController();
+  final TextEditingController employeeNameController = TextEditingController();
+  final TextEditingController employeeNationalIdController =
+      TextEditingController();
+  final TextEditingController employeeJobTitleController =
+      TextEditingController();
+  final TextEditingController employeeDepartmentController =
+      TextEditingController();
+  final TextEditingController employeeEducationController =
+      TextEditingController();
+  final TextEditingController employeeEducationNameController =
+      TextEditingController();
+  final TextEditingController employeeGenderController =
+      TextEditingController();
+  final TextEditingController employeeSocialStatusController =
+      TextEditingController();
+  final TextEditingController employeePhoneNumberController =
+      TextEditingController();
+  final TextEditingController employeeWorkStartDateController =
+      TextEditingController();
+  final TextEditingController employeeAddressController =
+      TextEditingController();
+
+  final TextEditingController vacationStartDateController =
+      TextEditingController();
+  final TextEditingController vacationReturnDateController =
+      TextEditingController();
+  final TextEditingController remainingVacationsController =
+      TextEditingController();
+  final TextEditingController vacationDaysController = TextEditingController();
+  final TextEditingController vacationNotesController = TextEditingController();
+  final TextEditingController loanStartDateController = TextEditingController();
+  final TextEditingController loanRequestDateController =
+      TextEditingController();
+  final TextEditingController numOfLoanAdvanceController =
+      TextEditingController();
+  final TextEditingController loanValueController = TextEditingController();
+  final TextEditingController loanDaysController = TextEditingController();
+  final TextEditingController loanNotesController = TextEditingController();
+  final TextEditingController absenceDaysController = TextEditingController();
+  final TextEditingController absenceDateFromController =
+      TextEditingController();
+  final TextEditingController absenceDateToController = TextEditingController();
+
+  final TextEditingController abssenceNotesController = TextEditingController();
+  final TextEditingController permissionDateFromController =
+      TextEditingController();
+  final TextEditingController permissionDateToController =
+      TextEditingController();
+
+  final TextEditingController permissionNotesController =
+      TextEditingController();
+  //attendance
+  final TextEditingController attendanceTimingBLController =
+      TextEditingController();
+  final BoardDateTimeTextController attendanceBLTimeController =
+      BoardDateTimeTextController();
+  final BoardDateTimeTextController startAttendanceBLTimeController =
+      BoardDateTimeTextController();
+  final BoardDateTimeTextController departureBLTimeController =
+      BoardDateTimeTextController();
+  final BoardDateTimeTextController endAttendanceBLTimeController =
+      BoardDateTimeTextController();
+  final BoardDateTimeTextController startDepartureBLTimeController =
+      BoardDateTimeTextController();
+  final BoardDateTimeTextController endDepartureBLTimeController =
+      BoardDateTimeTextController();
+  List<TextEditingController> get attendanceControllers => [
+        attendanceTimingBLController,
+      ];
+  List<TextEditingController> get permissionControllers => [
+        permissionDateFromController,
+        permissionDateToController,
+        permissionNotesController,
+      ];
+  List<TextEditingController> get employeeControllers => [
+        employeeCodeController,
+        employeeNameController,
+        employeeNationalIdController,
+        employeeJobTitleController,
+        employeeDepartmentController,
+        employeeEducationController,
+        employeeEducationNameController,
+        employeeGenderController,
+        employeeSocialStatusController,
+        employeePhoneNumberController,
+        employeeWorkStartDateController,
+        employeeAddressController,
+      ];
+
 // Method to get the controller by field name
   List<TextEditingController> get purchaseRequestControllers => [
         purchaseCodeController,
@@ -210,6 +364,30 @@ class ControllerManager {
         purchaseNotesController,
         purchaseItemQuantitytemController,
         purchaseItemDiscriptionController,
+      ];
+  // Method to get the controller by field name
+  List<TextEditingController> get vacationRequestControllers => [
+        vacationStartDateController,
+        vacationReturnDateController,
+        remainingVacationsController,
+        vacationDaysController,
+        vacationNotesController,
+      ];
+  // Method to get the controller by field name
+  List<TextEditingController> get loanRequestControllers => [
+        loanStartDateController,
+        loanRequestDateController,
+        loanDaysController,
+        numOfLoanAdvanceController,
+        loanValueController,
+        loanNotesController,
+      ];
+  // Method to get the controller by field name
+  List<TextEditingController> get absenceRequestControllers => [
+        absenceDateFromController,
+        absenceDateToController,
+        absenceDaysController,
+        abssenceNotesController,
       ];
 // Method to get the controller by field name
   List<TextEditingController> get recietCollectionController => [

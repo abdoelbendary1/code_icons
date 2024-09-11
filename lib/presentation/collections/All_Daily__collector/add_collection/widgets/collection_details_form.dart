@@ -1,18 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:accordion/accordion.dart';
-import 'package:accordion/controllers.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
-import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
-import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/Reusable_Custom_TextField.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/years_of_payment_grid_view.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
@@ -590,7 +583,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                           context: context,
                           type: QuickAlertType.error,
                           showConfirmBtn: false,
-                          title: "حدث خطأ ما",
+                          title: state.errorMsg,
                           titleColor: AppColors.redColor,
                         );
                         /*  DialogUtils.showMessage(

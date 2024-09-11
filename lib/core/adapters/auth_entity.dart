@@ -27,3 +27,4 @@ class AuthResponseDMAdapter extends TypeAdapter<AuthResponseDM> {
     writer.writeList(obj.screens ?? []);
   }
 }
+

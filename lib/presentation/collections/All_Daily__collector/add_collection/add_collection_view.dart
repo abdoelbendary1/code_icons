@@ -50,7 +50,7 @@ class AddCollectionView extends StatelessWidget {
           }
         },
         child: CustomSliverAppBar(
-          title: AppLocalizations.of(context)!.add_Collection_Title,
+          title: "إضافة حافظة مقيدة",
           body: AddCollectionBody(),
         ),
       ),

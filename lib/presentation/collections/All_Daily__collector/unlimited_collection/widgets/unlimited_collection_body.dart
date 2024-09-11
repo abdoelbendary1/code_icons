@@ -33,7 +33,8 @@ class _UnlimitedCollectionBodyState extends State<UnlimitedCollectionBody> {
       postUnRegisteredTradeCollectionUseCase:
           injectPostUnRegisteredTradeCollectionUseCase(),
       getUnRegisteredTradeCollectionUseCase:
-          injectGetUnRegisteredTradeCollectionUseCase());
+          injectGetUnRegisteredTradeCollectionUseCase(),
+      authManager: injectAuthManagerInterface());
 
   @override
   void initState() {

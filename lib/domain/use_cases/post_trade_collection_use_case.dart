@@ -16,6 +16,6 @@ class PostTradeCollectionUseCase {
     required TradeCollectionRequest tradeCollectionRequest,
   }) async {
     return await postTradeCollectionRepo.postTradeCollectionData(
-        token: token, tradeCollectionRequest: tradeCollectionRequest);
+        tradeCollectionRequest: tradeCollectionRequest);
   }
 }

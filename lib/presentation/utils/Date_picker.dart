@@ -1,5 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppDatePicker {
   static Future<void> selectDate({
@@ -7,12 +7,15 @@ class AppDatePicker {
     required TextEditingController controller,
     required Map<String, String> dateStorageMap,
     required String key,
+    DateTime? lastDate,
+    DateTime? firstDate,
   }) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
+      /* locale: Locale("ar"), */
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: firstDate ?? DateTime(1900),
+      lastDate: lastDate ?? DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(

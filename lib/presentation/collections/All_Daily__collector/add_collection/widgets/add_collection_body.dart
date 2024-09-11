@@ -33,7 +33,7 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
   @override
   void initState() {
     super.initState();
-    addCollectionCubit.fetchCustomerData();
+    addCollectionCubit.fetchCustomerData(skip: 10, take: 20);
     ControllerManager().clearControllers(
         controllers: ControllerManager().addCollectionControllers);
     /* addCollectionCubit.getReciets(); */
@@ -247,6 +247,8 @@ class _AddCollectionBodyState extends State<AddCollectionBody> {
                           },
                         ),
                         SelectCustomerEntityRegistryNum(
+                          overlayController: addCollectionCubit
+                              .overlayPortalRegistryController,
 /*                             initialItem: addCollectionCubit.selectedCustomer,
  */
                           itemList: addCollectionCubit.customerData,

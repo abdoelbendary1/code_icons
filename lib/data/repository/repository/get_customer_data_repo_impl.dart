@@ -19,8 +19,12 @@ class GetCustomerDataRepoImpl implements GetCustomerDataRepo {
     required this.getCustomerDataRemoteDataSource,
   });
   @override
-  Future<Either<Failures, List<CustomerDataEntity>>> fetchCustomerData() {
-    return getCustomerDataRemoteDataSource.fetchCustomerData();
+  Future<Either<Failures, List<CustomerDataModel>>> fetchCustomerData({
+    required int skip,
+    required int take,
+    String? filter, // Optional filter parameter
+  }) {
+    return getCustomerDataRemoteDataSource.fetchCustomerData(skip: skip,take: take,filter: filter);
   }
 
   @override

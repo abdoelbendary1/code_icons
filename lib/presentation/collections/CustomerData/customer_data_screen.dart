@@ -4,6 +4,7 @@ import 'package:code_icons/presentation/collections/CustomerData/add_customer/ad
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/grid_data_source.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customers_data_table.dart';
+import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/services/di.dart';
 
@@ -116,42 +117,7 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
             ),
           ],
         ),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120.h),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [AppColors.blueColor, AppColors.lightBlueColor],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: AppBar(
-              toolbarHeight: 120.h,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              title: Text(
-                "قائمه العملاء ",
-                style: TextStyle(
-                  color: AppColors.whiteColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.sp,
-                ),
-              ),
-            ),
-          ),
-        ),
+        appBar: buildAppBar(context: context, title: "العملاء"),
         body: Column(
           children: [
             Expanded(

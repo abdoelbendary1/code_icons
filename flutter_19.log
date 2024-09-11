@@ -1,0 +1,70 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter debug_adapter
+
+## exception
+
+_Exception: Exception: lookupResolvedPackageUris result contained more results than the request. See https://github.com/dart-lang/sdk/issues/52632
+
+```
+```
+
+## flutter doctor
+
+```
+[!] Flutter (Channel [user-branch], 3.19.1-0.0.pre.1, on Microsoft Windows [Version 10.0.22631.4037], locale en-US)
+    ! Flutter version 3.19.1-0.0.pre.1 on channel [user-branch] at E:\Flutter
+      Currently on an unknown channel. Run `flutter channel` to switch to an official channel.
+      If that doesn't fix the issue, reinstall Flutter by following instructions at https://flutter.dev/docs/get-started/install.
+    ! Upstream repository unknown source is not a standard remote.
+      Set environment variable "FLUTTER_GIT_URL" to unknown source to dismiss this error.
+    • Framework revision 5b1448afbb (6 months ago), 2024-03-06 19:57:48 +0200
+    • Engine revision 04817c99c9
+    • Dart version 3.3.0
+    • DevTools version 2.31.1
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[✓] Windows Version (Installed version of Windows is version 10 or higher)
+
+[!] Android toolchain - develop for Android devices (Android SDK version 34.0.0)
+    • Android SDK at E:\buildTools\Sdk
+    • Platform android-34, build-tools 34.0.0
+    • Java binary at: E:\Android\jbr\bin\java
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-b2043.56-10027231)
+    ! Some Android licenses not accepted. To resolve this, run: flutter doctor --android-licenses
+
+[✓] Chrome - develop for the web
+    • Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[✓] Visual Studio - develop Windows apps (Visual Studio Community 2022 17.7.0 Preview 2.0)
+    • Visual Studio at C:\Program Files\Microsoft Visual Studio\2022\Preview
+    • Visual Studio Community 2022 version 17.7.33808.371
+    • The current Visual Studio installation is a pre-release version. It may not be supported by Flutter yet.
+    • Windows 10 SDK version 10.0.22621.0
+
+[✓] Android Studio (version 2022.3)
+    • Android Studio at E:\Android
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 17.0.6+0-b2043.56-10027231)
+
+[✓] VS Code (version 1.92.2)
+    • VS Code at C:\Users\abdoe\AppData\Local\Programs\Microsoft VS Code
+    • Flutter extension version 3.95.20240801
+
+[✓] Connected device (4 available)
+    • sdk gphone64 x86 64 (mobile) • emulator-5554 • android-x64    • Android 12 (API 31) (emulator)
+    • Windows (desktop)            • windows       • windows-x64    • Microsoft Windows [Version 10.0.22631.4037]
+    • Chrome (web)                 • chrome        • web-javascript • Google Chrome 127.0.6533.120
+    • Edge (web)                   • edge          • web-javascript • Microsoft Edge 127.0.2651.105
+
+[✓] Network resources
+    • All expected network resources are available.
+
+! Doctor found issues in 2 categories.
+```

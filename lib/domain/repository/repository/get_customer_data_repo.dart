@@ -10,7 +10,11 @@ import 'package:code_icons/domain/entities/trade_office/trade_office_entity.dart
 import 'package:dartz/dartz.dart';
 
 abstract class GetCustomerDataRepo {
-  Future<Either<Failures, List<CustomerDataEntity>>> fetchCustomerData();
+  Future<Either<Failures, List<CustomerDataModel>>> fetchCustomerData({
+    required int skip,
+    required int take,
+    String? filter, // Optional filter parameter
+  });
   Future<Either<Failures, CustomerDataEntity>> fetchCustomerDataByID(
       {required String customerId});
   Future<Either<Failures, PaymentValuesEntity>> fetchPaymentValuesByID(

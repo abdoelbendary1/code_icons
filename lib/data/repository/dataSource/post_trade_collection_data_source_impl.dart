@@ -15,15 +15,15 @@ class PostTradeCollectionDataSourceImpl
   PostTradeCollectionDataSourceImpl({required this.apiManager});
   @override
   Future<Either<Failures, TradeCollectionEntity>> postTradeCollectionData(
-      {required String token,
+      {
       required TradeCollectionRequest tradeCollectionRequest}) async {
     var either = await apiManager.postTradeCollectionData(
-        token: token, tradeCollectionRequest: tradeCollectionRequest);
+        tradeCollectionRequest: tradeCollectionRequest);
     return either.fold((l) => left(l), (response) => right(response));
   }
 
   @override
-  Future<Either<Failures, String>> postUnRegisteredTradeCollectionData(
+  Future<Either<Failures, int>> postUnRegisteredTradeCollectionData(
       {required UnRegisteredCollectionsResponse
           unRegisteredTradeCollectionRequest}) async {
     var either = await apiManager.postUnRegisteredTradeCollectionData(

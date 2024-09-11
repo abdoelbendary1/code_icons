@@ -1,6 +1,12 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
 import 'package:code_icons/domain/entities/sectionEntity/sectionEntity.dart';
-import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
+import 'package:code_icons/presentation/HR/All_Attendances_by_day/All_Attendances_by_day_screen.dart';
+import 'package:code_icons/presentation/HR/HR_Screen.dart';
+import 'package:code_icons/presentation/HR/LoanRequest/LoanRequestScreen.dart';
+import 'package:code_icons/presentation/HR/VacationRequest/VacationOrderScreen.dart';
+import 'package:code_icons/presentation/HR/absenceRequest/absenceScreen.dart';
+import 'package:code_icons/presentation/HR/attendance/attendanceScreen.dart';
+import 'package:code_icons/presentation/HR/permissionRequest/permissionRequestScreen.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
@@ -8,11 +14,6 @@ import 'package:code_icons/presentation/collections/All_Daily__collector/unlimit
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
 import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
-import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/purchase_Invoice.dart';
 import 'package:code_icons/presentation/purchases/PurchaseOrder/purchase_order.dart';
 import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
@@ -46,7 +47,7 @@ class AppLocalData {
           icon: Icons.payment,
         ),
         MenuItem(
-          title: 'حوافظ غير مقيده',
+          title: 'إضافه حافظة غير مقيده',
           route: UnRegisteredCollectionsScreen.routeName,
           icon: Icons.unpublished_outlined,
         ),
@@ -203,31 +204,41 @@ class AppLocalData {
       ],
     ),
     "humanResources": SectionEntity(
-      name: "HR",
+      name: "ادارة الموارد البشرية",
       icon: Icons.group,
-      route: CollectionsScreen.routeName,
+      route: HRScreen.routeName,
       items: [
         MenuItem(
-          title: 'بيانات العملاء',
-          route: CustomerDataScreen.routeName,
+          title: 'طلب اجازه',
+          route: VacationOrderScreen.routeName,
           icon: Icons.person,
         ),
         /*   MenuItem(
             title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-          title: 'بيان التسديدات',
-          route: AllDailyCollectorScreen.routeName,
+          title: 'طلب سلفه',
+          route: LoanRequestScreen.routeName,
           icon: Icons.payment,
         ),
         MenuItem(
-          title: 'حوافظ غير مقيده',
-          route: UnRegisteredCollectionsScreen.routeName,
+          title: 'طلب اذن',
+          route: PermissionRequestScreen.routeName,
           icon: Icons.unpublished_outlined,
         ),
         MenuItem(
-          title: 'دفاتر الايصالات',
-          route: AllRecietsScreen.routeName,
-          icon: Icons.receipt,
+          title: "تسجيل غياب",
+          route: AbsenceRequestScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: 'تسجيل الحضور والانصراف',
+          route: AttendanceScreen.routeName,
+          icon: Icons.unpublished_outlined,
+        ),
+        MenuItem(
+          title: "توقيتات الحضور والانصراف",
+          route: AllAttendancesScreen.routeName,
+          icon: Icons.unpublished_outlined,
         ),
       ],
     ),
@@ -418,12 +429,12 @@ class AppLocalData {
         /*   MenuItem(
             title: 'all Trade Prove', route: AllTradeProveScreen.routeName), */
         MenuItem(
-          title: 'إضافه حافظة مقيده',
+          title: 'إضافه حافظة مقيدة',
           route: AddCollectionView.routeName,
           icon: Icons.payment,
         ),
         MenuItem(
-          title: 'حوافظ غير مقيده',
+          title: 'إضافه حافظة غير مقيدة',
           route: UnlimitedCollection.routeName,
           icon: Icons.unpublished_outlined,
         ),

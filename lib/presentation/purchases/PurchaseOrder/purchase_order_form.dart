@@ -32,7 +32,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
   void initState() {
     super.initState();
     ControllerManager().clearControllers(
-        controllers: ControllerManager().purchaseRequestControllers);
+        controllers: ControllerManager().purchaseOrderControllers);
     /* ControllerManager().clearControllers(
         controllers: ControllerManager().recietCollectionController);
     PurchasesCubit.petLastReciet(); */
@@ -365,8 +365,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
             BuildTextField(
                 label: "سعر شراء الوحدة",
                 hint: "سعر شراء الوحدة",
-                controller: ControllerManager()
-                    .getControllerByName('purchaseItemDiscriptionController'),
+                controller: ControllerManager().prOrderItemPriceController,
                 icon: Icons.phone_iphone,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -375,14 +374,11 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   return null;
                 },
                 onTap: () {
-                  ControllerManager()
-                          .getControllerByName('purchaseItemDiscriptionController')
-                          .selection =
+                  ControllerManager().prOrderItemPriceController.selection =
                       TextSelection(
                           baseOffset: 0,
                           extentOffset: ControllerManager()
-                              .getControllerByName(
-                                  'purchaseItemDiscriptionController')
+                              .prOrderItemPriceController
                               .value
                               .text
                               .length);
@@ -397,8 +393,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         child: BuildTextField(
                             label: "الكمية",
                             hint: "الكمية",
-                            controller: ControllerManager().getControllerByName(
-                                'purchaseItemQuantitytemController'),
+                            controller:
+                                ControllerManager().prOrderQtyController,
                             icon: Icons.diversity_3_sharp,
                             keyboardType: TextInputType.number,
                             validator: (value) {
@@ -409,14 +405,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                             },
                             onTap: () {
                               ControllerManager()
-                                      .getControllerByName(
-                                          'purchaseItemQuantitytemController')
+                                      .prOrderQtyController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
                                       extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'purchaseItemQuantitytemController')
+                                          .prOrderQtyController
                                           .value
                                           .text
                                           .length);
@@ -426,8 +420,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         child: BuildTextField(
                             label: "إجمالي الكمية",
                             hint: "إجمالي الكمية",
-                            controller: ControllerManager().getControllerByName(
-                                'purchaseItemQuantitytemController'),
+                            controller:
+                                ControllerManager().prOrderTotalQtyController,
                             icon: Icons.diversity_3_sharp,
                             keyboardType: TextInputType.number,
                             validator: (value) {
@@ -438,14 +432,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                             },
                             onTap: () {
                               ControllerManager()
-                                      .getControllerByName(
-                                          'purchaseItemQuantitytemController')
+                                      .prOrderTotalQtyController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
                                       extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'purchaseItemQuantitytemController')
+                                          .prOrderTotalQtyController
                                           .value
                                           .text
                                           .length);
@@ -454,41 +446,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                     ],
                   );
                 }
-
-                /*   return BuildTextField(
-                    label: "الكميه",
-                    hint: "الكميه",
-                    controller: ControllerManager().getControllerByName(
-                        'purchaseItemQuantitytemController'),
-                    icon: Icons.diversity_3_sharp,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return "يجب ادخال الكميه";
-                      }
-                      return null;
-                    },
-                    onTap: () {
-                      ControllerManager()
-                              .getControllerByName(
-                                  'purchaseItemQuantitytemController')
-                              .selection =
-                          TextSelection(
-                              baseOffset: 0,
-                              extentOffset: ControllerManager()
-                                  .getControllerByName(
-                                      'purchaseItemQuantitytemController')
-                                  .value
-                                  .text
-                                  .length);
-                    }); */
               },
             ),
             BuildTextField(
                 label: "تاريخ الصلاحيه",
                 hint: "تاريخ الصلاحيه",
-                controller: ControllerManager()
-                    .getControllerByName('purchaseItemDiscriptionController'),
+                controller: ControllerManager().prOrderExpireDateController,
                 icon: Icons.phone_iphone,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -497,14 +460,11 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   return null;
                 },
                 onTap: () {
-                  ControllerManager()
-                          .getControllerByName('purchaseItemDiscriptionController')
-                          .selection =
+                  ControllerManager().prOrderExpireDateController.selection =
                       TextSelection(
                           baseOffset: 0,
                           extentOffset: ControllerManager()
-                              .getControllerByName(
-                                  'purchaseItemDiscriptionController')
+                              .prOrderExpireDateController
                               .value
                               .text
                               .length);
@@ -515,8 +475,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   child: BuildTextField(
                       label: "نسبة الخصم",
                       hint: "نسبة الخصم",
-                      controller: ControllerManager().getControllerByName(
-                          'purchaseItemDiscriptionController'),
+                      controller: ControllerManager()
+                          .prOrderDiscountPercentageController,
                       icon: Icons.phone_iphone,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -526,14 +486,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                       },
                       onTap: () {
                         ControllerManager()
-                                .getControllerByName(
-                                    'purchaseItemDiscriptionController')
+                                .prOrderDiscountPercentageController
                                 .selection =
                             TextSelection(
                                 baseOffset: 0,
                                 extentOffset: ControllerManager()
-                                    .getControllerByName(
-                                        'purchaseItemDiscriptionController')
+                                    .prOrderDiscountPercentageController
                                     .value
                                     .text
                                     .length);
@@ -543,8 +501,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   child: BuildTextField(
                       label: "قيمة الخصم",
                       hint: "قيمة الخصم",
-                      controller: ControllerManager().getControllerByName(
-                          'purchaseItemDiscriptionController'),
+                      controller:
+                          ControllerManager().prOrderDiscountValueController,
                       icon: Icons.phone_iphone,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -554,14 +512,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                       },
                       onTap: () {
                         ControllerManager()
-                                .getControllerByName(
-                                    'purchaseItemDiscriptionController')
+                                .prOrderDiscountValueController
                                 .selection =
                             TextSelection(
                                 baseOffset: 0,
                                 extentOffset: ControllerManager()
-                                    .getControllerByName(
-                                        'purchaseItemDiscriptionController')
+                                    .prOrderDiscountValueController
                                     .value
                                     .text
                                     .length);
@@ -575,8 +531,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   child: BuildTextField(
                       label: "الطول",
                       hint: "الطول",
-                      controller: ControllerManager().getControllerByName(
-                          'purchaseItemDiscriptionController'),
+                      controller:
+                          ControllerManager().prOrderItemLengthController,
                       icon: Icons.phone_iphone,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -586,14 +542,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                       },
                       onTap: () {
                         ControllerManager()
-                                .getControllerByName(
-                                    'purchaseItemDiscriptionController')
+                                .prOrderItemLengthController
                                 .selection =
                             TextSelection(
                                 baseOffset: 0,
                                 extentOffset: ControllerManager()
-                                    .getControllerByName(
-                                        'purchaseItemDiscriptionController')
+                                    .prOrderItemLengthController
                                     .value
                                     .text
                                     .length);
@@ -603,8 +557,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   child: BuildTextField(
                       label: "العرض",
                       hint: "العرض",
-                      controller: ControllerManager().getControllerByName(
-                          'purchaseItemDiscriptionController'),
+                      controller:
+                          ControllerManager().prOrderItemWidthController,
                       icon: Icons.phone_iphone,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -614,14 +568,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                       },
                       onTap: () {
                         ControllerManager()
-                                .getControllerByName(
-                                    'purchaseItemDiscriptionController')
+                                .prOrderItemWidthController
                                 .selection =
                             TextSelection(
                                 baseOffset: 0,
                                 extentOffset: ControllerManager()
-                                    .getControllerByName(
-                                        'purchaseItemDiscriptionController')
+                                    .prOrderItemWidthController
                                     .value
                                     .text
                                     .length);
@@ -632,8 +584,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
             BuildTextField(
                 label: "الارتفاع",
                 hint: "الارتفاع",
-                controller: ControllerManager()
-                    .getControllerByName('purchaseItemDiscriptionController'),
+                controller: ControllerManager().prOrderItemheightController,
                 icon: Icons.phone_iphone,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -642,14 +593,11 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   return null;
                 },
                 onTap: () {
-                  ControllerManager()
-                          .getControllerByName('purchaseItemDiscriptionController')
-                          .selection =
+                  ControllerManager().prOrderItemheightController.selection =
                       TextSelection(
                           baseOffset: 0,
                           extentOffset: ControllerManager()
-                              .getControllerByName(
-                                  'purchaseItemDiscriptionController')
+                              .prOrderItemheightController
                               .value
                               .text
                               .length);
@@ -657,8 +605,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
             BuildTextField(
                 label: "الوصف",
                 hint: "الوصف",
-                controller: ControllerManager()
-                    .getControllerByName('purchaseItemDiscriptionController'),
+                controller: ControllerManager().prOrderDiscriptionController,
                 icon: Icons.phone_iphone,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -667,14 +614,11 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   return null;
                 },
                 onTap: () {
-                  ControllerManager()
-                          .getControllerByName('purchaseItemDiscriptionController')
-                          .selection =
+                  ControllerManager().prOrderDiscriptionController.selection =
                       TextSelection(
                           baseOffset: 0,
                           extentOffset: ControllerManager()
-                              .getControllerByName(
-                                  'purchaseItemDiscriptionController')
+                              .prOrderDiscriptionController
                               .value
                               .text
                               .length);
@@ -726,8 +670,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         label: "كود",
                         hint: "كود",
                         keyboardType: TextInputType.number,
-                        controller: ControllerManager()
-                            .getControllerByName('purchaseCodeController'),
+                        controller: ControllerManager().prOrderCodeController,
                         icon: Icons.diversity_3_sharp,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -736,14 +679,11 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                           return null;
                         },
                         onTap: () {
-                          ControllerManager()
-                                  .getControllerByName('purchaseCodeController')
-                                  .selection =
+                          ControllerManager().prOrderCodeController.selection =
                               TextSelection(
                                   baseOffset: 0,
                                   extentOffset: ControllerManager()
-                                      .getControllerByName(
-                                          'purchaseCodeController')
+                                      .prOrderCodeController
                                       .value
                                       .text
                                       .length);
@@ -754,8 +694,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         label: "كود المصدر",
                         hint: " كود",
                         keyboardType: TextInputType.number,
-                        controller: ControllerManager()
-                            .getControllerByName('purchaseCodeController'),
+                        controller:
+                            ControllerManager().prOrderSourceCodeController,
                         icon: Icons.diversity_3_sharp,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -765,13 +705,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         },
                         onTap: () {
                           ControllerManager()
-                                  .getControllerByName('purchaseCodeController')
+                                  .prOrderSourceCodeController
                                   .selection =
                               TextSelection(
                                   baseOffset: 0,
                                   extentOffset: ControllerManager()
-                                      .getControllerByName(
-                                          'purchaseCodeController')
+                                      .prOrderSourceCodeController
                                       .value
                                       .text
                                       .length);
@@ -834,15 +773,13 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
               BuildTextField(
                 label: "التاريخ",
                 hint: "التاريخ ",
-                controller: ControllerManager()
-                    .getControllerByName('purchaseDateController'),
+                controller: ControllerManager().prOrderDateController,
                 readOnly: true,
                 icon: Icons.app_registration,
                 onTap: () {
                   AppDatePicker.selectDate(
                       context: context,
-                      controller: ControllerManager()
-                          .getControllerByName('purchaseDateController'),
+                      controller: ControllerManager().prOrderDateController,
                       dateStorageMap: purchasesCubit.dateStorageMap,
                       key: "purchaseDateController");
                 },
@@ -881,8 +818,8 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         label: "المعامل",
                         hint: "المعامل",
                         keyboardType: TextInputType.number,
-                        controller: ControllerManager()
-                            .getControllerByName('purchaseCodeController'),
+                        controller:
+                            ControllerManager().prOrderFactoryController,
                         icon: Icons.diversity_3_sharp,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -892,13 +829,12 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                         },
                         onTap: () {
                           ControllerManager()
-                                  .getControllerByName('purchaseCodeController')
+                                  .prOrderFactoryController
                                   .selection =
                               TextSelection(
                                   baseOffset: 0,
                                   extentOffset: ControllerManager()
-                                      .getControllerByName(
-                                          'purchaseCodeController')
+                                      .prOrderFactoryController
                                       .value
                                       .text
                                       .length);
@@ -917,8 +853,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                   hint: "ملاحظات",
                   minLines: 1,
                   maxLines: 5,
-                  controller: ControllerManager()
-                      .getControllerByName('purchaseNotesController'),
+                  controller: ControllerManager().prOrderNotesController,
                   icon: Icons.phone_iphone,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -927,13 +862,11 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
                     return null;
                   },
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName('purchaseNotesController')
-                            .selection =
+                    ControllerManager().prOrderNotesController.selection =
                         TextSelection(
                             baseOffset: 0,
                             extentOffset: ControllerManager()
-                                .getControllerByName('purchaseNotesController')
+                                .prOrderNotesController
                                 .value
                                 .text
                                 .length);

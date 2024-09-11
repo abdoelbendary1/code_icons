@@ -20,8 +20,12 @@ class GetCustomerDataRemoteDataSourceImpl
     required this.apiManager,
   });
   @override
-  Future<Either<Failures, List<CustomerDataEntity>>> fetchCustomerData() async {
-    var either = await apiManager.fetchCustomerData();
+  Future<Either<Failures, List<CustomerDataModel>>> fetchCustomerData({
+    required int skip,
+    required int take,
+    String? filter, // Optional filter parameter
+  }) async {
+    var either = await apiManager.fetchCustomerData(skip: skip,take: take,filter: filter);
     return either.fold(
         (failure) => Left(failure), (response) => Right(response));
   }

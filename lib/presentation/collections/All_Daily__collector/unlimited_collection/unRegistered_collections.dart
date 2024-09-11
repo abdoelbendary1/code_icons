@@ -1,8 +1,13 @@
-import 'package:code_icons/data/model/data_model/add_collection_table.dart';
+import 'package:code_icons/presentation/utils/build_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 import 'package:code_icons/data/model/data_model/unRegistered_collection_table.dart';
 import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_state.dart';
@@ -10,13 +15,6 @@ import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 
 class UnRegisteredCollectionsScreen extends StatefulWidget {
   UnRegisteredCollectionsScreen({super.key});
@@ -31,10 +29,12 @@ class UnRegisteredCollectionsScreen extends StatefulWidget {
 class _UnRegisteredCollectionsScreenState
     extends State<UnRegisteredCollectionsScreen> {
   UnlimitedCollectionCubit unlimitedCollectionCubit = UnlimitedCollectionCubit(
-      postUnRegisteredTradeCollectionUseCase:
-          injectPostUnRegisteredTradeCollectionUseCase(),
-      getUnRegisteredTradeCollectionUseCase:
-          injectGetUnRegisteredTradeCollectionUseCase());
+    postUnRegisteredTradeCollectionUseCase:
+        injectPostUnRegisteredTradeCollectionUseCase(),
+    getUnRegisteredTradeCollectionUseCase:
+        injectGetUnRegisteredTradeCollectionUseCase(),
+    authManager: injectAuthManagerInterface(),
+  );
 
   late UnlimitedCollectionsDataSource _dataSource;
   DataGridController dataGridController = DataGridController();
@@ -42,7 +42,6 @@ class _UnRegisteredCollectionsScreenState
   @override
   void initState() {
     super.initState();
-    /* unlimitedCollectionCubit.getAllCollctions(); */
   }
 
   var renderOverlay = true;
@@ -106,7 +105,6 @@ class _UnRegisteredCollectionsScreenState
             shape: const CircleBorder(), // default is CircleBorder
             children: [
               SpeedDialChild(
-                /*  child: const Icon(Icons.add, color: Colors.white), */
                 backgroundColor: AppColors.blueColor,
                 labelWidget: Container(
                   padding:
@@ -142,43 +140,7 @@ class _UnRegisteredCollectionsScreenState
               ),
             ],
           ),
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(120.h),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.blueColor, AppColors.lightBlueColor],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: AppBar(
-                toolbarHeight: 120.h,
-                leading: IconButton(
-                  icon:
-                      const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                title: Text(
-                  "الحوافظ الغير مقيده",
-                  style: TextStyle(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24.sp,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          appBar: buildAppBar(context: context, title: "الحوافظ الفير مقيدة"),
           body: Column(
             children: [
               BlocConsumer<UnlimitedCollectionCubit, UnlimitedCollectionState>(
@@ -198,9 +160,7 @@ class _UnRegisteredCollectionsScreenState
                     if (state.collectiion.isNotEmpty) {
                       _dataSource = UnlimitedCollectionsDataSource(
                         collections: state.collectiion,
-                        onRowSelected: (row) {
-                          unlimitedCollectionCubit.selectRow(row);
-                        },
+                        onRowSelected: (row) {},
                       );
                     }
 
@@ -256,10 +216,6 @@ class _UnRegisteredCollectionsScreenState
                                     frozenColumnsCount:
                                         0, // Freezing the first column
                                     columns: [
-                                      /*   buildGridColumn(
-                                          columnName: "collectionId",
-                                          label: "Id",
-                                          alignment: Alignment.centerRight), */
                                       buildGridColumn(
                                           columnName: "unlimitedName",
                                           label: "الاسم",
@@ -297,27 +253,7 @@ class _UnRegisteredCollectionsScreenState
                                     selectionMode: SelectionMode.single,
                                     onSelectionChanged:
                                         (List<DataGridRow> addedRows,
-                                            List<DataGridRow> removedRows) {
-                                      if (addedRows.isNotEmpty) {
-                                        Future.delayed(Duration.zero, () {
-                                          if (mounted) {
-                                            setState(() {
-                                              /*   TradeCollectionEntity selectedRow =
-                                                    convertRowToEntity(
-                                                        dataGridController
-                                                            .selectedRow!);
-                                                print(selectedRow.compensationBl);
-                                                print(dataGridController
-                                                    .selectedIndex); */
-                                              /* unlimitedCollectionCubit
-                                                    .selectRow(selectedRow); */
-                                            });
-                                          }
-                                        });
-                                      } else {
-                                        unlimitedCollectionCubit.deselectRow();
-                                      }
-                                    },
+                                            List<DataGridRow> removedRows) {},
                                   ),
                                 ),
                               ),
@@ -413,7 +349,6 @@ class _UnRegisteredCollectionsScreenState
       currentBl: cells[6].value as double?,
       differentBl: cells[7].value as double?,
       totalBl: cells[8].value as double?,
-      /*  customerDataIdBl: cells[9].value as int?, */
     );
   }
 }

@@ -15,7 +15,7 @@ class BuildTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.minLines,
     this.maxLines,
-    this.maxLength,
+    this.maxLength,this.onTapOutside
   });
 
   final String? label;
@@ -29,7 +29,7 @@ class BuildTextField extends StatelessWidget {
   TextInputType keyboardType;
   int? minLines;
   int? maxLines;
-  int? maxLength;
+  int? maxLength;void Function(PointerDownEvent)? onTapOutside;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class BuildTextField extends StatelessWidget {
             keyboardType: keyboardType,
             minLines: minLines,
             maxLines: maxLines,
-            maxLength: maxLength,
+            maxLength: maxLength,onTapOutside: onTapOutside,
           ),
           SizedBox(height: 10.h),
         ],

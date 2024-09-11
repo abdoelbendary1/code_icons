@@ -1,5 +1,6 @@
 import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
+import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -143,42 +144,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
           );
         },
       ),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(120.h),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.blueColor, AppColors.lightBlueColor],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: AppBar(
-            toolbarHeight: 120.h,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(
-              "دفاتر الإيصالات",
-              style: TextStyle(
-                color: AppColors.whiteColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 24.sp,
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: buildAppBar(context: context, title: "دفاتر الايصالات"),
       body: BlocConsumer<RecietCollctionCubit, RecietCollctionState>(
         listener: (context, state) {
           if (state is RemoveRecietError) {

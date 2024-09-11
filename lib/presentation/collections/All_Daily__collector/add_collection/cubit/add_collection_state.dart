@@ -13,6 +13,12 @@ class SelecetedCustomer extends AddCollectionState {
 
 final class AddCollectionLoading extends AddCollectionState {}
 
+final class CustomerDataLoaded extends AddCollectionState {
+  
+}
+
+final class CustomerDataError extends AddCollectionState {}
+
 final class AddCollectionError extends AddCollectionState {
   late String errorMsg;
   AddCollectionError({required this.errorMsg});
@@ -53,7 +59,6 @@ final class GetCustomerDataByIDError extends AddCollectionState {
   String errorMsg;
   GetCustomerDataByIDError({required this.errorMsg});
 }
-
 
 final class GetpaymentValuesByIDError extends AddCollectionState {
   String errorMsg;

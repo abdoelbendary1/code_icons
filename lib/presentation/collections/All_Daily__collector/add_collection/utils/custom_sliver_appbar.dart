@@ -25,24 +25,52 @@ class CustomSliverAppBar extends StatelessWidget {
           pinned: false,
           snap: true,
           flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.pin,
-              stretchModes: const [StretchMode.fadeTitle],
-              expandedTitleScale: 1.5,
-              centerTitle: false,
-              title: Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.blueColor, AppColors.lightBlueColor],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  color: AppColors.blueColor,
+            collapseMode: CollapseMode.pin,
+            stretchModes: const [StretchMode.fadeTitle],
+            expandedTitleScale: 1.5,
+            centerTitle: true,
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    Spacer(),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Spacer(
+                      flex: 5,
+                    ),
+                  ],
                 ),
-              )),
+                SizedBox(
+                  height: 20.h,
+                )
+              ],
+            ),
+            background: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+                gradient: const LinearGradient(
+                  colors: [AppColors.blueColor, AppColors.lightBlueColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+          ),
           actions: actions,
         ),
         SliverList(

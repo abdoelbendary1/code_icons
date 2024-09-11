@@ -1,7 +1,10 @@
+import 'package:code_icons/core/enums/searchCases.dart';
+import 'package:code_icons/data/api/tradeChamber/customers/customers_manager.dart';
 import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
 import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
+import 'package:code_icons/services/di.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,11 +41,22 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   PostTradeCollectionUseCase postTradeCollectionUseCase;
   PostPaymentValuesByIdUseCase paymentValuesByIdUseCase;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  CustomersManager customersManager = CustomersManager(
+    authManager: injectAuthManagerInterface(),
+    httpRequestHelper: injectHttpRequestHelper(),
+    handleResponseHelper: injectHandleResponseHelper(),
+  );
 
   /*  List<CustomerDataEntity> customerData = [
     CustomerDataEntity(),
   ]; */
   List<CustomerDataEntity> customerData = [];
+  List<CustomerDataEntity> filteredData = [];
+  OverlayPortalController overlayPortalNameController =
+      OverlayPortalController();
+  OverlayPortalController overlayPortalRegistryController =
+      OverlayPortalController();
+
 /*   final ReceiptManager receiptManager;
  */
   late List<String> customersNames;
@@ -82,20 +96,125 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     );
   }
 
-  void fetchCustomerData() async {
+  /*  void searchCustomerData(
+      {required String query, required SearchCases searchCase}) {
+    if (searchCase == SearchCases.Empty) {
+      filteredData = customerData;
+      // Reset to the full dataset when the search query is cleared
+      /*  _currentChunkIndex = 0;
+      _displayedCustomers = _getNextChunk(); */
+    } else {
+      if (searchCase == SearchCases.Name) {
+        filteredData = customerData
+            .where((customer) => customer.brandNameBl!
+                .toLowerCase()
+                .contains(query.toLowerCase()))
+            .toList();
+      } else if (searchCase == SearchCases.TradeRegistry) {
+        filteredData = customerData
+            .where((customer) => customer.tradeRegistryBl!
+                .toLowerCase()
+                .contains(query.toString().toLowerCase()))
+            .toList();
+      }
+    }
+  }
+ */
+  Future<void> fetchCustomerData({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
+    emit(GetAllCustomerDataLoading());
+
+    // Try to load cached data first
+    var cachedCustomers = await _getCachedCustomerData();
+    if (cachedCustomers.isNotEmpty) {
+      customersNames = cachedCustomers.map((e) => e.brandNameBl!).toList();
+      customerData = cachedCustomers;
+      emit(GetAllCustomerDataSuccess(
+          customerData: cachedCustomers,
+          selectedCustomer: cachedCustomers.first));
+      return; // Return early if cached data is available
+    }
+
+    // If no cached data or if refresh is needed, fetch from API
+    var either = await fetchCustomerDataUseCase.fetchCustomerData(
+        skip: skip, take: take, filter: filter);
+    either.fold(
+      (failure) {
+        emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
+      },
+      (response) async {
+        customersNames = response.map((e) => e.brandNameBl!).toList();
+        customerData = response;
+
+        // Cache the fetched data
+        await _cacheCustomerData(response);
+
+        emit(GetAllCustomerDataSuccess(
+            customerData: response, selectedCustomer: response.first));
+      },
+    );
+  }
+
+  Future<List<CustomerDataEntity>> searchCustomerData({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
+    var either = await fetchCustomerDataUseCase.fetchCustomerData(
+        skip: skip, take: take, filter: filter);
+    return either.fold(
+      (failure) {
+        return [];
+        /* emit(GetAllCustomerDataError(errorMsg: failure.errorMessege)); */
+      },
+      (response) async {
+        customerData = response;
+        return customerData;
+
+        // Cache the fetched data
+        /* await _cacheCustomerData(response); */
+
+        /*   emit(GetAllCustomerDataSuccess(
+              customerData: response, selectedCustomer: response.first)); */
+      },
+    );
+  }
+
+  Future<void> _cacheCustomerData(List<CustomerDataEntity> customers) async {
+    var box = await Hive.openBox<CustomerDataEntity>('customersBox');
+    await box.clear(); // Clear old data before caching new data
+    await box.addAll(customers); // Add all customer data to the box
+  }
+
+  Future<List<CustomerDataEntity>> _getCachedCustomerData() async {
+    var box = await Hive.openBox<CustomerDataEntity>('customersBox');
+    return box.values.toList(); // Retrieve all cached customer data
+  }
+
+  /*  void fetchCustomerData({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
     /* emit(GetAllCustomerDataInitial()); */
     emit(GetAllCustomerDataLoading());
-    var either = await fetchCustomerDataUseCase.invoke();
+    var either = await fetchCustomerDataUseCase.fetchCustomerData(
+      skip: skip,
+      take: take,
+      filter: filter,
+    );
     either.fold((failure) {
-      print(failure.errorMessege);
       emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
     }, (response) {
       customersNames = response.map((e) => e.brandNameBl!).toList();
+      customerData = response;
       emit(GetAllCustomerDataSuccess(
           customerData: response, selectedCustomer: response.first));
-      customerData = response;
     });
-  }
+  } */
 
 // Function to get registry numbers by id
   String getRegistryNumbersById(
@@ -349,7 +468,6 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       var receiptsBox = Hive.box('receiptsBox');
 
       // Retrieve user token
-      String username = SharedPrefrence.getData(key: "username") as String;
 
       AuthRepoEntity? user = userBox.get('user');
       int userID = user!.id!;
@@ -388,6 +506,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   Future<RecietCollectionDataModel> selectReciet(int paymentReceipt) async {
     /*   return await ReceiptManager.selectReceipt(paymentReceipt); */
     try {
+      receipts = await getReciets();
       for (var reciept in receipts) {
         if (reciept.paperNum! + reciept.totalPapers! > paymentReceipt) {
           reciept.valid = true;
@@ -396,13 +515,14 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
         }
       }
       if (!receipts.any((element) => element.valid == true)) {
-        addReciet();
+        await addReciet();
       }
       /*  await getReciets(); */
       selectedReceit = receipts.firstWhere((receipt) => receipt.valid == true);
       /* await addReciet(); */
       return selectedReceit;
     } catch (e) {
+      print(e.toString());
       return receipts.last;
     }
   }
@@ -495,8 +615,6 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
 
-    String username = SharedPrefrence.getData(key: "username") as String;
-
     AuthRepoEntity? user = userBox.get('user');
     int userID = user!.id!;
 
@@ -513,57 +631,76 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   List<RecietCollectionDataModel> receipts = [];
   RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
   Future<void> initialize({required controller}) async {
-    await getReciets();
-    int userId = await getUserId();
-    if (storedPaymentReceipt == null && receipts.isEmpty) {
-      await storePaymentReceipt(receipt: 1, userId: userId);
-    }
-
-    if (receipts.isNotEmpty) {
-      storedPaymentReceipt = await getPaymentReceipt(userId: userId);
-
-      if (storedPaymentReceipt == null) {
+    try {
+      await getReciets();
+      int userId = await getUserId();
+      if (storedPaymentReceipt == null && receipts.isEmpty) {
         await storePaymentReceipt(receipt: 1, userId: userId);
-        storedPaymentReceipt = await getPaymentReceipt(userId: userId);
       }
 
-      selectedReceit = await selectReciet(storedPaymentReceipt!);
-      if (storedPaymentReceipt != null) {
-        if (selectedReceit.valid!) {
-          if (storedPaymentReceipt! <
-                  selectedReceit.paperNum! + selectedReceit.totalPapers! &&
-              storedPaymentReceipt! > selectedReceit.paperNum!) {
-            paymentReceipt = storedPaymentReceipt!;
-            await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
-          } else if (storedPaymentReceipt! < selectedReceit.paperNum!) {
-            paymentReceipt = selectedReceit.paperNum!;
-            await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
-          } else {
-            selectedReceit = await selectReciet(storedPaymentReceipt!);
-            paymentReceipt = selectedReceit.paperNum!;
+      if (receipts.isNotEmpty) {
+        storedPaymentReceipt = await getPaymentReceipt(userId: userId);
 
-            await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
-            if (storedPaymentReceipt! < selectedReceit.paperNum!) {
-              selectedReceit = await selectReciet(storedPaymentReceipt!);
+        if (storedPaymentReceipt == null) {
+          await storePaymentReceipt(receipt: 1, userId: userId);
+          storedPaymentReceipt = await getPaymentReceipt(userId: userId);
+        }
 
+        selectedReceit = await selectReciet(storedPaymentReceipt!);
+        if (storedPaymentReceipt != null) {
+          if (selectedReceit.valid!) {
+            if (storedPaymentReceipt! <
+                    selectedReceit.paperNum! + selectedReceit.totalPapers! &&
+                storedPaymentReceipt! > selectedReceit.paperNum!) {
+              paymentReceipt = storedPaymentReceipt!;
+              await storePaymentReceipt(
+                  receipt: paymentReceipt, userId: userId);
+            } else if (storedPaymentReceipt! < selectedReceit.paperNum!) {
               paymentReceipt = selectedReceit.paperNum!;
               await storePaymentReceipt(
                   receipt: paymentReceipt, userId: userId);
             } else {
               selectedReceit = await selectReciet(storedPaymentReceipt!);
+              paymentReceipt = selectedReceit.paperNum!;
 
-              paymentReceipt = storedPaymentReceipt!;
               await storePaymentReceipt(
                   receipt: paymentReceipt, userId: userId);
+              if (storedPaymentReceipt! < selectedReceit.paperNum!) {
+                selectedReceit = await selectReciet(storedPaymentReceipt!);
+
+                paymentReceipt = selectedReceit.paperNum!;
+                await storePaymentReceipt(
+                    receipt: paymentReceipt, userId: userId);
+              } else {
+                selectedReceit = await selectReciet(storedPaymentReceipt!);
+
+                paymentReceipt = storedPaymentReceipt!;
+                await storePaymentReceipt(
+                    receipt: paymentReceipt, userId: userId);
+              }
             }
+          } else {
+            await getReciets();
+            selectedReceit = await selectReciet(storedPaymentReceipt!);
+            paymentReceipt = selectedReceit.paperNum!;
+            updateController();
           }
         } else {
-          await getReciets();
-          selectedReceit = await selectReciet(storedPaymentReceipt!);
-          paymentReceipt = selectedReceit.paperNum!;
-          updateController();
+          selectedReceit = receipts.firstWhere(
+            (element) => element.valid == true,
+            orElse: () => RecietCollectionDataModel(
+                id: 0, paperNum: 0, totalPapers: 0, valid: false),
+          );
+          if (selectedReceit.id != 0) {
+            paymentReceipt = selectedReceit.paperNum!;
+            await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
+          }
         }
+        updateController();
       } else {
+        await storePaymentReceipt(receipt: 1, userId: userId);
+        await addReciet();
+        receipts = await getReciets();
         selectedReceit = receipts.firstWhere(
           (element) => element.valid == true,
           orElse: () => RecietCollectionDataModel(
@@ -573,22 +710,10 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
           paymentReceipt = selectedReceit.paperNum!;
           await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
         }
+        updateController();
       }
-      updateController();
-    } else {
-      await storePaymentReceipt(receipt: 1, userId: userId);
-      await addReciet();
-      receipts = await getReciets();
-      selectedReceit = receipts.firstWhere(
-        (element) => element.valid == true,
-        orElse: () => RecietCollectionDataModel(
-            id: 0, paperNum: 0, totalPapers: 0, valid: false),
-      );
-      if (selectedReceit.id != 0) {
-        paymentReceipt = selectedReceit.paperNum!;
-        await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
-      }
-      updateController();
+    } catch (e) {
+      print(e.toString());
     }
   }
 

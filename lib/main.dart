@@ -1,5 +1,23 @@
 import 'package:code_icons/core/adapters/auth_entity.dart';
+import 'package:code_icons/core/adapters/customers.dart';
+import 'package:code_icons/core/adapters/loginRequest.dart';
+import 'package:code_icons/core/adapters/settings.dart';
+import 'package:code_icons/data/model/request/login_request.dart';
+import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/domain/entities/HR/employee/employee_entity.dart';
 import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
+import 'package:code_icons/domain/entities/settings/settings_entity.dart';
+import 'package:code_icons/presentation/HR/All_Attendances_by_day/All_Attendances_by_day_screen.dart';
+import 'package:code_icons/presentation/HR/HR_Screen.dart';
+import 'package:code_icons/presentation/HR/LoanRequest/LoanRequestScreen.dart';
+import 'package:code_icons/presentation/HR/LoanRequest/cubit/Loan_order_cubit.dart';
+import 'package:code_icons/presentation/HR/VacationRequest/VacationOrderScreen.dart';
+import 'package:code_icons/presentation/HR/VacationRequest/cubit/vaction_order_cubit.dart';
+import 'package:code_icons/presentation/HR/absenceRequest/absenceScreen.dart';
+import 'package:code_icons/presentation/HR/absenceRequest/cubit/absenceCubit.dart';
+import 'package:code_icons/presentation/HR/attendance/attendanceScreen.dart';
+import 'package:code_icons/presentation/HR/attendance/cubit/attendace_cubit.dart';
+import 'package:code_icons/presentation/HR/permissionRequest/permissionRequestScreen.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
@@ -14,6 +32,8 @@ import 'package:code_icons/presentation/collections/CustomerData/customer_data_s
 import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
+import 'package:code_icons/presentation/home/cubit/BottomNavCubit.dart';
+import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/E-commerce%20Setting_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
@@ -40,6 +60,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:code_icons/core/adapters/EmployeeEntityAdapter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,30 +77,83 @@ void main() async {
 /*     Hive.registerAdapter(RecietCollectionDataModelAdapter());
  */
   Hive.registerAdapter(AuthResponseDMAdapter()); // Register the adapter
+  Hive.registerAdapter(CustomerDataEntityAdapter());
+  Hive.registerAdapter(SettingsEntityAdapter());
+  Hive.registerAdapter(EmployeeEntityAdapter());
+  Hive.registerAdapter(LoginRequestAdapter());
 
   await Hive.openBox('userBox');
   await Hive.openBox('receiptsBox');
+  await Hive.openBox<LoginRequest>('login_requests');
+
   setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => MyApp(
+      builder: (context) => const MyApp(
           /*  route: route, */
           ), // Wrap your app
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({
+class MyApp extends StatefulWidget {
+  const MyApp({
     super.key,
     /* required this.route */
   });
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   late String route;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // Remove the observer
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached ||
+        state == AppLifecycleState.inactive) {
+      _clearCache(); // Clear the cache when the app is being closed
+      clearEmployeeBox();
+    } else if (state == AppLifecycleState.detached) {}
+  }
+
+  Future<void> _clearCache() async {
+    var box = await Hive.openBox<CustomerDataEntity>('customersBox');
+    var settingBox = await Hive.openBox<SettingsEntity>('settingsBox');
+    var employeeBox = await Hive.openBox<EmployeeEntity>('employeeBox');
+    var loginBox = await Hive.openBox<LoginRequest>('login_requests');
+
+    await employeeBox.clear();
+    await box.clear();
+    /* await loginBox.clear(); */
+
+    await settingBox.clear(); // Clear all the data in the box
+  }
+
+  Future<void> clearEmployeeBox() async {
+    var employeeBox = await Hive.openBox<EmployeeEntity>('employeeBox');
+
+    await employeeBox.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(const StackOverflowError().stackTrace.toString());
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -93,11 +167,17 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
+          create: (context) => HomeScreenViewModel(
+            fetchEmployeeDataByIDUseCase: injectFetchEmployeeDataByIDUseCase(),
+          ),
+        ),
+        BlocProvider(
           create: (context) => UnlimitedCollectionCubit(
             getUnRegisteredTradeCollectionUseCase:
                 injectGetUnRegisteredTradeCollectionUseCase(),
             postUnRegisteredTradeCollectionUseCase:
                 injectPostUnRegisteredTradeCollectionUseCase(),
+            authManager: injectAuthManagerInterface(),
           ),
         ),
         BlocProvider(
@@ -123,6 +203,13 @@ class MyApp extends StatelessWidget {
               paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase()),
         ),
         BlocProvider(create: (context) => PurchasesCubit()),
+        BlocProvider(create: (context) => BottomNavCubit()),
+        BlocProvider(create: (context) => VactionOrderCubit()),
+        BlocProvider(create: (context) => LoanRequestCubit()),
+        BlocProvider(create: (context) => AbsenceRequestCubit()),
+        BlocProvider(
+          create: (context) => AttendaceCubit(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(430, 932),
@@ -145,11 +232,20 @@ class MyApp extends StatelessWidget {
             SystemSettings.routeName: (context) => const SystemSettings(),
             EcommerceSetting.routeName: (context) => const EcommerceSetting(),
             MainSettingScreen.routeName: (context) => MainSettingScreen(),
-            CollectionsScreen.routeName: (context) => CollectionsScreen(),
+            HRScreen.routeName: (context) => HRScreen(),
+            LoanRequestScreen.routeName: (context) => LoanRequestScreen(),
+            AbsenceRequestScreen.routeName: (context) => AbsenceRequestScreen(),
+            AttendanceScreen.routeName: (context) => AttendanceScreen(),
+            PermissionRequestScreen.routeName: (context) =>
+                PermissionRequestScreen(),
+            AllAttendancesScreen.routeName: (context) =>
+                const AllAttendancesScreen(),
+            VacationOrderScreen.routeName: (context) => VacationOrderScreen(),
             UnlimitedCollection.routeName: (context) => UnlimitedCollection(
                   data: TradeCollectionEntity(),
                 ),
             CustomerDataScreen.routeName: (context) => CustomerDataScreen(),
+            CollectionsScreen.routeName: (context) => CollectionsScreen(),
             AllTradeProveScreen.routeName: (context) =>
                 const AllTradeProveScreen(),
             AllDailyCollectorScreen.routeName: (context) =>

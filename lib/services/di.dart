@@ -3,27 +3,50 @@
 // repo => datasource
 // data source => api
 
+import 'dart:io';
+
+import 'package:code_icons/core/helpers/HttpRequestHelper.dart';
+import 'package:code_icons/core/helpers/_handleResponseHelper.dart';
+import 'package:code_icons/data/api/HR/Requests/attendence/IAttendance.dart';
+import 'package:code_icons/data/api/HR/Requests/attendence/attendance_manager.dart';
+import 'package:code_icons/data/api/HR/employee/Employee_interface.dart';
+import 'package:code_icons/data/api/HR/employee/Employee_manager.dart';
 import 'package:code_icons/data/api/api_manager.dart';
-import 'package:code_icons/data/repository/dataSource/auth_remote_data_source_impl.dart';
+import 'package:code_icons/data/api/auth/auth_manager.dart';
+import 'package:code_icons/data/api/auth/auth_manager_interface.dart';
+import 'package:code_icons/data/api/purchases/PR_Request/PR_manager.dart';
+import 'package:code_icons/data/api/purchases/PR_Request/PR_request_interface.dart';
+import 'package:code_icons/data/api/tradeChamber/collections/trade_collection_interface.dart';
+import 'package:code_icons/data/api/tradeChamber/collections/trade_collection_manager.dart';
+import 'package:code_icons/data/api/tradeChamber/customers/customers_interface.dart';
+import 'package:code_icons/data/api/tradeChamber/customers/customers_manager.dart';
+import 'package:code_icons/data/interfaces/IHttpClient.dart';
+import 'package:code_icons/data/repository/dataSource/HR/Employee/Employee_DataSource_Impl.dart';
+import 'package:code_icons/data/repository/dataSource/auth/HttpClientImpl.dart';
+import 'package:code_icons/data/repository/dataSource/auth/auth_remote_data_source_impl.dart';
 import 'package:code_icons/data/repository/dataSource/fetchTradeCollectionsDataSource_Impl.dart';
 import 'package:code_icons/data/repository/dataSource/get_customer_data_remote_impl.dart';
 import 'package:code_icons/data/repository/dataSource/post_trade_collection_data_source_impl.dart';
 import 'package:code_icons/data/repository/dataSource/purcase_request_remote_impl.dart';
+import 'package:code_icons/data/repository/repository/HR/Employee/Employee_Repo_Impl.dart';
 import 'package:code_icons/data/repository/repository/Purchase_requset_repo_impl.dart';
 import 'package:code_icons/data/repository/repository/auth_repository_impl.dart';
 import 'package:code_icons/data/repository/repository/fetchTradeCollectionsRepo_Impl.dart';
 import 'package:code_icons/data/repository/repository/get_customer_data_repo_impl.dart';
 import 'package:code_icons/data/repository/repository/post_trade_collection_repo_impl.dart';
+import 'package:code_icons/domain/repository/data_source/Employee/Employee_Repo.dart';
 import 'package:code_icons/domain/repository/data_source/auth_remote_data_source.dart';
 import 'package:code_icons/domain/repository/data_source/fetchTradeCollectionsDataSource.dart';
 import 'package:code_icons/domain/repository/data_source/get_customer_data_remote.dart';
 import 'package:code_icons/domain/repository/data_source/post_trade_collection_data_source.dart';
 import 'package:code_icons/domain/repository/data_source/purchase_request_remote_data_source.dart';
+import 'package:code_icons/domain/repository/repository/HR/Employee/Employee_Repo.dart';
 import 'package:code_icons/domain/repository/repository/Purchase_request_dart.dart';
 import 'package:code_icons/domain/repository/repository/auth_repository.dart';
 import 'package:code_icons/domain/repository/repository/fetchTradeCollectionsRepo.dart';
 import 'package:code_icons/domain/repository/repository/get_customer_data_repo.dart';
 import 'package:code_icons/domain/repository/repository/post_trade_collection_repo.dart';
+import 'package:code_icons/domain/use_cases/HR/Employee/fetchEmployeeDataByID.dart';
 import 'package:code_icons/domain/use_cases/fetch_Station_usecase.dart';
 import 'package:code_icons/domain/use_cases/fetch_activity_useCase.dart';
 
@@ -48,6 +71,68 @@ LoginUseCase injectLoginUseCase() {
   return LoginUseCase(authRepository: injectAuthRepository());
 }
 
+AuthManager injectAuthManagerInterface() {
+  return AuthManager(
+    httpClient: injectHttpClient(),
+    httpRequestHelper: injectHttpRequestHelper(),
+    handleResponseHelper: injectHandleResponseHelper(),
+  );
+}
+
+IAttendance injectIAttendance() {
+  return AttendanceManager(
+      authManager: injectAuthManagerInterface(),
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper());
+}
+
+FetchEmployeeDataByIDUseCase injectFetchEmployeeDataByIDUseCase() {
+  return FetchEmployeeDataByIDUseCase(employeeRepo: injectEmployeeRepo());
+}
+
+EmployeeRepo injectEmployeeRepo() {
+  return EmployeeRepoImpl(employeeDataSource: injectEmployeeDataSource());
+}
+
+EmployeeDataSource injectEmployeeDataSource() {
+  return EmployeeDataSourceImpl(employeeInterface: injectEmployeeInterface());
+}
+
+EmployeeInterface injectEmployeeInterface() {
+  return EmployeeManager(
+      authManager: injectAuthManagerInterface(),
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper());
+}
+
+TradeCollectionsInterface injectTradeCollectionsInterface() {
+  return TradeCollectionManager(
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper(),
+      authManager: injectAuthManagerInterface());
+}
+
+CustomersDataInterface injectCustomersDataInterface() {
+  return CustomersManager(
+      httpRequestHelper: injectHttpRequestHelper(),
+      authManager: injectAuthManagerInterface(),
+      handleResponseHelper: injectHandleResponseHelper());
+}
+
+HandleResponseHelper injectHandleResponseHelper() {
+  return HandleResponseHelper(httpRequestHelper: injectHttpRequestHelper());
+}
+
+IHttpClient injectHttpClient() {
+  return HttpClientImpl();
+}
+
+HttpRequestHelper injectHttpRequestHelper() {
+  return HttpRequestHelper(
+    httpClient: injectHttpClient(),
+  );
+}
+
 AuthRepository injectAuthRepository() {
   return AuthRepositoryImpl(authRemoteDataSource: injectAuthDataSource());
 }
@@ -68,7 +153,16 @@ PurchaseRequestRepo injectPurchaseRequestRepo() {
 
 PurchaseRequestRemoteDataSource injectPurchaseRequestRemoteDataSource() {
   return PurchaseRequestRemoteDataSourceImpl(
-      apiManager: ApiManager.getInstance());
+    apiManager: ApiManager.getInstance(),
+    prRequestManager: injectPrRequestInterface(),
+  );
+}
+
+PrRequestInterface injectPrRequestInterface() {
+  return PrRequestManager(
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper(),
+      authManager: injectAuthManagerInterface());
 }
 
 PostCustomerDataUseCase injectPostCustomerDataUseCase() {

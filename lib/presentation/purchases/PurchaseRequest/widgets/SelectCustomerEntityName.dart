@@ -1,8 +1,12 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:code_icons/core/enums/searchCases.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectCustomerEntityName extends StatelessWidget {
@@ -30,7 +34,6 @@ class SelectCustomerEntityName extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: 8.w,
-        vertical: 16.h,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +44,18 @@ class SelectCustomerEntityName extends StatelessWidget {
                 color: AppColors.primaryColor, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 20.h),
-          CustomDropdown.search(
+          CustomDropdown.searchRequest(
+            futureRequest: (query) async {
+              /*   context.read<AddCollectionCubit>().searchCustomerData(
+                  query: query, searchCase: SearchCases.Name); */
+              final filter = '["brandNameBL","contains","$query"]';
+
+              context
+                  .read<AddCollectionCubit>()
+                  .searchCustomerData(skip: 10, take: 20, filter: filter);
+              return context.read<AddCollectionCubit>().customerData;
+            },
+            overlayHeight: 650.h,
             headerBuilder: (context, selectedItem, enabled) {
               selectedItem as CustomerDataEntity;
               return Text(
@@ -58,7 +72,7 @@ class SelectCustomerEntityName extends StatelessWidget {
               return Container(
                 /*  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), */
                 decoration: BoxDecoration(
-                  color: AppColors.lightBlueColor,
+                  color: AppColors.whiteColor,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -70,10 +84,10 @@ class SelectCustomerEntityName extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 24),
+                      horizontal: 16.0, vertical: 16),
                   child: Row(
                     children: [
-                      Container(
+                      /*  Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: AppColors.blueColor.withOpacity(0.8),
@@ -84,42 +98,45 @@ class SelectCustomerEntityName extends StatelessWidget {
                           color: AppColors.whiteColor,
                           size: 28,
                         ),
-                      ),
-                      const SizedBox(width: 25),
+                      ), */
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              item.brandNameBl!,
-                              style: const TextStyle(
-                                color: AppColors.whiteColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                            Wrap(
+                              children: [
+                                Text(
+                                  item.brandNameBl!,
+                                  style: const TextStyle(
+                                    color: AppColors.blackColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+/*                                   overflow: TextOverflow.ellipsis,
+ */
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 25),
                             Row(
-                              /*    mainAxisAlignment: MainAxisAlignment.spaceBetween, */
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
                                   child: Text(
                                     item.tradeRegistryBl!,
                                     style: const TextStyle(
-                                      color: AppColors.whiteColor,
+                                      color: AppColors.greyColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Spacer(),
                                 Text(
                                   CustomersCubit.customersCubit
                                       .getTypeById(item.tradeRegistryTypeBl!),
                                   style: const TextStyle(
-                                    color: AppColors.whiteColor,
+                                    color: AppColors.greyColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
@@ -129,12 +146,14 @@ class SelectCustomerEntityName extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Flexible(
                                   child: Text(
                                     item.tradeOfficeNameBl!,
                                     style: const TextStyle(
-                                      color: AppColors.whiteColor,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.greyColor,
                                       fontSize: 14,
                                     ),
                                     overflow: TextOverflow.ellipsis,

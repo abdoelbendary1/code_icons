@@ -34,14 +34,14 @@ class AllDailyCollectorCubit extends Cubit<AllDailyCollectorState> {
   }
 
   Future<void> fetchCustomerData() async {
-    var either = await fetchCustomerDataUseCase.invoke();
+   /*  var either = await fetchCustomerDataUseCase.invoke();
     either.fold((failure) {
       print(failure.errorMessege);
       emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
     }, (response) {
       customerData = response;
       emit(GetAllCustomerDataSuccessDaily(customerData: customerData));
-    });
+    }); */
   }
 
   CustomerDataEntity getCustomerById(int customerId) {

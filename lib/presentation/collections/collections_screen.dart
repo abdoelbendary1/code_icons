@@ -1,6 +1,7 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/presentation/home/widgets/custom_card.dart';
+import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,71 +18,55 @@ class CollectionsScreen extends StatelessWidget {
     var menuItems =
         ModalRoute.of(context)!.settings.arguments as List<MenuItem>;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(120.h),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.blueColor, AppColors.lightBlueColor],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: AppBar(
-            toolbarHeight: 120.h,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(
-              "التحصيلات",
-              style: TextStyle(
-                color: AppColors.whiteColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 24.sp,
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1.2,
+      appBar: buildAppBar(context: context, title: "التحصيلات"),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 30.h),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 36.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "التحصيلات المالية",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.blackColor.withOpacity(0.8),
+                    fontSize: 25,
+                  ),
                 ),
-                itemBuilder: (context, index) {
-                  String title = menuItems[index].title;
-                  /* IconData icon = menuCubit.menus[title]!['icon'] as IconData;
-                  List<MenuItem> menuItem =
-                      menuCubit.menus[title]!['items'] as List<MenuItem>; */
-                  String routeName = menuItems[index].route;
+                SizedBox(
+                  height: 5.h,
+                ),
+                const Text(
+                  "ماذا تريد ان تفعل الأن؟",
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: AppColors.greyColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20.h),
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                String title = menuItems[index].title;
 
-                  return CustomCard(
-                    title: title,
-                    routeName: routeName,
-                  );
-                },
-                itemCount: menuItems.length,
-              ),
-            )
-          ],
-        ),
+                String routeName = menuItems[index].route;
+
+                return CustomCard(
+                  title: title,
+                  routeName: routeName,
+                );
+              },
+              itemCount: menuItems.length,
+            ),
+          )
+        ],
       ),
     );
   }
