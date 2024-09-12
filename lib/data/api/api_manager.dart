@@ -78,9 +78,13 @@ class ApiManager {
   }
 
   Future<Either<Failures, List<TradeCollectionResponse>>>
-      fetchTradeCollectionData() async {
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+  }) async {
     try {
-      return tradeCollectionsInterface.fetchTradeCollectionData();
+      return tradeCollectionsInterface.fetchTradeCollectionData(
+          skip: skip, take: take);
     } catch (e) {
       return left(Failures(errorMessege: e.toString()));
     }

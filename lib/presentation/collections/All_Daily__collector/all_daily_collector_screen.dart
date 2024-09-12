@@ -38,12 +38,11 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
   @override
   void initState() {
     super.initState();
-    allDailyCollectorCubit
-        .fetchCustomerData()
-        .whenComplete(() => allDailyCollectorCubit.fetchAllCollections());
+    allDailyCollectorCubit.fetchCustomerData(skip: 0, take: 20).whenComplete(
+        () => allDailyCollectorCubit.fetchAllCollections(skip: 0, take: 20));
   }
 
-  var renderOverlay = true;
+  /* var renderOverlay = true;
   var visible = true;
   var switchLabelPosition = false;
   var extend = false;
@@ -66,7 +65,8 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
     FloatingActionButtonLocation.startTop,
     FloatingActionButtonLocation.centerTop,
     FloatingActionButtonLocation.endTop,
-  ];
+  ]; */
+  DataPagerController dataPagerController = DataPagerController();
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +150,12 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                   if (state is GetAllCollectionsSuccess) {
                     if (state.dataList.isNotEmpty) {
                       _dataSource = CollectionsDataSource(
+                        onPageChange: (skip, take) {
+                          /*  allDailyCollectorCubit.fetchCustomerData(
+                              skip: skip, take: take); */
+                          allDailyCollectorCubit.fetchAllCollections(
+                              skip: skip, take: take);
+                        },
                         collections: state.dataList,
                         onRowSelected: (row) {
                           allDailyCollectorCubit.selectRow(row);
@@ -164,8 +170,9 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 0.0),
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10.0.h,
+                              ),
                               child: Container(
                                 decoration: const BoxDecoration(
                                     color: AppColors.whiteColor),
@@ -211,8 +218,6 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                     columns: [
                                       buildGridColumn('customerName', 'الإسم',
                                           Alignment.centerRight),
-                                      buildGridColumn('address', 'العنوان ',
-                                          Alignment.centerRight),
                                       buildGridColumn('collectionDateBl',
                                           'تاريح السجل', Alignment.centerRight),
                                       buildGridColumn('paymentReceiptNumBl',
@@ -223,12 +228,33 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                           Alignment.centerRight),
                                       buildGridColumn('currentBl', 'حالي',
                                           Alignment.centerRight),
+                                      buildGridColumn('activityBl', 'النشاط',
+                                          Alignment.centerRight),
+                                      buildGridColumn(
+                                          'tradeRegistryTypeBl',
+                                          'نوع السجل التجاري',
+                                          Alignment.centerRight),
                                       buildGridColumn('differentBl', 'متنوع',
                                           Alignment.centerRight),
                                       buildGridColumn('totalBl', 'إجمالي',
                                           Alignment.centerRight),
-                                      /*   buildGridColumn('customerDataIdBl', 'ID',
-                                          Alignment.centerRight), */
+                                   
+                                      buildGridColumn('customerDataIdBl',
+                                          'معرف العميل', Alignment.centerRight),
+                                      buildGridColumn('lastPaidYearBl',
+                                          'آخر سنة دفع', Alignment.centerRight),
+                                      buildGridColumn('capitalBl', 'رأس المال',
+                                          Alignment.centerRight),
+                                      buildGridColumn('collectorNameBl',
+                                          'اسم المحصل', Alignment.centerRight),
+                                      buildGridColumn(
+                                          'brandNameBl',
+                                          'العلامة التجارية',
+                                          Alignment.centerRight),
+                                      buildGridColumn(
+                                          'tradeRegistryBl',
+                                          'السجل التجاري',
+                                          Alignment.centerRight),
                                     ],
                                     selectionMode: SelectionMode.single,
                                     onSelectionChanged:
@@ -271,13 +297,21 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                             child: SizedBox(
                               height: 60.h,
                               child: SfDataPager(
+                                controller: dataPagerController,
                                 itemHeight: 40.h,
                                 availableRowsPerPage: const [10, 20, 30],
                                 delegate: _dataSource,
-                                pageCount:
-                                    (_dataSource.collections.length.toDouble() /
+                                pageCount: 10
+                                /*  (_dataSource.collections.length.toDouble() /
                                             30)
-                                        .ceilToDouble(),
+                                        .ceilToDouble() */
+                                ,
+                                onPageNavigationStart: (pageIndex) {
+                                  /* allDailyCollectorCubit.fetchCustomerData(
+                                      skip: pageIndex * 20, take: 20); */
+                                  allDailyCollectorCubit.fetchAllCollections(
+                                      skip: pageIndex * 20, take: 20);
+                                },
                                 initialPageIndex: 1,
                               ),
                             ),
@@ -286,9 +320,10 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                       ),
                     );
                   } else if (state is GetAllCollectionsError) {
+                    print(state.errorMsg);
                     return Center(child: Text('Error: ${state.errorMsg}'));
                   }
-                  return const Expanded(
+                  return Expanded(
                     child: Column(
                       children: [
                         Spacer(),
@@ -330,7 +365,7 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
     );
   }
 
-  TradeCollectionEntity convertRowToEntity(DataGridRow? row) {
+  /*  TradeCollectionEntity convertRowToEntity(DataGridRow? row) {
     final cells = row!.getCells();
     return TradeCollectionEntity(
       collectionDateBl: cells[2].value.toString(),
@@ -342,5 +377,5 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
       totalBl: cells[8].value as double?,
       /*  customerDataIdBl: cells[9].value as int?, */
     );
-  }
+  } */
 }

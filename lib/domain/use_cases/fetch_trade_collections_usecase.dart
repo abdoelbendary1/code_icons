@@ -13,7 +13,8 @@ class FetchTradeCollectionDataUseCase {
   });
 
   Future<Either<Failures, List<TradeCollectionEntity>>>
-      fetchTradeCollectionData() async {
-    return await fetchTradeCollectionsRepo.fetchTradeCollectionData();
+      fetchTradeCollectionData({ required int skip,
+    required int take,}) async {
+    return await fetchTradeCollectionsRepo.fetchTradeCollectionData(skip: skip,take: take);
   }
 }

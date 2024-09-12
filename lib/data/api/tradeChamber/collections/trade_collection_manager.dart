@@ -29,14 +29,26 @@ class TradeCollectionManager implements TradeCollectionsInterface {
   });
   @override
   Future<Either<Failures, List<TradeCollectionResponse>>>
-      fetchTradeCollectionData() async {
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+  }) async {
     try {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
+      var queryParams = {
+        'skip': skip.toString(),
+        'take': take.toString(),
+        'requireTotalCount': 'true',
+        // Only add filter if provided
+      };
 
       var url = Uri.https(
-          ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
+        ApiConstants.chamberApi,
+        ApiConstants.tradeCollectionEndPoint,
+        queryParams,
+      );
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

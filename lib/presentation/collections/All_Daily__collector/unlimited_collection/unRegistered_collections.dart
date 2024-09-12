@@ -169,8 +169,7 @@ class _UnRegisteredCollectionsScreenState
                         children: [
                           Expanded(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 0.0),
+                              padding: EdgeInsets.symmetric(vertical: 10.0.h),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color:
@@ -295,7 +294,7 @@ class _UnRegisteredCollectionsScreenState
                       ),
                     );
                   } else if (state is GetCollectionsLoading) {
-                    return const Expanded(
+                    return Expanded(
                       child: Column(
                         children: [
                           Spacer(),
@@ -339,7 +338,7 @@ class _UnRegisteredCollectionsScreenState
     );
   }
 
-  TradeCollectionEntity convertRowToEntity(DataGridRow? row) {
+/*   TradeCollectionEntity convertRowToEntity(DataGridRow? row) {
     final cells = row!.getCells();
     return TradeCollectionEntity(
       collectionDateBl: cells[2].value.toString(),
@@ -350,5 +349,5 @@ class _UnRegisteredCollectionsScreenState
       differentBl: cells[7].value as double?,
       totalBl: cells[8].value as double?,
     );
-  }
+  } */
 }

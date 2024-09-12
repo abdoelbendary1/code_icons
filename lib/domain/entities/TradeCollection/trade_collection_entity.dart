@@ -5,32 +5,38 @@ class TradeCollectionEntity {
   dynamic yearsOfRepaymentLstBl;
   String? paymentReceiptNumBl;
   double? compensationBl;
-  double? activityBL;
   double? lateBl;
   double? currentBl;
+  double? activityBl;
+  int? tradeRegistryTypeBl;
   double? differentBl;
   double? totalBl;
   dynamic notesBl;
   int? customerDataIdBl;
-  /* String? cutomerName;
-  String? address; */
+  int? lastPaidYearBl;
+  double? capitalBl;
+  dynamic collectorNameBl;
+  String? brandNameBl;
+  String? tradeRegistryBl;
 
-  TradeCollectionEntity({
-    this.idBl,
-    this.collectionDateBl,
-    this.yearsOfRepaymentBl,
-    this.yearsOfRepaymentLstBl,
-    this.paymentReceiptNumBl,
-    this.compensationBl,
-    this.lateBl,
-    this.currentBl,
-    this.differentBl,
-    this.totalBl,
-    this.notesBl,
-    this.customerDataIdBl,this.activityBL,
-    String? cutomerName,
-    String? address,
-    /*  this.cutomerName,
-    this.address, */
-  });
+  TradeCollectionEntity(
+      {this.idBl,
+      this.collectionDateBl,
+      this.yearsOfRepaymentBl,
+      this.yearsOfRepaymentLstBl,
+      this.paymentReceiptNumBl,
+      this.compensationBl,
+      this.lateBl,
+      this.currentBl,
+      this.activityBl,
+      this.tradeRegistryTypeBl,
+      this.differentBl,
+      this.totalBl,
+      this.notesBl,
+      this.customerDataIdBl,
+      this.lastPaidYearBl,
+      this.capitalBl,
+      this.collectorNameBl,
+      this.brandNameBl,
+      this.tradeRegistryBl});
 }

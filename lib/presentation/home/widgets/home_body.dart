@@ -40,11 +40,11 @@ class _HomeBodyState extends State<HomeBody> {
           ..getCachedEmployeeEntity(),
         builder: (context, state) {
           if (state is HomeScreenLoading) {
-            return const Column(
+            return  Column(
               children: [
-                Spacer(),
+                const Spacer(),
                 LoadingStateAnimation(),
-                Spacer(),
+                const Spacer(),
               ],
             );
           } else if (state is HomeScreenError) {

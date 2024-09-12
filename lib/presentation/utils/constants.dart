@@ -434,6 +434,16 @@ class AppLocalData {
           icon: Icons.payment,
         ),
         MenuItem(
+          title: 'بيان ايصالات السداد',
+          route: AllDailyCollectorScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
+          title: 'بيان الحوافظ الغير مقيده',
+          route: UnRegisteredCollectionsScreen.routeName,
+          icon: Icons.payment,
+        ),
+        MenuItem(
           title: 'إضافه حافظة غير مقيدة',
           route: UnlimitedCollection.routeName,
           icon: Icons.unpublished_outlined,

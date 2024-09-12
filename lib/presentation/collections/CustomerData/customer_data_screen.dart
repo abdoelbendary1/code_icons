@@ -131,7 +131,7 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
                   } else if (state is FetchCustomersError) {
                     return Center(child: Text('Error: ${state.errorMsg}'));
                   }
-                  return const Column(
+                  return  Column(
                     children: [
                       Spacer(),
                       LoadingStateAnimation(),

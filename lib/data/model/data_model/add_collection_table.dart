@@ -8,12 +8,15 @@ import 'package:code_icons/domain/entities/TradeCollection/trade_collection_enti
 
 class CollectionsDataSource extends DataGridSource {
   final List<TradeCollectionEntity> collections;
+  final void Function(int skip, int take)
+      onPageChange; // Callback for pagination
   final void Function(TradeCollectionEntity row) onRowSelected;
   AllDailyCollectorCubit allDailyCollectorCubit;
   BuildContext context;
 
   CollectionsDataSource({
     required this.collections,
+    required this.onPageChange,
     required this.onRowSelected,
     required this.allDailyCollectorCubit,
     required this.context,
@@ -23,36 +26,58 @@ class CollectionsDataSource extends DataGridSource {
 
       return DataGridRow(cells: [
         DataGridCell<String>(
-            columnName: 'customerName',
-            value: allDailyCollectorCubit
-                    .getCustomerById(dataGridRow.customerDataIdBl!)
-                    .brandNameBl ??
-                "Unknown"),
-        DataGridCell<String>(
-            columnName: 'address',
-            value: allDailyCollectorCubit
-                    .getCustomerById(dataGridRow.customerDataIdBl!)
-                    .addressBl ??
-                "Unknown"),
+            columnName: 'brandNameBl',
+            value: dataGridRow.brandNameBl ?? "Unknown"),
+      // Assuming "address" is not available
         DataGridCell<String>(
           columnName: 'collectionDateBl',
-          value: DateFormat('y/MM/dd')
-              .format(DateTime.parse(dataGridRow.collectionDateBl!)),
+          value: dataGridRow.collectionDateBl != null
+              ? DateFormat('y/MM/dd')
+                  .format(DateTime.parse(dataGridRow.collectionDateBl!))
+              : "N/A",
         ),
         DataGridCell<String>(
             columnName: 'paymentReceiptNumBl',
-            value: dataGridRow.paymentReceiptNumBl),
+            value: dataGridRow.paymentReceiptNumBl ?? "N/A"),
         DataGridCell<double>(
-            columnName: 'compensationBl', value: dataGridRow.compensationBl),
-        DataGridCell<double>(columnName: 'lateBl', value: dataGridRow.lateBl),
+            columnName: 'compensationBl',
+            value: _convertToDouble(dataGridRow.compensationBl)),
         DataGridCell<double>(
-            columnName: 'currentBl', value: dataGridRow.currentBl),
+            columnName: 'lateBl', value: _convertToDouble(dataGridRow.lateBl)),
         DataGridCell<double>(
-            columnName: 'differentBl', value: dataGridRow.differentBl),
-        DataGridCell<double>(columnName: 'totalBl', value: dataGridRow.totalBl),
-        /*  DataGridCell<int>(
+            columnName: 'currentBl',
+            value: _convertToDouble(dataGridRow.currentBl)),
+        const DataGridCell<String>(
+            columnName: 'activityBl',
+            value: "N/A"), // Assuming activityBl is not available
+        const DataGridCell<String>(
+            columnName: 'tradeRegistryTypeBl',
+            value: "N/A"), // Assuming tradeRegistryTypeBl is not available
+        DataGridCell<double>(
+            columnName: 'differentBl',
+            value: _convertToDouble(dataGridRow.differentBl)),
+        DataGridCell<double>(
+            columnName: 'totalBl',
+            value: _convertToDouble(dataGridRow.totalBl)),
+       
+        DataGridCell<double>(
             columnName: 'customerDataIdBl',
-            value: dataGridRow.customerDataIdBl), */
+            value: _convertToDouble(dataGridRow.customerDataIdBl)),
+        DataGridCell<double>(
+            columnName: 'lastPaidYearBl',
+            value: _convertToDouble(dataGridRow.lastPaidYearBl)),
+        DataGridCell<double>(
+            columnName: 'capitalBl',
+            value: _convertToDouble(dataGridRow.capitalBl)),
+        DataGridCell<String>(
+            columnName: 'collectorNameBl',
+            value: dataGridRow.collectorNameBl?.toString() ?? "N/A"),
+        DataGridCell<String>(
+            columnName: 'brandNameBl',
+            value: dataGridRow.brandNameBl ?? "Unknown"),
+        DataGridCell<String>(
+            columnName: 'tradeRegistryBl',
+            value: dataGridRow.tradeRegistryBl ?? "Unknown"),
       ]);
     }).toList();
   }
@@ -81,25 +106,19 @@ class CollectionsDataSource extends DataGridSource {
                   ? dataGridCell.value
                   : null,
               lateBl: dataGridCell.columnName == 'lateBl'
-                  ? dataGridCell.value as double
+                  ? dataGridCell.value
                   : null,
               currentBl: dataGridCell.columnName == 'currentBl'
-                  ? dataGridCell.value as double
+                  ? dataGridCell.value
                   : null,
               differentBl: dataGridCell.columnName == 'differentBl'
-                  ? dataGridCell.value as double
+                  ? dataGridCell.value
                   : null,
               totalBl: dataGridCell.columnName == 'totalBl'
-                  ? dataGridCell.value as double
+                  ? dataGridCell.value
                   : null,
-              /*    customerDataIdBl: dataGridCell.columnName == 'customerDataIdBl'
-                  ? dataGridCell.value as int?
-                  : null, */
-              cutomerName: dataGridCell.columnName == 'customerName'
-                  ? dataGridCell.value as String?
-                  : null,
-              address: dataGridCell.columnName == 'address'
-                  ? dataGridCell.value as String?
+              brandNameBl: dataGridCell.columnName == 'customerName'
+                  ? dataGridCell.value
                   : null,
             );
             onRowSelected(entity);
@@ -126,5 +145,19 @@ class CollectionsDataSource extends DataGridSource {
         );
       }).toList(),
     );
+  } // Helper function to convert int or null to double
+
+  double? _convertToDouble(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+    return value is int ? value.toDouble() : value as double?;
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    int skip = newPageIndex * 20;
+    onPageChange(skip, 20); // Trigger loading more data
+    return true;
   }
 }

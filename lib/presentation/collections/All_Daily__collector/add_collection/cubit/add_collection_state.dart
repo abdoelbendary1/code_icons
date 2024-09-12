@@ -14,7 +14,8 @@ class SelecetedCustomer extends AddCollectionState {
 final class AddCollectionLoading extends AddCollectionState {}
 
 final class CustomerDataLoaded extends AddCollectionState {
-  
+  List<CustomerDataEntity>? customerData;
+  CustomerDataLoaded({required this.customerData});
 }
 
 final class CustomerDataError extends AddCollectionState {}
@@ -70,11 +71,11 @@ final class GetCustomerDataByIDLoading extends AddCollectionState {}
 // ignore: must_be_immutable
 final class GetCustomerDataByIDSuccess extends AddCollectionState {
   CustomerDataEntity customerData;
-  List<TextEditingController> controllers;
+  List<TextEditingController>? controllers;
   /* List<Map<dynamic, dynamic>> yearsOfPayment; */
   GetCustomerDataByIDSuccess({
     required this.customerData,
-    required this.controllers,
+     this.controllers,
   });
 }
 

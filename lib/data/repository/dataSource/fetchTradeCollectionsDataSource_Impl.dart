@@ -15,8 +15,12 @@ class FetchTradeCollectionsDataSourceImpl
 
   @override
   Future<Either<Failures, List<TradeCollectionEntity>>>
-      fetchTradeCollectionData() async {
-    var either = await apiManager.fetchTradeCollectionData();
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+  }) async {
+    var either =
+        await apiManager.fetchTradeCollectionData(skip: skip, take: take);
     return either.fold((l) => Left(l), (r) => right(r));
   }
 }

@@ -120,7 +120,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     }
   }
  */
-  Future<void> fetchCustomerData({
+  /*  Future<void> fetchCustomerData({
     required int skip,
     required int take,
     String? filter,
@@ -128,7 +128,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     emit(GetAllCustomerDataLoading());
 
     // Try to load cached data first
-    var cachedCustomers = await _getCachedCustomerData();
+    /* var cachedCustomers = await _getCachedCustomerData();
     if (cachedCustomers.isNotEmpty) {
       customersNames = cachedCustomers.map((e) => e.brandNameBl!).toList();
       customerData = cachedCustomers;
@@ -136,7 +136,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
           customerData: cachedCustomers,
           selectedCustomer: cachedCustomers.first));
       return; // Return early if cached data is available
-    }
+    } */
 
     // If no cached data or if refresh is needed, fetch from API
     var either = await fetchCustomerDataUseCase.fetchCustomerData(
@@ -156,7 +156,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
             customerData: response, selectedCustomer: response.first));
       },
     );
-  }
+  } */
 
   Future<List<CustomerDataEntity>> searchCustomerData({
     required int skip,
@@ -168,17 +168,10 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     return either.fold(
       (failure) {
         return [];
-        /* emit(GetAllCustomerDataError(errorMsg: failure.errorMessege)); */
       },
       (response) async {
         customerData = response;
         return customerData;
-
-        // Cache the fetched data
-        /* await _cacheCustomerData(response); */
-
-        /*   emit(GetAllCustomerDataSuccess(
-              customerData: response, selectedCustomer: response.first)); */
       },
     );
   }
@@ -194,7 +187,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     return box.values.toList(); // Retrieve all cached customer data
   }
 
-  /*  void fetchCustomerData({
+  void fetchCustomerData({
     required int skip,
     required int take,
     String? filter,
@@ -214,8 +207,58 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       emit(GetAllCustomerDataSuccess(
           customerData: response, selectedCustomer: response.first));
     });
-  } */
+  }
 
+  Future<List<CustomerDataEntity>> fetchCustomerDataPages({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
+    // No emit here, we handle data directly.
+    var either = await fetchCustomerDataUseCase.fetchCustomerData(
+      skip: skip,
+      take: take,
+      filter: filter,
+    );
+
+    // Handle the result
+    return either.fold((failure) {
+      // Handle the error here (for example, throw an exception or return an empty list)
+      throw Exception(
+          failure.errorMessege); // Or return an empty list if preferred
+    }, (response) {
+      emit(GetAllCustomerDataSuccess(
+          customerData: response, selectedCustomer: response.first));
+      // Process the successful response, for example:
+      customerData = response;
+      return response; // Return the fetched data
+    });
+  }
+
+/*   void fetchCustomerDataPages({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
+    /* emit(GetAllCustomerDataInitial()); */
+    /*  emit(GetAllCustomerDataLoading()); */
+    var either = await fetchCustomerDataUseCase.fetchCustomerData(
+      skip: skip,
+      take: take,
+      filter: filter,
+    );
+    either.fold((failure) {
+      emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
+    }, (response) {
+      customersNames = response.map((e) => e.brandNameBl!).toList();
+      customerData = response;
+      /* emit(CustomerDataLoaded(customerData: response)); */
+      emit(GetAllCustomerDataSuccess(
+          customerData: response, selectedCustomer: response.first));
+    });
+  
+  }
+ */
 // Function to get registry numbers by id
   String getRegistryNumbersById(
       String id, List<CustomerDataEntity> customerData) {

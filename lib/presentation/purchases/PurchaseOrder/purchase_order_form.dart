@@ -118,7 +118,7 @@ class _PurchaseOrderFormState extends State<PurchaseOrderForm> {
           } else if (state is AddPurchasesItemSuccess) {
             return buildItemsListWithAddition(context);
           } else if (state is AddPurchasesItemError) {
-            return const LoadingStateAnimation();
+            return LoadingStateAnimation();
           }
           return Container();
         },

@@ -11,7 +11,8 @@ import 'package:dartz/dartz.dart';
 
 abstract class TradeCollectionsInterface {
   Future<Either<Failures, List<TradeCollectionResponse>>>
-      fetchTradeCollectionData();
+      fetchTradeCollectionData({required int skip,
+    required int take,});
   Future<Either<Failures, TradeCollectionResponse>> getTradeCollectionDataByID({
     required int id,
   });

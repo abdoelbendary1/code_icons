@@ -130,7 +130,7 @@ class _AllAttendancesScreenState extends State<AllAttendancesScreen> {
                             SizedBox(
                               height: 100.h,
                             ),
-                            const LoadingStateAnimation(),
+                            LoadingStateAnimation(),
                           ],
                         );
                       }

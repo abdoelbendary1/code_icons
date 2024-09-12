@@ -287,7 +287,7 @@ class _AllPurchasesScreenState extends State<AllPurchasesScreen> {
               ),
             );
           } else if (state is GetRecietCollctionLoading) {
-            return const Center(
+            return  Center(
               child: LoadingStateAnimation(),
             );
           }

@@ -14,13 +14,18 @@ class TradeCollectionResponse extends TradeCollectionEntity {
     super.totalBl,
     super.notesBl,
     super.customerDataIdBl,
-    super.activityBL,
+    super.activityBl,
+    super.brandNameBl,
+    super.capitalBl,
+    super.collectorNameBl,
+    super.lastPaidYearBl,
+    super.tradeRegistryBl,
+    super.tradeRegistryTypeBl,
   });
 
   TradeCollectionResponse.fromJson(Map<String, dynamic> json) {
-    if (json["idBL"] is int) {
-      idBl = json["idBL"];
-    }
+    idBl = json["idBL"];
+
     if (json["collectionDateBL"] is String) {
       collectionDateBl = json["collectionDateBL"];
     }
@@ -31,28 +36,31 @@ class TradeCollectionResponse extends TradeCollectionEntity {
     if (json["paymentReceiptNumBL"] is String) {
       paymentReceiptNumBl = json["paymentReceiptNumBL"];
     }
-    if (json["compensationBL"] is double) {
-      compensationBl = json["compensationBL"];
-    }
-    if (json["lateBL"] is double) {
-      lateBl = json["lateBL"];
-    }
-    if (json["activityBL"] is double) {
-      lateBl = json["activityBL"];
-    }
-    if (json["currentBL"] is double) {
-      currentBl = json["currentBL"];
-    }
-    if (json["differentBL"] is double) {
-      differentBl = json["differentBL"];
-    }
-    if (json["totalBL"] is double) {
-      totalBl = json["totalBL"];
-    }
+    compensationBl = json["compensationBL"];
+
+    lateBl = json["lateBL"];
+
+    currentBl = json["currentBL"];
+
+    activityBl = json["activityBL"];
+
+    tradeRegistryTypeBl = json["tradeRegistryTypeBL"];
+
+    differentBl = json["differentBL"];
+
+    totalBl = json["totalBL"];
+
     notesBl = json["notesBL"];
-    if (json["customerDataIdBL"] is int) {
-      customerDataIdBl = json["customerDataIdBL"];
-    }
+    customerDataIdBl = json["customerDataIdBL"];
+
+    lastPaidYearBl = json["lastPaidYearBL"];
+
+    capitalBl = json["capitalBL"];
+
+    collectorNameBl = json["collectorNameBL"];
+    brandNameBl = json["brandNameBL"];
+
+    tradeRegistryBl = json["tradeRegistryBL"];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,11 +73,17 @@ class TradeCollectionResponse extends TradeCollectionEntity {
     _data["compensationBL"] = compensationBl;
     _data["lateBL"] = lateBl;
     _data["currentBL"] = currentBl;
-    _data["activityBL"] = currentBl;
+    _data["activityBL"] = activityBl;
+    _data["tradeRegistryTypeBL"] = tradeRegistryTypeBl;
     _data["differentBL"] = differentBl;
     _data["totalBL"] = totalBl;
     _data["notesBL"] = notesBl;
     _data["customerDataIdBL"] = customerDataIdBl;
+    _data["lastPaidYearBL"] = lastPaidYearBl;
+    _data["capitalBL"] = capitalBl;
+    _data["collectorNameBL"] = collectorNameBl;
+    _data["brandNameBL"] = brandNameBl;
+    _data["tradeRegistryBL"] = tradeRegistryBl;
     return _data;
   }
 }

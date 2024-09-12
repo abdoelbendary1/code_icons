@@ -22,9 +22,12 @@ class AllDailyCollectorCubit extends Cubit<AllDailyCollectorState> {
   CustomerDataEntity customer = CustomerDataEntity();
   Map<String, dynamic> customers = {};
 
-  void fetchAllCollections() async {
-    var either =
-        await fetchTradeCollectionDataUseCase.fetchTradeCollectionData();
+  void fetchAllCollections({
+    required int skip,
+    required int take,
+  }) async {
+    var either = await fetchTradeCollectionDataUseCase.fetchTradeCollectionData(
+        skip: skip, take: take);
     either.fold((l) => emit(GetAllCollectionsError(errorMsg: l.errorMessege)),
         (r) {
       {
@@ -33,15 +36,19 @@ class AllDailyCollectorCubit extends Cubit<AllDailyCollectorState> {
     });
   }
 
-  Future<void> fetchCustomerData() async {
-   /*  var either = await fetchCustomerDataUseCase.invoke();
+  Future<void> fetchCustomerData({
+    required int skip,
+    required int take,
+  }) async {
+    var either = await fetchCustomerDataUseCase.fetchCustomerData(
+        skip: skip, take: take);
     either.fold((failure) {
       print(failure.errorMessege);
       emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
     }, (response) {
       customerData = response;
       emit(GetAllCustomerDataSuccessDaily(customerData: customerData));
-    }); */
+    });
   }
 
   CustomerDataEntity getCustomerById(int customerId) {
@@ -63,6 +70,6 @@ class AllDailyCollectorCubit extends Cubit<AllDailyCollectorState> {
   }
 
   void deselectRow() {
-    fetchAllCollections(); // This is to reset the state to the initial list
+    /*  fetchAllCollections(); */ // This is to reset the state to the initial list
   }
 }

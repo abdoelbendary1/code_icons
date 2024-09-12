@@ -432,7 +432,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
               ),
             );
           } else if (state is GetRecietCollctionLoading) {
-            return const Center(
+            return  Center(
               child: LoadingStateAnimation(),
             );
           }

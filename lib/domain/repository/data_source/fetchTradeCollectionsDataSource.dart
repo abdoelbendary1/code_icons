@@ -6,5 +6,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class FetchTradeCollectionsDataSource {
   Future<Either<Failures, List<TradeCollectionEntity>>>
-      fetchTradeCollectionData();
+      fetchTradeCollectionData({ required int skip,
+    required int take,});
 }

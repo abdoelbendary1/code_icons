@@ -62,7 +62,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         },
         builder: (context, state) {
           if (state is GetAttendaceByIDLoading) {
-            return const LoadingStateAnimation();
+            return LoadingStateAnimation();
           }
           return BoardDateTimeBuilder(
               resizeBottom: false,

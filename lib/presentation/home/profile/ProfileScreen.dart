@@ -77,7 +77,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                 bloc: homeScreenViewModel..fetchEmployeeDataByID(),
                 builder: (context, state) {
                   if (state is GetEmployeeDataLoading) {
-                    return const Align(
+                    return  Align(
                         alignment: Alignment.center,
                         child: LoadingStateAnimation());
                   }
