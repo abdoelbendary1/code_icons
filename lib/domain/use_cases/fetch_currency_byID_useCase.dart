@@ -11,7 +11,8 @@ class FetchCurrencyByIDUseCase {
     required this.getCustomerDataRepo,
   });
 
-  Future<Either<Failures, CurrencyEntity>> invoke({required int currencyId}) async {
+  Future<Either<Failures, CurrencyEntity>> invoke(
+      {required int currencyId}) async {
     return await getCustomerDataRepo.fetchCurrencyDataById(
         currencyId: currencyId);
   }

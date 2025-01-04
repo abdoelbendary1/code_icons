@@ -45,7 +45,7 @@ class CurrencyDataModel extends CurrencyEntity {
     if (json["currency_name_ar"] is String) {
       currencyNameAr = json["currency_name_ar"];
     }
-    if (json["rate"] is int) {
+    if (json["rate"] is double) {
       rate = json["rate"];
     }
     userId = json["userId"];

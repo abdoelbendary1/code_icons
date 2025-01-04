@@ -10,6 +10,10 @@ class GetAllCollectionsError extends AllDailyCollectorState {
   GetAllCollectionsError({required this.errorMsg});
 }
 
+class ChangeFilter extends AllDailyCollectorState {
+  ChangeFilter();
+}
+
 class GetAllCollectionsSuccess extends AllDailyCollectorState {
   List<TradeCollectionEntity> dataList;
   GetAllCollectionsSuccess({required this.dataList});

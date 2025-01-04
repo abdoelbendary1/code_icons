@@ -1,7 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
+import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
+import 'package:code_icons/presentation/utils/Date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +18,8 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class CollectionDetailsForm extends StatefulWidget {
+  const CollectionDetailsForm({super.key});
+
   @override
   State<CollectionDetailsForm> createState() => _CollectionDetailsFormState();
 }
@@ -30,28 +34,32 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
   );
 
   final addCollectionControllers = ControllerManager().addCollectionControllers;
+  ControllerManager controllerManager = ControllerManager();
+  @override
+  void initState() {
+    super.initState();
 
-  /*  @override
-  void didChangeDependencies() {
-    Navigator.of(context);
-    super.didChangeDependencies();
-  } */
+    // Add focus listener to the division focus node
+    addCollectionCubit.divisionFocusNode.addListener(() {
+      if (!addCollectionCubit.divisionFocusNode.hasFocus) {
+        // Call recalculateTotal when focus is lost
+        addCollectionCubit.recalculateTotal(
+            context.read<AddCollectionCubit>().paymentValuesEntity);
+      }
+    });
 
-  /*  @override
-  void didUpdateWidget(covariant CollectionDetailsForm oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
+    // Add focus listener to other focus nodes as needed
+    addCollectionCubit.diffrentFocusNode.addListener(() {
+      if (!addCollectionCubit.diffrentFocusNode.hasFocus) {
+        // Call recalculateTotal when focus is lost
+        addCollectionCubit.recalculateTotal(
+            context.read<AddCollectionCubit>().paymentValuesEntity);
+      }
+    });
   }
- */
+
   @override
   void dispose() {
-    // Perform any cleanup before navigating
-    /*  Future.delayed(Duration.zero, () {
-      if (mounted) {
-        Navigator.pushReplacementNamed(
-            context, AllDailyCollectorScreen.routeName);
-      }
-    }); */
     super.dispose();
   }
 
@@ -62,62 +70,30 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         physics: const BouncingScrollPhysics(),
-        /* padding: EdgeInsets.symmetric(horizontal: 2.0.w, vertical: 2.0.h), */
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /*  BlocBuilder<AddCollectionCubit, AddCollectionState>(
-              bloc: addCollectionCubit,
-              builder: (context, state) {
-                return Accordion(
-                  paddingBetweenClosedSections: 20,
-                  disableScrolling: true,
-                  scrollIntoViewOfItems: ScrollIntoViewOfItems.fast,
-                  contentBorderWidth: 0,
-                  contentBackgroundColor: Colors.transparent,
-                  headerBackgroundColorOpened: AppColors.greenColor,
-                  maxOpenSections: 1,
-                  headerBackgroundColor: AppColors.blueColor,
-                  headerPadding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  children: [
-                    AccordionSection(
-                        header: Text(
-                          "بيانات الحافظه",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(fontSize: 20.sp),
-                        ),
-                        content: Container())
-                  ],
-                );
-              },
-            ), */
             Column(
               children: [
                 BuildTextField(
                   label: AppLocalizations.of(context)!.phone_Number_label,
                   hint: AppLocalizations.of(context)!.phone_Number_hint,
-                  controller: ControllerManager()
-                      .getControllerByName('addCollectionPhoneNumController'),
+                  controller: controllerManager.addCollectionPhoneNumController,
                   icon: Icons.phone_iphone,
-                  readOnly: true,
-                  validator: (value) {
+                  keyboardType: TextInputType.number,
+                  /*  validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return "يجب ادخال رقم الموبايل";
                     }
                     return null;
-                  },
+                  }, */
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName('addCollectionPhoneNumController')
-                            .selection =
+                    controllerManager
+                            .addCollectionPhoneNumController.selection =
                         TextSelection(
                             baseOffset: 0,
-                            extentOffset: ControllerManager()
-                                .getControllerByName(
-                                    'addCollectionPhoneNumController')
+                            extentOffset: controllerManager
+                                .addCollectionPhoneNumController
                                 .value
                                 .text
                                 .length);
@@ -127,8 +103,8 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                   label:
                       AppLocalizations.of(context)!.registration_Number_label,
                   hint: AppLocalizations.of(context)!.registration_Number_hint,
-                  controller: ControllerManager().getControllerByName(
-                      'addCollectionRegisrtyNumController'),
+                  controller:
+                      controllerManager.addCollectionRegisrtyNumController,
                   icon: Icons.app_registration,
                   readOnly: true,
                   validator: (value) {
@@ -138,15 +114,12 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                     return null;
                   },
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName(
-                                'addCollectionRegisrtyNumController')
-                            .selection =
+                    controllerManager
+                            .addCollectionRegisrtyNumController.selection =
                         TextSelection(
                             baseOffset: 0,
-                            extentOffset: ControllerManager()
-                                .getControllerByName(
-                                    'addCollectionRegisrtyNumController')
+                            extentOffset: controllerManager
+                                .addCollectionRegisrtyNumController
                                 .value
                                 .text
                                 .length);
@@ -155,8 +128,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                 BuildTextField(
                   label: AppLocalizations.of(context)!.address_label,
                   hint: AppLocalizations.of(context)!.address_hint,
-                  controller: ControllerManager()
-                      .getControllerByName('addCollectionAddressController'),
+                  controller: controllerManager.addCollectionAddressController,
                   icon: Icons.home,
                   readOnly: true,
                   validator: (value) {
@@ -166,14 +138,11 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                     return null;
                   },
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName('addCollectionAddressController')
-                            .selection =
+                    controllerManager.addCollectionAddressController.selection =
                         TextSelection(
                             baseOffset: 0,
-                            extentOffset: ControllerManager()
-                                .getControllerByName(
-                                    'addCollectionAddressController')
+                            extentOffset: controllerManager
+                                .addCollectionAddressController
                                 .value
                                 .text
                                 .length);
@@ -182,10 +151,9 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                 BuildTextField(
                   label: AppLocalizations.of(context)!.registration_Date_label,
                   hint: AppLocalizations.of(context)!.registration_Date_hint,
-                  controller: ControllerManager().getControllerByName(
-                      'addCollectionRegistryDateController'),
+                  controller:
+                      controllerManager.addCollectionRegistryDateController,
                   icon: Icons.app_registration,
-                  readOnly: true,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return "يجب ادخال تاريخ السجل";
@@ -193,18 +161,13 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                     return null;
                   },
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName(
-                                'addCollectionRegistryDateController')
-                            .selection =
-                        TextSelection(
-                            baseOffset: 0,
-                            extentOffset: ControllerManager()
-                                .getControllerByName(
-                                    'addCollectionRegistryDateController')
-                                .value
-                                .text
-                                .length);
+                    AppDatePicker.selectDate(
+                      context: context,
+                      controller:
+                          controllerManager.addCollectionRegistryDateController,
+                      dateStorageMap: addCollectionCubit.dateStorageMap,
+                      key: "addCollectionRegistryDateController",
+                    );
                   },
                 ),
                 BuildTextField(
@@ -212,8 +175,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                       AppLocalizations.of(context)!.commercial_activities_label,
                   hint:
                       AppLocalizations.of(context)!.commercial_activities_hint,
-                  controller: ControllerManager()
-                      .getControllerByName('addCollectionActivityController'),
+                  controller: controllerManager.addCollectionActivityController,
                   icon: Icons.local_activity,
                   readOnly: true,
                   validator: (value) {
@@ -223,14 +185,12 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                     return null;
                   },
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName('addCollectionActivityController')
-                            .selection =
+                    controllerManager
+                            .addCollectionActivityController.selection =
                         TextSelection(
                             baseOffset: 0,
-                            extentOffset: ControllerManager()
-                                .getControllerByName(
-                                    'addCollectionActivityController')
+                            extentOffset: controllerManager
+                                .addCollectionActivityController
                                 .value
                                 .text
                                 .length);
@@ -239,26 +199,43 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                 BuildTextField(
                   label: "رقم الايصال",
                   hint: "رقم الايصال",
-                  controller: ControllerManager().getControllerByName(
-                      'addCollectionPaymentReceitController'),
+                  controller:
+                      controllerManager.addCollectionPaymentReceitController,
                   icon: Icons.local_activity,
-                  readOnly: true,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "يجب ادخال النشاط";
+                      return "يجب ادخال رقم الايصال";
+                    } else if (int.parse(value) >
+                            context
+                                    .read<AddCollectionCubit>()
+                                    .selectedReceit
+                                    .paperNum! +
+                                context
+                                    .read<AddCollectionCubit>()
+                                    .selectedReceit
+                                    .totalPapers! &&
+                        int.parse(value) >
+                            context
+                                .read<AddCollectionCubit>()
+                                .selectedReceit
+                                .paperNum!) {
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          showConfirmBtn: false,
+                          title: "يجب ادخال رقم الايصال داخل الدفتر الحالي",
+                          titleColor: AppColors.redColor);
+                      return "يجب ادخال رقم الايصال داخل الدفتر الحالي";
                     }
                     return null;
                   },
                   onTap: () {
-                    ControllerManager()
-                            .getControllerByName(
-                                'addCollectionPaymentReceitController')
-                            .selection =
+                    controllerManager
+                            .addCollectionPaymentReceitController.selection =
                         TextSelection(
                             baseOffset: 0,
-                            extentOffset: ControllerManager()
-                                .getControllerByName(
-                                    'addCollectionPaymentReceitController')
+                            extentOffset: controllerManager
+                                .addCollectionPaymentReceitController
                                 .value
                                 .text
                                 .length);
@@ -273,10 +250,10 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             label: AppLocalizations.of(context)!.division_label,
                             hint: AppLocalizations.of(context)!.division_hint,
                             keyboardType: TextInputType.number,
-                            controller: ControllerManager().getControllerByName(
-                                'addCollectionDivisionController'),
+                            focusNode: addCollectionCubit.divisionFocusNode,
+                            controller: controllerManager
+                                .addCollectionDivisionController,
                             icon: Icons.diversity_3_sharp,
-                            /* readOnly: true, */
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return "يجب ادخال الشعبه";
@@ -284,15 +261,12 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                               return null;
                             },
                             onTap: () {
-                              ControllerManager()
-                                      .getControllerByName(
-                                          'addCollectionDivisionController')
+                              controllerManager.addCollectionDivisionController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
-                                      extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'addCollectionDivisionController')
+                                      extentOffset: controllerManager
+                                          .addCollectionDivisionController
                                           .value
                                           .text
                                           .length);
@@ -305,8 +279,8 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                                 .compensation_label,
                             hint:
                                 AppLocalizations.of(context)!.compensation_hint,
-                            controller: ControllerManager().getControllerByName(
-                                'addCollectionCompensationController'),
+                            controller: controllerManager
+                                .addCollectionCompensationController,
                             icon: Icons.attach_money,
                             readOnly: true,
                             validator: (value) {
@@ -316,15 +290,13 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                               return null;
                             },
                             onTap: () {
-                              ControllerManager()
-                                      .getControllerByName(
-                                          'addCollectionCompensationController')
+                              controllerManager
+                                      .addCollectionCompensationController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
-                                      extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'addCollectionCompensationController')
+                                      extentOffset: controllerManager
+                                          .addCollectionCompensationController
                                           .value
                                           .text
                                           .length);
@@ -341,8 +313,8 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                                 .financial_arrears_label,
                             hint: AppLocalizations.of(context)!
                                 .financial_arrears_hint,
-                            controller: ControllerManager().getControllerByName(
-                                'addCollectionLateFinanceController'),
+                            controller: controllerManager
+                                .addCollectionLateFinanceController,
                             icon: Icons.attach_money,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -352,15 +324,13 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             },
                             readOnly: true,
                             onTap: () {
-                              ControllerManager()
-                                      .getControllerByName(
-                                          'addCollectionLateFinanceController')
+                              controllerManager
+                                      .addCollectionLateFinanceController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
-                                      extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'addCollectionLateFinanceController')
+                                      extentOffset: controllerManager
+                                          .addCollectionLateFinanceController
                                           .value
                                           .text
                                           .length);
@@ -372,8 +342,8 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             label: AppLocalizations.of(context)!
                                 .current_finance_label,
                             hint: AppLocalizations.of(context)!.current_hint,
-                            controller: ControllerManager().getControllerByName(
-                                'addCollectionCurrentFinanceController'),
+                            controller: controllerManager
+                                .addCollectionCurrentFinanceController,
                             icon: Icons.attach_money,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -383,15 +353,75 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             },
                             readOnly: true,
                             onTap: () {
-                              ControllerManager()
-                                      .getControllerByName(
-                                          'addCollectionCurrentFinanceController')
+                              controllerManager
+                                      .addCollectionCurrentFinanceController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
-                                      extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'addCollectionCurrentFinanceController')
+                                      extentOffset: controllerManager
+                                          .addCollectionCurrentFinanceController
+                                          .value
+                                          .text
+                                          .length);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BuildTextField(
+                            label: "سداد مقدم",
+                            keyboardType: TextInputType.number,
+                            hint: AppLocalizations.of(context)!
+                                .finance_Diffrence_hint,
+                            controller:
+                                controllerManager.addCollectionAdvPayController,
+                            onChanged: (value) {},
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "يجب ادخال المتنوع";
+                              }
+                              return null;
+                            },
+                            readOnly: false,
+                            icon: Icons.add_to_photos_sharp,
+                            onTap: () {
+                              controllerManager.addCollectionLatePayController
+                                      .selection =
+                                  TextSelection(
+                                      baseOffset: 0,
+                                      extentOffset: controllerManager
+                                          .addCollectionAdvPayController
+                                          .value
+                                          .text
+                                          .length);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: BuildTextField(
+                            label: "مديونية",
+                            hint: AppLocalizations.of(context)!
+                                .enter_your_Total_finance_hint,
+                            controller: controllerManager
+                                .addCollectionLatePayController,
+                            readOnly: true,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "يجب ادخال الاجمالي";
+                              }
+                              return null;
+                            },
+                            icon: Icons.money,
+                            onTap: () {
+                              controllerManager.addCollectionLatePayController
+                                      .selection =
+                                  TextSelection(
+                                      baseOffset: 0,
+                                      extentOffset: controllerManager
+                                          .addCollectionLatePayController
                                           .value
                                           .text
                                           .length);
@@ -409,8 +439,9 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             keyboardType: TextInputType.number,
                             hint: AppLocalizations.of(context)!
                                 .finance_Diffrence_hint,
-                            controller: ControllerManager().getControllerByName(
-                                'addCollectionDiffrentFinanaceController'),
+                            focusNode: addCollectionCubit.diffrentFocusNode,
+                            controller: controllerManager
+                                .addCollectionDiffrentFinanaceController,
                             onChanged: (value) {},
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -421,15 +452,13 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             readOnly: false,
                             icon: Icons.add_to_photos_sharp,
                             onTap: () {
-                              ControllerManager()
-                                      .getControllerByName(
-                                          'addCollectionDiffrentFinanaceController')
+                              controllerManager
+                                      .addCollectionDiffrentFinanaceController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
-                                      extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'addCollectionDiffrentFinanaceController')
+                                      extentOffset: controllerManager
+                                          .addCollectionDiffrentFinanaceController
                                           .value
                                           .text
                                           .length);
@@ -442,8 +471,8 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                                 .total_finance_label,
                             hint: AppLocalizations.of(context)!
                                 .enter_your_Total_finance_hint,
-                            controller: ControllerManager().getControllerByName(
-                                'addCollectionTotalFinanceController'),
+                            controller: controllerManager
+                                .addCollectionTotalFinanceController,
                             readOnly: true,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -453,15 +482,13 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                             },
                             icon: Icons.money,
                             onTap: () {
-                              ControllerManager()
-                                      .getControllerByName(
-                                          'addCollectionTotalFinanceController')
+                              controllerManager
+                                      .addCollectionTotalFinanceController
                                       .selection =
                                   TextSelection(
                                       baseOffset: 0,
-                                      extentOffset: ControllerManager()
-                                          .getControllerByName(
-                                              'addCollectionTotalFinanceController')
+                                      extentOffset: controllerManager
+                                          .addCollectionTotalFinanceController
                                           .value
                                           .text
                                           .length);
@@ -516,43 +543,25 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                   bloc: addCollectionCubit,
                   listener: (context, state) {
                     if (state is AddCollectionSucces) {
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.routeName, (route) => false);
+                      Navigator.pushNamed(
+                        context,
+                        CollectionsScreen.routeName,
+                        arguments: context
+                            .read<HomeScreenViewModel>()
+                            .menus['collections']
+                            ?.items,
+                      );
                       QuickAlert.show(
                         context: context,
                         type: QuickAlertType.success,
-                        showConfirmBtn: false,
-                        confirmBtnText: "الذهاب الى الصفحه الرئيسيه",
+                        /* showConfirmBtn: false,
+                        confirmBtnText: "الذهاب الى الصفحه الرئيسيه", */
                         title: "تمت الإضافه بنجاح",
                         titleColor: AppColors.lightBlueColor,
                         /*   onConfirmBtnTap: () {}, */
                       );
-                      /*  DialogUtils.showMessage(
-                        context: context,
-                        barrierDismissible: true,
-                        message: "",
-                        posActionName: "تأكيد",
-                        posAction: () {
-                          Navigator.pushReplacementNamed(
-                              context, HomeScreen.routeName);
-                        },
-                        title: "تمت الإضافه بنجاح",
-                      ); */
-                      /*  DialogUtils.showMessage(
-                          context: context, message: "تمت الإضافه بنجاح");
-                      /*   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          "تمت الإضافه بنجاح",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        backgroundColor: AppColors.greenColor,
-                        duration: Durations.extralong1,
-                      )); */
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName); */
-                      /* Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName);
-                       */
                     } else if (state is AddCollectionError) {
                       if (context
                           .read<AddCollectionCubit>()
@@ -566,17 +575,6 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                           title: "يجب اضافه سنوات السداد",
                           titleColor: AppColors.redColor,
                         );
-                        /*   DialogUtils.showMessage(
-                            context: context,
-                            message: "يجب اضافه سنوات السداد"); */
-                        /*  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            "يجب اضافه سنوات السداد",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          backgroundColor: AppColors.redColor,
-                          duration: Durations.extralong1,
-                        )); */
                       } else {
                         QuickAlert.show(
                           animType: QuickAlertAnimType.slideInUp,
@@ -586,16 +584,6 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                           title: state.errorMsg,
                           titleColor: AppColors.redColor,
                         );
-                        /*  DialogUtils.showMessage(
-                            context: context, message: "حدث خطأ ما"); */
-                        /*    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            "حدث خطأ ما",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          backgroundColor: AppColors.redColor,
-                          duration: Durations.extralong1,
-                        )); */
                       }
                     }
                   },
@@ -606,7 +594,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                         backgroundColor: AppColors.blueColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () async {
+                    /*  onPressed: () async {
                       if (addCollectionCubit.formKey.currentState!.validate()) {
                         if (mounted) {
                           CustomerDataEntity selectedCustomer = context
@@ -621,12 +609,84 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                               token: "token",
                               tradeCollectionRequest: tradeCollectionRequest,
                               context: context);
-                          /*  .whenComplete(() =>
-                                  Navigator.pushReplacementNamed(context,
-                                      AllDailyCollectorScreen.routeName)); */
                         }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            "برجاء ادخال جميع البيانات",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          backgroundColor: AppColors.redColor,
+                          duration: Durations.extralong1,
+                        ));
                       }
-                    },
+                    }, */
+                    onPressed: context
+                            .read<AddCollectionCubit>()
+                            .isButtonEnabled
+                        ? () async {
+                            // Immediately disable the button
+                            var cubit = context.read<AddCollectionCubit>();
+                            if (!cubit.isButtonEnabled)
+                              return; // Prevent double execution
+                            cubit.isButtonEnabled = false;
+
+                            if (addCollectionCubit.formKey.currentState!
+                                .validate()) {
+                              try {
+                                if (mounted) {
+                                  CustomerDataEntity selectedCustomer =
+                                      cubit.selectedCustomer;
+                                  var tradeCollectionRequest =
+                                      cubit.intializeTradeRequest(
+                                    selectedCustomer: selectedCustomer,
+                                    context: context,
+                                  );
+
+                                  await addCollectionCubit.postTradeCollection(
+                                    token: "token",
+                                    tradeCollectionRequest:
+                                        tradeCollectionRequest,
+                                    context: context,
+                                  );
+                                }
+                              } catch (e) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      "An error occurred: $e",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    backgroundColor: AppColors.redColor,
+                                    duration: Durations.extralong1,
+                                  ));
+                                }
+                              } finally {
+                                if (mounted) {
+                                  cubit.isButtonEnabled =
+                                      true; // Re-enable the button
+                                }
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  "برجاء ادخال جميع البيانات",
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                                backgroundColor: AppColors.redColor,
+                                duration: Durations.extralong1,
+                              ));
+                              cubit.isButtonEnabled =
+                                  true; // Re-enable if validation fails
+                            }
+                          }
+                        : null,
+// Disable the button if isButtonEnabled is false
                     child: Text(AppLocalizations.of(context)!.save),
                   ),
                 ),

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:code_icons/core/adapters/auth_entity.dart';
 import 'package:code_icons/core/adapters/customers.dart';
 import 'package:code_icons/core/adapters/loginRequest.dart';
+import 'package:code_icons/core/adapters/loginScreen.dart';
 import 'package:code_icons/core/adapters/settings.dart';
 import 'package:code_icons/data/model/request/login_request.dart';
+import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/HR/employee/employee_entity.dart';
 import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
@@ -18,14 +22,22 @@ import 'package:code_icons/presentation/HR/absenceRequest/cubit/absenceCubit.dar
 import 'package:code_icons/presentation/HR/attendance/attendanceScreen.dart';
 import 'package:code_icons/presentation/HR/attendance/cubit/attendace_cubit.dart';
 import 'package:code_icons/presentation/HR/permissionRequest/permissionRequestScreen.dart';
+import 'package:code_icons/presentation/Sales/Invoice/All_invoices.dart';
+import 'package:code_icons/presentation/Sales/Invoice/addInvoice/Sales_Invoice.dart';
+import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
+import 'package:code_icons/presentation/Sales/Invoice/editInvoice/EditSales_Invoice.dart';
+import 'package:code_icons/presentation/Sales/SalesScreen.dart';
+import 'package:code_icons/presentation/Sales/returns/All_returns.dart';
+import 'package:code_icons/presentation/Sales/returns/addReturn/Sales_Returns.dart';
+import 'package:code_icons/presentation/Sales/returns/editInvoice/EditSales_Return.dart';
 import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screenCards.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
+import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collectionsCards.dart';
 import 'package:code_icons/presentation/collections/CustomerData/add_customer/add_customer_Screen.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
@@ -39,31 +51,39 @@ import 'package:code_icons/presentation/home/side_menu/screens/main_settings/ite
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/SystemSettings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/items_screens/settings_screen.dart';
 import 'package:code_icons/presentation/home/side_menu/screens/main_settings/mainSetting.dart';
-import 'package:code_icons/presentation/purchases/PurchaseInvoice/purchase_Invoice.dart';
+import 'package:code_icons/presentation/purchases/PurchaseInvoice/All_invoices.dart';
+import 'package:code_icons/presentation/purchases/PurchaseInvoice/addInvoice/purchase_Invoice.dart';
+import 'package:code_icons/presentation/purchases/PurchaseInvoice/editInvoice/EditPRInvoice.dart';
 import 'package:code_icons/presentation/purchases/PurchaseOrder/purchase_order.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/purchase_request.dart';
 import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
 import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
+import 'package:code_icons/presentation/purchases/returns/All_pr_returns.dart';
+import 'package:code_icons/presentation/purchases/returns/addReturn/PR_Returns.dart';
+import 'package:code_icons/presentation/purchases/returns/editInvoice/EditPR_Return.dart';
+import 'package:code_icons/presentation/ships/AddReport/addReportView.dart';
+import 'package:code_icons/presentation/ships/ShipsManagementScreen.dart';
+import 'package:code_icons/presentation/storage/StorageScreen.dart';
+import 'package:code_icons/presentation/storage/all_items.dart';
+import 'package:code_icons/presentation/storage/items/storageBody.dart';
 import 'package:code_icons/presentation/utils/GlobalVariables.dart';
-import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:code_icons/services/my_observer.dart';
 import 'package:code_icons/presentation/auth/login/login_screen.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/utils/theme/app_theme.dart';
 import 'package:code_icons/services/service_locator.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:code_icons/core/adapters/EmployeeEntityAdapter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid) {}
   /* //auto login
   await SharedPrefrence.init();
   var token = SharedPrefrence.getData(key: "accessToken");
@@ -81,6 +101,8 @@ void main() async {
   Hive.registerAdapter(SettingsEntityAdapter());
   Hive.registerAdapter(EmployeeEntityAdapter());
   Hive.registerAdapter(LoginRequestAdapter());
+  Hive.registerAdapter(
+      LoginScreensDMAdapter()); // Register LoginScreensDMAdapter
 
   await Hive.openBox('userBox');
   await Hive.openBox('receiptsBox');
@@ -89,12 +111,15 @@ void main() async {
   setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(
-    DevicePreview(
+    MyApp(
+        /*  route: route, */
+        ), // Wrap your app
+    /*  DevicePreview(
       enabled: !kReleaseMode,
       builder: (context) => const MyApp(
           /*  route: route, */
           ), // Wrap your app
-    ),
+    ), */
   );
 }
 
@@ -126,19 +151,33 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.detached ||
         state == AppLifecycleState.inactive) {
-      _clearCache(); // Clear the cache when the app is being closed
+      clearCache(); // Clear the cache when the app is being closed
       clearEmployeeBox();
-    } else if (state == AppLifecycleState.detached) {}
+    }
+    if (state == AppLifecycleState.paused) {
+      clearScreens();
+    }
   }
 
-  Future<void> _clearCache() async {
+  Future<void> clearScreens() async {
+    var screens = await Hive.openBox<LoginScreensDM>('loginScreensBox');
+
+    await screens.clear();
+
+    // Clear all the data in the box
+  }
+
+  Future<void> clearCache() async {
     var box = await Hive.openBox<CustomerDataEntity>('customersBox');
     var settingBox = await Hive.openBox<SettingsEntity>('settingsBox');
     var employeeBox = await Hive.openBox<EmployeeEntity>('employeeBox');
     var loginBox = await Hive.openBox<LoginRequest>('login_requests');
+    var screens = await Hive.openBox<LoginScreensDM>('loginScreensBox');
 
     await employeeBox.clear();
     await box.clear();
+    await screens.clear();
+
     /* await loginBox.clear(); */
 
     await settingBox.clear(); // Clear all the data in the box
@@ -152,8 +191,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print(const StackOverflowError().stackTrace.toString());
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -210,6 +247,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (context) => AttendaceCubit(),
         ),
+        BlocProvider(
+          create: (context) => getIt<SalesInvoiceCubit>(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(430, 932),
@@ -219,9 +259,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           navigatorKey: GlobalVariable.navigatorState,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          /* useInheritedMediaQuery: true, */
+          useInheritedMediaQuery: true,
           locale: const Locale("ar"),
-          builder: DevicePreview.appBuilder,
           theme: AppTheme.mainTheme,
           debugShowCheckedModeBanner: false,
           initialRoute: LoginScreen.routeName,
@@ -248,8 +287,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             CollectionsScreen.routeName: (context) => CollectionsScreen(),
             AllTradeProveScreen.routeName: (context) =>
                 const AllTradeProveScreen(),
-            AllDailyCollectorScreen.routeName: (context) =>
-                AllDailyCollectorScreen(),
+            AllDailyCollectorScreenCards.routeName: (context) =>
+                AllDailyCollectorScreenCards(),
             PurchaseScreen.routeName: (context) => PurchaseScreen(),
             AllPurchasesScreen.routeName: (context) => AllPurchasesScreen(),
             PurchaseRequest.routeName: (context) => PurchaseRequest(),
@@ -258,12 +297,35 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             RecietsCollectionsScreen.routeName: (context) =>
                 RecietsCollectionsScreen(),
             AllRecietsScreen.routeName: (context) => AllRecietsScreen(),
-            UnRegisteredCollectionsScreen.routeName: (context) =>
-                UnRegisteredCollectionsScreen(),
+            UnRegisteredCollectionsScreenCards.routeName: (context) =>
+                UnRegisteredCollectionsScreenCards(),
             AddCustomerScreen.routeName: (context) => const AddCustomerScreen(),
+            ShipsManagmentScreen.routeName: (context) =>
+                const ShipsManagmentScreen(),
+            AddReportView.routeName: (context) => AddReportView(),
             AddCollectionView.routeName: (context) => AddCollectionView(
                   data: TradeCollectionEntity(),
                 ),
+            SalesInvoice.routeName: (context) => SalesInvoice(),
+            SalesReturn.routeName: (context) => SalesReturn(),
+            SalesScreen.routeName: (context) => SalesScreen(),
+            AllInvoicesScreenCards.routeName: (context) =>
+                AllInvoicesScreenCards(),
+            AllPrInvoicesScreenCards.routeName: (context) =>
+                AllPrInvoicesScreenCards(),
+            AllReturnsScreenCards.routeName: (context) =>
+                AllReturnsScreenCards(),
+            AllPrReturnsScreenCards.routeName: (context) =>
+                AllPrReturnsScreenCards(),
+            PrReturn.routeName: (context) => PrReturn(),
+            EditSalesInvoice.routeName: (context) => EditSalesInvoice(),
+            EditPRInvoice.routeName: (context) => EditPRInvoice(),
+            EditSalesReturn.routeName: (context) => EditSalesReturn(),
+            EditPrReturn.routeName: (context) => EditPrReturn(),
+            StorageScreen.routeName: (context) => StorageScreen(),
+            AddItemsScreen.routeName: (context) => AddItemsScreen(),
+            AllStorageItesmScreenCards.routeName: (context) =>
+                AllStorageItesmScreenCards(),
           },
         ),
       ),

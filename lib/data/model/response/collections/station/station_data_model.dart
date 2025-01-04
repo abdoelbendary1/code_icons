@@ -1,16 +1,13 @@
-
 import 'package:code_icons/domain/entities/station/station.dart';
 
 class StationDataModel extends StationEntity {
-  
-
   StationDataModel({super.idBl, super.stationBl});
 
   StationDataModel.fromJson(Map<String, dynamic> json) {
-    if(json["idBL"] is int) {
+    if (json["idBL"] is int) {
       idBl = json["idBL"];
     }
-    if(json["stationBL"] is String) {
+    if (json["stationBL"] is String) {
       stationBl = json["stationBL"];
     }
   }

@@ -15,9 +15,13 @@ class BuildTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.minLines,
     this.maxLines,
-    this.maxLength,this.onTapOutside
+    this.maxLength,
+    this.onTapOutside,
+    this.color,
+    this.onEditingComplete,
+    this.focusNode,
   });
-
+  Color? color;
   final String? label;
   final String? hint;
   final TextEditingController controller;
@@ -29,7 +33,10 @@ class BuildTextField extends StatelessWidget {
   TextInputType keyboardType;
   int? minLines;
   int? maxLines;
-  int? maxLength;void Function(PointerDownEvent)? onTapOutside;
+  int? maxLength;
+  FocusNode? focusNode;
+  void Function(PointerDownEvent)? onTapOutside;
+  void Function()? onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +56,8 @@ class BuildTextField extends StatelessWidget {
             height: 20.h,
           ),
           ReusableCustomTextField(
+            focusNode: focusNode,
+            color: color,
             /* labelText: label ?? "", */
             hintText: hint ?? "",
             controller: controller,
@@ -60,7 +69,9 @@ class BuildTextField extends StatelessWidget {
             keyboardType: keyboardType,
             minLines: minLines,
             maxLines: maxLines,
-            maxLength: maxLength,onTapOutside: onTapOutside,
+            maxLength: maxLength,
+            onTapOutside: onTapOutside,
+            onEditingComplete: onEditingComplete,
           ),
           SizedBox(height: 10.h),
         ],

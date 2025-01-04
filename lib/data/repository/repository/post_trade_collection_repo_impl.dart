@@ -29,7 +29,12 @@ class PostTradeCollectionRepoImpl implements PostTradeCollectionRepo {
 
   @override
   Future<Either<Failures, List<UnRegisteredCollectionEntity>>>
-      getUnRegisteredTradeCollectionData() {
-    return postTradeCollectionDataSource.getUnRegisteredTradeCollectionData();
+      getUnRegisteredTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+  }) {
+    return postTradeCollectionDataSource.getUnRegisteredTradeCollectionData(
+        skip: skip, take: take, filter: filter);
   }
 }

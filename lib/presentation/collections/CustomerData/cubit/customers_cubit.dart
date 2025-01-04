@@ -131,7 +131,7 @@ class CustomersCubit extends Cubit<CustomersState> {
 
   String convertStringToDate({required String inputString}) {
     if (inputString.isNotEmpty) {
-      DateFormat inputFormat = DateFormat('yyyy/MM/dd');
+      DateFormat inputFormat = DateFormat('MMM d, y, h:mm:ss a');
       // Parse the input string into a DateTime object
       DateTime dateTime = inputFormat.parse(inputString);
 
@@ -467,7 +467,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   }
 
   void fetchCustomers() async {
-   /*  var either = await fetchCustomerDataUseCase.invoke();
+    /*  var either = await fetchCustomerDataUseCase.invoke();
     either.fold((l) => emit(FetchCustomersError(errorMsg: l.errorMessege)),
         (r) {
       customerData = r;

@@ -9,12 +9,15 @@ import 'package:dartz/dartz.dart';
 
 abstract class PostTradeCollectionDataSource {
   Future<Either<Failures, TradeCollectionEntity>> postTradeCollectionData({
-  
     required TradeCollectionRequest tradeCollectionRequest,
   });
   Future<Either<Failures, int>> postUnRegisteredTradeCollectionData({
     required UnRegisteredCollectionsResponse unRegisteredTradeCollectionRequest,
   });
   Future<Either<Failures, List<UnRegisteredCollectionEntity>>>
-      getUnRegisteredTradeCollectionData();
+      getUnRegisteredTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+  });
 }

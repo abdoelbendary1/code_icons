@@ -1,160 +1,142 @@
 import 'package:code_icons/data/model/response/purchases/purchase_request/purchase_item/item_Uom/item_Uom.dart';
-import 'package:code_icons/domain/entities/purchase_item/itemUom/item_Uom.dart';
 import 'package:code_icons/domain/entities/purchase_item/purchase_item_entity.dart';
 
 class PurchaseItemDataModel extends PurchaseItemEntity {
-  PurchaseItemDataModel({
-    super.itemId,
-    super.itemCode1,
-    super.itemCode2,
-    super.itemNameAr,
-    super.itemNameEn,
-    super.description,
-    super.category,
-    super.company,
-    super.itemType,
-    super.isExpire,
-    super.expireMonth,
-    super.itemUom,
-    super.itemTaxsRelation,
-    super.itemReviews,
-    super.images,
-    super.smallUom,
-    super.smallUomPrice,
-    super.smallUoMprPrice,
-    super.mediumUom,
-    super.mediumUomFactor,
-    super.mediumUomPrice,
-    super.mediumUoMprPrice,
-    super.largeUom,
-    super.largeUomFactor,
-    super.largeUomPrice,
-    super.largeUoMprPrice,
-    super.dfltSellUomIndx,
-    super.dfltPrchsUomIndx,
-    super.reorderLevel,
-    super.maxQty,
-    super.minQty,
-    super.currentQty,
-    super.calcBeforeDisc,
-    super.price,
-    super.discount,
-    super.length,
-    super.width,
-    super.height,
-    super.insertDate,
-    super.matrixId,
-    super.matrix,
-  });
+  PurchaseItemDataModel(
+      {super.itemId,
+      super.itemCode1,
+      super.itemCode2,
+      super.itemNameAr,
+      super.itemNameEn,
+      super.description,
+      super.category,
+      super.company,
+      super.itemType,
+      super.isExpire,
+      super.expireMonth,
+      super.itemUom,
+      super.itemTaxsRelation,
+      super.itemReviews,
+      super.images,
+      super.smallUom,
+      super.smallUomPrice,
+      super.smallUoMprPrice,
+      super.mediumUom,
+      super.mediumUomFactor,
+      super.mediumUomPrice,
+      super.mediumUoMprPrice,
+      super.largeUom,
+      super.largeUomFactor,
+      super.largeUomPrice,
+      super.largeUoMprPrice,
+      super.dfltSellUomIndx,
+      super.dfltPrchsUomIndx,
+      super.reorderLevel,
+      super.maxQty,
+      super.minQty,
+      super.currentQty,
+      super.calcBeforeDisc,
+      super.price,
+      super.discount,
+      super.length,
+      super.width,
+      super.height,
+      super.insertDate,
+      super.matrixId,
+      super.matrix});
 
   PurchaseItemDataModel.fromJson(Map<String, dynamic> json) {
-    if (json["itemId"] is int) {
-      itemId = json["itemId"];
-    }
-    if (json["itemCode1"] is int) {
-      itemCode1 = json["itemCode1"];
-    }
-    if (json["itemCode2"] is String) {
-      itemCode2 = json["itemCode2"];
-    }
-    if (json["itemNameAr"] is String) {
-      itemNameAr = json["itemNameAr"];
-    }
+    itemId = (json["itemId"] is double)
+        ? (json["itemId"] as double).toInt()
+        : json["itemId"];
+    itemCode1 = (json["itemCode1"] is double)
+        ? (json["itemCode1"] as double).toInt()
+        : json["itemCode1"];
+    itemCode2 = json["itemCode2"];
+    itemNameAr = json["itemNameAr"];
     itemNameEn = json["itemNameEn"];
     description = json["description"];
-    if (json["category"] is int) {
-      category = json["category"];
-    }
-    if (json["company"] is int) {
-      company = json["company"];
-    }
-    if (json["itemType"] is int) {
-      itemType = json["itemType"];
-    }
-    if (json["isExpire"] is bool) {
-      isExpire = json["isExpire"];
-    }
-    if (json["expireMonth"] is int) {
-      expireMonth = json["expireMonth"];
-    }
-    if (json["itemUom"] is List) {
-      itemUom = json["itemUom"] == null
-          ? null
-          : (json["itemUom"] as List).map((e) => ItemUomDataModel.fromJson(e)).toList();
-    }
-    if (json["itemTaxsRelation"] is List) {
-      itemTaxsRelation = json["itemTaxsRelation"] ?? [];
-    }
-    if (json["itemReviews"] is List) {
-      itemReviews = json["itemReviews"] ?? [];
-    }
-    if (json["images"] is List) {
-      images = json["images"] ?? [];
-    }
-    if (json["smallUOM"] is int) {
-      smallUom = json["smallUOM"];
-    }
-    if (json["smallUOMPrice"] is int) {
-      smallUomPrice = json["smallUOMPrice"];
-    }
-    if (json["smallUOMprPrice"] is int) {
-      smallUoMprPrice = json["smallUOMprPrice"];
-    }
+    category = (json["category"] is double)
+        ? (json["category"] as double).toInt()
+        : json["category"];
+    company = (json["company"] is double)
+        ? (json["company"] as double).toInt()
+        : json["company"];
+    itemType = (json["itemType"] is double)
+        ? (json["itemType"] as double).toInt()
+        : json["itemType"];
+    isExpire = json["isExpire"];
+    expireMonth = (json["expireMonth"] is double)
+        ? (json["expireMonth"] as double).toInt()
+        : json["expireMonth"];
+    itemUom = json["itemUom"] == null
+        ? null
+        : (json["itemUom"] as List)
+            .map((e) => ItemUomDataModel.fromJson(e))
+            .toList();
+    itemTaxsRelation = json["itemTaxsRelation"];
+    itemReviews = json["itemReviews"];
+    images = json["images"];
+    smallUom = (json["smallUOM"] is double)
+        ? (json["smallUOM"] as double).toInt()
+        : json["smallUOM"];
+    smallUomPrice = (json["smallUOMPrice"] is double)
+        ? (json["smallUOMPrice"] as double).toInt()
+        : json["smallUOMPrice"];
+    smallUoMprPrice = (json["smallUOMprPrice"] is double)
+        ? (json["smallUOMprPrice"] as double).toInt()
+        : json["smallUOMprPrice"];
     mediumUom = json["mediumUOM"];
     mediumUomFactor = json["mediumUOMFactor"];
-    if (json["mediumUOMPrice"] is int) {
-      mediumUomPrice = json["mediumUOMPrice"];
-    }
-    if (json["mediumUOMprPrice"] is int) {
-      mediumUoMprPrice = json["mediumUOMprPrice"];
-    }
+    mediumUomPrice = (json["mediumUOMPrice"] is double)
+        ? (json["mediumUOMPrice"] as double).toInt()
+        : json["mediumUOMPrice"];
+    mediumUoMprPrice = (json["mediumUOMprPrice"] is double)
+        ? (json["mediumUOMprPrice"] as double).toInt()
+        : json["mediumUOMprPrice"];
     largeUom = json["largeUOM"];
     largeUomFactor = json["largeUOMFactor"];
-    if (json["largeUOMPrice"] is int) {
-      largeUomPrice = json["largeUOMPrice"];
-    }
-    if (json["largeUOMprPrice"] is int) {
-      largeUoMprPrice = json["largeUOMprPrice"];
-    }
-    if (json["dfltSellUomIndx"] is int) {
-      dfltSellUomIndx = json["dfltSellUomIndx"];
-    }
-    if (json["dfltPrchsUomIndx"] is int) {
-      dfltPrchsUomIndx = json["dfltPrchsUomIndx"];
-    }
-    if (json["reorderLevel"] is int) {
-      reorderLevel = json["reorderLevel"];
-    }
-    if (json["maxQty"] is int) {
-      maxQty = json["maxQty"];
-    }
-    if (json["minQty"] is int) {
-      minQty = json["minQty"];
-    }
-    if (json["currentQTY"] is int) {
-      currentQty = json["currentQTY"];
-    }
-    if (json["calcBeforeDisc"] is bool) {
-      calcBeforeDisc = json["calcBeforeDisc"];
-    }
-    if (json["price"] is int) {
-      price = json["price"];
-    }
-    if (json["discount"] is int) {
-      discount = json["discount"];
-    }
-    if (json["length"] is int) {
-      length = json["length"];
-    }
-    if (json["width"] is int) {
-      width = json["width"];
-    }
-    if (json["height"] is int) {
-      height = json["height"];
-    }
-    if (json["insertDate"] is String) {
-      insertDate = json["insertDate"];
-    }
+    largeUomPrice = (json["largeUOMPrice"] is double)
+        ? (json["largeUOMPrice"] as double).toInt()
+        : json["largeUOMPrice"];
+    largeUoMprPrice = (json["largeUOMprPrice"] is double)
+        ? (json["largeUOMprPrice"] as double).toInt()
+        : json["largeUOMprPrice"];
+    dfltSellUomIndx = (json["dfltSellUomIndx"] is double)
+        ? (json["dfltSellUomIndx"] as double).toInt()
+        : json["dfltSellUomIndx"];
+    dfltPrchsUomIndx = (json["dfltPrchsUomIndx"] is double)
+        ? (json["dfltPrchsUomIndx"] as double).toInt()
+        : json["dfltPrchsUomIndx"];
+    reorderLevel = (json["reorderLevel"] is double)
+        ? (json["reorderLevel"] as double).toInt()
+        : json["reorderLevel"];
+    maxQty = (json["maxQty"] is double)
+        ? (json["maxQty"] as double).toInt()
+        : json["maxQty"];
+    minQty = (json["minQty"] is double)
+        ? (json["minQty"] as double).toInt()
+        : json["minQty"];
+    currentQty = (json["currentQTY"] is double)
+        ? (json["currentQTY"] as double).toInt()
+        : json["currentQTY"];
+    calcBeforeDisc = json["calcBeforeDisc"];
+    price = (json["price"] is double)
+        ? (json["price"] as double).toInt()
+        : json["price"];
+    discount = (json["discount"] is double)
+        ? (json["discount"] as double).toInt()
+        : json["discount"];
+    length = (json["length"] is double)
+        ? (json["length"] as double).toInt()
+        : json["length"];
+    width = (json["width"] is double)
+        ? (json["width"] as double).toInt()
+        : json["width"];
+    height = (json["height"] is double)
+        ? (json["height"] as double).toInt()
+        : json["height"];
+    insertDate = json["insertDate"];
     matrixId = json["matrixId"];
     matrix = json["matrix"];
   }
@@ -213,4 +195,3 @@ class PurchaseItemDataModel extends PurchaseItemEntity {
     return _data;
   }
 }
-

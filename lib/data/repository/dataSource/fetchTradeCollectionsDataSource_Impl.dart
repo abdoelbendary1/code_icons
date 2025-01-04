@@ -18,9 +18,14 @@ class FetchTradeCollectionsDataSourceImpl
       fetchTradeCollectionData({
     required int skip,
     required int take,
+    String? filter,
+    List<dynamic>? filterConditions,
   }) async {
-    var either =
-        await apiManager.fetchTradeCollectionData(skip: skip, take: take);
+    var either = await apiManager.fetchTradeCollectionData(
+        skip: skip,
+        take: take,
+        filter: filter,
+        filterConditions: filterConditions);
     return either.fold((l) => Left(l), (r) => right(r));
   }
 }

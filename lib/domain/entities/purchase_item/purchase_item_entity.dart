@@ -1,10 +1,9 @@
 import 'package:code_icons/data/model/response/purchases/purchase_request/purchase_item/item_Uom/item_Uom.dart';
-import 'package:code_icons/domain/entities/purchase_item/itemUom/item_Uom.dart';
 
 class PurchaseItemEntity {
   int? itemId;
   int? itemCode1;
-  String? itemCode2;
+  dynamic itemCode2;
   String? itemNameAr;
   dynamic itemNameEn;
   dynamic description;

@@ -1,6 +1,7 @@
 import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/purchase_request.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
+import 'package:code_icons/presentation/purchases/cubit/purchases_state.dart';
 import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
@@ -230,7 +231,7 @@ class _AllPurchasesScreenState extends State<AllPurchasesScreen> {
                             ),
                           ),
                           title: Text(
-                            "تاريخ الطلب: ${purchasesCubit.convertToDateString(request.date!)}",
+                            "تاريخ الطلب: ${purchasesCubit.convertToDateString(request.date ?? "")}",
                             style: TextStyle(
                               color: AppColors.whiteColor,
                               fontWeight: FontWeight.bold,
@@ -287,7 +288,7 @@ class _AllPurchasesScreenState extends State<AllPurchasesScreen> {
               ),
             );
           } else if (state is GetRecietCollctionLoading) {
-            return  Center(
+            return Center(
               child: LoadingStateAnimation(),
             );
           }

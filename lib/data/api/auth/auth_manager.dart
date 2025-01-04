@@ -5,11 +5,11 @@ import 'package:code_icons/data/api/api_constants.dart';
 import 'package:code_icons/data/api/auth/auth_manager_interface.dart';
 import 'package:code_icons/data/interfaces/IHttpClient.dart';
 import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
+import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
 import 'package:code_icons/core/helpers/_handleResponseHelper.dart';
-
 
 class AuthManager implements AuthManagerInterface {
   final IHttpClient httpClient;
@@ -29,9 +29,11 @@ class AuthManager implements AuthManagerInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
+      var url = Uri.parse(
+          'http://${ApiConstants.chamberApi}${ApiConstants.loginEndPoint}');
 
-      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
-
+/*       var url = Uri.https(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
+ */
       var response = await httpRequestHelper.sendRequest(
         method: HttpMethod.POST,
         url: url,
@@ -58,14 +60,14 @@ class AuthManager implements AuthManagerInterface {
   }
 
   @override
-  Future<void> saveUser(AuthResponseDM user) async {
+  Future<void> saveUser(AuthRepoEntity user) async {
     var userBox = await Hive.openBox('userBox');
     await userBox.put('user', user);
   }
 
   @override
-  Future<AuthResponseDM?> getUser() async {
+  Future<AuthRepoEntity?> getUser() async {
     var userBox = await Hive.openBox('userBox');
-    return userBox.get('user') as AuthResponseDM?;
+    return userBox.get('user') as AuthRepoEntity?;
   }
 }

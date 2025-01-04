@@ -1,3 +1,4 @@
+import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
 import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 
 class AuthResponseDM extends AuthRepoEntity {
@@ -25,9 +26,11 @@ class AuthResponseDM extends AuthRepoEntity {
     if (json["message"] is String) {
       message = json["message"];
     }
-    if (json["screens"] is List) {
-      screens = json["screens"] ?? [];
-    }
+    screens = json["screens"] == null
+        ? null
+        : (json["screens"] as List)
+            .map((e) => LoginScreensDM.fromJson(e))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {

@@ -6,7 +6,7 @@ abstract class MenuState {}
 class MenuInitial extends MenuState {}
 
 class MenuLoaded extends MenuState {
- Map<String, SectionEntity> menus;
+  Map<String, SectionEntity> menus;
 
   MenuLoaded(this.menus);
 }
@@ -16,5 +16,3 @@ class MenuError extends MenuState {
 
   MenuError(this.message);
 }
-   
-  

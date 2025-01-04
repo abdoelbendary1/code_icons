@@ -1,5 +1,6 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
+import 'package:code_icons/domain/entities/invoice/customers/invoice_customer_entity.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
@@ -43,9 +44,9 @@ class SelectCustomerEntity extends StatelessWidget {
           SizedBox(height: 20.h),
           CustomDropdown.search(
             headerBuilder: (context, selectedItem, enabled) {
-              selectedItem as CustomerDataEntity;
+              selectedItem as InvoiceCustomerEntity;
               return Text(
-                selectedItem.brandNameBl!,
+                selectedItem.cusNameAr!,
                 style: const TextStyle(
                   color: AppColors.whiteColor,
                   fontWeight: FontWeight.bold,
@@ -54,28 +55,13 @@ class SelectCustomerEntity extends StatelessWidget {
               );
             },
             listItemBuilder: (context, item, isSelected, onItemSelect) {
-              item as CustomerDataEntity;
-              return ListTile(
-                contentPadding: const EdgeInsets.all(8),
-                subtitleTextStyle: const TextStyle(
+              item as InvoiceCustomerEntity;
+              return Text(
+                item.cusNameAr!,
+                style: const TextStyle(
                   color: AppColors.whiteColor,
-                ),
-                subtitle: Text(item.tradeOfficeNameBl!),
-                leading: const Icon(
-                  Icons.person,
-                  color: AppColors.whiteColor,
-                ),
-                titleTextStyle: const TextStyle(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(item.brandNameBl!),
-                    Text(CustomersCubit.customersCubit
-                        .getTypeById(item.tradeRegistryTypeBl!)),
-                  ],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
               );
             },

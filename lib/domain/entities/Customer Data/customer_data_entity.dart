@@ -86,6 +86,12 @@ class CustomerDataEntity extends HiveObject {
 
   @HiveField(27)
   String? message;
+ 
+
+  /*  @override
+  String toString() {
+    return brandNameBl!;
+  } */
 
   CustomerDataEntity({
     this.idBl,
@@ -116,5 +122,6 @@ class CustomerDataEntity extends HiveObject {
     this.tradeRegistryTypeBl,
     this.customerDataIdBl,
     this.message,
+    
   });
 }

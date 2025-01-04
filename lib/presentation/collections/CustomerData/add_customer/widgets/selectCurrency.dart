@@ -1,16 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:code_icons/domain/entities/Currency/currency.dart';
-import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
-import 'package:code_icons/presentation/collections/CustomerData/add_customer/grid_data_source.dart';
-import 'package:code_icons/services/di.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:code_icons/data/model/data_model/trader_DM.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReusableSelectCurrency extends StatefulWidget {
   ReusableSelectCurrency({

@@ -23,6 +23,4 @@ class PaymentValueRequest {
           (map['paidYears'] as List<int>),
         ));
   }
-
-  
 }

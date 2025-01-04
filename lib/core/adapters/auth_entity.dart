@@ -1,4 +1,5 @@
 import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
+import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
 import 'package:hive/hive.dart';
 
 class AuthResponseDMAdapter extends TypeAdapter<AuthResponseDM> {
@@ -13,7 +14,7 @@ class AuthResponseDMAdapter extends TypeAdapter<AuthResponseDM> {
       name: reader.readString(),
       accessToken: reader.readString(),
       message: reader.readString(),
-      screens: reader.readList().cast<String>(),
+      screens: reader.readList().cast<LoginScreensDM>(),
     );
   }
 
@@ -27,4 +28,3 @@ class AuthResponseDMAdapter extends TypeAdapter<AuthResponseDM> {
     writer.writeList(obj.screens ?? []);
   }
 }
-

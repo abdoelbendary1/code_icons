@@ -32,20 +32,49 @@ class CustomersManager implements CustomersDataInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
+      /*   if (filter != null && filter.isNotEmpty) {
+        var filterStructure = [
+          ["brandNameBL", "contains", filter],
+          "or",
+          ["nationalIdBL", "contains", filter],
+          "or",
+          ["tradeRegistryBL", "contains", filter],
+          "or",
+          ["addressBL", "contains", filter],
+          "or",
+          ["divisionBL", "contains", filter]
+        ];
 
+        // Convert the filter structure to a JSON string and encode it
+        filter = Uri.encodeComponent(jsonEncode(filterStructure));
+      } */
       // Define query parameters for pagination and filtering
+
       var queryParams = {
         'skip': skip.toString(),
         'take': take.toString(),
         'requireTotalCount': 'true',
         if (filter != null) 'filter': filter, // Only add filter if provided
       };
-
-      var url = Uri.https(
+      var url = Uri.http(
         ApiConstants.chamberApi,
         ApiConstants.customerDataEndPoint,
         queryParams, // Include the pagination and filter params
       );
+
+// If using http instead of https
+// var url = Uri.http(
+//   ApiConstants.chamberApi,
+//   ApiConstants.customerDataEndPoint,
+//   queryParams, // Include the pagination and filter params
+// );
+      /*  var url = Uri.parse(
+          'http://${ApiConstants.chamberApi}"${ApiConstants.customerDataEndPoint}"'); */
+      /* var url = Uri.https(
+        ApiConstants.chamberApi,
+        ApiConstants.customerDataEndPoint,
+        queryParams, // Include the pagination and filter params
+      ); */
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -74,8 +103,9 @@ class CustomersManager implements CustomersDataInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-
-      var url = Uri.https(ApiConstants.chamberApi,
+      /*  var url = Uri.parse(
+          'http://${ApiConstants.chamberApi}"${ApiConstants.customerDataEndPoint}/$customerId"'); */
+      var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.customerDataEndPoint}/$customerId");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -102,9 +132,10 @@ class CustomersManager implements CustomersDataInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-
+      /*   var url = Uri.parse(
+          'http://${ApiConstants.chamberApi}"${ApiConstants.customerDataEndPoint}"'); */
       var url =
-          Uri.https(ApiConstants.chamberApi, ApiConstants.customerDataEndPoint);
+          Uri.http(ApiConstants.chamberApi, ApiConstants.customerDataEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

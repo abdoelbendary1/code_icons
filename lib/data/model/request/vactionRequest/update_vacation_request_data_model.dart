@@ -1,4 +1,3 @@
-
 class UpdateVacationRequestDataModel {
   String? fromDateBl;
   String? employeesIdBl;
@@ -8,28 +7,35 @@ class UpdateVacationRequestDataModel {
   int? numDaysBl;
   String? notesBl;
 
-  UpdateVacationRequestDataModel({this.fromDateBl, this.employeesIdBl, this.vacationTypeIdBl, this.amountBl, this.toDateBl, this.numDaysBl, this.notesBl});
+  UpdateVacationRequestDataModel(
+      {this.fromDateBl,
+      this.employeesIdBl,
+      this.vacationTypeIdBl,
+      this.amountBl,
+      this.toDateBl,
+      this.numDaysBl,
+      this.notesBl});
 
   UpdateVacationRequestDataModel.fromJson(Map<String, dynamic> json) {
-    if(json["fromDateBL"] is String) {
+    if (json["fromDateBL"] is String) {
       fromDateBl = json["fromDateBL"];
     }
-    if(json["employeesIdBL"] is String) {
+    if (json["employeesIdBL"] is String) {
       employeesIdBl = json["employeesIdBL"];
     }
-    if(json["vacationTypeIdBL"] is String) {
+    if (json["vacationTypeIdBL"] is String) {
       vacationTypeIdBl = json["vacationTypeIdBL"];
     }
-    if(json["amountBL"] is int) {
+    if (json["amountBL"] is int) {
       amountBl = json["amountBL"];
     }
-    if(json["toDateBL"] is String) {
+    if (json["toDateBL"] is String) {
       toDateBl = json["toDateBL"];
     }
-    if(json["numDaysBL"] is int) {
+    if (json["numDaysBL"] is int) {
       numDaysBl = json["numDaysBL"];
     }
-    if(json["notesBL"] is String) {
+    if (json["notesBL"] is String) {
       notesBl = json["notesBL"];
     }
   }

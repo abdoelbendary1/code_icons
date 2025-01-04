@@ -17,6 +17,13 @@ class HomeScreenSuccess extends HomeScreenViewModelState {
   });
 }
 
+class GetScreensSuccess extends HomeScreenViewModelState {
+  List<StFormEntity> stFormEntityList;
+  GetScreensSuccess({
+    required this.stFormEntityList,
+  });
+}
+
 class HomeScreenError extends HomeScreenViewModelState {
   String message;
 

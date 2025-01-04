@@ -4,6 +4,7 @@ import 'package:code_icons/domain/entities/purchase_item/purchase_item_entity.da
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectableDropDownlist.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
+import 'package:code_icons/presentation/purchases/cubit/purchases_state.dart';
 import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
 import 'package:code_icons/presentation/utils/Date_picker.dart';
 import 'package:code_icons/presentation/utils/GlobalVariables.dart';
@@ -36,7 +37,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
     /* ControllerManager().clearControllers(
         controllers: ControllerManager().recietCollectionController);
     PurchasesCubit.petLastReciet(); */
-    purchasesCubit.selectedItem = PurchaseItemEntity();
+/*     purchasesCubit.selectedItem = PurchaseItemEntity();
+ */
     purchasesCubit.fetchProductInfoDatalists();
 
     purchasesCubit.getItemsData();
@@ -255,7 +257,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                         hintText: "اختيار الكود",
                         itemList: purchasesCubit.itemsCodesList,
                         onChanged: (value) {
-                          purchasesCubit.selectItem(code: value);
+/*                           purchasesCubit.selectItem(code: value);
+ */
                         },
                       );
                     }
@@ -270,7 +273,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                       hintText: "اختيار الكود",
                       itemList: purchasesCubit.itemsCodesList,
                       onChanged: (value) {
-                        purchasesCubit.selectItem(code: value);
+/*                         purchasesCubit.selectItem(code: value);
+ */
                       },
                     );
                   },
@@ -300,7 +304,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                           /* purchasesCubit.selectItem(
                               code: state.selectedItem.itemCode1!); */
                           /* state.selectedItem.itemNameAr = value; */
-                          purchasesCubit.selectItem(name: value);
+/*                           purchasesCubit.selectItem(name: value);
+ */
                         },
                       );
                     }
@@ -316,7 +321,8 @@ class _PurchaseRequestFormState extends State<PurchaseRequestForm> {
                       hintText: "اختيار الاسم",
                       itemList: purchasesCubit.itemsNamesList,
                       onChanged: (value) {
-                        purchasesCubit.selectItem(name: value);
+/*                         purchasesCubit.selectItem(name: value);
+ */
                       },
                     );
                   },

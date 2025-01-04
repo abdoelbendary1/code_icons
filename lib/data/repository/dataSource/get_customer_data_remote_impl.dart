@@ -25,7 +25,8 @@ class GetCustomerDataRemoteDataSourceImpl
     required int take,
     String? filter, // Optional filter parameter
   }) async {
-    var either = await apiManager.fetchCustomerData(skip: skip,take: take,filter: filter);
+    var either = await apiManager.fetchCustomerData(
+        skip: skip, take: take, filter: filter);
     return either.fold(
         (failure) => Left(failure), (response) => Right(response));
   }

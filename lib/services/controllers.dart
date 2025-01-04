@@ -4,6 +4,7 @@ import 'package:board_datetime_picker/board_datetime_picker.dart';
 import 'package:code_icons/domain/entities/Currency/currency.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';
+import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
 import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,41 +20,15 @@ class ControllerManager {
 
   // Private constructor to prevent external instantiation
   ControllerManager._internal() {
-    addCollectionDiffrentFinanaceController.addListener(_updateTotalFinance);
-    addCollectionDivisionController.addListener(_updateTotalFinance);
+    /* addCollectionDiffrentFinanaceController.addListener(_updateTotalFinance);
+    addCollectionDivisionController.addListener(_updateTotalFinance); */
     unlimitedCurrentFinanceController.addListener(calculateAndSetTotal);
     unlimitedDivisionController.addListener(calculateAndSetTotal);
-    /*   vacationDaysController.addListener(
-      () {},
-    ); */
-  }
-  /*  DateTime convertStringToDateTime({required String input}) {
-    DateFormat inputFormat = DateFormat('yyyy/MM/dd');
-    // Parse the input string into a DateTime object
-    DateTime dateTime = inputFormat.parse(input);
-    return dateTime;
-    /*  // Define the output format
-    DateFormat outputFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
-    return outputFormat.parse(input); */
   }
 
-  int calculateVacationDays({String? startDate, String? returnDate}) {
-    DateTime startDateTime = convertStringToDateTime(input: startDate!);
-    DateTime returnDateTime = convertStringToDateTime(input: returnDate!);
-    return returnDateTime.difference(startDateTime).inDays;
-  }
-
-  void updateVacationDaysController({String? startDate, String? returnDate}) {
-    int vacationDays =
-        calculateVacationDays(startDate: startDate, returnDate: returnDate);
-    vacationDaysController.text = vacationDays.toString();
-  }
- */
   final customerCubit = CustomersCubit.customersCubit;
   // Method to update the total finance controller based on other values
   double _originalTotal = 0;
-  double _previousDifferentFinance = 0;
-  double _previousDivisionFinance = 0;
   void calculateDivisionAndSetTotal() {
     try {
       // Parse the current and division values from the text controllers
@@ -111,26 +86,272 @@ class ControllerManager {
     } catch (e) {
       addCollectionTotalFinanceController.text = "Error";
     }
-  }
+  } // Update discount value based on rate
 
-  /* void _updateTotalFinanceController() {
-    try {
-      // Parse the new value of diffrentFinanaceController
-      /*   final divisonFinance =
-          double.tryParse(addCollectionDivisionController.text) ?? 0; */
-      final differentFinance =
-          double.tryParse(addCollectionDiffrentFinanaceController.text) ?? 0;
+// Update discount rate based on value
+  // Declare controllers with purchases prefix
+  final TextEditingController pritemNameAr = TextEditingController();
+  final TextEditingController pritemSmallUomPriceP = TextEditingController();
+  final TextEditingController pritemSmallUomPriceS = TextEditingController();
 
-      // Reset to the original total and add the current different finance value
-      final totalFinance = _originalTotal + differentFinance;
+  final TextEditingController prUnitPriceController = TextEditingController();
+  final TextEditingController prQuantityController = TextEditingController();
+  final TextEditingController prTotalQuantityController =
+      TextEditingController();
+  final TextEditingController prDiscountRateController =
+      TextEditingController();
+  final TextEditingController prDiscountValueController =
+      TextEditingController();
 
-      // Update the total finance controller
-      addCollectionTotalFinanceController.text = totalFinance.toString();
-    } catch (e) {
-      addCollectionTotalFinanceController.text = "Error";
-    }
-  }
- */
+  final TextEditingController prPriceController = TextEditingController();
+  final TextEditingController prAvailableQuantityController =
+      TextEditingController();
+  final TextEditingController prInvoiceOperationNumberController =
+      TextEditingController();
+  final TextEditingController prLengthController = TextEditingController();
+  final TextEditingController prWidthController = TextEditingController();
+  final TextEditingController prHeightController = TextEditingController();
+  final TextEditingController prTotalTaxesController = TextEditingController();
+  final TextEditingController prTaxesNameController = TextEditingController();
+  final TextEditingController prinvoiceTotalTaxesController =
+      TextEditingController();
+  final TextEditingController prInvoiceDescriptionController =
+      TextEditingController();
+  final TextEditingController prinvoiceDateController = TextEditingController();
+  final TextEditingController prinvoiceRateController = TextEditingController();
+  final TextEditingController prinvoiceDiscountPercentageController =
+      TextEditingController();
+  final TextEditingController prinvoiceDiscountValueController =
+      TextEditingController();
+  final TextEditingController prinvoicePaidController = TextEditingController();
+  final TextEditingController prinvoiceTotalPriceController =
+      TextEditingController();
+
+  final TextEditingController prinvoiceCodeController = TextEditingController();
+  final TextEditingController prinvoiceAddCustomerNameController =
+      TextEditingController();
+  final TextEditingController prinvoiceAddCustomerPhoneController =
+      TextEditingController();
+  final TextEditingController prinvoiceAddCustomerTaxNumController =
+      TextEditingController();
+  final TextEditingController prinvoiceAddItemCompanyNameArController =
+      TextEditingController();
+  final TextEditingController prinvoiceAddItemCategoryNameArController =
+      TextEditingController();
+  final TextEditingController prinvoiceAddCustomerCountryController =
+      TextEditingController();
+
+  final TextEditingController prinvoiceSourceCodeController =
+      TextEditingController();
+  final TextEditingController prinvoiceNotesController =
+      TextEditingController();
+  final TextEditingController prinvoiceTotalController =
+      TextEditingController();
+  final TextEditingController prinvoiceNetController = TextEditingController();
+  final TextEditingController prinvoiceTaxesController =
+      TextEditingController();
+  final TextEditingController prinvoiceJournalController =
+      TextEditingController();
+  final TextEditingController prinvoiceDrawerIdController =
+      TextEditingController();
+  final TextEditingController prinvoiceProcessIdController =
+      TextEditingController();
+  final TextEditingController prinvoiceSourceTypeController =
+      TextEditingController();
+  final TextEditingController prinvoiceRemainController =
+      TextEditingController();
+  final TextEditingController prinvoiceCustomerBalanceController =
+      TextEditingController();
+  final TextEditingController prinvoiceReceiveDateController =
+      TextEditingController();
+  final TextEditingController prinvoiceDueDateController =
+      TextEditingController();
+  final TextEditingController prinvoiceInsertDateController =
+      TextEditingController();
+// Declare controllers with Sales prefix
+  final TextEditingController itemNameAr = TextEditingController();
+  final TextEditingController itemSmallUomPriceP = TextEditingController();
+  final TextEditingController itemSmallUomPriceS = TextEditingController();
+
+  final TextEditingController salesUnitPriceController =
+      TextEditingController();
+  final TextEditingController salesQuantityController = TextEditingController();
+  final TextEditingController salesTotalQuantityController =
+      TextEditingController();
+  final TextEditingController salesDiscountRateController =
+      TextEditingController();
+  final TextEditingController salesDiscountValueController =
+      TextEditingController();
+
+  final TextEditingController salesPriceController = TextEditingController();
+  final TextEditingController salesAvailableQuantityController =
+      TextEditingController();
+  final TextEditingController salesOperationNumberController =
+      TextEditingController();
+  final TextEditingController salesLengthController = TextEditingController();
+  final TextEditingController salesWidthController = TextEditingController();
+  final TextEditingController salesHeightController = TextEditingController();
+  final TextEditingController salesTotalTaxesController =
+      TextEditingController();
+  final TextEditingController salesTaxesNameController =
+      TextEditingController();
+  final TextEditingController invoiceTotalTaxesController =
+      TextEditingController();
+  final TextEditingController salesDescriptionController =
+      TextEditingController();
+  final TextEditingController invoiceDateController = TextEditingController();
+  final TextEditingController invoiceRateController = TextEditingController();
+  final TextEditingController invoiceDiscountPercentageController =
+      TextEditingController();
+  final TextEditingController invoiceDiscountValueController =
+      TextEditingController();
+  final TextEditingController invoicePaidController = TextEditingController();
+
+  final TextEditingController invoiceTotalPriceController =
+      TextEditingController();
+
+  final TextEditingController invoiceCodeController = TextEditingController();
+  final TextEditingController invoiceAddCustomerNameController =
+      TextEditingController();
+  final TextEditingController invoiceAddCustomerPhoneController =
+      TextEditingController();
+  final TextEditingController invoiceAddCustomerTaxNumController =
+      TextEditingController();
+  final TextEditingController invoiceAddItemCompanyNameArController =
+      TextEditingController();
+  final TextEditingController invoiceAddItemCategoryNameArController =
+      TextEditingController();
+  final TextEditingController invoiceAddCustomerCountryController =
+      TextEditingController();
+
+  final TextEditingController invoiceSourceCodeController =
+      TextEditingController();
+  final TextEditingController invoiceNotesController = TextEditingController();
+  final TextEditingController invoiceTotalController = TextEditingController();
+  final TextEditingController invoiceNetController = TextEditingController();
+  final TextEditingController invoiceTaxesController = TextEditingController();
+  final TextEditingController invoiceJournalController =
+      TextEditingController();
+  final TextEditingController invoiceDrawerIdController =
+      TextEditingController();
+  final TextEditingController invoiceProcessIdController =
+      TextEditingController();
+  final TextEditingController invoiceSourceTypeController =
+      TextEditingController();
+  final TextEditingController invoiceRemainController = TextEditingController();
+  final TextEditingController invoiceCustomerBalanceController =
+      TextEditingController();
+  final TextEditingController invoiceReceiveDateController =
+      TextEditingController();
+  final TextEditingController invoiceDueDateController =
+      TextEditingController();
+  final TextEditingController invoiceInsertDateController =
+      TextEditingController();
+  List<TextEditingController> get discountsSales => [
+        salesDiscountRateController,
+        salesDiscountValueController,
+      ];
+  List<TextEditingController> get discountsPR => [
+        prDiscountRateController,
+        prDiscountValueController,
+      ];
+  List<TextEditingController> get addSalesCustomer => [
+        invoiceAddCustomerNameController,
+        invoiceAddCustomerPhoneController,
+        invoiceAddCustomerTaxNumController,
+        invoiceAddCustomerCountryController
+      ];
+  List<TextEditingController> get prinvoiceControllers => [
+        prinvoiceDateController,
+        prinvoiceRateController,
+        prinvoiceTotalTaxesController,
+        prinvoiceDiscountPercentageController,
+        prinvoiceDiscountValueController,
+        prinvoicePaidController,
+        prinvoiceNetController,
+        prinvoiceCodeController,
+        prinvoiceSourceCodeController,
+        prinvoiceNotesController,
+        prinvoiceTotalPriceController,
+        prinvoiceTotalController,
+        prinvoiceNetController,
+        prinvoiceTaxesController,
+        prinvoiceJournalController,
+        prinvoiceDrawerIdController,
+        prinvoiceProcessIdController,
+        prinvoiceSourceTypeController,
+        prinvoiceRemainController,
+        prinvoiceCustomerBalanceController,
+        prinvoiceReceiveDateController,
+        prinvoiceDueDateController,
+        prinvoiceInsertDateController,
+      ];
+  List<TextEditingController> get prControllers => [
+        prUnitPriceController,
+        prQuantityController,
+        prTotalQuantityController,
+        prDiscountRateController,
+        prDiscountValueController,
+        prPriceController,
+        prAvailableQuantityController,
+        prInvoiceOperationNumberController,
+        prLengthController,
+        prWidthController,
+        prHeightController,
+        prTotalTaxesController,
+        prInvoiceDescriptionController,
+        prTaxesNameController
+      ];
+  List<TextEditingController> get invoiceControllers => [
+        invoiceDateController,
+        invoiceRateController,
+        invoiceTotalTaxesController,
+        invoiceDiscountPercentageController,
+        invoiceDiscountValueController,
+        invoicePaidController,
+        invoiceNetController,
+        invoiceCodeController,
+        invoiceSourceCodeController,
+        invoiceNotesController,
+        invoiceTotalPriceController,
+        invoiceTotalController,
+        invoiceNetController,
+        invoiceTaxesController,
+        invoiceJournalController,
+        invoiceDrawerIdController,
+        invoiceProcessIdController,
+        invoiceSourceTypeController,
+        invoiceRemainController,
+        invoiceCustomerBalanceController,
+        invoiceReceiveDateController,
+        invoiceDueDateController,
+        invoiceInsertDateController,
+      ];
+
+  List<TextEditingController> get itemControllers => [
+        itemNameAr,
+        itemSmallUomPriceP,
+        itemSmallUomPriceS,
+      ];
+
+  // List of controllers
+  List<TextEditingController> get salesControllers => [
+        salesUnitPriceController,
+        salesQuantityController,
+        salesTotalQuantityController,
+        salesDiscountRateController,
+        salesDiscountValueController,
+        salesPriceController,
+        salesAvailableQuantityController,
+        salesOperationNumberController,
+        salesLengthController,
+        salesWidthController,
+        salesHeightController,
+        salesTotalTaxesController,
+        salesDescriptionController,
+        salesTaxesNameController
+      ];
+
 // List of TextEditingControllers managed by this class
   final TextEditingController idBLController = TextEditingController();
   final TextEditingController brandNameBLController = TextEditingController();
@@ -183,6 +404,10 @@ class ControllerManager {
       TextEditingController();
   final TextEditingController addCollectionLateFinanceController =
       TextEditingController();
+  final TextEditingController addCollectionAdvPayController =
+      TextEditingController();
+  final TextEditingController addCollectionLatePayController =
+      TextEditingController();
   final TextEditingController addCollectionCurrentFinanceController =
       TextEditingController();
   final TextEditingController addCollectionDiffrentFinanaceController =
@@ -220,6 +445,11 @@ class ControllerManager {
   final TextEditingController purchaseItemQuantitytemController =
       TextEditingController();
   final TextEditingController purchaseItemDiscriptionController =
+      TextEditingController();
+  //purchase invoice
+  final TextEditingController purchaseCurRateController =
+      TextEditingController();
+  final TextEditingController purchaseInvoiceDateController =
       TextEditingController();
 
   //PrOrderControllers
@@ -309,6 +539,7 @@ class ControllerManager {
   final TextEditingController absenceDateFromController =
       TextEditingController();
   final TextEditingController absenceDateToController = TextEditingController();
+  final TextEditingController vesselNotesController = TextEditingController();
 
   final TextEditingController abssenceNotesController = TextEditingController();
   final TextEditingController permissionDateFromController =
@@ -571,7 +802,6 @@ class ControllerManager {
 
   void updateControllersWithCustomerData(
       CustomerDataEntity customerDataEntity) {
-    print(customerDataEntity.capitalBl);
     brandNameBLController.text = customerDataEntity.brandNameBl ?? ""; //!
     nationalIdBLController.text = customerDataEntity.nationalIdBl ?? ""; //!
 
@@ -629,6 +859,7 @@ class ControllerManager {
           DateFormat('yyyy-MM-dd').format(DateTime.now());
       addCollectionActivityController.text =
           customerDataEntity.divisionBl ?? "";
+
       addCollectionPaymentReceitController.text = payementReceipt.toString();
       addCollectionDivisionController.text =
           paymentValuesEntity.activity.toString();
@@ -636,12 +867,16 @@ class ControllerManager {
           paymentValuesEntity.compensation?.toString() ?? "0";
       addCollectionLateFinanceController.text =
           paymentValuesEntity.late?.toString() ?? "0";
+      addCollectionAdvPayController.text =
+          paymentValuesEntity.advPay?.toString() ?? "0";
+      addCollectionLatePayController.text =
+          paymentValuesEntity.latePay?.toString() ?? "0";
       addCollectionCurrentFinanceController.text =
           paymentValuesEntity.current?.toString() ?? "0";
       addCollectionDiffrentFinanaceController.text =
           paymentValuesEntity.different?.toString() ?? "0";
 //calcualte original total without divison and different
-      _originalTotal = (paymentValuesEntity.total! -
+      /*    _originalTotal = (paymentValuesEntity.total! -
           paymentValuesEntity.activity! -
           paymentValuesEntity.different!);
       if (addCollectionDiffrentFinanaceController.text.isEmpty) {
@@ -655,12 +890,20 @@ class ControllerManager {
       } else {
         _previousDivisionFinance =
             double.tryParse(addCollectionDivisionController.text) ?? 0;
-      }
+      } */
+      _originalTotal = paymentValuesEntity.activity! +
+          paymentValuesEntity.current! +
+          paymentValuesEntity.compensation! +
+          paymentValuesEntity.late! +
+          paymentValuesEntity.different! +
+          paymentValuesEntity.latePay! -
+          paymentValuesEntity.advPay!;
 
-      addCollectionTotalFinanceController.text = (_originalTotal +
+      /* addCollectionTotalFinanceController.text = (_originalTotal +
               _previousDifferentFinance +
               _previousDivisionFinance)
-          .toString();
+          .toString(); */
+      addCollectionTotalFinanceController.text = _originalTotal.toString();
     } else {
       addCollectionPhoneNumController.text = customerDataEntity.phoneBl ?? "";
       addCollectionAddressController.text = customerDataEntity.addressBl ?? "";
@@ -677,7 +920,6 @@ class ControllerManager {
       addCollectionDiffrentFinanaceController.text = "0.0";
       addCollectionTotalFinanceController.text = "0.0";
       _originalTotal = 0;
-      _previousDifferentFinance = 0;
     }
   }
 

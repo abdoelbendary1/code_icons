@@ -1,4 +1,6 @@
 import 'package:code_icons/data/model/data_model/menu_item.dart';
+import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
+import 'package:code_icons/presentation/auth/login/cubit/login_view_model.dart';
 import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/widgets/custom_card.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
@@ -20,7 +22,7 @@ class _HomeBodyState extends State<HomeBody> {
   HomeScreenViewModel homeScreenViewModel = HomeScreenViewModel(
     fetchEmployeeDataByIDUseCase: injectFetchEmployeeDataByIDUseCase(),
   );
-
+  List<LoginScreensDM> screens = [];
   @override
   void initState() {
     super.initState();
@@ -29,6 +31,9 @@ class _HomeBodyState extends State<HomeBody> {
     /*  homeScreenViewModel.updateProfile(
         employeeEntity: homeScreenViewModel.employee!); */
     homeScreenViewModel.loadMenu();
+    homeScreenViewModel.getScreen();
+
+    fetchAndDisplayScreens();
   }
 
   @override
@@ -40,7 +45,7 @@ class _HomeBodyState extends State<HomeBody> {
           ..getCachedEmployeeEntity(),
         builder: (context, state) {
           if (state is HomeScreenLoading) {
-            return  Column(
+            return Column(
               children: [
                 const Spacer(),
                 LoadingStateAnimation(),
@@ -90,8 +95,26 @@ class _HomeBodyState extends State<HomeBody> {
                       String sectionName = state.menus.keys.elementAt(index);
                       String title = state.menus[sectionName]!.name;
                       IconData icon = state.menus[sectionName]!.icon;
-                      List<MenuItem> menuItem = state.menus[sectionName]!.items;
-                      String routeName = state.menus[sectionName]!.route;
+                      /*    List<MenuItem> menuItem = state.menus[sectionName]!.items
+                          .where((screen) =>
+                              screen.stFormEntity != null &&
+                              homeScreenViewModel.screens.any((permission) =>
+                                  permission.formId ==
+                                  screen.stFormEntity!.formId))
+                          .toList(); */
+                      List<MenuItem> menuItem =
+                          context.read<HomeScreenViewModel>().screens.isNotEmpty
+                              ? state.menus[sectionName]!.items
+                                  .where((screen) =>
+                                      screen.stFormEntity != null &&
+                                      homeScreenViewModel.screens.any(
+                                          (permission) =>
+                                              permission.formId ==
+                                              screen.stFormEntity!.formId))
+                                  .toList()
+                              : state.menus[sectionName]!.items;
+
+                      String routeName = state.menus[sectionName]?.route ?? "";
 
                       return CustomCard(
                         title: title,

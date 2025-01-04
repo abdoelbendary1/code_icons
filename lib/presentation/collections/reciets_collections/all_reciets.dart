@@ -135,8 +135,9 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                           ],
                         ),
                       ),
-                      onTap: () {
-                        recietCollctionCubit.removeAllReciets();
+                      onTap: () async {
+                        recietCollctionCubit.removeAllReceipts(
+                            await recietCollctionCubit.getUserId());
                       },
                     )
                   : SpeedDialChild()
@@ -167,7 +168,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
             );
           }
         },
-        bloc: recietCollctionCubit..getReciets(),
+        bloc: recietCollctionCubit..getLastReciet(),
         builder: (context, state) {
           if (state is GetRecietCollctionSuccess) {
             recietCollctionCubit.receipts = state.reciets;
@@ -317,8 +318,10 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                                   content:
                                       _getIconButton(Colors.red, Icons.delete),
                                   onTap: (handler) async {
-                                    recietCollctionCubit
-                                        .removeReciet(reciept.id!);
+                                    recietCollctionCubit.removeReceipt(
+                                      await recietCollctionCubit.getUserId(),
+                                      reciept.id!,
+                                    );
                                   },
                                 ),
                               ],
@@ -432,7 +435,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
               ),
             );
           } else if (state is GetRecietCollctionLoading) {
-            return  Center(
+            return Center(
               child: LoadingStateAnimation(),
             );
           }

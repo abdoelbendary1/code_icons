@@ -1,4 +1,4 @@
-import 'package:code_icons/data/model/data_model/add_collection_table.dart';
+/* import 'package:code_icons/data/model/data_model/add_collection_table.dart';
 import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
@@ -42,30 +42,6 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
         () => allDailyCollectorCubit.fetchAllCollections(skip: 0, take: 20));
   }
 
-  /* var renderOverlay = true;
-  var visible = true;
-  var switchLabelPosition = false;
-  var extend = false;
-  var mini = false;
-  var rmicons = false;
-  var customDialRoot = false;
-  var closeManually = false;
-  var useRAnimation = true;
-  var isDialOpen = ValueNotifier<bool>(false);
-  var speedDialDirection = SpeedDialDirection.up;
-  var buttonSize = const Size(56.0, 56.0);
-  var childrenButtonSize = const Size(56.0, 56.0);
-  var selectedfABLocation = FloatingActionButtonLocation.centerTop;
-  var items = [
-    FloatingActionButtonLocation.startFloat,
-    FloatingActionButtonLocation.startDocked,
-    FloatingActionButtonLocation.centerFloat,
-    FloatingActionButtonLocation.endFloat,
-    FloatingActionButtonLocation.endDocked,
-    FloatingActionButtonLocation.startTop,
-    FloatingActionButtonLocation.centerTop,
-    FloatingActionButtonLocation.endTop,
-  ]; */
   DataPagerController dataPagerController = DataPagerController();
 
   @override
@@ -200,6 +176,9 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                         AppColors.whiteColor,
                                   ),
                                   child: SfDataGrid(
+                                    onFilterChanged: (details) {
+                                      print("object");
+                                    },
                                     isScrollbarAlwaysShown: false,
                                     headerGridLinesVisibility:
                                         GridLinesVisibility.none,
@@ -238,7 +217,6 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
                                           Alignment.centerRight),
                                       buildGridColumn('totalBl', 'إجمالي',
                                           Alignment.centerRight),
-                                   
                                       buildGridColumn('customerDataIdBl',
                                           'معرف العميل', Alignment.centerRight),
                                       buildGridColumn('lastPaidYearBl',
@@ -379,3 +357,4 @@ class _AllDailyCollectorScreenState extends State<AllDailyCollectorScreen> {
     );
   } */
 }
+ */

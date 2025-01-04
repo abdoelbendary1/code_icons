@@ -1,4 +1,3 @@
-
 class CostCenterEntity {
   int? id;
   String? costcenterNameAr;
@@ -13,7 +12,17 @@ class CostCenterEntity {
   dynamic lastUpdateDate;
   dynamic items;
 
-  CostCenterEntity({this.id, this.costcenterNameAr, this.costcenterNameEn, this.level, this.parentId, this.code, this.costCenter, this.userId, this.lastUpdateUserId, this.insertDate, this.lastUpdateDate, this.items});
-
-  
+  CostCenterEntity(
+      {this.id,
+      this.costcenterNameAr,
+      this.costcenterNameEn,
+      this.level,
+      this.parentId,
+      this.code,
+      this.costCenter,
+      this.userId,
+      this.lastUpdateUserId,
+      this.insertDate,
+      this.lastUpdateDate,
+      this.items});
 }

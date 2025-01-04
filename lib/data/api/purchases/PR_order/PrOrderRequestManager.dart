@@ -29,7 +29,7 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.https(
+      var url = Uri.http(
           ApiConstants.chamberApi, ApiConstants.postPurchaseOrderEndPoint);
 
       var user = await authManager.getUser();
@@ -58,7 +58,7 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.https(
+      var url = Uri.http(
           ApiConstants.chamberApi, ApiConstants.postPurchaseOrderEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -87,7 +87,7 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
       }
 
       var url = Uri.parse(
-          'https://${ApiConstants.chamberApi}${ApiConstants.postPurchaseOrderEndPoint}/$id');
+          'http://${ApiConstants.chamberApi}${ApiConstants.postPurchaseOrderEndPoint}/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -112,8 +112,8 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.taxes);
-      /*  var url = Uri.parse('https://demoapi1.code-icons.com/api/Tax/All'); */
+      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.taxes);
+      /*  var url = Uri.parse('http://demoapi1.code-icons.com/api/Tax/All'); */
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -138,8 +138,8 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.vendors);
-      /* var url = Uri.parse('https://demoapi1.code-icons.com/api/Vendor'); */
+      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.vendors);
+      /* var url = Uri.parse('http://demoapi1.code-icons.com/api/Vendor'); */
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -166,8 +166,8 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url =
-          Uri.parse('https://${ApiConstants.chamberApi}${ApiConstants.postPurchaseOrderEndPoint}/$id');
+      var url = Uri.parse(
+          'http://${ApiConstants.chamberApi}${ApiConstants.postPurchaseOrderEndPoint}/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

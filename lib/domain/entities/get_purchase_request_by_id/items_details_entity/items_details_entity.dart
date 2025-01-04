@@ -13,6 +13,4 @@ class ItemsDetailsEntity {
       this.qty,
       this.description,
       this.id});
-
- 
 }

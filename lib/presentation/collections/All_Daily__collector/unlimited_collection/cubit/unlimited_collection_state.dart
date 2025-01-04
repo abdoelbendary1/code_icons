@@ -32,5 +32,7 @@ class GetUnlimitedCollectionsError extends UnlimitedCollectionState {
 
 class GetUnlimitedCollectionsSuccess extends UnlimitedCollectionState {
   List<UnRegisteredCollectionEntity> collectiion;
-  GetUnlimitedCollectionsSuccess({required this.collectiion});
+  bool isLastPage;
+  GetUnlimitedCollectionsSuccess(
+      {required this.collectiion, required this.isLastPage});
 }

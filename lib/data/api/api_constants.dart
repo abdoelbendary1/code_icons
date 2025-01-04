@@ -1,12 +1,24 @@
 class ApiConstants {
-  static String chamberApi = "demoapi5.code-icons.com";
+/*   static String chamberApi = "demoapi5.code-icons.com";
+ */
+  static String chamberApi = "207.180.236.112:60015";
+  //autApi
+/*   static String chamberApi = "207.180.236.112:60009";
+ */
+/*   static String chamberApi = "116.203.194.75:60011";
+ */
+  /*  static String chamberApi = "elreedy-api.code-icons.com";
+ */
+  /*  static String chamberApi = "demoapi1.code-icons.com"; */
 
-  /* static String chamberApi = "demoapi1.code-icons.com"; */
-
+  /*  static String chamberApi = "amcc-api.code-icons.com"; */
+/* autApi */
   static String elreedyApi = "elreedy-api.code-icons.com";
   static String baseUrl = "demoapi1.code-icons.com";
   static String settingsEndPoint = "api/Settings";
   static String customerDataEndPoint = "/api/CustomerData";
+  static String invoiceCustomerDataEndPoint = "/api/Customer";
+
   static String paymentValuesEndPoint = "/api/CustomerData/PaymentValues";
   static String tradeCollectionEndPoint = "/api/TradeCollection";
   static String unlimitedTradeCollectionEndPoint =
@@ -20,6 +32,9 @@ class ApiConstants {
   static String generalCentersEndPoint = "api/GeneralCenters";
   static String storeEndPoint = "api/Store";
   static String itemEndPoint = "api/Item";
+  static String itemCategoryEndPoint = "api/Category/ItemCategory";
+  static String itemCompanyEndPoint = "api/Company/All";
+
   static String uoms = "api/uoms";
   static String employeeEndPoint = "api/Employee";
   static String vacationRequest = "/api/VacationRequest";
@@ -31,8 +46,18 @@ class ApiConstants {
   static String purchaseRequestEndPoint = "api/PurchaseRequest";
   static String costCenterAllEndPoint = "api/costCenter/All";
   static String postPREndPoint = "api/PurchaseRequest";
+  static String postPrInvoiceEndPoint = "api/purchaseInvoice";
+
   static String getPREndPoint = "api/PurchaseRequest";
   static String postPurchaseOrderEndPoint = "/api/PurchaseOrder";
   static String taxes = "/api/Tax/All";
   static String vendors = "/api/Vendor";
+
+  static String companyEndPoint = "api/Company";
+
+  static String vendorEndPoint = "api/Vendor";
+
+  static String salesReturn = "api/SalesReturn";
+
+  static String purchaseReturnEndPoint = "api/PurchaseReturn";
 }

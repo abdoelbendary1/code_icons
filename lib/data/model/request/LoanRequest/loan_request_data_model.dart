@@ -1,4 +1,3 @@
-
 class LoanRequestDataModel {
   int? statusBl;
   String? employeesIdBl;
@@ -8,28 +7,35 @@ class LoanRequestDataModel {
   String? requestDateBl;
   String? startDateBl;
 
-  LoanRequestDataModel({this.statusBl, this.employeesIdBl, this.amountBl, this.numAdvanceBl, this.valueAdvanceBl, this.requestDateBl, this.startDateBl});
+  LoanRequestDataModel(
+      {this.statusBl,
+      this.employeesIdBl,
+      this.amountBl,
+      this.numAdvanceBl,
+      this.valueAdvanceBl,
+      this.requestDateBl,
+      this.startDateBl});
 
   LoanRequestDataModel.fromJson(Map<String, dynamic> json) {
-    if(json["statusBL"] is int) {
+    if (json["statusBL"] is int) {
       statusBl = json["statusBL"];
     }
-    if(json["employeesIdBL"] is String) {
+    if (json["employeesIdBL"] is String) {
       employeesIdBl = json["employeesIdBL"];
     }
-    if(json["amountBL"] is double) {
+    if (json["amountBL"] is double) {
       amountBl = json["amountBL"];
     }
-    if(json["numAdvanceBL"] is double) {
+    if (json["numAdvanceBL"] is double) {
       numAdvanceBl = json["numAdvanceBL"];
     }
-    if(json["valueAdvanceBL"] is String) {
+    if (json["valueAdvanceBL"] is String) {
       valueAdvanceBl = json["valueAdvanceBL"];
     }
-    if(json["requestDateBL"] is String) {
+    if (json["requestDateBL"] is String) {
       requestDateBl = json["requestDateBL"];
     }
-    if(json["startDateBL"] is String) {
+    if (json["startDateBL"] is String) {
       startDateBl = json["startDateBL"];
     }
   }

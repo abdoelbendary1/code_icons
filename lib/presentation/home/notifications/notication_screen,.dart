@@ -12,8 +12,9 @@ class NotificationsBody extends StatefulWidget {
 }
 
 class _NotificationsBodyState extends State<NotificationsBody> {
-  HomeScreenViewModel homeScreenViewModel = HomeScreenViewModel(    fetchEmployeeDataByIDUseCase: injectFetchEmployeeDataByIDUseCase(),
-);
+  HomeScreenViewModel homeScreenViewModel = HomeScreenViewModel(
+    fetchEmployeeDataByIDUseCase: injectFetchEmployeeDataByIDUseCase(),
+  );
 
   /*  @override
   void initState() {

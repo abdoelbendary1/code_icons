@@ -1,10 +1,10 @@
 import 'package:hive/hive.dart';
 import "package:code_icons/domain/entities/HR/employee/employee_entity.dart";
 
-
 class EmployeeEntityAdapter extends TypeAdapter<EmployeeEntity> {
   @override
-  final int typeId = 4; // Ensure this is unique and different from other adapters
+  final int typeId =
+      4; // Ensure this is unique and different from other adapters
 
   @override
   EmployeeEntity read(BinaryReader reader) {

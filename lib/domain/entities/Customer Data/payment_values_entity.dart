@@ -6,6 +6,9 @@ class PaymentValuesEntity {
   double? late;
   double? current;
   double? different;
+  double? advPay;
+  double? latePay;
+
   double? total;
   double? clientId;
   double? tradeRegistryTypeBl;
@@ -22,6 +25,8 @@ class PaymentValuesEntity {
     this.late,
     this.current,
     this.different,
+    this.advPay,
+    this.latePay,
     this.total,
     this.clientId,
     this.tradeRegistryTypeBl,

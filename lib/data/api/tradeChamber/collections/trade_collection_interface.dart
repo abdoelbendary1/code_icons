@@ -11,8 +11,12 @@ import 'package:dartz/dartz.dart';
 
 abstract class TradeCollectionsInterface {
   Future<Either<Failures, List<TradeCollectionResponse>>>
-      fetchTradeCollectionData({required int skip,
-    required int take,});
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+    List<dynamic>? filterConditions,
+  });
   Future<Either<Failures, TradeCollectionResponse>> getTradeCollectionDataByID({
     required int id,
   });
@@ -28,7 +32,11 @@ abstract class TradeCollectionsInterface {
     required UnRegisteredCollectionsResponse unRegisteredTradeCollectionRequest,
   });
   Future<Either<Failures, List<UnRegisteredCollectionsResponse>>>
-      getUnRegisteredTradeCollectionData();
+      getUnRegisteredTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+  });
   Future<Either<Failures, PaymenValuesDM>> postPaymenValuesByID(
       {int? customerId, List<int>? paidYears});
   Future<Either<Failures, List<TradeOfficeDataModel>>> fetchTradeOfficeData();

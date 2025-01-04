@@ -1,7 +1,8 @@
+import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoice_item_details_dm.dart';
 import 'package:code_icons/domain/entities/get_purchase_request_by_id/items_details_entity/items_details_entity.dart';
 
 class PurchaseRequestDataModel {
-  List<ItemsDetails>? itemsDetails;
+  List<InvoiceItemDetailsDm>? itemsDetails;
   String? date;
   String? status;
   int? storeId;
@@ -14,7 +15,7 @@ class PurchaseRequestDataModel {
       itemsDetails = json["itemsDetails"] == null
           ? null
           : (json["itemsDetails"] as List)
-              .map((e) => ItemsDetails.fromJson(e))
+              .map((e) => InvoiceItemDetailsDm.fromJson(e))
               .toList();
     }
     if (json["date"] is String) {

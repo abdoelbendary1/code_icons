@@ -18,6 +18,11 @@ class MainSettingScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          /*  Expanded(
+              child: TextButton(
+            onPressed: () {},
+            child: Text("تسجيل خروج"),
+          )), */
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -40,7 +45,7 @@ class MainSettingScreen extends StatelessWidget {
               },
               itemCount: menuItems.length,
             ),
-          )
+          ),
         ],
       ),
     );

@@ -8,12 +8,15 @@ class CustomSliverAppBar extends StatelessWidget {
   Widget body;
   List<Widget>? actions;
   String title;
-  CustomSliverAppBar({
-    super.key,
-    required this.body,
-    this.actions,
-    required this.title,
-  });
+  void Function()? onPressed;
+  IconData? icon;
+  CustomSliverAppBar(
+      {super.key,
+      required this.body,
+      this.actions,
+      required this.title,
+      this.icon,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,16 @@ class CustomSliverAppBar extends StatelessWidget {
           expandedHeight: 120.0.h,
           floating: true,
           pinned: false,
+          leadingWidth: 80.w,
+          leading: IconButton(
+              onPressed: onPressed ??
+                  () {
+                    Navigator.pop(context);
+                  },
+              icon: Icon(
+                icon ?? Icons.arrow_back_ios,
+                color: AppColors.whiteColor,
+              )),
           snap: true,
           flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.pin,
@@ -34,7 +47,9 @@ class CustomSliverAppBar extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Spacer(),
+                    Spacer(
+                      flex: 2,
+                    ),
                     Text(
                       title,
                       style: Theme.of(context).textTheme.titleMedium,

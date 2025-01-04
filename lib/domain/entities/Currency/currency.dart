@@ -14,7 +14,7 @@ class CurrencyEntity {
   dynamic pound1Ar;
   String? currencyNameEn;
   String? currencyNameAr;
-  int? rate;
+  double? rate;
   dynamic userId;
   int? lastUpdateUserId;
   dynamic insertDate;

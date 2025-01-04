@@ -24,7 +24,7 @@ class PurchaseScreen extends StatelessWidget {
         children: [
           SizedBox(height: 20.h),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 36.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

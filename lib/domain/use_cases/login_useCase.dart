@@ -4,8 +4,6 @@ import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/domain/repository/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
-
-
 class LoginUseCase {
   AuthRepository authRepository;
   LoginUseCase({

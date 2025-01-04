@@ -33,7 +33,7 @@ class vacationManager implements VacationInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
       var url =
-          Uri.https(ApiConstants.chamberApi, ApiConstants.vacationRequest);
+          Uri.http(ApiConstants.chamberApi, ApiConstants.vacationRequest);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -66,7 +66,7 @@ class vacationManager implements VacationInterface {
       }
 
       var url =
-          Uri.https(ApiConstants.chamberApi, ApiConstants.vacationRequest);
+          Uri.http(ApiConstants.chamberApi, ApiConstants.vacationRequest);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -96,7 +96,7 @@ class vacationManager implements VacationInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.vacationType);
+      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.vacationType);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -128,7 +128,7 @@ class vacationManager implements VacationInterface {
       }
 
       var url =
-          Uri.https(ApiConstants.chamberApi, '/api/VacationRequest/$requestID');
+          Uri.http(ApiConstants.chamberApi, '/api/VacationRequest/$requestID');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -156,7 +156,7 @@ class vacationManager implements VacationInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.https(ApiConstants.chamberApi, '/api/VactionTypes/$typeId');
+      var url = Uri.http(ApiConstants.chamberApi, '/api/VactionTypes/$typeId');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -186,7 +186,7 @@ class vacationManager implements VacationInterface {
       }
 
       var url =
-          Uri.https(ApiConstants.chamberApi, '/api/VacationRequest/$requestID');
+          Uri.http(ApiConstants.chamberApi, '/api/VacationRequest/$requestID');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

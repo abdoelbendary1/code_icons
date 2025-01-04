@@ -6,6 +6,8 @@ import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_enti
 import 'package:code_icons/domain/entities/unlimited_Collection_entity/unlimited_collection_entity.dart';
 import 'package:code_icons/domain/use_cases/get_UnRegistered_trade_collection_use_case%20.dart';
 import 'package:code_icons/domain/use_cases/post_UnRegistered_trade_collection_use_case%20.dart';
+import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
+import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'unlimited_collection_state.dart';
 
@@ -77,7 +81,7 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
 
   String convertStringToDate({required String inputString}) {
     if (inputString.isNotEmpty) {
-      DateFormat inputFormat = DateFormat('yyyy/MM/dd');
+      DateFormat inputFormat = DateFormat('MMM d, y, h:mm:ss a');
       // Parse the input string into a DateTime object
       DateTime dateTime = inputFormat.parse(inputString);
 
@@ -92,24 +96,29 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
 
   List<UnRegisteredCollectionEntity> collections = [];
 
-  Future<void> getAllCollctions() async {
+  Future<void> getAllCollctions({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
     emit(GetCollectionsLoading());
-    var either = await getUnRegisteredTradeCollectionUseCase.invoke();
-    either.fold(
-      (l) => emit(
-        GetUnlimitedCollectionsError(errorMsg: l.errorMessege),
-      ),
-      (r) => emit(
-        GetUnlimitedCollectionsSuccess(collectiion: r),
-      ),
-    );
+    var either = await getUnRegisteredTradeCollectionUseCase.invoke(
+        skip: skip, take: take, filter: filter);
 
-    /* either.fold(
-        (l) => emit(GetUnlimitedCollectionsError(errorMsg: l.errorMessege)),
-        (r) {
-      
-      GetUnlimitedCollectionsSuccess(collectiion: r);
-    }); */
+    either.fold(
+      (l) => emit(GetUnlimitedCollectionsError(errorMsg: l.errorMessege)),
+      (r) {
+        if (r.isEmpty) {
+          emit(GetUnlimitedCollectionsSuccess(
+              collectiion: [], isLastPage: true));
+        } else {
+          emit(GetUnlimitedCollectionsSuccess(
+            collectiion: r,
+            isLastPage: r.length < take,
+          ));
+        }
+      },
+    );
   }
 
   Future<void> addCustomer(
@@ -120,6 +129,13 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
       either.fold(
           (l) => emit(AddUnlimitedCollectionError(errorMsg: l.errorMessege)),
           (r) async {
+        int userId = await getUserId();
+        await storePaymentReceipt(
+            receipt: int.parse(
+                ControllerManager().unlimitedPaymentReceiptController.text),
+            userId: userId);
+
+        await incrementPaymentReceipt();
         await incrementPaymentReceipt();
         emit(AddUnlimitedCollectionSuccess(collectionID: r.toString()));
       });
@@ -140,9 +156,9 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
  */
   }
 
-  void deselectRow() {
+/*   void deselectRow() {
     getAllCollctions(); // This is to reset the state to the initial list
-  }
+  } */
 
   Future<void> storePaymentReceipt(
       {required int userId, required int receipt}) async {
@@ -361,7 +377,8 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
     return userId;
   }
 
-  Future<void> initialize({required controller}) async {
+  Future<void> initialize(
+      {required controller, required BuildContext context}) async {
     /* if (paymentReceipt == null) {
       paymentReceipt = storedPaymentReceipt;
     } */
@@ -431,7 +448,28 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
       }
       updateController();
     } else {
-      await storePaymentReceipt(receipt: 1, userId: userId);
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        showConfirmBtn: true,
+        showCancelBtn: true,
+        barrierDismissible: false,
+        cancelBtnText: "رجوع",
+        onCancelBtnTap: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+        onConfirmBtnTap: () {
+          Navigator.pop(context);
+          Navigator.pushNamedAndRemoveUntil(
+              context, HomeScreen.routeName, (route) => false);
+          Navigator.pushNamed(context, AllRecietsScreen.routeName);
+        },
+        confirmBtnText: "إضافه دفتر",
+        title: "لا يوجد دفاتر متاحه",
+        titleColor: AppColors.redColor,
+      );
+      /*   await storePaymentReceipt(receipt: 1, userId: userId);
       await addReciet();
       receipts = await getReciets();
       selectedReceit = receipts.firstWhere(
@@ -443,7 +481,7 @@ class UnlimitedCollectionCubit extends Cubit<UnlimitedCollectionState>
         paymentReceipt = selectedReceit.paperNum!;
         await storePaymentReceipt(receipt: paymentReceipt!, userId: userId);
       }
-      updateController();
+      updateController(); */
     }
   }
 

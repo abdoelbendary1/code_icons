@@ -5,15 +5,11 @@ import 'package:code_icons/domain/entities/failures/failures.dart';
 import 'package:code_icons/domain/repository/data_source/auth_remote_data_source.dart';
 import 'package:dartz/dartz.dart';
 
-
-
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   ApiManager apiManager;
   AuthRemoteDataSourceImpl({
     required this.apiManager,
   });
-
-  
 
   @override
   Future<Either<Failures, AuthRepoEntity>> login(

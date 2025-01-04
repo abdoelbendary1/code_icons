@@ -35,7 +35,7 @@ class HandleResponseHelper {
         // Normal handling for 2xx responses with body
         String responseBody = await httpRequestHelper.getResponseBody(response);
         dynamic responseBodyJson = jsonDecode(responseBody);
-
+        print(fromJson(responseBodyJson));
         return right(fromJson(responseBodyJson));
       } else {
         // Handle non-success status codes
@@ -71,7 +71,7 @@ class HandleResponseHelper {
 
     switch (response.statusCode) {
       case 400:
-        return ServerError(errorMessege: errorMessage);
+        return ServerError(errorMessege: "Bad Request");
       case 401:
         return ServerError(errorMessege: "Unauthorized ");
       case 403:

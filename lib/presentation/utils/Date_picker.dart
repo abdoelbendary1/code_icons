@@ -10,9 +10,9 @@ class AppDatePicker {
     DateTime? lastDate,
     DateTime? firstDate,
   }) async {
+    // Show the date picker dialog
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      /* locale: Locale("ar"), */
       initialDate: DateTime.now(),
       firstDate: firstDate ?? DateTime(1900),
       lastDate: lastDate ?? DateTime.now(),
@@ -34,15 +34,31 @@ class AppDatePicker {
         );
       },
     );
-    if (pickedDate != null) {
-      // Store the picked date in '1984-01-31T22:00:00' format
-      String storedDate = pickedDate.toIso8601String();
 
-      // Format the date to 'yyyy-MM-dd' for display
-      String displayDate = DateFormat('yyyy/MM/dd').format(pickedDate);
+    if (pickedDate != null) {
+      // Get the current time
+      final now = DateTime.now();
+
+      // Combine the picked date with the current time
+      final bookedDate = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        now.hour,
+        now.minute,
+        now.second,
+        now.millisecond,
+        now.microsecond,
+      );
+
+      // Store the combined date in ISO8601 format
+      String storedDate = bookedDate.toIso8601String();
+
+      // Format the combined date for display
+      String displayDate = DateFormat('MMM d, y, h:mm:ss a').format(bookedDate);
       controller.text = displayDate;
 
-      // Store the date in the map based on the key
+      // Store the combined date in the map based on the key
       dateStorageMap[key] = storedDate;
     }
   }

@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:hawk_fab_menu/hawk_fab_menu.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -42,7 +41,6 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
 
   late CustomerDataSource _dataSource;
   DataGridController dataGridController = DataGridController();
-  HawkFabMenuController hawkFabMenuController = HawkFabMenuController();
 
   @override
   void initState() {
@@ -131,7 +129,7 @@ class _CustomerDataScreenState extends State<CustomerDataScreen> {
                   } else if (state is FetchCustomersError) {
                     return Center(child: Text('Error: ${state.errorMsg}'));
                   }
-                  return  Column(
+                  return Column(
                     children: [
                       Spacer(),
                       LoadingStateAnimation(),

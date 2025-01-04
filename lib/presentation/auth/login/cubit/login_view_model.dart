@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:code_icons/data/api/auth/auth_manager.dart';
 import 'package:code_icons/data/model/request/login_request.dart';
+import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
+import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_state.dart';
+import 'package:code_icons/services/di.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/widgets.dart';
@@ -13,15 +17,14 @@ import 'package:local_auth/local_auth.dart';
 class LoginViewModel extends Cubit<LoginState> {
   LoginViewModel({required this.loginUseCase}) : super(LoginLoadinState());
 
+  AuthManager authManager = AuthManager(
+      httpClient: injectHttpClient(),
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper());
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController(
-/*     text: "admin",
- */
-      );
-  TextEditingController passwordController = TextEditingController(
-/*     text: "admin",
- */
-      );
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final LocalAuthentication auth = LocalAuthentication();
   bool authState = false;
 
@@ -66,6 +69,7 @@ class LoginViewModel extends Cubit<LoginState> {
           either.fold((failure) {
             emit(LoginErrorState(errorMessege: failure.errorMessege));
           }, (response) {
+            print("login response =============> ${response.screens}");
             emit(LoginSuccesState(loginRepositoryEntity: response));
           });
         } else {
@@ -86,6 +90,7 @@ class LoginViewModel extends Cubit<LoginState> {
   late void Function()? buttonFunction;
   bool isObsecure = true;
   LoginUseCase loginUseCase;
+  List<LoginScreensDM>? userScreens = [];
 
   void login() async {
     if (formKey.currentState!.validate()) {
@@ -95,10 +100,15 @@ class LoginViewModel extends Cubit<LoginState> {
           emailController.text, passwordController.text);
 
       either.fold((failure) {
+        print("login error =============> ${failure.errorMessege}");
         emit(LoginErrorState(errorMessege: failure.errorMessege));
-      }, (response) {
+      }, (response) async {
         var username = emailController.text;
         var password = passwordController.text;
+        authManager.saveUser(response);
+        userScreens = response.screens;
+        saveLoginScreens(response.screens ?? []);
+        print("login response =============> ${response.screens}");
         clearLoginRequest();
 
         saveLoginRequest(LoginRequest(
@@ -108,6 +118,20 @@ class LoginViewModel extends Cubit<LoginState> {
         emit(LoginSuccesState(loginRepositoryEntity: response));
       });
     }
+  }
+
+  Future<void> saveLoginScreens(List<LoginScreensDM> screens) async {
+    var box = await Hive.openBox<LoginScreensDM>('loginScreensBox');
+
+    // Clear existing data before saving, if needed
+    await box.clear();
+
+    // Add each screen to the box
+    for (var screen in screens) {
+      await box.add(screen);
+    }
+
+    print('LoginScreens saved to Hive.');
   }
 
   void saveLoginRequest(LoginRequest request) async {
@@ -123,5 +147,23 @@ class LoginViewModel extends Cubit<LoginState> {
   void clearLoginRequest() {
     var box = Hive.box<LoginRequest>('login_requests');
     box.clear();
+  }
+}
+
+Future<List<LoginScreensDM>> getLoginScreens() async {
+  var box = await Hive.openBox<LoginScreensDM>('loginScreensBox');
+
+  // Get all the screens stored in the box
+  List<LoginScreensDM> screens = box.values.toList();
+
+  return screens;
+}
+
+void fetchAndDisplayScreens() async {
+  List<LoginScreensDM> screens = await getLoginScreens();
+
+  // Do something with the screens
+  for (var screen in screens) {
+    print('Screen ID: ${screen.id}, Form ID: ${screen.formId}');
   }
 }

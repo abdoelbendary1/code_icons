@@ -120,7 +120,7 @@ class CustomerDataSource extends DataGridSource {
 
   String convertStringToDate({required String inputString}) {
     if (inputString.isNotEmpty) {
-      DateFormat inputFormat = DateFormat('yyyy/MM/dd');
+      DateFormat inputFormat = DateFormat('MMM d, y, h:mm:ss a');
       // Parse the input string into a DateTime object
       DateTime dateTime = inputFormat.parse(inputString);
 

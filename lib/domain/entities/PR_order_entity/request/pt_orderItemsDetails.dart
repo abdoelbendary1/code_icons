@@ -40,6 +40,4 @@ class PrOrderItemsDetailsEntity {
     this.itemCode2,
     this.itemCode1,
   });
-
-
 }

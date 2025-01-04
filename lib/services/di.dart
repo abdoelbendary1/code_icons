@@ -11,11 +11,17 @@ import 'package:code_icons/data/api/HR/Requests/attendence/IAttendance.dart';
 import 'package:code_icons/data/api/HR/Requests/attendence/attendance_manager.dart';
 import 'package:code_icons/data/api/HR/employee/Employee_interface.dart';
 import 'package:code_icons/data/api/HR/employee/Employee_manager.dart';
+import 'package:code_icons/data/api/Sales/Invoice/Invoice_interface.dart';
+import 'package:code_icons/data/api/Sales/Invoice/invoice_manager.dart';
 import 'package:code_icons/data/api/api_manager.dart';
 import 'package:code_icons/data/api/auth/auth_manager.dart';
 import 'package:code_icons/data/api/auth/auth_manager_interface.dart';
 import 'package:code_icons/data/api/purchases/PR_Request/PR_manager.dart';
 import 'package:code_icons/data/api/purchases/PR_Request/PR_request_interface.dart';
+import 'package:code_icons/data/api/storage/IStorage.dart';
+import 'package:code_icons/data/api/storage/StorageManager.dart';
+import 'package:code_icons/data/api/sysSettings/ISysSetting.dart';
+import 'package:code_icons/data/api/sysSettings/sysSetting_manager.dart';
 import 'package:code_icons/data/api/tradeChamber/collections/trade_collection_interface.dart';
 import 'package:code_icons/data/api/tradeChamber/collections/trade_collection_manager.dart';
 import 'package:code_icons/data/api/tradeChamber/customers/customers_interface.dart';
@@ -66,6 +72,10 @@ import 'package:code_icons/domain/use_cases/post_UnRegistered_trade_collection_u
 import 'package:code_icons/domain/use_cases/post_customer_data.dart';
 import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart';
 import 'package:code_icons/domain/use_cases/purchase_request_usecase/purchase_request.useCase.dart';
+import 'package:code_icons/domain/use_cases/storage/add_item_category.dart';
+import 'package:code_icons/domain/use_cases/storage/add_item_company.dart';
+import 'package:code_icons/domain/use_cases/storage/add_item_usecase.dart';
+import 'package:code_icons/domain/use_cases/storage/fetchUOM_usecase.dart';
 
 LoginUseCase injectLoginUseCase() {
   return LoginUseCase(authRepository: injectAuthRepository());
@@ -151,6 +161,20 @@ PurchaseRequestRepo injectPurchaseRequestRepo() {
       purchaseRequestRemoteDataSource: injectPurchaseRequestRemoteDataSource());
 }
 
+InvoiceInterface injectInvoiceInterface() {
+  return InvoiceManager(
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper(),
+      authManager: injectAuthManagerInterface());
+}
+
+ISysSettings injectISysSettings() {
+  return SysSettingManager(
+      httpRequestHelper: injectHttpRequestHelper(),
+      handleResponseHelper: injectHandleResponseHelper(),
+      authManager: injectAuthManagerInterface());
+}
+
 PurchaseRequestRemoteDataSource injectPurchaseRequestRemoteDataSource() {
   return PurchaseRequestRemoteDataSourceImpl(
     apiManager: ApiManager.getInstance(),
@@ -163,6 +187,29 @@ PrRequestInterface injectPrRequestInterface() {
       httpRequestHelper: injectHttpRequestHelper(),
       handleResponseHelper: injectHandleResponseHelper(),
       authManager: injectAuthManagerInterface());
+}
+
+IStorage injectIStorage() {
+  return StorageManager(
+      authManager: injectAuthManagerInterface(),
+      handleResponseHelper: injectHandleResponseHelper(),
+      httpRequestHelper: injectHttpRequestHelper());
+}
+
+FetchUOMUsecase injectFetchUOMUseCase() {
+  return FetchUOMUsecase(iStorage: injectIStorage());
+}
+
+AddItemUseCase injcetAddItemUseCase() {
+  return AddItemUseCase(iStorage: injectIStorage());
+}
+
+AddItemCategoryUseCase injectAddItemCategoryUseCase() {
+  return AddItemCategoryUseCase(iStorage: injectIStorage());
+}
+
+AddItemCompanyUseCase injcetAddItemCompanyUseCase() {
+  return AddItemCompanyUseCase(iStorage: injectIStorage());
 }
 
 PostCustomerDataUseCase injectPostCustomerDataUseCase() {

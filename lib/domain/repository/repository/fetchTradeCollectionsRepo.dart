@@ -6,6 +6,10 @@ import 'package:dartz/dartz.dart';
 
 abstract class FetchTradeCollectionsRepo {
   Future<Either<Failures, List<TradeCollectionEntity>>>
-      fetchTradeCollectionData({ required int skip,
-    required int take,});
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+    List<dynamic>? filterConditions,
+  });
 }

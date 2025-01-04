@@ -5,14 +5,12 @@ import 'package:code_icons/domain/repository/data_source/auth_remote_data_source
 import 'package:code_icons/domain/repository/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
-
 class AuthRepositoryImpl implements AuthRepository {
   AuthRemoteDataSource authRemoteDataSource;
   AuthRepositoryImpl({
     required this.authRemoteDataSource,
   });
 
- 
   @override
   Future<Either<Failures, AuthRepoEntity>> login(
       String username, String password) {

@@ -202,7 +202,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                       },
                       builder: (context, state) {
                         if (state is LoadCurrency) {
-                          return  Center(
+                          return Center(
                             child: SizedBox(
                                 height: 30, child: LoadingStateAnimation()),
                           );

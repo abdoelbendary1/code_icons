@@ -28,7 +28,7 @@ class CollectionsDataSource extends DataGridSource {
         DataGridCell<String>(
             columnName: 'brandNameBl',
             value: dataGridRow.brandNameBl ?? "Unknown"),
-      // Assuming "address" is not available
+        // Assuming "address" is not available
         DataGridCell<String>(
           columnName: 'collectionDateBl',
           value: dataGridRow.collectionDateBl != null
@@ -59,7 +59,7 @@ class CollectionsDataSource extends DataGridSource {
         DataGridCell<double>(
             columnName: 'totalBl',
             value: _convertToDouble(dataGridRow.totalBl)),
-       
+
         DataGridCell<double>(
             columnName: 'customerDataIdBl',
             value: _convertToDouble(dataGridRow.customerDataIdBl)),

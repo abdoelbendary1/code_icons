@@ -24,7 +24,8 @@ class GetCustomerDataRepoImpl implements GetCustomerDataRepo {
     required int take,
     String? filter, // Optional filter parameter
   }) {
-    return getCustomerDataRemoteDataSource.fetchCustomerData(skip: skip,take: take,filter: filter);
+    return getCustomerDataRemoteDataSource.fetchCustomerData(
+        skip: skip, take: take, filter: filter);
   }
 
   @override

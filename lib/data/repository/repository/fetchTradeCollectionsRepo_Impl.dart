@@ -16,8 +16,13 @@ class FetchTradeCollectionsRepoImpl implements FetchTradeCollectionsRepo {
   });
   @override
   Future<Either<Failures, List<TradeCollectionEntity>>>
-      fetchTradeCollectionData({ required int skip,
-    required int take,}) {
-    return fetchTradeCollectionsDataSource.fetchTradeCollectionData(skip: skip,take: take);
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+    List<dynamic>? filterConditions,
+  }) {
+    return fetchTradeCollectionsDataSource.fetchTradeCollectionData(
+        skip: skip, take: take, filter: filter, filterConditions: filterConditions);
   }
 }

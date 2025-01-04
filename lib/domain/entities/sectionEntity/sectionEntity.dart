@@ -5,14 +5,14 @@ class SectionEntity {
   final String name;
   final IconData icon;
   final String route;
+  final String? modules;
   final List<MenuItem> items;
-  
 
   SectionEntity({
     required this.name,
     required this.icon,
     required this.route,
     required this.items,
-   
+    this.modules,
   });
 }

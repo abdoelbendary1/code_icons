@@ -1,4 +1,3 @@
-
 class StoreEntity {
   int? storeId;
   String? storeCode;
@@ -25,7 +24,29 @@ class StoreEntity {
   String? insertDate;
   String? lastUpdateDate;
 
-  StoreEntity({this.storeId, this.storeCode, this.storeNameAr, this.storeNameEn, this.managerName, this.address, this.tel, this.mobile, this.isStopped, this.parentId, this.parent, this.parentName, this.stockMethod, this.sellAccount, this.sellReturnAccount, this.inventoryAccount, this.costOfSoldGoodsAcc, this.salesDiscountAcc, this.purchaseDiscountAcc, this.costCenter, this.userId, this.lastUpdateUserId, this.insertDate, this.lastUpdateDate});
-
-  
+  StoreEntity(
+      {this.storeId,
+      this.storeCode,
+      this.storeNameAr,
+      this.storeNameEn,
+      this.managerName,
+      this.address,
+      this.tel,
+      this.mobile,
+      this.isStopped,
+      this.parentId,
+      this.parent,
+      this.parentName,
+      this.stockMethod,
+      this.sellAccount,
+      this.sellReturnAccount,
+      this.inventoryAccount,
+      this.costOfSoldGoodsAcc,
+      this.salesDiscountAcc,
+      this.purchaseDiscountAcc,
+      this.costCenter,
+      this.userId,
+      this.lastUpdateUserId,
+      this.insertDate,
+      this.lastUpdateDate});
 }

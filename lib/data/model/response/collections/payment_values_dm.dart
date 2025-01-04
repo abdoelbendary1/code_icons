@@ -1,22 +1,23 @@
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';
 
 class PaymenValuesDM extends PaymentValuesEntity {
-  PaymenValuesDM({
-    super.yearsOfRepayment,
-    super.paidYears,
-    super.compensation,
-    super.activity,
-    super.late,
-    super.current,
-    super.different,
-    super.total,
-    super.clientId,
-    super.tradeRegistryTypeBl,
-    super.clientName,
-    super.clientAddress,
-    super.capital,
-    super.message,
-  });
+  PaymenValuesDM(
+      {super.yearsOfRepayment,
+      super.paidYears,
+      super.compensation,
+      super.activity,
+      super.late,
+      super.current,
+      super.different,
+      super.total,
+      super.clientId,
+      super.tradeRegistryTypeBl,
+      super.clientName,
+      super.clientAddress,
+      super.capital,
+      super.message,
+      super.advPay,
+      super.latePay});
 
   PaymenValuesDM.fromJson(Map<String, dynamic> json) {
     if (json["yearsOfRepayment"] is String) {
@@ -61,6 +62,8 @@ class PaymenValuesDM extends PaymentValuesEntity {
     if (json["message"] is String) {
       message = json["message"];
     }
+    advPay = json["advPay"];
+    latePay = json["latePay"];
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +84,8 @@ class PaymenValuesDM extends PaymentValuesEntity {
     _data["clientAddress"] = clientAddress;
     _data["capital"] = capital;
     _data["message"] = message;
+    _data["advPay"] = advPay;
+    _data["latePay"] = latePay;
 
     return _data;
   }

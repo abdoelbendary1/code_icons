@@ -13,7 +13,12 @@ class GetUnRegisteredTradeCollectionUseCase {
   GetUnRegisteredTradeCollectionUseCase({
     required this.postTradeCollectionRepo,
   });
-  Future<Either<Failures, List<UnRegisteredCollectionEntity>>> invoke() async {
-    return await postTradeCollectionRepo.getUnRegisteredTradeCollectionData();
+  Future<Either<Failures, List<UnRegisteredCollectionEntity>>> invoke({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
+    return await postTradeCollectionRepo.getUnRegisteredTradeCollectionData(
+        skip: skip, take: take, filter: filter);
   }
 }

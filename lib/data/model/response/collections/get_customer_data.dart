@@ -30,6 +30,7 @@ class CustomerDataModel extends CustomerDataEntity {
     super.tradeRegistryTypeBl,
     super.customerDataIdBl,
     super.message,
+    
   });
 
   CustomerDataModel.fromJson(Map<String, dynamic> json) {
@@ -111,6 +112,7 @@ class CustomerDataModel extends CustomerDataEntity {
     if (json["message"] is String) {
       message = json["message"];
     }
+   
   }
 
   Map<String, dynamic> toJson() {
@@ -143,6 +145,8 @@ class CustomerDataModel extends CustomerDataEntity {
     _data["tradeRegistryTypeBL"] = tradeRegistryTypeBl;
     _data["customerDataIdBL"] = customerDataIdBl;
     _data["message"] = message;
+   
+
     return _data;
   }
 }

@@ -10,7 +10,9 @@ class FetchCustomerDataByIDUseCase {
     required this.getCustomerDataRepo,
   });
 
-  Future<Either<Failures, CustomerDataEntity>> invoke({required String customerId}) async {
-    return await getCustomerDataRepo.fetchCustomerDataByID(customerId: customerId);
+  Future<Either<Failures, CustomerDataEntity>> invoke(
+      {required String customerId}) async {
+    return await getCustomerDataRepo.fetchCustomerDataByID(
+        customerId: customerId);
   }
 }

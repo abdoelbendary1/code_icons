@@ -108,7 +108,8 @@ class _PermissionRequestScreenState extends State<PermissionRequestScreen> {
                     BuildTextField(
                       label: "من",
                       /*  hint: "من", */
-                      controller: ControllerManager().permissionDateFromController,
+                      controller:
+                          ControllerManager().permissionDateFromController,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return "يجب ادخال التاريخ";
@@ -122,7 +123,8 @@ class _PermissionRequestScreenState extends State<PermissionRequestScreen> {
                           firstDate: DateTime.now(),
                           lastDate: DateTime(2050),
                           context: context,
-                          controller: ControllerManager().permissionDateFromController,
+                          controller:
+                              ControllerManager().permissionDateFromController,
                           dateStorageMap: permissionRequestCubit.dateStorageMap,
                           key: "unlimitedPaymentReceitDateController",
                         );
@@ -140,7 +142,8 @@ class _PermissionRequestScreenState extends State<PermissionRequestScreen> {
                     BuildTextField(
                       label: "الى",
                       /*   hint: "تاريخ الطلب", */
-                      controller: ControllerManager().permissionDateToController,
+                      controller:
+                          ControllerManager().permissionDateToController,
                       icon: Icons.app_registration,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -154,7 +157,8 @@ class _PermissionRequestScreenState extends State<PermissionRequestScreen> {
                         AppDatePicker.selectDate(
                           firstDate: DateTime.now(),
                           context: context,
-                          controller: ControllerManager().permissionDateToController,
+                          controller:
+                              ControllerManager().permissionDateToController,
                           dateStorageMap: permissionRequestCubit.dateStorageMap,
                           lastDate: DateTime(2050),
                           key: "unlimitedPaymentReceitDateController",
@@ -184,7 +188,9 @@ class _PermissionRequestScreenState extends State<PermissionRequestScreen> {
                         return null;
                       },
                       onTap: () {
-                        ControllerManager().permissionNotesController.selection =
+                        ControllerManager()
+                                .permissionNotesController
+                                .selection =
                             TextSelection(
                                 baseOffset: 0,
                                 extentOffset: ControllerManager()

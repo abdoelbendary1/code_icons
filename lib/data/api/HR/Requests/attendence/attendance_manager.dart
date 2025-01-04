@@ -30,7 +30,7 @@ class AttendanceManager implements IAttendance {
         return Left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
       var url =
-          Uri.https(ApiConstants.chamberApi, ApiConstants.attendenceRequest);
+          Uri.http(ApiConstants.chamberApi, ApiConstants.attendenceRequest);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -55,7 +55,7 @@ class AttendanceManager implements IAttendance {
       }
 
       var url =
-          Uri.https(ApiConstants.chamberApi, ApiConstants.attendenceRequest);
+          Uri.http(ApiConstants.chamberApi, ApiConstants.attendenceRequest);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -85,7 +85,7 @@ class AttendanceManager implements IAttendance {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
       var url = Uri.parse(
-          'https://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$attendanceID');
+          'http://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$attendanceID');
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -113,7 +113,7 @@ class AttendanceManager implements IAttendance {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
       var url = Uri.parse(
-          'https://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$id');
+          'http://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$id');
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -143,7 +143,7 @@ class AttendanceManager implements IAttendance {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
       var url = Uri.parse(
-          'https://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$id');
+          'http://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$id');
 
       var user = await authManager.getUser();
       var token = user?.accessToken;

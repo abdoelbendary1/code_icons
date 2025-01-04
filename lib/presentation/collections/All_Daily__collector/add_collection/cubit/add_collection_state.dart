@@ -75,7 +75,7 @@ final class GetCustomerDataByIDSuccess extends AddCollectionState {
   /* List<Map<dynamic, dynamic>> yearsOfPayment; */
   GetCustomerDataByIDSuccess({
     required this.customerData,
-     this.controllers,
+    this.controllers,
   });
 }
 

@@ -6,6 +6,7 @@ class MenuItem extends MenuItemEntity {
     required super.title,
     required super.route,
     required super.icon,
+    super.stFormEntity,
   });
 
   factory MenuItem.fromJson(Map<String, dynamic> json) {

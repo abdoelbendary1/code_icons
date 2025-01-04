@@ -5,7 +5,6 @@ class ItemUomEntity {
   int? sellPrice;
   int? factor;
 
-  ItemUomEntity({this.uomId, this.uom, this.prPrice, this.sellPrice, this.factor});
-
- 
+  ItemUomEntity(
+      {this.uomId, this.uom, this.prPrice, this.sellPrice, this.factor});
 }

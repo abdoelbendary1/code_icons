@@ -10,4 +10,3 @@ class Item {
   });
 }
 //create a list of the items, you need to add items into it first
-

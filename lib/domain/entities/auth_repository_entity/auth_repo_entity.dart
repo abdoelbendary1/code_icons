@@ -1,3 +1,5 @@
+import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
+import 'package:code_icons/domain/entities/auth_repository_entity/loginScreen.dart';
 import 'package:hive/hive.dart';
 
 @HiveType(typeId: 1)
@@ -18,7 +20,7 @@ class AuthRepoEntity extends HiveObject {
   String? message;
 
   @HiveField(5)
-  List<dynamic>? screens;
+  List<LoginScreensDM>? screens;
 
   AuthRepoEntity({
     this.id,

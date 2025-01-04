@@ -1,13 +1,8 @@
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/collections_screen.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
 import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
-import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
-import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,14 +20,14 @@ class RecietScreenBody extends StatefulWidget {
 
 class _RecietScreenBodyState extends State<RecietScreenBody> {
   RecietCollctionCubit recietCollctionCubit = RecietCollctionCubit();
-
+  ControllerManager controllerManager = ControllerManager();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    /* ControllerManager().recietCollectionController.last.clear(); */
-    ControllerManager().clearControllers(
-        controllers: ControllerManager().recietCollectionController);
+
+    controllerManager.clearControllers(
+        controllers: controllerManager.recietCollectionController);
     recietCollctionCubit.getLastReciet();
     RecietCollctionCubit.initHive();
     Future.delayed(Durations.medium1);
@@ -49,14 +44,6 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
-
-  /* @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    ControllerManager().totalPapers.dispose();
-    ControllerManager().paperNum.dispose();
-  } */
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +62,13 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
             BuildTextField(
               label: "رقم اول ورقه",
               hint: "ادخل الرقم",
-              controller: ControllerManager().getControllerByName('paperNum'),
+              controller: controllerManager.paperNum,
               icon: Icons.phone_iphone,
               keyboardType: TextInputType.number,
               onTap: () {
-                ControllerManager().getControllerByName('paperNum').selection =
-                    TextSelection(
-                        baseOffset: 0,
-                        extentOffset: ControllerManager()
-                            .getControllerByName('paperNum')
-                            .value
-                            .text
-                            .length);
+                controllerManager.paperNum.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: controllerManager.paperNum.value.text.length);
               },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -104,21 +86,14 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
             BuildTextField(
               label: "عدد الورقات ",
               hint: "ادخل العدد",
-              controller:
-                  ControllerManager().getControllerByName('totalPapers'),
+              controller: controllerManager.totalPapers,
               icon: Icons.phone_iphone,
               keyboardType: TextInputType.number,
               onTap: () {
-                ControllerManager()
-                        .getControllerByName('totalPapers')
-                        .selection =
-                    TextSelection(
-                        baseOffset: 0,
-                        extentOffset: ControllerManager()
-                            .getControllerByName('totalPapers')
-                            .value
-                            .text
-                            .length);
+                controllerManager.totalPapers.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset:
+                        controllerManager.totalPapers.value.text.length);
               },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -153,13 +128,6 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                 title: "تمت الإضافه بنجاح",
                 titleColor: AppColors.lightBlueColor,
               );
-              /*   SnackBarUtils.showSnackBar(
-                context: context,
-                label: "تمت الإضافه بنجاح",
-                backgroundColor: AppColors.greenColor,
-              ); */
-              /* Navigator.pushReplacementNamed(
-                  context, AllRecietsScreen.routeName); */
             } else if (state is AddRecietCollctionError) {
               if (state.errorMsg.contains("400")) {
                 QuickAlert.show(
@@ -170,11 +138,6 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                   title: "برجاء ادخال البيانات صحيحه",
                   titleColor: AppColors.redColor,
                 );
-                /*   SnackBarUtils.showSnackBar(
-                  context: context,
-                  label: "برجاء ادخال البيانات صحيحه",
-                  backgroundColor: AppColors.redColor,
-                ); */
               } else if (state.errorMsg.contains("500")) {
                 QuickAlert.show(
                   animType: QuickAlertAnimType.slideInUp,
@@ -184,12 +147,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                   title: "حدث خطأ ما",
                   titleColor: AppColors.redColor,
                 );
-                /*      SnackBarUtils.showSnackBar(
-                  context: context,
-                  label: "حدث خطأ ما",
-                  backgroundColor: AppColors.redColor,
-                ); */
-                print(state.errorMsg);
+
               } else {
                 QuickAlert.show(
                   animType: QuickAlertAnimType.slideInUp,
@@ -213,17 +171,15 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () async {
                 if (recietCollctionCubit.formKey.currentState!.validate()) {
-                  /* DialogUtils.showLoading(context: context, message: ""); */
-                  await recietCollctionCubit.addReciet(context);
-                  /*  Navigator.pushReplacementNamed(
-                      context, AllRecietsScreen.routeName);
-                  QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.success,
-                    showConfirmBtn: false,
-                    title: "تمت الإضافه بنجاح",
-                    titleColor: AppColors.lightBlueColor,
-                  ); */
+                  await recietCollctionCubit.addReceipt(
+                    context,
+                    newReceipt: RecietCollectionDataModel(
+                      paperNum: int.parse(controllerManager.paperNum.text),
+                      totalPapers:
+                          int.parse(controllerManager.totalPapers.text),
+                    ),
+                    userId: await recietCollctionCubit.getUserId(),
+                  );
                 }
               },
               child: Text(AppLocalizations.of(context)!.save),

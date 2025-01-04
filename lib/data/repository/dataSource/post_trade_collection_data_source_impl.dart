@@ -15,8 +15,7 @@ class PostTradeCollectionDataSourceImpl
   PostTradeCollectionDataSourceImpl({required this.apiManager});
   @override
   Future<Either<Failures, TradeCollectionEntity>> postTradeCollectionData(
-      {
-      required TradeCollectionRequest tradeCollectionRequest}) async {
+      {required TradeCollectionRequest tradeCollectionRequest}) async {
     var either = await apiManager.postTradeCollectionData(
         tradeCollectionRequest: tradeCollectionRequest);
     return either.fold((l) => left(l), (response) => right(response));
@@ -33,8 +32,16 @@ class PostTradeCollectionDataSourceImpl
 
   @override
   Future<Either<Failures, List<UnRegisteredCollectionEntity>>>
-      getUnRegisteredTradeCollectionData() async {
-    var either = await apiManager.getUnRegisteredTradeCollectionData();
+      getUnRegisteredTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+  }) async {
+    var either = await apiManager.getUnRegisteredTradeCollectionData(
+      skip: skip,
+      take: take,
+      filter: filter,
+    );
     return either.fold((l) => left(l), (response) => right(response));
   }
 }

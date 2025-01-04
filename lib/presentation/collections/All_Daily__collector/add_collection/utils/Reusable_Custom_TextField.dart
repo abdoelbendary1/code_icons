@@ -19,6 +19,10 @@ class ReusableCustomTextField extends StatelessWidget {
   int? minLines;
   int? maxLines;
   int? maxLength;
+  Color? color;
+  FocusNode? focusNode;
+  void Function()? onEditingComplete;
+
   void Function(PointerDownEvent)? onTapOutside;
 
   ReusableCustomTextField({
@@ -39,11 +43,17 @@ class ReusableCustomTextField extends StatelessWidget {
     this.maxLines,
     this.maxLength,
     this.onTapOutside,
+    this.color,
+    this.onEditingComplete,
+    this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
+      onEditingComplete: onEditingComplete,
+      style: TextStyle(color: color ?? AppColors.blackColor),
       onTapOutside: (event) {},
       maxLines: maxLines,
       minLines: minLines,

@@ -7,4 +7,4 @@ sealed class PurchaseRequestState extends Equatable {
   List<Object> get props => [];
 }
 
- class PurchaseRequestInitial extends PurchaseRequestState {}
+class PurchaseRequestInitial extends PurchaseRequestState {}

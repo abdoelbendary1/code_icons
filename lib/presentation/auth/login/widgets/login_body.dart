@@ -160,6 +160,9 @@ class _LoginBodyState extends State<LoginBody> {
                       ),
                     ), */
                     // login button
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     CustomButton(
                       buttonText: "تسجيل الدخول",
                       buttonFunction: widget.buttonFunctionReg,

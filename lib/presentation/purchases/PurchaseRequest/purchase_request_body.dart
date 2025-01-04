@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class PurchaseRequestBody extends StatelessWidget {
   const PurchaseRequestBody({super.key});
-  
 
   @override
   Widget build(BuildContext context) {

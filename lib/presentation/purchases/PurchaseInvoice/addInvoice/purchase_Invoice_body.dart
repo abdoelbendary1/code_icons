@@ -1,4 +1,4 @@
-import 'package:code_icons/presentation/purchases/PurchaseInvoice/purchase_Invoice_form.dart';
+import 'package:code_icons/presentation/purchases/PurchaseInvoice/addInvoice/purchase_Invoice_form.dart';
 import 'package:flutter/material.dart';
 
 class PurchaseInvoiceBody extends StatelessWidget {

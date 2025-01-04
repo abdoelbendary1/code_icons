@@ -15,5 +15,9 @@ abstract class PostTradeCollectionRepo {
     required UnRegisteredCollectionsResponse unRegisteredTradeCollectionRequest,
   });
   Future<Either<Failures, List<UnRegisteredCollectionEntity>>>
-      getUnRegisteredTradeCollectionData();
+      getUnRegisteredTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter,
+  });
 }

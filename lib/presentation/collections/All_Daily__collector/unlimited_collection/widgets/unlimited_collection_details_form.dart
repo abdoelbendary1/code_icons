@@ -1,10 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screen.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
 import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_state.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collections.dart';
+import 'package:code_icons/presentation/collections/collections_screen.dart';
+import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 
 import 'package:code_icons/presentation/utils/Date_picker.dart';
@@ -18,6 +17,7 @@ import 'package:code_icons/presentation/utils/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 
 class UnlimitedCollectionDetailsForm extends StatefulWidget {
@@ -47,6 +47,9 @@ class _UnlimitedCollectionDetailsFormState
           controllers: ControllerManager().unRegestriedCollectionControllers);
       unlimitedCollectionCubit.paymentReceipt =
           unlimitedCollectionCubit.storedPaymentReceipt;
+      ControllerManager().unlimitedPaymentReceitDateController.text =
+          DateFormat('MMM d, y, h:mm:ss a').format(DateTime.now());
+      ControllerManager().unlimitedCurrentFinanceController.text = "0";
     });
   }
 
@@ -138,7 +141,6 @@ class _UnlimitedCollectionDetailsFormState
             BuildTextField(
                 label: "رقم الايصال ",
                 hint: "رقم الايصال ",
-                readOnly: true,
                 keyboardType: TextInputType.number,
                 controller: ControllerManager()
                     .getControllerByName('unlimitedPaymentReceiptController'),
@@ -159,6 +161,19 @@ class _UnlimitedCollectionDetailsFormState
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return "يجب ادخال رقم الايصال";
+                  } else if (int.parse(value) >
+                          unlimitedCollectionCubit.selectedReceit.paperNum! +
+                              unlimitedCollectionCubit
+                                  .selectedReceit.totalPapers! &&
+                      int.parse(value) >
+                          unlimitedCollectionCubit.selectedReceit.paperNum!) {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        showConfirmBtn: false,
+                        title: "يجب ادخال رقم الايصال داخل الدفتر الحالي",
+                        titleColor: AppColors.redColor);
+                    return "يجب ادخال رقم الايصال داخل الدفتر الحالي";
                   }
                   return null;
                 }),
@@ -281,13 +296,22 @@ class _UnlimitedCollectionDetailsFormState
                     UnlimitedCollectionState>(
                   bloc: unlimitedCollectionCubit
                     ..initialize(
-                        controller: 'unlimitedPaymentReceiptController'),
+                        controller: 'unlimitedPaymentReceiptController',
+                        context: context),
                   listener: (context, state) {
                     if (state is AddUnlimitedCollectionSuccess) {
                       /*   DialogUtils.showLoading(context: context, message: "");
                       DialogUtils.hideLoading(context); */
-                      Navigator.pushReplacementNamed(
-                          context, HomeScreen.routeName);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, HomeScreen.routeName, (route) => false);
+                      Navigator.pushNamed(
+                        context,
+                        CollectionsScreen.routeName,
+                        arguments: context
+                            .read<HomeScreenViewModel>()
+                            .menus['collections']
+                            ?.items,
+                      );
                       QuickAlert.show(
                         context: context,
                         type: QuickAlertType.success,

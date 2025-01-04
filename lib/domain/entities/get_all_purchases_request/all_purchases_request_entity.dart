@@ -1,4 +1,3 @@
-
 class GetAllPurchasesRequestEntity {
   int? id;
   dynamic pRRequestDetails;
@@ -15,7 +14,19 @@ class GetAllPurchasesRequestEntity {
   String? insertDate;
   dynamic lastUpdateDate;
 
-  GetAllPurchasesRequestEntity({this.id, this.pRRequestDetails, this.code, this.storeId, this.iCStore, this.status, this.costcenter, this.aCcCostCenter, this.notes, this.date, this.userId, this.lastUpdateUserId, this.insertDate, this.lastUpdateDate});
-
-  
+  GetAllPurchasesRequestEntity(
+      {this.id,
+      this.pRRequestDetails,
+      this.code,
+      this.storeId,
+      this.iCStore,
+      this.status,
+      this.costcenter,
+      this.aCcCostCenter,
+      this.notes,
+      this.date,
+      this.userId,
+      this.lastUpdateUserId,
+      this.insertDate,
+      this.lastUpdateDate});
 }
