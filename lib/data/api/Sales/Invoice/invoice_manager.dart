@@ -53,9 +53,9 @@ class InvoiceManager implements InvoiceInterface {
       }
 
       // Create the URL for the image request
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}/api/PrintReport/receiptSalesInvoice/$id');
 
+      var url = Uri.http(
+          ApiConstants.chamberApi, "/api/PrintReport/receiptSalesInvoice/$id");
       // Get the token from the authManager
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -340,7 +340,6 @@ class InvoiceManager implements InvoiceInterface {
         ApiConstants.invoiceCustomerDataEndPoint,
         // Include the pagination and filter params
       );
-      /*   var url = Uri.parse('http://${ApiConstants.chamberApi}/api/Customer'); */
       var user = await authManager.getUser();
       var token = user?.accessToken;
       var requestBody = jsonEncode(invoiceCustomerDm.toJson());
@@ -416,8 +415,8 @@ class InvoiceManager implements InvoiceInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
-          ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
+      var url =
+          Uri.http(ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -505,8 +504,7 @@ class InvoiceManager implements InvoiceInterface {
       }
 
       // Prepare the API URL
-      var url =
-          Uri.http('${ApiConstants.chamberApi}', '/api/SalesInvoice/$id');
+      var url = Uri.http('${ApiConstants.chamberApi}', '/api/SalesInvoice/$id');
 
       // Get the user access token
       var user = await authManager.getUser();
@@ -602,8 +600,8 @@ class InvoiceManager implements InvoiceInterface {
       }
 
       // Construct the URL for posting the sales report
-      var url =
-          Uri.parse('http://${ApiConstants.chamberApi}/api/SalesInvoice');
+
+      var url = Uri.http(ApiConstants.chamberApi, "/api/SalesInvoice");
       var user = await authManager.getUser();
       var token = user?.accessToken;
       var requestBody = jsonEncode(invoiceReportDm.toJson());
@@ -635,9 +633,9 @@ class InvoiceManager implements InvoiceInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
+      var url = Uri.http(ApiConstants.chamberApi, "/api/Drawer");
 
       // Construct the URL
-      var url = Uri.parse('http://${ApiConstants.chamberApi}/api/Drawer');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -669,10 +667,10 @@ class InvoiceManager implements InvoiceInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
+      var url = Uri.http(ApiConstants.chamberApi, "/api/Drawer/$drawerId");
 
       // Construct the URL with the drawerId parameter
-      var url =
-          Uri.parse('http://${ApiConstants.chamberApi}/api/Drawer/$drawerId');
+
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -888,9 +886,8 @@ class InvoiceManager implements InvoiceInterface {
       }
 
       // Construct the URL for posting the sales report
+      var url = Uri.http(ApiConstants.chamberApi, "/api/SalesInvoice/$id");
 
-      var url =
-          Uri.parse('http://${ApiConstants.chamberApi}/api/SalesInvoice/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -1017,10 +1014,11 @@ class InvoiceManager implements InvoiceInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
+      var url =
+          Uri.http(ApiConstants.chamberApi, "${ApiConstants.salesReturn}");
 
       // Construct the URL for posting the sales report
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}/${ApiConstants.salesReturn}');
+
       var user = await authManager.getUser();
       var token = user?.accessToken;
       var requestBody = jsonEncode(invoiceReportDm.toJson());
@@ -1055,9 +1053,9 @@ class InvoiceManager implements InvoiceInterface {
       }
 
       // Construct the URL for posting the sales report
+      var url =
+          Uri.http(ApiConstants.chamberApi, "${ApiConstants.salesReturn}/$id}");
 
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}/${ApiConstants.salesReturn}/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -1092,10 +1090,10 @@ class InvoiceManager implements InvoiceInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-
+      var url = Uri.http(
+          ApiConstants.chamberApi, ApiConstants.purchaseReturnEndPoint);
       // Construct the URL for posting the sales report
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}/${ApiConstants.purchaseReturnEndPoint}');
+
       var user = await authManager.getUser();
       var token = user?.accessToken;
       var requestBody = jsonEncode(invoiceReportDm.toJson());
@@ -1130,9 +1128,9 @@ class InvoiceManager implements InvoiceInterface {
       }
 
       // Construct the URL for posting the sales report
+      var url = Uri.http(ApiConstants.chamberApi,
+          "/${ApiConstants.purchaseReturnEndPoint}/$id");
 
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}/${ApiConstants.purchaseReturnEndPoint}/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

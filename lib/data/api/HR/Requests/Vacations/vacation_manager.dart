@@ -32,8 +32,7 @@ class vacationManager implements VacationInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.vacationRequest);
+      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.vacationRequest);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -65,8 +64,7 @@ class vacationManager implements VacationInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.vacationRequest);
+      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.vacationRequest);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

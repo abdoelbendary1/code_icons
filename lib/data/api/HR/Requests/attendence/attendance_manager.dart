@@ -83,9 +83,9 @@ class AttendanceManager implements IAttendance {
     try {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
-      }
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$attendanceID');
+      }  var url = Uri.http(ApiConstants.chamberApi,
+          "${ApiConstants.attendenceRequest}/$attendanceID");
+      
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -111,9 +111,9 @@ class AttendanceManager implements IAttendance {
     try {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
-      }
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$id');
+      } var url = Uri.http(ApiConstants.chamberApi,
+          "${ApiConstants.attendenceRequest}/$id");
+    
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -141,9 +141,10 @@ class AttendanceManager implements IAttendance {
     try {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
-      }
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}${ApiConstants.attendenceRequest}/$id');
+      }var url = Uri.http(ApiConstants.chamberApi,
+          "${ApiConstants.attendenceRequest}/$id");
+      
+     
 
       var user = await authManager.getUser();
       var token = user?.accessToken;

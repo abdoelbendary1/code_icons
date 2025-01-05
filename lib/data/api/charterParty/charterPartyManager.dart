@@ -125,7 +125,7 @@ class CharterPartyManager implements ICharterParty {
 
       // Send POST request
       var response = await dio.post(
-        'http://demoapi1.code-icons.com/api/VesselOperaiton/voyageReport',
+        'https://demoapi1.code-icons.com/api/VesselOperaiton/voyageReport',
         options: Options(
           headers: headers,
         ),

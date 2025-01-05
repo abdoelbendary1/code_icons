@@ -95,9 +95,9 @@ class PROrderAPi {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.parse(
-            'http://elreedy-api.code-icons.com${ApiConstants.postPurchaseOrderEndPoint}/$id');
+          connectivityResult == ConnectivityResult.wifi) { var url = Uri.http(ApiConstants.chamberApi,
+          "${ApiConstants.postPurchaseOrderEndPoint}/$id");
+        
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 

@@ -274,7 +274,6 @@ class HomeScreenViewModel extends Cubit<HomeScreenViewModelState> {
     }
   }
 
-  
   Future<void> _cacheEmployeeEntity(EmployeeEntity employeeEntity) async {
     var box = await Hive.openBox<EmployeeEntity>('employeeBox');
     await box.put('employee', employeeEntity);

@@ -26,8 +26,7 @@ class EmployeeManager implements EmployeeInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      /*   var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}"${ApiConstants.employeeEndPoint}"'); */
+
       var url =
           Uri.http(ApiConstants.chamberApi, ApiConstants.employeeEndPoint);
       var user = await authManager.getUser();
@@ -57,10 +56,9 @@ class EmployeeManager implements EmployeeInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}"${ApiConstants.employeeEndPoint}/$id"');
-      /*   var url = Uri.https(
-          ApiConstants.chamberApi, "${ApiConstants.employeeEndPoint}/$id"); */
+
+      var url = Uri.http(
+          ApiConstants.chamberApi, "${ApiConstants.employeeEndPoint}/$id");
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

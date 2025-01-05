@@ -101,7 +101,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                       context, RecietsCollectionsScreen.routeName);
                 },
               ),
-              recietCollctionCubit.receipts.isNotEmpty
+              /* recietCollctionCubit.receipts.isNotEmpty
                   ? SpeedDialChild(
                       /*  child: const Icon(Icons.delete, color: Colors.white), */
                       backgroundColor: AppColors.redColor,
@@ -135,12 +135,11 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                           ],
                         ),
                       ),
-                      onTap: () async {
-                        recietCollctionCubit.removeAllReceipts(
-                            await recietCollctionCubit.getUserId());
+                      onTap: () {
+                        recietCollctionCubit.removeAllReciets();
                       },
                     )
-                  : SpeedDialChild()
+                  : SpeedDialChild() */
             ],
           );
         },
@@ -168,7 +167,7 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
             );
           }
         },
-        bloc: recietCollctionCubit..getLastReciet(),
+        bloc: recietCollctionCubit..getReciets(),
         builder: (context, state) {
           if (state is GetRecietCollctionSuccess) {
             recietCollctionCubit.receipts = state.reciets;
@@ -318,10 +317,8 @@ class _AllRecietsScreenState extends State<AllRecietsScreen> {
                                   content:
                                       _getIconButton(Colors.red, Icons.delete),
                                   onTap: (handler) async {
-                                    recietCollctionCubit.removeReceipt(
-                                      await recietCollctionCubit.getUserId(),
-                                      reciept.id!,
-                                    );
+                                    recietCollctionCubit
+                                        .removeReciet(reciept.id!);
                                   },
                                 ),
                               ],

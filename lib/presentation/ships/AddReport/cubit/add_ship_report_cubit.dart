@@ -81,7 +81,7 @@ class AddShipReportCubit extends Cubit<AddShipReportState> {
       }
 
       // Create URI, replace with actual server URL if needed
-      final uri = Uri.https(
+      final uri = Uri.http(
           ApiConstants.chamberApi, '/api/VesselOperaiton/voyageReport');
 
       // Obtain access token
@@ -146,7 +146,7 @@ class AddShipReportCubit extends Cubit<AddShipReportState> {
       }
 
       final uri =
-          Uri.https(ApiConstants.baseUrl, '/api/VesselOperaiton/voyageReport');
+          Uri.http(ApiConstants.baseUrl, '/api/VesselOperaiton/voyageReport');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 

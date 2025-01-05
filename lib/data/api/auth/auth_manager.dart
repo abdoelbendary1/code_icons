@@ -29,11 +29,9 @@ class AuthManager implements AuthManagerInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}${ApiConstants.loginEndPoint}');
 
-/*       var url = Uri.https(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
- */
+      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
+
       var response = await httpRequestHelper.sendRequest(
         method: HttpMethod.POST,
         url: url,

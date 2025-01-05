@@ -92,11 +92,11 @@ class AbsenceManager implements IAbsence {
       // Check network connection
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
-      }
+      }  var url =
+          Uri.http(ApiConstants.chamberApi, "${ApiConstants.AbsenceRequest}/$absenceRequestId");
 
       // Construct the URL for the delete Absence request endpoint
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}${ApiConstants.AbsenceRequest}/$absenceRequestId');
+    
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();

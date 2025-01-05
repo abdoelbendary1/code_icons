@@ -63,7 +63,6 @@ class StorageManager implements IStorage {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      /* var url = Uri.parse("http://amcc-api.code-icons.com/api/Item"); */
       var url = Uri.http(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
 
       var user = await authManager.getUser();

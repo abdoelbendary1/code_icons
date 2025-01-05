@@ -93,10 +93,10 @@ class LoanManager implements ILoan {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-
+ var url = Uri.http(ApiConstants.chamberApi,
+          "${ApiConstants.loanRequest}/$loanRequestId");
       // Construct the URL for the delete loan request endpoint
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}${ApiConstants.loanRequest}/$loanRequestId');
+      
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();

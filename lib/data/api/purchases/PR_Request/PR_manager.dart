@@ -241,8 +241,8 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
-          ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
+      var url =
+          Uri.http(ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -327,8 +327,8 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
-          ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
+      var url =
+          Uri.http(ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -384,8 +384,8 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
-          ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
+      var url =
+          Uri.http(ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
       print("request : ${purchaseRequestDataModel.toJson()}");
@@ -413,10 +413,9 @@ class PrRequestManager implements PrRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.parse(
-          'http://${ApiConstants.chamberApi}/${ApiConstants.postPrInvoiceEndPoint}/$id');
-      /*  var url = Uri.http(
-          ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint); */
+      var url = Uri.http(
+          ApiConstants.chamberApi, "${ApiConstants.postPrInvoiceEndPoint}/$id");
+
       var user = await authManager.getUser();
       var token = user?.accessToken;
       log("request : ${purchaseRequestDataModel.toJson()}");

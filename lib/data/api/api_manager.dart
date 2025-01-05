@@ -28,7 +28,7 @@ import 'package:code_icons/presentation/utils/shared_prefrence.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as https;
 
 class ApiManager {
   ApiManager._({
@@ -245,10 +245,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.parse('http://${ApiConstants.chamberApi}/api/Settings');
-
-        /*    var url =
-            Uri.http(ApiConstants.chamberApi, ApiConstants.settingsEndPoint); */
+        var url =
+            Uri.http(ApiConstants.chamberApi, ApiConstants.settingsEndPoint);
         var user = await authManager.getUser();
         var token = user!.accessToken;
 
@@ -261,10 +259,10 @@ class ApiManager {
           'Connection': 'keep-alive'
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -319,8 +317,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.http(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
+        var url = Uri.http(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -335,10 +332,10 @@ class ApiManager {
           "Connection": "keep-alive"
         };
 
-        var request = http.MultipartRequest('GET', url);
+        var request = https.MultipartRequest('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -381,10 +378,10 @@ class ApiManager {
           "Connection": "keep-alive"
         };
 
-        var request = http.MultipartRequest('GET', url);
+        var request = https.MultipartRequest('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -431,10 +428,10 @@ class ApiManager {
           "Connection": "keep-alive"
         };
 
-        var request = http.MultipartRequest('GET', url);
+        var request = https.MultipartRequest('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -462,8 +459,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
+        var url = Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -478,10 +474,10 @@ class ApiManager {
           "Connection": "keep-alive"
         };
 
-        var request = http.Request('DELETE', url);
+        var request = https.Request('DELETE', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -510,8 +506,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
+        var url = Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -526,10 +521,10 @@ class ApiManager {
           "Connection": "keep-alive"
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -573,10 +568,10 @@ class ApiManager {
           "Connection": "keep-alive"
         };
 
-        var request = http.MultipartRequest('GET', url);
+        var request = https.MultipartRequest('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
         print(response.statusCode);
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
@@ -623,10 +618,10 @@ class ApiManager {
           'Connection': 'keep-alive'
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();
@@ -664,11 +659,11 @@ class ApiManager {
           'Authorization': 'Bearer $token',
         };
 
-        var request = http.Request('POST', url);
+        var request = https.Request('POST', url);
         request.body = json.encode(purchaseRequestDataModel.toJson());
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
 
         if (response.statusCode >= 200 && response.statusCode < 300) {
           String responseBody = await response.stream.bytesToString();
@@ -692,8 +687,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url =
-            Uri.http(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
+        var url = Uri.http(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -707,10 +701,10 @@ class ApiManager {
           'Connection': 'keep-alive'
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();
@@ -750,10 +744,10 @@ class ApiManager {
           'Connection': 'keep-alive'
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();
@@ -780,8 +774,9 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.parse(
-            'http://${ApiConstants.chamberApi}/api/Currency/$currencyId');
+        var url =
+            Uri.http(ApiConstants.chamberApi, "/api/Currency/$currencyId");
+
         var user = await authManager.getUser();
         var token = user!.accessToken;
 
@@ -794,10 +789,10 @@ class ApiManager {
           'Connection': 'keep-alive'
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();
@@ -836,10 +831,10 @@ class ApiManager {
           'Connection': 'keep-alive'
         };
 
-        var request = http.Request('GET', url);
+        var request = https.Request('GET', url);
         request.headers.addAll(headers);
 
-        http.StreamedResponse response = await request.send();
+        https.StreamedResponse response = await request.send();
 
         if (response.statusCode >= 200 && response.statusCode <= 300) {
           String responseBody = await response.stream.bytesToString();

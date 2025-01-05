@@ -20,14 +20,14 @@ class RecietScreenBody extends StatefulWidget {
 
 class _RecietScreenBodyState extends State<RecietScreenBody> {
   RecietCollctionCubit recietCollctionCubit = RecietCollctionCubit();
-  ControllerManager controllerManager = ControllerManager();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    controllerManager.clearControllers(
-        controllers: controllerManager.recietCollectionController);
+    ControllerManager().clearControllers(
+        controllers: ControllerManager().recietCollectionController);
     recietCollctionCubit.getLastReciet();
     RecietCollctionCubit.initHive();
     Future.delayed(Durations.medium1);
@@ -62,38 +62,50 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
             BuildTextField(
               label: "رقم اول ورقه",
               hint: "ادخل الرقم",
-              controller: controllerManager.paperNum,
+              controller: ControllerManager().getControllerByName('paperNum'),
               icon: Icons.phone_iphone,
               keyboardType: TextInputType.number,
               onTap: () {
-                controllerManager.paperNum.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset: controllerManager.paperNum.value.text.length);
+                ControllerManager().getControllerByName('paperNum').selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName('paperNum')
+                            .value
+                            .text
+                            .length);
               },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
                   return "يجب ادخال رقم اول ورقه";
                 }
-                if (int.tryParse(value)! <
+                /*   if (int.tryParse(value)! <
                     recietCollctionCubit.lastRecietCollection.paperNum! +
                         recietCollctionCubit
                             .lastRecietCollection.totalPapers!) {
                   return "يجب ادخال اول ورقه اكبر من ${recietCollctionCubit.lastRecietCollection.paperNum! + recietCollctionCubit.lastRecietCollection.totalPapers! - 1}";
-                }
+                } */
                 return null;
               },
             ),
             BuildTextField(
               label: "عدد الورقات ",
               hint: "ادخل العدد",
-              controller: controllerManager.totalPapers,
+              controller:
+                  ControllerManager().getControllerByName('totalPapers'),
               icon: Icons.phone_iphone,
               keyboardType: TextInputType.number,
               onTap: () {
-                controllerManager.totalPapers.selection = TextSelection(
-                    baseOffset: 0,
-                    extentOffset:
-                        controllerManager.totalPapers.value.text.length);
+                ControllerManager()
+                        .getControllerByName('totalPapers')
+                        .selection =
+                    TextSelection(
+                        baseOffset: 0,
+                        extentOffset: ControllerManager()
+                            .getControllerByName('totalPapers')
+                            .value
+                            .text
+                            .length);
               },
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -148,6 +160,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                   titleColor: AppColors.redColor,
                 );
 
+                print(state.errorMsg);
               } else {
                 QuickAlert.show(
                   animType: QuickAlertAnimType.slideInUp,
@@ -171,15 +184,7 @@ class _RecietScreenBodyState extends State<RecietScreenBody> {
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () async {
                 if (recietCollctionCubit.formKey.currentState!.validate()) {
-                  await recietCollctionCubit.addReceipt(
-                    context,
-                    newReceipt: RecietCollectionDataModel(
-                      paperNum: int.parse(controllerManager.paperNum.text),
-                      totalPapers:
-                          int.parse(controllerManager.totalPapers.text),
-                    ),
-                    userId: await recietCollctionCubit.getUserId(),
-                  );
+                  await recietCollctionCubit.addReciet(context);
                 }
               },
               child: Text(AppLocalizations.of(context)!.save),
