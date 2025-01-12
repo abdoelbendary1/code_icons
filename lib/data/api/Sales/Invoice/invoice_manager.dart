@@ -605,7 +605,7 @@ class InvoiceManager implements InvoiceInterface {
       var user = await authManager.getUser();
       var token = user?.accessToken;
       var requestBody = jsonEncode(invoiceReportDm.toJson());
-      print("Request Body: $requestBody"); // Print the payload
+      log("Request Body: $requestBody"); // Print the payload
 
       // Send the POST request
       var response = await httpRequestHelper.sendRequest(

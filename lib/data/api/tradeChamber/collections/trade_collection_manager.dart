@@ -6,9 +6,9 @@ import 'package:code_icons/core/helpers/check_connection.dart';
 import 'package:code_icons/data/api/api_constants.dart';
 import 'package:code_icons/data/api/auth/auth_manager_interface.dart';
 import 'package:code_icons/data/api/tradeChamber/collections/trade_collection_interface.dart';
-import 'package:code_icons/data/model/request/trade_collection_request.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/model/TradeCollection/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/collections/TradeCollectionResponse.dart';
-import 'package:code_icons/data/model/response/collections/UnRegisteredCollections/un_registered_collections_response.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/data/model/UnRegisteredCollections/un_registered_collections_response.dart';
 import 'package:code_icons/data/model/response/collections/activity/activity_data_model.dart';
 import 'package:code_icons/data/model/response/collections/general_central/general_central_data_model.dart';
 import 'package:code_icons/data/model/response/collections/payment_values_dm.dart';
@@ -29,6 +29,74 @@ class TradeCollectionManager implements TradeCollectionsInterface {
     required this.authManager,
   });
   @override
+  /* Future<Either<Failures, List<TradeCollectionResponse>>>
+      fetchTradeCollectionData({
+    required int skip,
+    required int take,
+    String? filter, // Accept pre-encoded filter or plain text
+    List<dynamic>? filterConditions,
+  }) async {
+    try {
+      // Check for internet connection
+      if (!await isConnected()) {
+        return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
+      }
+
+      // Retrieve user token
+      var user = await authManager.getUser();
+      var token = user?.accessToken;
+
+      if (token == null || token.isEmpty) {
+        return left(
+            Failures(errorMessege: "Unauthorized: Missing access token"));
+      }
+
+      // Define headers
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      // Construct the URL without double encoding
+      var queryParameters = {
+        "skip": "$skip",
+        "take": "$take",
+        "requireTotalCount": "true",
+        if (filter != null)
+          "filter": filter, // Do not encode if already encoded
+      };
+
+      var url = Uri(
+        scheme: "http",
+        host: ApiConstants.chamberApi,
+        port: 60011,
+        path: "/api/TradeCollection",
+        queryParameters: queryParameters,
+      );
+
+      print('Request URL: $url'); // Debugging the URL
+
+      // Send the HTTP GET request
+      var response = await httpRequestHelper.sendRequest(
+        method: HttpMethod.GET,
+        url: url,
+        headers: headers,
+      );
+
+      // Handle and parse the response
+      return await handleResponseHelper
+          .handleResponse<List<TradeCollectionResponse>>(
+        response: response,
+        fromJson: (json) => (json as List)
+            .map((item) => TradeCollectionResponse.fromJson(item))
+            .toList(),
+      );
+    } catch (e) {
+      // Catch any errors and return a Failure
+      return left(Failures(errorMessege: e.toString()));
+    }
+  }
+ */
   Future<Either<Failures, List<TradeCollectionResponse>>>
       fetchTradeCollectionData({
     required int skip,
@@ -48,19 +116,28 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${token}',
       };
+//http://116.203.194.75:60011/api/TradeCollection?skip=0&take=20&requireTotalCount=true&filter=
+      /*  var url = Uri.http(ApiConstants.chamberApi,
+          "/api/TradeCollection?skip=${skip}&take=${take}&requireTotalCount=true&filter=${filter}"); */
+      var url = Uri.parse(
+          "http://${ApiConstants.chamberApi}/api/TradeCollection?skip=${skip}&take=${take}&requireTotalCount=true&filter=${filter}");
 
-      var url = Uri.http(ApiConstants.chamberApi,
-          "/api/TradeCollection?skip=$skip&take=$take&requireTotalCount=true&filter=$filter");
+/*       var request = http.Request('GET', url);
+ */
+      var response = await httpRequestHelper.sendRequest(
+        method: HttpMethod.GET,
+        url: url,
+        token: token,
+      );
+      print('Request URL: $url'); // Debugging the URL
 
-      var request =
-          http.Request('GET', url);
-      request.headers.addAll(headers);
+      /*  request.headers.addAll(headers);
 
-      var streamedResponse = await request.send();
+      var streamedResponse = await request.send(); */
 
       return await handleResponseHelper
           .handleResponse<List<TradeCollectionResponse>>(
-        response: streamedResponse,
+        response: response,
         fromJson: (json) => (json as List)
             .map((item) => TradeCollectionResponse.fromJson(item))
             .toList(),
@@ -77,7 +154,6 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
 
       var url = Uri.http(ApiConstants.chamberApi, "/api/TradeCollection/$id");
 
@@ -105,7 +181,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url =
           Uri.http(ApiConstants.chamberApi, ApiConstants.activityEndPoint);
       var user = await authManager.getUser();
@@ -135,7 +211,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.activityEndPoint}/$activityId");
       var user = await authManager.getUser();
@@ -163,7 +239,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.paymentValuesEndPoint}/$customerId");
       var user = await authManager.getUser();
@@ -192,7 +268,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(
           ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
       var user = await authManager.getUser();
@@ -222,7 +298,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(
           ApiConstants.chamberApi, "/api/TradeCollection/UnRegistered");
       var user = await authManager.getUser();
@@ -261,7 +337,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         'requireTotalCount': 'true',
         if (filter != null) 'filter': filter, // Only add filter if provided
       };
-     
+
       var url = Uri.http(
         ApiConstants.chamberApi,
         "/api/TradeCollection/UnRegistered",
@@ -297,7 +373,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.paymentValuesEndPoint}/$customerId");
       var user = await authManager.getUser();
@@ -326,7 +402,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url =
           Uri.http(ApiConstants.chamberApi, ApiConstants.tradeOfficeEndPoint);
       var user = await authManager.getUser();
@@ -358,7 +434,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.tradeOfficeEndPoint}/$tradeOfficeID");
       var user = await authManager.getUser();
@@ -385,7 +461,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi, ApiConstants.stationEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -415,7 +491,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.stationEndPoint}/$stationId");
       var user = await authManager.getUser();
@@ -443,7 +519,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(
           ApiConstants.chamberApi, ApiConstants.generalCentersEndPoint);
       var user = await authManager.getUser();
@@ -476,7 +552,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url = Uri.http(ApiConstants.chamberApi,
           "${ApiConstants.generalCentersEndPoint}/$generalCentralId");
       var user = await authManager.getUser();

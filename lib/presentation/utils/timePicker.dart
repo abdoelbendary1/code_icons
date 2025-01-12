@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:board_datetime_picker/board_datetime_picker.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

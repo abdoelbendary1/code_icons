@@ -1,10 +1,10 @@
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
+import 'package:code_icons/trade_chamber/features/show_all_collections/presentation/controller/cubit/all_daily_collector_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/model/TradeCollection/trade_collection_entity.dart';
 
 class CollectionsDataSource extends DataGridSource {
   final List<TradeCollectionEntity> collections;

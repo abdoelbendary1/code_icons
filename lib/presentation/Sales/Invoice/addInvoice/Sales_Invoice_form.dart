@@ -8,7 +8,7 @@ import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoi
 import 'package:code_icons/data/model/request/add_purchase_request/invoice/salesItem.dart';
 import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
 import 'package:code_icons/presentation/Sales/Invoice/editInvoice/EditSales_Invoice.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
+import 'package:code_icons/trade_chamber/core/widgets/build_textfield.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/widgets/SelectCustomerEntity.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/widgets/selectCurrency.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/widgets/selectItemCode.dart';
@@ -19,7 +19,7 @@ import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/Select
 import 'package:code_icons/presentation/utils/Date_picker.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,6 +110,8 @@ class _SalesInvoiceFormState extends State<SalesInvoiceForm> {
 
     Future.delayed(const Duration(seconds: 1));
   }
+
+  final formKeyItems = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -703,7 +705,7 @@ class _SalesInvoiceFormState extends State<SalesInvoiceForm> {
       listener: (context, state) {},
       builder: (context, state) {
         return Form(
-          key: salesInvoiceCubit.formKeyItems,
+          key: formKeyItems,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1238,7 +1240,9 @@ class _SalesInvoiceFormState extends State<SalesInvoiceForm> {
                     title: " اضافه المنتج",
                     context: context,
                     onPressed: () async {
-                      salesInvoiceCubit.saveSelectedItemAfterCheck(context);
+                      if (formKeyItems.currentState!.validate()) {
+                        salesInvoiceCubit.saveSelectedItemAfterCheck(context);
+                      }
                     },
                   ),
                 ],
@@ -1260,7 +1264,7 @@ class _SalesInvoiceFormState extends State<SalesInvoiceForm> {
       builder: (context, state) {
         while (state is EditPurchasesItemSuccess) {
           return Form(
-            key: salesInvoiceCubit.formKeyItems,
+            key: formKeyItems,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1790,8 +1794,10 @@ class _SalesInvoiceFormState extends State<SalesInvoiceForm> {
                       title: " تعديل المنتج",
                       context: context,
                       onPressed: () async {
-                        salesInvoiceCubit.editSelectedItem(
-                            salesInvoiceCubit.indexOfEditableItem);
+                        if (formKeyItems.currentState!.validate()) {
+                          salesInvoiceCubit.editSelectedItem(
+                              salesInvoiceCubit.indexOfEditableItem);
+                        }
                       },
                     ),
                   ],

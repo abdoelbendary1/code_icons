@@ -220,10 +220,7 @@ class ItemTaxsRelation {
     id = json["id"];
     itemId = json["item_id"].toString();
     iCItem = json["iC_Item"] == null ? null : IcItem.fromJson(json["iC_Item"]);
-    print("eTax_Id from JSON: ${json['eTax_Id']} before");
     eTaxId = json["eTax_Id"] ?? json["eTax_id"];
-
-    print("eTax_Id from JSON: ${json['eTax_Id']} after");
 
     /* eTaxId = json["eTax_Id"] != null
         ? int.tryParse(json["eTax_Id"].toString())

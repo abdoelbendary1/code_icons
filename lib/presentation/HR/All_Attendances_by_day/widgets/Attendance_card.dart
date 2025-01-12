@@ -1,7 +1,7 @@
 import 'package:code_icons/domain/entities/HR/attendanceResponse/attendance_response_entity.dart';
 import 'package:code_icons/presentation/HR/All_Attendances_by_day/cubit/all_attendance_cubit.dart';
 import 'package:code_icons/presentation/HR/attendance/attendanceScreen.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

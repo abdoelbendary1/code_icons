@@ -1,12 +1,12 @@
 import 'package:code_icons/data/api/api_manager.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
-import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/widgets/add_collection_body.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/model/TradeCollection/trade_collection_entity.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/presentation/controller/cubit/add_collection_cubit.dart';
+import 'package:code_icons/trade_chamber/core/widgets/custom_sliver_appbar.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/presentation/view/widgets/add_collection_body.dart';
 import 'package:code_icons/presentation/ships/AddReport/addReport.dart';
 import 'package:code_icons/presentation/ships/AddReport/cubit/add_ship_report_cubit.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

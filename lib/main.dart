@@ -5,11 +5,12 @@ import 'package:code_icons/core/adapters/customers.dart';
 import 'package:code_icons/core/adapters/loginRequest.dart';
 import 'package:code_icons/core/adapters/loginScreen.dart';
 import 'package:code_icons/core/adapters/settings.dart';
+import 'package:code_icons/core/theme/app_theme.dart';
 import 'package:code_icons/data/model/request/login_request.dart';
 import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/HR/employee/employee_entity.dart';
-import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/model/TradeCollection/trade_collection_entity.dart';
 import 'package:code_icons/domain/entities/settings/settings_entity.dart';
 import 'package:code_icons/presentation/HR/All_Attendances_by_day/All_Attendances_by_day_screen.dart';
 import 'package:code_icons/presentation/HR/HR_Screen.dart';
@@ -30,20 +31,17 @@ import 'package:code_icons/presentation/Sales/SalesScreen.dart';
 import 'package:code_icons/presentation/Sales/returns/All_returns.dart';
 import 'package:code_icons/presentation/Sales/returns/addReturn/Sales_Returns.dart';
 import 'package:code_icons/presentation/Sales/returns/editInvoice/EditSales_Return.dart';
-import 'package:code_icons/presentation/collections/AllTradeProve/all_trade_prove.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screenCards.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/cubit/all_daily_collector_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/cubit/unlimited_collection_cubit.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collectionsCards.dart';
-import 'package:code_icons/presentation/collections/CustomerData/add_customer/add_customer_Screen.dart';
-import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
-import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
-import 'package:code_icons/presentation/collections/collections_screen.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/reciets_collections_screen.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/presentation/controller/cubit/add_collection_cubit.dart';
+import 'package:code_icons/trade_chamber/features/add_customer/presentation/view/add_customer_Screen.dart';
+import 'package:code_icons/trade_chamber/features/show_all_collections/presentation/view/all_daily_collector_screenCards.dart';
+import 'package:code_icons/trade_chamber/features/show_all_collections/presentation/controller/cubit/all_daily_collector_cubit.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/presentation/view/add_unlimited_collection_view.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/presentation/controller/cubit/unlimited_collection_cubit.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/presentation/view/unRegistered_collectionsCards.dart';
+import 'package:code_icons/trade_chamber/features/show_customers/presentation/controller/cubit/customers_cubit.dart';
+import 'package:code_icons/trade_chamber/features/show_customers/customer_data_screen.dart';
+import 'package:code_icons/trade_chamber/features/add_reciept/presentation/view/reciets_collections_screen.dart';
+import 'package:code_icons/trade_chamber/features/show_all_reciepts/presentation/view/all_reciets.dart';
 import 'package:code_icons/presentation/home/cubit/BottomNavCubit.dart';
 import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
@@ -72,8 +70,9 @@ import 'package:code_icons/services/di.dart';
 import 'package:code_icons/services/my_observer.dart';
 import 'package:code_icons/presentation/auth/login/login_screen.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
-import 'package:code_icons/presentation/utils/theme/app_theme.dart';
 import 'package:code_icons/services/service_locator.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/presentation/view/add_collection_view.dart';
+import 'package:code_icons/trade_chamber/view/collections_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -111,7 +110,7 @@ void main() async {
   setupLocator();
   Bloc.observer = MyBlocObserver();
   runApp(
-    MyApp(
+    const MyApp(
         /*  route: route, */
         ), // Wrap your app
     /*  DevicePreview(
@@ -211,7 +210,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider(
           create: (context) => UnlimitedCollectionCubit(
             getUnRegisteredTradeCollectionUseCase:
-                injectGetUnRegisteredTradeCollectionUseCase(),
+                injectFetchAllUnRegisteredCollectionsUseCase(),
             postUnRegisteredTradeCollectionUseCase:
                 injectPostUnRegisteredTradeCollectionUseCase(),
             authManager: injectAuthManagerInterface(),
@@ -283,22 +282,21 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             UnlimitedCollection.routeName: (context) => UnlimitedCollection(
                   data: TradeCollectionEntity(),
                 ),
-            CustomerDataScreen.routeName: (context) => CustomerDataScreen(),
-            CollectionsScreen.routeName: (context) => CollectionsScreen(),
-            AllTradeProveScreen.routeName: (context) =>
-                const AllTradeProveScreen(),
+            CustomerDataScreen.routeName: (context) =>
+                const CustomerDataScreen(),
             AllDailyCollectorScreenCards.routeName: (context) =>
-                AllDailyCollectorScreenCards(),
+                const AllDailyCollectorScreenCards(),
             PurchaseScreen.routeName: (context) => PurchaseScreen(),
             AllPurchasesScreen.routeName: (context) => AllPurchasesScreen(),
             PurchaseRequest.routeName: (context) => PurchaseRequest(),
             PurchaseOrder.routeName: (context) => PurchaseOrder(),
             PurchaseInvoice.routeName: (context) => PurchaseInvoice(),
             RecietsCollectionsScreen.routeName: (context) =>
-                RecietsCollectionsScreen(),
+                const RecietsCollectionsScreen(),
+            CollectionsScreen.routeName: (context) => const CollectionsScreen(),
             AllRecietsScreen.routeName: (context) => AllRecietsScreen(),
             UnRegisteredCollectionsScreenCards.routeName: (context) =>
-                UnRegisteredCollectionsScreenCards(),
+                const UnRegisteredCollectionsScreenCards(),
             AddCustomerScreen.routeName: (context) => const AddCustomerScreen(),
             ShipsManagmentScreen.routeName: (context) =>
                 const ShipsManagmentScreen(),
@@ -316,7 +314,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             AllReturnsScreenCards.routeName: (context) =>
                 AllReturnsScreenCards(),
             AllPrReturnsScreenCards.routeName: (context) =>
-                AllPrReturnsScreenCards(),
+                const AllPrReturnsScreenCards(),
             PrReturn.routeName: (context) => PrReturn(),
             EditSalesInvoice.routeName: (context) => EditSalesInvoice(),
             EditPRInvoice.routeName: (context) => EditPRInvoice(),

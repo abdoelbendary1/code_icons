@@ -1,4 +1,4 @@
-import 'package:code_icons/domain/entities/TradeCollection/trade_collection_entity.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/model/TradeCollection/trade_collection_entity.dart';
 
 class TradeCollectionResponse extends TradeCollectionEntity {
   TradeCollectionResponse({

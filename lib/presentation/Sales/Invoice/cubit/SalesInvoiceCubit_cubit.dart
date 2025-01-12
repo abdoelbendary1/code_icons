@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:code_icons/core/widgets/custom_snack_bar.dart';
 import 'package:code_icons/data/api/Sales/permissions/sl_permissions_dm.dart';
 import 'package:code_icons/data/model/data_model/countryDM.dart';
 import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoice_item_details_dm.dart';
@@ -29,7 +30,7 @@ import 'package:code_icons/domain/use_cases/sysSettings/getSettingsUsecase.dart'
 import 'package:code_icons/presentation/Sales/Invoice/All_invoices.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:equatable/equatable.dart';
@@ -57,7 +58,7 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   final formKey = GlobalKey<FormState>();
   final accKey = GlobalKey<FormState>();
   ControllerManager controllerManager = ControllerManager();
-  final formKeyItems = GlobalKey<FormState>();
+
   final formKeyAddCustomer = GlobalKey<FormState>();
 
   Map<String, String> dateStorageMap = {
@@ -81,7 +82,7 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   List<SalesItemUom> selectedItemUom = [];
 
   late String selectedStatus;
-  late String selectedPaymentType = "0";
+  late String selectedPaymentType = "أجل";
   int? paymentMethodID = 1;
   List<InvoiceReportDm> returns = [];
   late int selectedCode;
@@ -596,7 +597,7 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
 
   SwipeActionController swipeActionController = SwipeActionController();
   void editSelectedItem(int index) {
-    if (formKeyItems.currentState!.validate()) {
+    {
       var selectedItemDetails = InvoiceItemDetailsDm(
         description:
             controllerManager.salesDescriptionController.text.isNotEmpty
@@ -681,8 +682,113 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     }
   }
 
+  void showConfirmationSnackBar(
+      BuildContext context, VoidCallback onConfirm, VoidCallback onCancel) {
+    final snackBar = SnackBar(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("هذه الكمية غير متوفرة هل تريد الاستمرار ؟"),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  onConfirm(); // Call the confirmation callback
+                },
+                child: Text(
+                  "نعم",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  onCancel(); // Call the cancellation callback
+                },
+                child: Text(
+                  "رجوع للفاتوره",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      duration: const Duration(
+          seconds: 10), // Keep the snack bar visible for user action
+      backgroundColor:
+          Colors.grey[800], // Optional: Set a custom background color
+    );
+
+    // Show the snack bar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   late int indexOfEditableItem;
   void saveSelectedItemAfterCheck(BuildContext context) {
+    bool isAddingClicked = false;
+
+    switch (slPermissions.itemDispensingWithoutCreditatDrawerBl) {
+      case null:
+        // Error SnackBar for null case
+        showCustomSnackBar(
+          context: context,
+          message: "لا يمكن الاضافه",
+          type: SnackBarType.error,
+        );
+        break;
+
+      case 0:
+        // Error SnackBar for case 0
+        showCustomSnackBar(
+          context: context,
+          message: "لا يمكن الاضافه",
+          type: SnackBarType.error,
+          confirmText: "",
+        );
+        break;
+
+      case 1:
+        // Confirm SnackBar for case 1
+        if (context.mounted) {
+          showCustomSnackBar(
+            context: context,
+            message: "هذه الكمية غير متوفرة هل تريد الاستمرار؟",
+            type: SnackBarType.confirm,
+            onConfirm: () {
+              if (!isAddingClicked) {
+                isAddingClicked = true;
+                saveSelectedItem();
+              }
+            },
+          );
+        } else {
+          print("Context is no longer valid.");
+        }
+        break;
+
+      case 2:
+        // Success case: Save item without confirmation
+        saveSelectedItem();
+        showCustomSnackBar(
+          context: context,
+          message: "تم الحفظ بنجاح.",
+          type: SnackBarType.success,
+        );
+        break;
+
+      default:
+        // Error SnackBar for any other cases
+        showCustomSnackBar(
+          context: context,
+          message: "لا يمكن الاضافه",
+          type: SnackBarType.error,
+        );
+    }
+  }
+
+  /* void saveSelectedItemAfterCheck(BuildContext context) {
+    bool _isAddingClicked = false;
+
     switch (slPermissions.itemDispensingWithoutCreditatDrawerBl) {
       case null:
         QuickAlert.show(
@@ -705,23 +811,33 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
           titleColor: AppColors.redColor,
           /* text: state.errorMsg, */
         );
+        break;
       case 1:
-        QuickAlert.show(
-          animType: QuickAlertAnimType.slideInUp,
-          context: context,
-          type: QuickAlertType.confirm,
-          showConfirmBtn: true,
-          onConfirmBtnTap: () {
-            saveSelectedItem();
-            Navigator.pop(context);
-          },
-          confirmBtnText: "نعم",
-          cancelBtnText: "إلغاء",
-          confirmBtnColor: AppColors.blueColor,
-          title: "تحذير",
-          titleColor: AppColors.redColor,
-          text: "هذه الكمية غير متوفرة هل تريد الاستمرار ؟",
-        );
+        if (context.mounted) {
+          QuickAlert.show(
+            animType: QuickAlertAnimType.slideInUp,
+            context: context,
+            type: QuickAlertType.confirm,
+            showConfirmBtn: true,
+            onConfirmBtnTap: () {
+              if (!_isAddingClicked) {
+                _isAddingClicked = true;
+                saveSelectedItem();
+                Navigator.pop(context);
+              }
+            },
+            confirmBtnText: "نعم",
+            cancelBtnText: " رجوع للفاتوره",
+            confirmBtnColor: AppColors.blueColor,
+            title: "تحذير",
+            titleColor: AppColors.redColor,
+            text: "هذه الكمية غير متوفرة هل تريد الاستمرار ؟",
+          );
+        } else {
+          print("Context is no longer valid.");
+        }
+
+        break;
       case 2:
         saveSelectedItem();
 
@@ -738,9 +854,9 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
         );
     }
   }
-
+ */
   void saveSelectedItem() {
-    if (formKeyItems.currentState!.validate()) {
+    {
       /*   if (slPermissions.itemDispensingWithoutCreditatDrawerBl == 0) {
         QuickAlert.show(
           animType: QuickAlertAnimType.slideInUp,
@@ -961,12 +1077,12 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     emit(AddPurchasesItemSuccess(selectedItemsList: selectedItemsList));
   }
 
-  DrawerEntity selectDrawer(DrawerEntity drawerEntity) {
+  DrawerEntity? selectDrawer(DrawerEntity drawerEntity) {
     if (drawerEntityList.isNotEmpty) {
       return drawerEntityList
           .firstWhere((element) => element.id == drawerEntity.id);
     } else {
-      return drawerEntityList.first;
+      return null;
     }
   }
 
@@ -1431,7 +1547,7 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     controllerManager.salesHeightController.text =
         settings.heightBl?.toString() ?? '1';
     controllerManager.salesTotalTaxesController.text =
-        itemDetailsDm.alltaxesvalue.toString();
+        itemDetailsDm.alltaxesvalue?.toStringAsFixed(2) ?? '0.00';
 
     controllerManager.salesDescriptionController.text =
         itemDetailsDm.description.toString();
@@ -1549,7 +1665,8 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     controllerManager.salesAvailableQuantityController.text =
         item.currentQty?.toString() ?? '1';
     controllerManager.salesTotalTaxesController.text =
-        ((calcTaxesPercentageforOneItem(item)! / 100) * newPrice).toString();
+        ((calcTaxesPercentageforOneItem(item)! / 100) * newPrice)
+            .toStringAsFixed(2);
     /* settings.salesPriceIncludesTaxesBl!
         ? calculateTaxForPriceIncudesTax(
                 item.smallUOMPrice!,
@@ -1613,6 +1730,9 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     double totalTaxes = _parseControllerText(
         controllerManager.invoiceTotalTaxesController,
         defaultValue: 1.0);
+    double totalPaid = _parseControllerText(
+        controllerManager.invoicePaidController,
+        defaultValue: 1.0);
 
     double discountRate;
     double discountValue = _parseControllerText(
@@ -1632,6 +1752,8 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
         discountValue.toStringAsFixed(2);
     controllerManager.invoiceNetController.text =
         (totalPrice + totalTaxes - discountValue).toStringAsFixed(2);
+    controllerManager.invoicePaidController.text =
+        (totalPaid - discountValue).toStringAsFixed(2);
   }
 
   Map<String, double> calculatePrice({

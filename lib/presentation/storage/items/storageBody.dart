@@ -1,6 +1,6 @@
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/custom_sliver_appbar.dart';
+import 'package:code_icons/trade_chamber/core/widgets/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/storage/items/Add_ItemBody.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AddItemsScreen extends StatefulWidget {

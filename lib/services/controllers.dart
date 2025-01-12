@@ -5,7 +5,7 @@ import 'package:code_icons/domain/entities/Currency/currency.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/payment_values_entity.dart';
 import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
-import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
+import 'package:code_icons/trade_chamber/features/show_customers/presentation/controller/cubit/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -856,11 +856,12 @@ class ControllerManager {
       addCollectionRegisrtyNumController.text =
           customerDataEntity.tradeRegistryBl ?? "";
       addCollectionRegistryDateController.text =
-          DateFormat('yyyy-MM-dd').format(DateTime.now());
+          DateFormat('MMM d, y, h:mm:ss a').format(DateTime.now());
       addCollectionActivityController.text =
           customerDataEntity.divisionBl ?? "";
 
-      addCollectionPaymentReceitController.text = payementReceipt.toString();
+/*       addCollectionPaymentReceitController.text = payementReceipt.toString();
+ */
       addCollectionDivisionController.text =
           paymentValuesEntity.activity.toString();
       addCollectionCompensationController.text =
@@ -910,7 +911,7 @@ class ControllerManager {
       addCollectionRegisrtyNumController.text =
           customerDataEntity.tradeRegistryBl ?? "";
       addCollectionRegistryDateController.text =
-          DateFormat('yyyy-MM-dd').format(DateTime.now());
+          DateFormat('MMM d, y, h:mm:ss a').format(DateTime.now());
       addCollectionActivityController.text =
           customerDataEntity.activityNameBl ?? "";
       addCollectionDivisionController.text = "0.0";

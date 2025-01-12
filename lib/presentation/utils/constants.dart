@@ -11,15 +11,12 @@ import 'package:code_icons/presentation/HR/permissionRequest/permissionRequestSc
 import 'package:code_icons/presentation/Sales/Invoice/All_invoices.dart';
 import 'package:code_icons/presentation/Sales/SalesScreen.dart';
 import 'package:code_icons/presentation/Sales/returns/All_returns.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/add_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/all_daily_collector_screenCards.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/add_unlimited_collection_view.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/unlimited_collection/unRegistered_collectionsCards.dart';
-import 'package:code_icons/presentation/collections/CustomerData/customer_data_screen.dart';
-import 'package:code_icons/presentation/collections/collections_screen.dart';
-import 'package:code_icons/presentation/collections/reciets_collections/all_reciets.dart';
+import 'package:code_icons/trade_chamber/features/show_all_collections/presentation/view/all_daily_collector_screenCards.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/presentation/view/add_unlimited_collection_view.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/presentation/view/unRegistered_collectionsCards.dart';
+import 'package:code_icons/trade_chamber/features/show_customers/customer_data_screen.dart';
+import 'package:code_icons/trade_chamber/features/show_all_reciepts/presentation/view/all_reciets.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/All_invoices.dart';
-import 'package:code_icons/presentation/purchases/PurchaseInvoice/addInvoice/purchase_Invoice.dart';
 import 'package:code_icons/presentation/purchases/PurchaseOrder/purchase_order.dart';
 import 'package:code_icons/presentation/purchases/PurchaseScreen.dart';
 import 'package:code_icons/presentation/purchases/getAllPurchases/view/all_purchases.dart';
@@ -28,7 +25,8 @@ import 'package:code_icons/presentation/ships/AddReport/addReportView.dart';
 import 'package:code_icons/presentation/ships/ShipsManagementScreen.dart';
 import 'package:code_icons/presentation/storage/StorageScreen.dart';
 import 'package:code_icons/presentation/storage/all_items.dart';
-import 'package:code_icons/presentation/storage/items/storageBody.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/presentation/view/add_collection_view.dart';
+import 'package:code_icons/trade_chamber/view/collections_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppAssets {

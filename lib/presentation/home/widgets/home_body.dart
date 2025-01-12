@@ -4,7 +4,7 @@ import 'package:code_icons/presentation/auth/login/cubit/login_view_model.dart';
 import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/widgets/custom_card.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:code_icons/data/api/auth/auth_manager.dart';
 import 'package:code_icons/data/model/request/login_request.dart';
-import 'package:code_icons/data/model/response/auth_respnose/auth_response.dart';
 import 'package:code_icons/data/model/response/auth_respnose/loginScreen.dart';
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
 import 'package:code_icons/presentation/auth/login/cubit/login_state.dart';
@@ -31,7 +30,6 @@ class LoginViewModel extends Cubit<LoginState> {
   Future<bool> authenticate() async {
     try {
       bool check = await auth.canCheckBiometrics;
-      print(check);
       if (check) {
         bool isAuthenticated = await auth.authenticate(
             localizedReason: "Login",
@@ -40,14 +38,12 @@ class LoginViewModel extends Cubit<LoginState> {
               stickyAuth: true,
             ));
         authState = isAuthenticated;
-        print("isAuthenticated ${isAuthenticated}");
         return isAuthenticated;
       } else {
         authState = authState;
         return false;
       }
     } on PlatformException catch (e) {
-      print(e.toString());
       authState = authState;
       return false;
     }
@@ -69,7 +65,6 @@ class LoginViewModel extends Cubit<LoginState> {
           either.fold((failure) {
             emit(LoginErrorState(errorMessege: failure.errorMessege));
           }, (response) {
-            print("login response =============> ${response.screens}");
             emit(LoginSuccesState(loginRepositoryEntity: response));
           });
         } else {

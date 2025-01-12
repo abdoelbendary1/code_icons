@@ -12,7 +12,7 @@ import 'package:code_icons/presentation/home/widgets/custom_drawer_item.dart';
 import 'package:code_icons/presentation/home/widgets/home_body.dart';
 import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/constants.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

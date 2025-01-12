@@ -3,7 +3,7 @@ import 'package:code_icons/data/model/request/add_purchase_request/invoice/sales
 import 'package:code_icons/data/model/response/purchases/purchase_request/purchase_item/item_Uom/item_Uom.dart';
 
 import 'package:flutter/material.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectItemEntityUOM extends StatelessWidget {

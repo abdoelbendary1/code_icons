@@ -1,20 +1,20 @@
 import 'package:code_icons/data/model/response/charterParty/vessel_dm.dart';
-import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
+import 'package:code_icons/trade_chamber/features/show_customers/presentation/controller/cubit/customers_cubit.dart';
 import 'package:code_icons/presentation/ships/AddReport/cubit/add_ship_report_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/cubit/add_collection_cubit.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/presentation/controller/cubit/add_collection_cubit.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:code_icons/services/di.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:code_icons/domain/Uom/uom_entity.dart';
 import 'package:code_icons/domain/entities/storage/itemCompany/item_company_entity.dart';
 
 import 'package:flutter/material.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectShipEntity extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:code_icons/data/model/request/trade_collection_request.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/model/TradeCollection/trade_collection_request.dart';
 import 'package:code_icons/data/model/response/collections/TradeCollectionResponse.dart';
-import 'package:code_icons/data/model/response/collections/UnRegisteredCollections/un_registered_collections_response.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/data/model/UnRegisteredCollections/un_registered_collections_response.dart';
 import 'package:code_icons/data/model/response/collections/activity/activity_data_model.dart';
 import 'package:code_icons/data/model/response/collections/general_central/general_central_data_model.dart';
 import 'package:code_icons/data/model/response/collections/payment_values_dm.dart';

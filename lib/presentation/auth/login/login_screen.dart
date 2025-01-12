@@ -5,7 +5,7 @@ import 'package:code_icons/presentation/auth/login/widgets/login_body.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/shared_prefrence.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

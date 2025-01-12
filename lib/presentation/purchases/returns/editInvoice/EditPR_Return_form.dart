@@ -15,7 +15,7 @@ import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoi
 import 'package:code_icons/data/model/request/add_purchase_request/invoice/salesItem.dart';
 import 'package:code_icons/data/model/response/invoice/drawer_dm.dart';
 import 'package:code_icons/data/model/response/purchases/purchase_request/Uom/uom_data_model.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
+import 'package:code_icons/trade_chamber/core/widgets/build_textfield.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/widgets/SelectCustomerEntity.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/widgets/selectCurrency.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/widgets/selectItemCode.dart';
@@ -28,7 +28,7 @@ import 'package:code_icons/presentation/utils/GlobalVariables.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
 import 'package:code_icons/presentation/utils/pdf_generator.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 
 import '../../cubit/purchases_cubit.dart';

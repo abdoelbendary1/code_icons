@@ -1,10 +1,10 @@
-import 'package:code_icons/presentation/collections/reciets_collections/cubit/reciet_collction_cubit.dart';
+import 'package:code_icons/trade_chamber/features/add_reciept/presentation/controller/cubit/reciet_collction_cubit.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/purchase_request.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_state.dart';
 import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

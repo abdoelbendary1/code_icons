@@ -2,7 +2,7 @@ import 'package:code_icons/data/model/data_model/unlimited_Data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:intl/intl.dart';
-import 'package:code_icons/domain/entities/unlimited_Collection_entity/unlimited_collection_entity.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/data/model/unlimited_Collection_entity/unlimited_collection_entity.dart';
 
 class UnlimitedCollectionsDataSource extends DataGridSource {
   final List<UnRegisteredCollectionEntity> collections;

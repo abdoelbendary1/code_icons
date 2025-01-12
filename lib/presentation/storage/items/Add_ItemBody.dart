@@ -5,7 +5,7 @@ import 'package:code_icons/data/model/response/storage/itemCategory/item_categor
 import 'package:code_icons/data/model/response/storage/itemCompany/item_company_dm.dart';
 import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
 import 'package:code_icons/presentation/Sales/Invoice/editInvoice/EditSales_Invoice.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
+import 'package:code_icons/trade_chamber/core/widgets/build_textfield.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectableDropDownlist.dart';
 import 'package:code_icons/presentation/storage/StorageScreen.dart';
 import 'package:code_icons/presentation/storage/items/cubit/items_cubit.dart';
@@ -14,7 +14,7 @@ import 'package:code_icons/presentation/storage/widgets/selectCategory.dart';
 import 'package:code_icons/presentation/storage/widgets/selectCompany.dart';
 import 'package:code_icons/presentation/storage/widgets/select_ItemUOM.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:flutter/material.dart';

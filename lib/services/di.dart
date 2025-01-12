@@ -3,8 +3,6 @@
 // repo => datasource
 // data source => api
 
-import 'dart:io';
-
 import 'package:code_icons/core/helpers/HttpRequestHelper.dart';
 import 'package:code_icons/core/helpers/_handleResponseHelper.dart';
 import 'package:code_icons/data/api/HR/Requests/attendence/IAttendance.dart';
@@ -15,7 +13,6 @@ import 'package:code_icons/data/api/Sales/Invoice/Invoice_interface.dart';
 import 'package:code_icons/data/api/Sales/Invoice/invoice_manager.dart';
 import 'package:code_icons/data/api/api_manager.dart';
 import 'package:code_icons/data/api/auth/auth_manager.dart';
-import 'package:code_icons/data/api/auth/auth_manager_interface.dart';
 import 'package:code_icons/data/api/purchases/PR_Request/PR_manager.dart';
 import 'package:code_icons/data/api/purchases/PR_Request/PR_request_interface.dart';
 import 'package:code_icons/data/api/storage/IStorage.dart';
@@ -32,26 +29,24 @@ import 'package:code_icons/data/repository/dataSource/auth/HttpClientImpl.dart';
 import 'package:code_icons/data/repository/dataSource/auth/auth_remote_data_source_impl.dart';
 import 'package:code_icons/data/repository/dataSource/fetchTradeCollectionsDataSource_Impl.dart';
 import 'package:code_icons/data/repository/dataSource/get_customer_data_remote_impl.dart';
-import 'package:code_icons/data/repository/dataSource/post_trade_collection_data_source_impl.dart';
 import 'package:code_icons/data/repository/dataSource/purcase_request_remote_impl.dart';
 import 'package:code_icons/data/repository/repository/HR/Employee/Employee_Repo_Impl.dart';
 import 'package:code_icons/data/repository/repository/Purchase_requset_repo_impl.dart';
 import 'package:code_icons/data/repository/repository/auth_repository_impl.dart';
 import 'package:code_icons/data/repository/repository/fetchTradeCollectionsRepo_Impl.dart';
 import 'package:code_icons/data/repository/repository/get_customer_data_repo_impl.dart';
-import 'package:code_icons/data/repository/repository/post_trade_collection_repo_impl.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/data_source/add_collection_data_source.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/data/repo_impl/add_collection_repo_impl.dart';
 import 'package:code_icons/domain/repository/data_source/Employee/Employee_Repo.dart';
 import 'package:code_icons/domain/repository/data_source/auth_remote_data_source.dart';
 import 'package:code_icons/domain/repository/data_source/fetchTradeCollectionsDataSource.dart';
 import 'package:code_icons/domain/repository/data_source/get_customer_data_remote.dart';
-import 'package:code_icons/domain/repository/data_source/post_trade_collection_data_source.dart';
 import 'package:code_icons/domain/repository/data_source/purchase_request_remote_data_source.dart';
 import 'package:code_icons/domain/repository/repository/HR/Employee/Employee_Repo.dart';
 import 'package:code_icons/domain/repository/repository/Purchase_request_dart.dart';
 import 'package:code_icons/domain/repository/repository/auth_repository.dart';
 import 'package:code_icons/domain/repository/repository/fetchTradeCollectionsRepo.dart';
 import 'package:code_icons/domain/repository/repository/get_customer_data_repo.dart';
-import 'package:code_icons/domain/repository/repository/post_trade_collection_repo.dart';
 import 'package:code_icons/domain/use_cases/HR/Employee/fetchEmployeeDataByID.dart';
 import 'package:code_icons/domain/use_cases/fetch_Station_usecase.dart';
 import 'package:code_icons/domain/use_cases/fetch_activity_useCase.dart';
@@ -64,18 +59,25 @@ import 'package:code_icons/domain/use_cases/fetch_general_central_useCase.dart';
 import 'package:code_icons/domain/use_cases/fetch_paymnetValues.dart';
 import 'package:code_icons/domain/use_cases/fetch_trade_collections_usecase.dart';
 import 'package:code_icons/domain/use_cases/fetch_trade_office_useCase.dart';
-import 'package:code_icons/domain/use_cases/get_UnRegistered_trade_collection_use_case%20.dart';
 
 import 'package:code_icons/domain/use_cases/login_useCase.dart';
 import 'package:code_icons/domain/use_cases/post-payment_values_by_ID_usecase.dart';
-import 'package:code_icons/domain/use_cases/post_UnRegistered_trade_collection_use_case%20.dart';
 import 'package:code_icons/domain/use_cases/post_customer_data.dart';
-import 'package:code_icons/domain/use_cases/post_trade_collection_use_case.dart';
 import 'package:code_icons/domain/use_cases/purchase_request_usecase/purchase_request.useCase.dart';
 import 'package:code_icons/domain/use_cases/storage/add_item_category.dart';
 import 'package:code_icons/domain/use_cases/storage/add_item_company.dart';
 import 'package:code_icons/domain/use_cases/storage/add_item_usecase.dart';
 import 'package:code_icons/domain/use_cases/storage/fetchUOM_usecase.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/domain/repo/add_collection_repo.dart';
+import 'package:code_icons/trade_chamber/features/add_collection/domain/use_case/add_collection_use_case.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/data/data_source/add_unregistered_collection_data_source.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/data/repo_impl/add_unregistered_collection_repo_impl.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/domain/repo/add_unregistered_collection_repo.dart';
+import 'package:code_icons/trade_chamber/features/add_unregistered_collection/domain/use_case/add_unregistered_collection_use_case.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/data/data_source/show_all_UnRegistered_TC.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/data/repo_impl/show_all_unRegistered_collctions.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/domain/repo/show_all_UnRegisgered_collections.dart';
+import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/domain/use_case/fetch_all_UnR_collections.dart';
 
 LoginUseCase injectLoginUseCase() {
   return LoginUseCase(authRepository: injectAuthRepository());
@@ -277,26 +279,46 @@ PostTradeCollectionUseCase injectPostTradeCollectionUseCase() {
       postTradeCollectionRepo: injectPostTradeCollectionRepo());
 }
 
-PostTradeCollectionRepo injectPostTradeCollectionRepo() {
-  return PostTradeCollectionRepoImpl(
+AddTradeCollectionRepo injectPostTradeCollectionRepo() {
+  return AddTradeCollectionRepoImpl(
       postTradeCollectionDataSource: injectPostTradeCollectionDataSource());
 }
 
-PostTradeCollectionDataSource injectPostTradeCollectionDataSource() {
-  return PostTradeCollectionDataSourceImpl(
+AddTradeCollectionDataSource injectPostTradeCollectionDataSource() {
+  return TradeCollectionDataSourceImpl(apiManager: ApiManager.getInstance());
+}
+
+AddUnregisteredTradeDataSource injectAddUnregisteredTradeDataSource() {
+  return AddUnregisteredTradeDataSourceImpl(
       apiManager: ApiManager.getInstance());
 }
 
-PostUnRegisteredTradeCollectionUseCase
-    injectPostUnRegisteredTradeCollectionUseCase() {
-  return PostUnRegisteredTradeCollectionUseCase(
-      postTradeCollectionRepo: injectPostTradeCollectionRepo());
+AddUnregisteredCollectionRepo injectAddUnregisteredCollectionRepo() {
+  return AddUnregisteredCollectionRepoImpl(
+      addUnregisteredTradeDataSource: injectAddUnregisteredTradeDataSource());
 }
 
-GetUnRegisteredTradeCollectionUseCase
-    injectGetUnRegisteredTradeCollectionUseCase() {
-  return GetUnRegisteredTradeCollectionUseCase(
-      postTradeCollectionRepo: injectPostTradeCollectionRepo());
+AddUnregisteredCollectionUseCase
+    injectPostUnRegisteredTradeCollectionUseCase() {
+  return AddUnregisteredCollectionUseCase(
+      addUnregisteredCollectionRepo: injectAddUnregisteredCollectionRepo());
+}
+
+FetchAllUnRegisteredCollectionsUseCase
+    injectFetchAllUnRegisteredCollectionsUseCase() {
+  return FetchAllUnRegisteredCollectionsUseCase(
+      fetchUnregisteredCollectionRepo: injectFetchUnregisteredCollectionRepo());
+}
+
+FecthUnregisteredTradeDataSource injectFecthUnregisteredTradeDataSource() {
+  return FecthUnregisteredTradeDataSourceImpl(
+      apiManager: ApiManager.getInstance());
+}
+
+FetchUnregisteredCollectionRepo injectFetchUnregisteredCollectionRepo() {
+  return FetchUnregisteredCollectionRepoImpl(
+      fecthUnregisteredTradeDataSource:
+          injectFecthUnregisteredTradeDataSource());
 }
 
 FetchTradeOfficeListUseCase injectFetchTradeOfficeListUseCase() {

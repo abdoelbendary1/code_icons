@@ -20,7 +20,7 @@ import 'package:code_icons/domain/entities/vendors/vendors_entity.dart';
 import 'package:code_icons/domain/use_cases/purchase_request_usecase/purchase_request.useCase.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_state.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:equatable/equatable.dart';

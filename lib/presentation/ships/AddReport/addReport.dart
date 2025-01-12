@@ -2,7 +2,7 @@ import 'package:code_icons/presentation/ships/AddReport/cubit/add_ship_report_cu
 import 'package:code_icons/presentation/ships/AddReport/form_details.dart';
 import 'package:code_icons/presentation/ships/widgets/selectShip.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

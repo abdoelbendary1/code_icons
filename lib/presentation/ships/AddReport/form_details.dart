@@ -1,9 +1,9 @@
 import 'package:code_icons/data/model/request/VesselReport/vesselDM.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
+import 'package:code_icons/trade_chamber/core/widgets/build_textfield.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/ships/AddReport/cubit/add_ship_report_cubit.dart';
 import 'package:code_icons/presentation/utils/Date_picker.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,8 +1,8 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:code_icons/domain/entities/Customer%20Data/customer_data_entity.dart';
-import 'package:code_icons/presentation/collections/CustomerData/cubit/customers_cubit.dart';
+import 'package:code_icons/trade_chamber/features/show_customers/presentation/controller/cubit/customers_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectCustomerEntityName extends StatelessWidget {

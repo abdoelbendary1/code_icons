@@ -3,7 +3,7 @@ import 'package:code_icons/presentation/HR/All_Attendances_by_day/cubit/all_atte
 import 'package:code_icons/presentation/HR/All_Attendances_by_day/widgets/Attendance_card.dart';
 import 'package:code_icons/presentation/utils/build_app_bar.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/di.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/cupertino.dart';

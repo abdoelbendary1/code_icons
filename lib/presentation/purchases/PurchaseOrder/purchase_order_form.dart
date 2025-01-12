@@ -1,7 +1,7 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 import 'package:code_icons/domain/entities/purchase_item/purchase_item_entity.dart';
-import 'package:code_icons/presentation/collections/All_Daily__collector/add_collection/utils/build_textfield.dart';
+import 'package:code_icons/trade_chamber/core/widgets/build_textfield.dart';
 import 'package:code_icons/presentation/purchases/PurchaseRequest/widgets/SelectableDropDownlist.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_state.dart';
@@ -10,7 +10,7 @@ import 'package:code_icons/presentation/utils/Date_picker.dart';
 import 'package:code_icons/presentation/utils/GlobalVariables.dart';
 import 'package:code_icons/presentation/utils/dialogUtils.dart';
 import 'package:code_icons/presentation/utils/loading_state_animation.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

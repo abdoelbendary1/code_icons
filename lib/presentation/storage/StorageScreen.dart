@@ -2,7 +2,7 @@ import 'package:code_icons/data/model/data_model/menu_item.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/presentation/home/widgets/custom_card.dart';
 import 'package:code_icons/presentation/utils/build_app_bar.dart';
-import 'package:code_icons/presentation/utils/theme/app_colors.dart';
+import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
