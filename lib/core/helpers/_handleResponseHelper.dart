@@ -15,7 +15,7 @@ class HandleResponseHelper {
     required http.StreamedResponse response,
     required T Function(dynamic json) fromJson,
     Map<int, String>? customErrorMessages,
-    String defaultErrorMessage = "An unexpected error occurred",
+    String defaultErrorMessage = "حدث خطأ ما",
     T? defaultResponseForNoContent, // Add this to specify what to return for 204
   }) async {
     try {

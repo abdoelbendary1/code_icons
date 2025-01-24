@@ -25,7 +25,7 @@ void showCustomSnackBar({
   };
 
   final snackBar = SnackBar(
-    duration: const Duration(seconds: 1), // Adjustable duration
+    duration: const Duration(seconds: 3), // Adjustable duration
     behavior: SnackBarBehavior.floating,
     backgroundColor: colors[type],
     shape: RoundedRectangleBorder(

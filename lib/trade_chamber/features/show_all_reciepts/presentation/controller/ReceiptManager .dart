@@ -1,118 +1,78 @@
 import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
-import 'package:code_icons/services/controllers.dart';
-
+import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class ReceiptManager {
-  late int paymentReceipt;
-  int? storedPaymentReceipt;
-  List<RecietCollectionDataModel> receipts = [];
-  RecietCollectionDataModel selectedReceipt = RecietCollectionDataModel();
-
-  Future<List<RecietCollectionDataModel>> getReceipts() async {
+  Future<int?> getPaymentReceipt({required int userId}) async {
     var userBox = Hive.box('userBox');
-    var receiptsBox = Hive.box('receiptsBox');
-    String token = userBox.get('accessToken') ?? '';
-    List<dynamic> existingReceipts = receiptsBox.get(token, defaultValue: []);
-    receipts = existingReceipts
-        .map((i) => RecietCollectionDataModel.fromJson(i))
-        .toList();
-    return receipts;
+
+    // Get the user's data
+    Map<dynamic, dynamic>? userData =
+        userBox.get(userId.toString()) as Map<dynamic, dynamic>?;
+
+    // Return the paymentReceipt if it exists
+    return userData?['paymentReceipt'];
   }
 
-  Future<int?> getPaymentReceipt() async {
+  Future<void> storePaymentNumber({
+    required int userId,
+    required int receipt,
+  }) async {
     var userBox = Hive.box('userBox');
-    return userBox.get('paymentReceipt');
+
+    // Get existing user data or create a new map
+    Map<dynamic, dynamic> userData = userBox
+        .get(userId.toString(), defaultValue: {}) as Map<dynamic, dynamic>;
+
+    // Update the paymentReceipt
+    userData['paymentReceipt'] = receipt;
+
+    // Save the updated user data
+    userBox.put(userId.toString(), userData);
   }
 
-  Future<void> addReceipt(RecietCollectionDataModel newReceipt) async {
+  Future<void> addReciet({
+    List<RecietCollectionDataModel>? receipts,
+    int? storedPaymentReceipt,
+  }) async {
     try {
       var userBox = Hive.box('userBox');
       var receiptsBox = Hive.box('receiptsBox');
-      String token = userBox.get('accessToken') ?? '';
-      List<dynamic> existingReceipts = receiptsBox.get(token, defaultValue: []);
 
-      existingReceipts.add(newReceipt.toJson());
-      receiptsBox.put(token, existingReceipts);
+      // Retrieve user token
 
-      var storedPaymentReciept = await getPaymentReceipt();
-      if (storedPaymentReciept == null) {
-        await storePaymentReceipt(
-            receipts.firstWhere((element) => element.valid == true).paperNum!);
-      }
-    } catch (e) {
-      // Handle error
-    }
-  }
+      AuthRepoEntity? user = userBox.get('user');
+      int userID = user!.id!;
 
-  Future<RecietCollectionDataModel> selectReceipt(int paymentReceipt) async {
-    try {
-      for (var receipt in receipts) {
-        receipt.valid =
-            (receipt.paperNum! + receipt.totalPapers!) > paymentReceipt;
+      List<dynamic> existingReceipts =
+          receiptsBox.get(userID, defaultValue: []);
+      RecietCollectionDataModel newReciept;
+      // Create new receipt
+      if (receipts != null && receipts.isNotEmpty) {
+        newReciept = RecietCollectionDataModel(
+            valid: true,
+            id: receipts.last.id! + 1,
+            paperNum: storedPaymentReceipt,
+            totalPapers: 50);
+      } else {
+        newReciept = RecietCollectionDataModel(
+            valid: true, id: 1, paperNum: 1, totalPapers: 50);
       }
 
-      selectedReceipt = receipts.firstWhere((receipt) => receipt.valid!);
-      return selectedReceipt;
-    } catch (e) {
-      await addReceipt(RecietCollectionDataModel(
-          id: receipts.length + 1, paperNum: 1, totalPapers: 20, valid: true));
-      return receipts.last;
-    }
-  }
+      // Add new receipt to the list
+      existingReceipts.add(newReciept.toJson());
 
-  Future<void> storePaymentReceipt(int receipt) async {
-    var userBox = Hive.box('userBox');
-    userBox.put('paymentReceipt', receipt);
-  }
-
-  Future<void> initialize({required String controller}) async {
-    await getReceipts();
-    storedPaymentReceipt = await getPaymentReceipt();
-
-    if (storedPaymentReceipt == null) {
-      await storePaymentReceipt(1);
-      storedPaymentReceipt = 1;
-    }
-    paymentReceipt = storedPaymentReceipt!;
-
-    if (receipts.isNotEmpty) {
-      selectedReceipt = await selectReceipt(paymentReceipt);
-      if (!selectedReceipt.valid!) {
-        selectedReceipt = await selectReceipt(paymentReceipt);
-        paymentReceipt = selectedReceipt.paperNum!;
-        await storePaymentReceipt(paymentReceipt);
+      // Save the updated receipts list
+      receiptsBox.put(userID, existingReceipts);
+      var storedPaymentReciet = await getPaymentReceipt(userId: userID);
+      if (storedPaymentReciet == null) {
+        await storePaymentNumber(
+            receipt: receipts
+                    ?.firstWhere((element) => element.valid == true)
+                    .paperNum ??
+                0,
+            userId: userID);
       }
-    } else {
-      await addReceipt(RecietCollectionDataModel(
-          id: receipts.length + 1, paperNum: 1, totalPapers: 20, valid: true));
-      receipts = await getReceipts();
-      selectedReceipt = receipts.firstWhere((element) => element.valid!);
-      paymentReceipt = selectedReceipt.paperNum!;
-      await storePaymentReceipt(paymentReceipt);
-    }
-    updateController(controller: controller);
-  }
-
-  void updateController({required String controller}) {
-    ControllerManager().getControllerByName(controller).text =
-        paymentReceipt.toString();
-  }
-
-  Future<void> incrementPaymentReceipt() async {
-    int? storedPaymentReceipt = await getPaymentReceipt();
-    if (storedPaymentReceipt != null) {
-      paymentReceipt = storedPaymentReceipt + 1;
-      await storePaymentReceipt(paymentReceipt);
-      ControllerManager()
-          .getControllerByName('unlimitedPaymentReceiptController')
-          .text = paymentReceipt.toString();
-    } else {
-      paymentReceipt = selectedReceipt.paperNum!;
-      await storePaymentReceipt(paymentReceipt);
-      ControllerManager()
-          .getControllerByName('unlimitedPaymentReceiptController')
-          .text = paymentReceipt.toString();
-    }
+    } catch (e) {}
   }
 }

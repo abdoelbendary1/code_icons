@@ -30,7 +30,7 @@ class AuthManager implements AuthManagerInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.loginEndPoint);
 
       var response = await httpRequestHelper.sendRequest(
         method: HttpMethod.POST,

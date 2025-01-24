@@ -117,10 +117,10 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         'Authorization': 'Bearer ${token}',
       };
 //http://116.203.194.75:60011/api/TradeCollection?skip=0&take=20&requireTotalCount=true&filter=
-      /*  var url = Uri.http(ApiConstants.chamberApi,
+      /*  var url = Uri.https(ApiConstants.chamberApi,
           "/api/TradeCollection?skip=${skip}&take=${take}&requireTotalCount=true&filter=${filter}"); */
       var url = Uri.parse(
-          "http://${ApiConstants.chamberApi}/api/TradeCollection?skip=${skip}&take=${take}&requireTotalCount=true&filter=${filter}");
+          "https://${ApiConstants.chamberApi}/api/TradeCollection?skip=${skip}&take=${take}&requireTotalCount=true&filter=${filter}");
 
 /*       var request = http.Request('GET', url);
  */
@@ -155,7 +155,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, "/api/TradeCollection/$id");
+      var url = Uri.https(ApiConstants.chamberApi, "/api/TradeCollection/$id");
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -183,7 +183,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       }
 
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.activityEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.activityEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -212,7 +212,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.activityEndPoint}/$activityId");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -240,7 +240,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.paymentValuesEndPoint}/$customerId");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -269,7 +269,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, ApiConstants.tradeCollectionEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -299,7 +299,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, "/api/TradeCollection/UnRegistered");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -338,7 +338,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         if (filter != null) 'filter': filter, // Only add filter if provided
       };
 
-      var url = Uri.http(
+      var url = Uri.https(
         ApiConstants.chamberApi,
         "/api/TradeCollection/UnRegistered",
         queryParams, // Include the pagination and filter params
@@ -374,7 +374,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.paymentValuesEndPoint}/$customerId");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -404,7 +404,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
       }
 
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.tradeOfficeEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.tradeOfficeEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -435,7 +435,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.tradeOfficeEndPoint}/$tradeOfficeID");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -462,7 +462,8 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.stationEndPoint);
+      var url =
+          Uri.https(ApiConstants.chamberApi, ApiConstants.stationEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -492,7 +493,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.stationEndPoint}/$stationId");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -520,7 +521,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, ApiConstants.generalCentersEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -553,7 +554,7 @@ class TradeCollectionManager implements TradeCollectionsInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.generalCentersEndPoint}/$generalCentralId");
       var user = await authManager.getUser();
       var token = user?.accessToken;

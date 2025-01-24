@@ -36,7 +36,7 @@ class StorageManager implements IStorage {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.uoms);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.uoms);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -63,7 +63,7 @@ class StorageManager implements IStorage {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -94,7 +94,7 @@ class StorageManager implements IStorage {
       }
 
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.itemCategoryEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.itemCategoryEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -124,7 +124,7 @@ class StorageManager implements IStorage {
       }
 
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.itemCompanyEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.itemCompanyEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -155,7 +155,7 @@ class StorageManager implements IStorage {
 
       // API URL
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.itemCategoryEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.itemCategoryEndPoint);
       // Get user token (if needed)
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -192,7 +192,7 @@ class StorageManager implements IStorage {
 
       // API URL
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.itemCompanyEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.itemCompanyEndPoint);
 
       // Get user token
       var user = await authManager.getUser();

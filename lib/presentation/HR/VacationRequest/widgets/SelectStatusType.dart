@@ -1,8 +1,6 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:code_icons/domain/entities/HR/Vacation/vacation_type_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:code_icons/core/theme/app_colors.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectStatusType extends StatelessWidget {
@@ -44,129 +42,7 @@ class SelectStatusType extends StatelessWidget {
           SizedBox(height: 20.h),
           CustomDropdown.search(
             enabled: enabled,
-
-            /*  futureRequest: (query) async {
-              context.read<AddCollectionCubit>().searchCustomerData(
-                  query: query, searchCase: SearchCases.Name);
-              return context.read<AddCollectionCubit>().filteredData;
-            }, */
             overlayHeight: 650.h,
-            /*   headerBuilder: (context, selectedItem, enabled) {
-             /*  selectedItem as VacationTypeEntity; */
-              return Text(
-                selectedItem.vactionTypeBl!,
-                style: const TextStyle(
-                  color: AppColors.whiteColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              );
-            }, */
-            /*  listItemBuilder: (context, item, isSelected, onItemSelect) {
-              item as CustomerDataEntity;
-              return Container(
-                /*  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), */
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 16),
-                  child: Row(
-                    children: [
-                      /*  Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.blueColor.withOpacity(0.8),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.person,
-                          color: AppColors.whiteColor,
-                          size: 28,
-                        ),
-                      ), */
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Wrap(
-                              children: [
-                                Text(
-                                  item.brandNameBl!,
-                                  style: const TextStyle(
-                                    color: AppColors.blackColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-/*                                   overflow: TextOverflow.ellipsis,
- */
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 25),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    item.tradeRegistryBl!,
-                                    style: const TextStyle(
-                                      color: AppColors.greyColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Text(
-                                  CustomersCubit.customersCubit
-                                      .getTypeById(item.tradeRegistryTypeBl!),
-                                  style: const TextStyle(
-                                    color: AppColors.greyColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    item.tradeOfficeNameBl!,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.greyColor,
-                                      fontSize: 14,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }, */
-/*             excludeSelected: true,
- */
             validator: validator,
             closeDropDownOnClearFilterSearch: true,
             canCloseOutsideBounds: true,

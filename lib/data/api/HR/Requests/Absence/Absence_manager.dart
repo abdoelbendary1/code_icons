@@ -30,7 +30,7 @@ class AbsenceManager implements IAbsence {
       }
 
       // Construct the URL for the Absence request endpoint
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.AbsenceRequest);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.AbsenceRequest);
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();
@@ -62,7 +62,7 @@ class AbsenceManager implements IAbsence {
       }
 
       // Construct the URL for the Absence requests endpoint
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.AbsenceRequest);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.AbsenceRequest);
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();
@@ -92,11 +92,11 @@ class AbsenceManager implements IAbsence {
       // Check network connection
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
-      }  var url =
-          Uri.http(ApiConstants.chamberApi, "${ApiConstants.AbsenceRequest}/$absenceRequestId");
+      }
+      var url = Uri.https(ApiConstants.chamberApi,
+          "${ApiConstants.AbsenceRequest}/$absenceRequestId");
 
       // Construct the URL for the delete Absence request endpoint
-    
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();

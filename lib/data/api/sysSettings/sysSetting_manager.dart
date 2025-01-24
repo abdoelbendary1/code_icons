@@ -28,9 +28,9 @@ class SysSettingManager implements ISysSettings {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      
+
       // Create the URL for the API request
-      var url = Uri.http(ApiConstants.chamberApi, '/api/systemSettings');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/systemSettings');
 
       // Get the token from the authManager
       var user = await authManager.getUser();
@@ -63,7 +63,7 @@ class SysSettingManager implements ISysSettings {
       }
 
       // Create the URL for the API request
-      var url = Uri.http(ApiConstants.chamberApi, '/api/formNames');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/formNames');
 
       // Get the token from the authManager
       var user = await authManager.getUser();

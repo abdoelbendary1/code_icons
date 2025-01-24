@@ -1772,9 +1772,10 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
       // Multiply price by quantity to get total price before calculations
       totalPrice = unitPrice * quantity;
 
+      unitPrice = calcUnitPriceforOneItem(unitPrice)!;
+
       if (calcBeforeDisc) {
         /* unitPrice = unitPrice; */
-        unitPrice = calcUnitPriceforOneItem(unitPrice)!;
 
         // Step 1: Calculate tax based on total price including tax
         taxAmount = calculateTaxForPriceIncudesTax(

@@ -30,7 +30,7 @@ class CharterPartyManager implements ICharterParty {
       }
 
       // Construct the URL
-      var url = Uri.http(ApiConstants.chamberApi, '/api/Vessel');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/Vessel');
 
       // Obtain access token
       var user = await authManager.getUser();

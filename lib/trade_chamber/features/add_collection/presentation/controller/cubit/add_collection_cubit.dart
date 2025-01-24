@@ -2,6 +2,11 @@ import 'package:code_icons/data/api/tradeChamber/customers/customers_manager.dar
 import 'package:code_icons/data/model/data_model/reciet_DataModel.dart';
 import 'package:code_icons/domain/entities/auth_repository_entity/auth_repo_entity.dart';
 import 'package:code_icons/domain/entities/failures/failures.dart';
+import 'package:code_icons/services/service_locator.dart';
+import 'package:code_icons/trade_chamber/core/utils/auth_utils.dart';
+import 'package:code_icons/trade_chamber/core/utils/date_utils.dart';
+import 'package:code_icons/trade_chamber/core/utils/parse_utils.dart';
+import 'package:code_icons/trade_chamber/features/show_all_reciepts/presentation/controller/ReceiptManager%20.dart';
 import 'package:code_icons/trade_chamber/features/show_all_reciepts/presentation/view/all_reciets.dart';
 import 'package:code_icons/presentation/home/cubit/home_screen_view_model_cubit.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
@@ -20,10 +25,8 @@ import 'package:code_icons/domain/use_cases/fetch_customer_data.dart';
 import 'package:code_icons/domain/use_cases/fetch_customer_data_by_ID.dart';
 import 'package:code_icons/domain/use_cases/fetch_paymnetValues.dart';
 import 'package:code_icons/domain/use_cases/post-payment_values_by_ID_usecase.dart';
-import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/intl.dart';
 part 'add_collection_state.dart';
 
 class AddCollectionCubit extends Cubit<AddCollectionState> {
@@ -48,6 +51,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   Map<String, String> dateStorageMap = {
     'addCollectionPaymentReceitController': '',
   };
+  ReceiptManager receiptManager = getIt<ReceiptManager>();
   final FocusNode divisionFocusNode = FocusNode();
   final FocusNode diffrentFocusNode = FocusNode();
   List<CustomerDataEntity> customerData = [];
@@ -56,14 +60,28 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       OverlayPortalController();
   OverlayPortalController overlayPortalRegistryController =
       OverlayPortalController();
-
-/*   final ReceiptManager receiptManager;
- */
+  ControllerManager controllerManager = getIt<ControllerManager>();
   late List<String> customersNames;
   //! check the selectedCustomer ID
   CustomerDataEntity selectedCustomer = CustomerDataEntity();
   String yearsOfRepaymentBL = '';
   late int paymentReceipt;
+  final ScrollController scrollController = ScrollController();
+  List<CustomerDataEntity> customers = [];
+  int skip = 0;
+  final int take = 20;
+  bool isLoading = false;
+  bool hasMoreData = true;
+  String searchQuery = '';
+  late PaymentValuesEntity paymentValuesEntity;
+  bool isButtonEnabled = true; // Initial state
+  List<int> paidYears = [];
+  int? storedPaymentReceipt;
+  List<RecietCollectionDataModel> receipts = [];
+  late RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
+  List<Map<String, dynamic>> years = [
+    {'year': DateTime.now().year.toString(), 'isPaid': false},
+  ];
   static AddCollectionCubit initializeCubit() {
     return AddCollectionCubit(
       fetchCustomerDataUseCase: injectFetchCustomerDataUseCase(),
@@ -71,12 +89,6 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       fetchPaymentValuesUseCase: injectFetchPaymentValuesUseCase(),
       postTradeCollectionUseCase: injectPostTradeCollectionUseCase(),
       paymentValuesByIdUseCase: injectPostPaymentValuesByIdUseCase(),
-    );
-  }
-
-  static void clearControllers() {
-    ControllerManager().clearControllers(
-      controllers: ControllerManager().addCollectionControllers,
     );
   }
 
@@ -163,141 +175,113 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     } */
   }
 
-  TradeCollectionRequest intializeTradeRequest(
-      {required CustomerDataEntity selectedCustomer,
-      required BuildContext context}) {
+  TradeCollectionRequest initializeTradeRequest({
+    required CustomerDataEntity selectedCustomer,
+  }) {
     return TradeCollectionRequest(
-      activityBl: double.tryParse(
-          ControllerManager().addCollectionDivisionController.text),
-      addressBl: ControllerManager().addCollectionAddressController.text,
+      activityBl:
+          parseDouble(controllerManager.addCollectionDivisionController.text),
+      addressBl: controllerManager.addCollectionAddressController.text.trim(),
+      compensationBl: parseDouble(
+          controllerManager.addCollectionCompensationController.text),
+      currentBl: parseDouble(
+          controllerManager.addCollectionCurrentFinanceController.text),
+      customerDataIdBl: selectedCustomer.idBl,
+      differentBl: parseDouble(
+          controllerManager.addCollectionDiffrentFinanaceController.text),
+      divisionBl: controllerManager.addCollectionDivisionController.text.trim(),
+      lateBl: parseDouble(
+          controllerManager.addCollectionLateFinanceController.text),
+      paymentReceiptNumBl:
+          parseInt(controllerManager.addCollectionPaymentReceitController.text),
+      phoneBl: controllerManager.addCollectionPhoneNumController.text.trim(),
+      totalBl: parseDouble(
+          controllerManager.addCollectionTotalFinanceController.text),
+      tradeRegistryBl:
+          controllerManager.addCollectionRegisrtyNumController.text.trim(),
       collectionDateBl: convertStringToDate(
           inputString:
-              ControllerManager().addCollectionRegistryDateController.text),
-      compensationBl: double.tryParse(
-          ControllerManager().addCollectionCompensationController.text),
-      currentBl: double.tryParse(
-          ControllerManager().addCollectionCurrentFinanceController.text),
-      customerDataIdBl: selectedCustomer.idBl,
-      differentBl: double.tryParse(
-          ControllerManager().addCollectionDiffrentFinanaceController.text),
-      divisionBl: ControllerManager().addCollectionDivisionController.text,
-      lateBl: double.tryParse(
-          ControllerManager().addCollectionLateFinanceController.text),
-      paymentReceiptNumBl: int.tryParse(
-          ControllerManager().addCollectionPaymentReceitController.text),
-      phoneBl: ControllerManager().addCollectionPhoneNumController.text,
-      totalBl: double.tryParse(
-          ControllerManager().addCollectionTotalFinanceController.text),
-      tradeRegistryBl:
-          ControllerManager().addCollectionRegisrtyNumController.text,
+              controllerManager.addCollectionRegistryDateController.text),
       yearsOfRepaymentLstBL: updatePaidYears(years),
     );
   }
 
   Future<void> addRegisteredCollection({
-    required BuildContext context,
-    required AddCollectionCubit cubit,
     required GlobalKey<FormState> formKey,
+    required TradeCollectionRequest Function() initializeTradeRequest,
+    void Function(String message)? showError,
+    VoidCallback? onSuccess,
   }) async {
-    // Prevent double execution if the button is already disabled
-    if (!cubit.isButtonEnabled) return;
+    if (!isButtonEnabled) return;
 
     try {
-      // Validate if years of repayment are provided
-      if (context.read<AddCollectionCubit>().yearsOfRepaymentBL.isEmpty) {
-        AlertService.showError(
-            context: context, errorMsg: "يجب اضافه سنوات السداد");
+      // Check if years of repayment are provided
+      if (yearsOfRepaymentBL.isEmpty) {
+        showError?.call("يجب اضافه سنوات السداد");
         return;
       }
 
       // Validate form inputs
       if (!formKey.currentState!.validate()) {
-        AlertService.showError(
-            context: context, errorMsg: "برجاء ادخال جميع البيانات");
+        showError?.call("برجاء ادخال جميع البيانات");
         return;
       }
 
-      // Proceed with trade collection request
-      CustomerDataEntity selectedCustomer =
-          context.read<AddCollectionCubit>().selectedCustomer;
-      TradeCollectionRequest tradeCollectionRequest =
-          cubit.intializeTradeRequest(
-        selectedCustomer: selectedCustomer,
-        context: context,
-      );
-      if (cubit.selectedCustomer.idBl == null ||
-          tradeCollectionRequest.paymentReceiptNumBl == null) {
-        AlertService.showError(
-            context: context, errorMsg: "برجاء المحاولة مرة اخرى");
-        emit(GetAllCustomerDataInitial());
+      // Prepare the trade collection request
+      final tradeCollectionRequest = initializeTradeRequest();
+
+      if (tradeCollectionRequest.paymentReceiptNumBl == null) {
+        showError?.call("برجاء المحاولة مرة اخرى");
         return;
       }
-      cubit.isButtonEnabled = false; // Disable the button immediately
 
-      await cubit.postTradeCollection(
-        token: "token",
-        tradeCollectionRequest: tradeCollectionRequest,
-        context: context,
-      );
+      isButtonEnabled = false;
+
+      // Perform the API call or business logic
+      await postTradeCollection(tradeCollectionRequest: tradeCollectionRequest);
+
+      // Trigger success callback
+      onSuccess?.call();
     } catch (e) {
-      AlertService.showError(
-          context: context, errorMsg: "An error occurred: $e");
+      showError?.call("An error occurred: $e");
     } finally {
-      // Re-enable the button after processing
-      cubit.isButtonEnabled = true;
+      isButtonEnabled = true;
     }
   }
-
-  final ScrollController scrollController = ScrollController();
-  List<CustomerDataEntity> customers = [];
-  int skip = 0;
-  final int take = 20;
-  bool isLoading = false;
-  bool hasMoreData = true;
-  String searchQuery = '';
-
-  void initializePagination() {
-    scrollController.addListener(onScroll);
-    loadMoreCustomers();
-  }
-
-  late PaymentValuesEntity paymentValuesEntity;
-  bool isButtonEnabled = true; // Initial state
 
   void recalculateTotal(PaymentValuesEntity paymentValuesEntity) {
     // Step 2: Override values with the current text values from the controllers
     double updatedActivity = double.tryParse(
-            ControllerManager().addCollectionDivisionController.text) ??
+            controllerManager.addCollectionDivisionController.text) ??
         paymentValuesEntity.activity ??
         0;
 
     double updatedDifferent = double.tryParse(
-            ControllerManager().addCollectionDiffrentFinanaceController.text) ??
+            controllerManager.addCollectionDiffrentFinanaceController.text) ??
         paymentValuesEntity.different ??
         0;
 
     // Step 3: Recalculate the total using the updated values
     paymentValuesEntity.total = updatedActivity +
-        (double.tryParse(ControllerManager()
-                .addCollectionCurrentFinanceController
-                .text) ??
+        (double.tryParse(
+                controllerManager.addCollectionCurrentFinanceController.text) ??
             0) +
         (double.tryParse(
-                ControllerManager().addCollectionCompensationController.text) ??
+                controllerManager.addCollectionCompensationController.text) ??
             0) +
         (double.tryParse(
-                ControllerManager().addCollectionLateFinanceController.text) ??
+                controllerManager.addCollectionLateFinanceController.text) ??
             0) +
         updatedDifferent +
         (double.tryParse(
-                ControllerManager().addCollectionLatePayController.text) ??
+                controllerManager.addCollectionLatePayController.text) ??
             0) -
         (double.tryParse(
-                ControllerManager().addCollectionAdvPayController.text) ??
+                controllerManager.addCollectionAdvPayController.text) ??
             0);
 
     // Step 4: Update the total in the total finance controller
-    ControllerManager().addCollectionTotalFinanceController.text =
+    controllerManager.addCollectionTotalFinanceController.text =
         paymentValuesEntity.total?.toStringAsFixed(2) ?? "0.00";
   }
 
@@ -326,6 +310,11 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     }
   }
 
+  void initializePagination() {
+    scrollController.addListener(onScroll);
+    loadMoreCustomers();
+  }
+
   void onScroll() {
     if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent &&
@@ -335,65 +324,11 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     }
   }
 
-  void setSearchQuery(String query) {
-    searchQuery = query;
-    resetPagination();
-  }
-
-  void resetPagination() {
-    customers.clear();
-    skip = 0;
-    hasMoreData = true;
-    loadMoreCustomers(filter: searchQuery);
-  }
-
-  Future<List<CustomerDataEntity>> searchCustomerData({
-    required int skip,
-    required int take,
-    String? filter,
-  }) async {
-    var either = await fetchCustomerDataUseCase.fetchCustomerData(
-        skip: skip, take: take, filter: filter);
-    return either.fold(
-      (failure) {
-        return [];
-      },
-      (response) async {
-        customerData = response;
-        return customerData;
-      },
-    );
-  }
-
-  void fetchCustomerData({
-    required int skip,
-    required int take,
-    String? filter,
-  }) async {
-    /* emit(GetAllCustomerDataInitial()); */
-    emit(GetAllCustomerDataLoading());
-    var either = await fetchCustomerDataUseCase.fetchCustomerData(
-      skip: skip,
-      take: take,
-      filter: filter,
-    );
-    either.fold((failure) {
-      emit(GetAllCustomerDataError(errorMsg: failure.errorMessege));
-    }, (response) {
-      customersNames = response.map((e) => e.brandNameBl!).toList();
-      customerData = response;
-      customers = response;
-      emit(GetAllCustomerDataSuccess(
-          customerData: response, selectedCustomer: response.first));
-    });
-  }
-
   Future<List<CustomerDataEntity>> fetchCustomerDataPages({
     required int skip,
     required int take,
     String? filter,
   }) async {
-    // No emit here, we handle data directly.
     var either = await fetchCustomerDataUseCase.fetchCustomerData(
       skip: skip,
       take: take,
@@ -402,59 +337,15 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
 
     // Handle the result
     return either.fold((failure) {
-      // Handle the error here (for example, throw an exception or return an empty list)
-      throw Exception(
-          failure.errorMessege); // Or return an empty list if preferred
+      throw Exception(failure.errorMessege);
     }, (response) {
-      /*  emit(GetAllCustomerDataSuccess(
-          customerData: response, selectedCustomer: response.first)); */
-      // Process the successful response, for example:
       customerData = response;
       return response; // Return the fetched data
     });
   }
 
-// Function to get registry numbers by id
-  String getRegistryNumbersById(
-      String id, List<CustomerDataEntity> customerData) {
-    CustomerDataEntity? selectedCustomer;
-    for (var customer in customerData) {
-      if (customer.idBl.toString() == id) {
-        selectedCustomer = customer;
-        break;
-      }
-    }
-    return selectedCustomer?.tradeRegistryBl ?? '';
-  }
-
-// Function to get CustomerDataEntity by tradeRegistryBl
-  CustomerDataEntity? getCustomerByTradeRegistryBl(
-      String tradeRegistryBl, List<CustomerDataEntity> customerData) {
-    for (var customer in customerData) {
-      if (customer.tradeRegistryBl == tradeRegistryBl) {
-        selectedCustomer = customer;
-        emit(GetCustomerDataByIDSuccess(
-            customerData: selectedCustomer,
-            controllers: ControllerManager().addCollectionControllers));
-        return customer;
-      }
-    }
-    return null; // Return null if not found
-  }
-
-  CustomerDataEntity getCustomerByName({required String name}) {
-    return customerData.firstWhere((element) => element.brandNameBl == name);
-  }
-
-  void selectCustomer({required int id}) {
-    final addCollectionControllers =
-        ControllerManager().addCollectionControllers;
-    emit(GetCustomerDataByIDInitial(controllers: addCollectionControllers));
-  }
-
   void fetchCustomerDataByID({required String customerId}) async {
-    final addCollectionControllers =
-        ControllerManager().addCollectionControllers;
+    final addCollectionControllers = controllerManager.addCollectionControllers;
 /*     emit(GetAllCustomerDataLoading());
  */
     emit(GetCustomerDataByIDLoading());
@@ -475,7 +366,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
 
 /*       getSavedPaymentReceiept();
  */
-        ControllerManager().updateAddCollectionControllers(
+        controllerManager.updateAddCollectionControllers(
             customerDataEntity: customerDataEntity,
             paymentValuesEntity: paymentValuesEntity,
             payementReceipt: paymentReceipt);
@@ -487,10 +378,6 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       });
     });
   }
-
-  List<Map<String, dynamic>> years = [
-    {'year': DateTime.now().year.toString(), 'isPaid': false},
-  ];
 
   List<int> updatePaidYears(List<Map<String, dynamic>> years) {
     List<int> paidYears = [];
@@ -556,22 +443,6 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     }
   }
 
-  /*  void toggleYearSelection(int index, bool isSelected) {
-    if (allPreviousYearsChecked(index)) {
-      years[index]['isPaid'] = isSelected;
-
-      for (int i = index + 1; i < years.length; i++) {
-        years[i]['isPaid'] = false;
-      }
-
-      emit(YearsUpdatedState(years: List.from(years)));
-    } else {
-      // Feedback to UI should be handled in the onSelected function
-    }
-   
-    emit(YearsUpdatedState(years: List.from(years)));
-  } */
-
   void toggleYearSelection(int index, bool isSelected) {
     // Update the selected year's isPaid status
     years[index]['isPaid'] = isSelected;
@@ -580,116 +451,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     emit(YearsUpdatedState(years: List.from(years)));
   }
 
-  bool anyForwardYearsChecked(int index) {
-    return years.sublist(index + 1).any((year) => year['isPaid'] == true);
-  }
-
-  bool allPreviousYearsChecked(int index) {
-    for (int i = 0; i < index; i++) {
-      if (!years[i]['isPaid']) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  void markAllYearsAsPaid(int upToIndex) {
-    for (int i = 0; i <= upToIndex; i++) {
-      years[i]['isPaid'] = true;
-    }
-
-    emit(YearsUpdatedState(years: List.from(years)));
-  }
-
-  Future<void> storePaymentReceipt(
-      {required int userId, required int receipt}) async {
-    var userBox = Hive.box('userBox');
-
-    // Get existing user data or create a new map
-    Map<dynamic, dynamic> userData = userBox
-        .get(userId.toString(), defaultValue: {}) as Map<dynamic, dynamic>;
-
-    // Update the paymentReceipt
-    userData['paymentReceipt'] = receipt;
-
-    // Save the updated user data
-    userBox.put(userId.toString(), userData);
-  }
-
-  Future<int?> getPaymentReceipt({required int userId}) async {
-    var userBox = Hive.box('userBox');
-
-    // Get the user's data
-    Map<dynamic, dynamic>? userData =
-        userBox.get(userId.toString()) as Map<dynamic, dynamic>?;
-
-    // Return the paymentReceipt if it exists
-    return userData?['paymentReceipt'];
-  }
-
-  Future<void> deletePaymentReceipt({required int userId}) async {
-    var userBox = Hive.box('userBox');
-
-    // Get existing user data
-    Map<String, dynamic>? userData =
-        userBox.get(userId.toString()) as Map<String, dynamic>?;
-
-    if (userData != null) {
-      // Remove the paymentReceipt entry
-      userData.remove('paymentReceipt');
-
-      // Update the user data or delete the user if no other data exists
-      if (userData.isEmpty) {
-        userBox.delete(userId.toString());
-      } else {
-        userBox.put(userId.toString(), userData);
-      }
-    }
-  }
-
-  Future<void> addReciet() async {
-    try {
-      var userBox = Hive.box('userBox');
-      var receiptsBox = Hive.box('receiptsBox');
-
-      // Retrieve user token
-
-      AuthRepoEntity? user = userBox.get('user');
-      int userID = user!.id!;
-
-      List<dynamic> existingReceipts =
-          receiptsBox.get(userID, defaultValue: []);
-      RecietCollectionDataModel newReciept;
-      // Create new receipt
-      if (receipts.isNotEmpty) {
-        newReciept = RecietCollectionDataModel(
-            valid: true,
-            id: receipts.last.id! + 1,
-            paperNum: storedPaymentReceipt,
-            totalPapers: 50);
-      } else {
-        newReciept = RecietCollectionDataModel(
-            valid: true, id: 1, paperNum: 1, totalPapers: 50);
-      }
-
-      // Add new receipt to the list
-      existingReceipts.add(newReciept.toJson());
-
-      // Save the updated receipts list
-      receiptsBox.put(userID, existingReceipts);
-      var storedPaymentReciet = await getPaymentReceipt(userId: userID);
-      if (storedPaymentReciet == null) {
-        await storePaymentReceipt(
-            receipt: receipts
-                .firstWhere((element) => element.valid == true)
-                .paperNum!,
-            userId: userID);
-      }
-    } catch (e) {}
-  }
-
   Future<RecietCollectionDataModel> selectReciet(int paymentReceipt) async {
-    /*   return await ReceiptManager.selectReceipt(paymentReceipt); */
     try {
       receipts = await getReciets();
       for (var reciept in receipts) {
@@ -700,7 +462,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
         }
       }
       if (!receipts.any((element) => element.valid == true)) {
-        await addReciet();
+        await receiptManager.addReciet(
+            receipts: receipts, storedPaymentReceipt: paymentReceipt);
       }
       /*  await getReciets(); */
       selectedReceit = receipts.firstWhere((receipt) => receipt.valid == true);
@@ -724,40 +487,29 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   }
 
   Future<void> incrementPaymentReceipt() async {
-/*     await receiptManager.incrementPaymentReceipt();
- */
-    int userId = await getUserId();
-    int? storedPaymentReceipt = await getPaymentReceipt(userId: userId);
+    int userId = await AuthUtils().getUserId();
+    int? storedPaymentReceipt =
+        await receiptManager.getPaymentReceipt(userId: userId);
     if (storedPaymentReceipt != null) {
       paymentReceipt = storedPaymentReceipt + 1;
-      /*  if (paymentReceipt >=
-          selectedReceit.paperNum! + selectedReceit.totalPapers!) {
-        // Select another receipt
-        int? newPaymentReceipt = selectNextReciet(paymentReceipt);
-        if (newPaymentReceipt != null) {
-          paymentReceipt = newPaymentReceipt;
-        } else {
-          // Handle case where no more receipts are available
-          return;
-        }
-      } */
-      await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
-      ControllerManager()
+
+      await receiptManager.storePaymentNumber(
+          receipt: paymentReceipt, userId: userId);
+      controllerManager
           .getControllerByName('addCollectionPaymentReceitController')
           .text = paymentReceipt.toString();
     } else {
       // Initialize with the selected receipt's paper number if no payment receipt is stored
       paymentReceipt = selectedReceit.paperNum!;
-      await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
-      ControllerManager()
+      await receiptManager.storePaymentNumber(
+          receipt: paymentReceipt, userId: userId);
+      controllerManager
           .getControllerByName('addCollectionPaymentReceitController')
           .text = paymentReceipt.toString();
     }
   }
 
   Future<List<RecietCollectionDataModel>> getReciets() async {
-/*     return await receiptManager.getReceipts();
- */
     var userBox = Hive.box('userBox');
     var receiptsBox = Hive.box('receiptsBox');
 
@@ -773,23 +525,22 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     return receipts;
   }
 
-  int? storedPaymentReceipt;
-  List<RecietCollectionDataModel> receipts = [];
-  late RecietCollectionDataModel selectedReceit = RecietCollectionDataModel();
   Future<void> initialize({required BuildContext context}) async {
     try {
       await getReciets();
-      int userId = await getUserId();
+      int userId = await AuthUtils().getUserId();
       if (storedPaymentReceipt == null && receipts.isEmpty) {
-        await storePaymentReceipt(receipt: 1, userId: userId);
+        await receiptManager.storePaymentNumber(receipt: 1, userId: userId);
       }
 
       if (receipts.isNotEmpty) {
-        storedPaymentReceipt = await getPaymentReceipt(userId: userId);
+        storedPaymentReceipt =
+            await receiptManager.getPaymentReceipt(userId: userId);
 
         if (storedPaymentReceipt == null) {
-          await storePaymentReceipt(receipt: 1, userId: userId);
-          storedPaymentReceipt = await getPaymentReceipt(userId: userId);
+          await receiptManager.storePaymentNumber(receipt: 1, userId: userId);
+          storedPaymentReceipt =
+              await receiptManager.getPaymentReceipt(userId: userId);
         }
 
         selectedReceit = await selectReciet(storedPaymentReceipt!);
@@ -799,29 +550,29 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
                     selectedReceit.paperNum! + selectedReceit.totalPapers! &&
                 storedPaymentReceipt! > selectedReceit.paperNum!) {
               paymentReceipt = storedPaymentReceipt!;
-              await storePaymentReceipt(
+              await receiptManager.storePaymentNumber(
                   receipt: paymentReceipt, userId: userId);
             } else if (storedPaymentReceipt! < selectedReceit.paperNum!) {
               paymentReceipt = selectedReceit.paperNum!;
-              await storePaymentReceipt(
+              await receiptManager.storePaymentNumber(
                   receipt: paymentReceipt, userId: userId);
             } else {
               selectedReceit = await selectReciet(storedPaymentReceipt!);
               paymentReceipt = selectedReceit.paperNum!;
 
-              await storePaymentReceipt(
+              await receiptManager.storePaymentNumber(
                   receipt: paymentReceipt, userId: userId);
               if (storedPaymentReceipt! < selectedReceit.paperNum!) {
                 selectedReceit = await selectReciet(storedPaymentReceipt!);
 
                 paymentReceipt = selectedReceit.paperNum!;
-                await storePaymentReceipt(
+                await receiptManager.storePaymentNumber(
                     receipt: paymentReceipt, userId: userId);
               } else {
                 selectedReceit = await selectReciet(storedPaymentReceipt!);
 
                 paymentReceipt = storedPaymentReceipt!;
-                await storePaymentReceipt(
+                await receiptManager.storePaymentNumber(
                     receipt: paymentReceipt, userId: userId);
               }
             }
@@ -839,7 +590,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
           );
           if (selectedReceit.id != 0) {
             paymentReceipt = selectedReceit.paperNum!;
-            await storePaymentReceipt(receipt: paymentReceipt, userId: userId);
+            await receiptManager.storePaymentNumber(
+                receipt: paymentReceipt, userId: userId);
           }
         }
         updateController();
@@ -851,15 +603,8 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     }
   }
 
-  Future<int> getUserId() async {
-    var userBox = Hive.box('userBox');
-    AuthRepoEntity? user = userBox.get('user');
-    int userId = user!.id!;
-    return userId;
-  }
-
   void updateController() {
-    ControllerManager()
+    controllerManager
         .getControllerByName('addCollectionPaymentReceitController')
         .text = paymentReceipt.toString();
   }
@@ -877,57 +622,28 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
         );
   }
 
-  String convertStringToDate({required String inputString}) {
-    if (inputString.isNotEmpty) {
-      DateFormat inputFormat = DateFormat('MMM d, y, h:mm:ss a');
-      // Parse the input string into a DateTime object
-      DateTime dateTime = inputFormat.parse(inputString);
-
-      // Define the output format
-      DateFormat outputFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
-      // Format the DateTime object into the desired output format
-      String formattedDate = outputFormat.format(dateTime);
-      return formattedDate;
-    }
-    return "";
-  }
-
   Future<void> postTradeCollection({
-    required String token,
     required TradeCollectionRequest tradeCollectionRequest,
-    required BuildContext context,
   }) async {
     try {
       emit(AddCollectionLoading());
-      if (formKey.currentState!.validate()) {
-        var either = await postTradeCollectionUseCase.invoke(
-            token: token, tradeCollectionRequest: tradeCollectionRequest);
+      var either = await postTradeCollectionUseCase.invoke(
+          tradeCollectionRequest: tradeCollectionRequest);
 
-        either.fold((l) {
-          emit(AddCollectionError(errorMsg: l.errorMessege));
-        }, (r) async {
-          int userId = await getUserId();
-          await storePaymentReceipt(
-              receipt: int.parse(ControllerManager()
-                  .addCollectionPaymentReceitController
-                  .text),
-              userId: userId);
+      either.fold((l) {
+        emit(AddCollectionError(errorMsg: l.errorMessege));
+      }, (r) async {
+        int userId = await AuthUtils().getUserId();
+        await receiptManager.storePaymentNumber(
+            receipt: int.parse(
+                controllerManager.addCollectionPaymentReceitController.text),
+            userId: userId);
 
-          await incrementPaymentReceipt();
-          emit(AddCollectionSucces(tradeCollectionEntity: r));
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "برجاء ادخال جميع البيانات",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          backgroundColor: AppColors.redColor,
-          duration: Durations.extralong1,
-        ));
-      }
+        await incrementPaymentReceipt();
+        emit(AddCollectionSucces(tradeCollectionEntity: r));
+      });
     } catch (e) {
-      print(e.toString());
+      emit(AddCollectionError(errorMsg: e.toString()));
     }
   }
 
@@ -939,23 +655,17 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       either.fold(
           (l) => Left(emit(GetCustomerDataByIDError(errorMsg: l.errorMessege))),
           (r) {
-        /*   getReciets();
-        selectReceitBasedOnConditions(receipts);
-        saveSelectedReceit();
-        retrieveSelectedReceit();
-        getSavedPaymentReceiept(); */
-        ControllerManager().updateAddCollectionControllers(
+        controllerManager.updateAddCollectionControllers(
             customerDataEntity: selectedCustomer,
             paymentValuesEntity: r,
             payementReceipt: paymentReceipt);
         emit(GetCustomerDataByIDSuccess(
             customerData: selectedCustomer,
-            controllers: ControllerManager().addCollectionControllers));
+            controllers: controllerManager.addCollectionControllers));
       });
     }
   }
 
-  List<int> paidYears = [];
   void handleYearSelection(BuildContext context, int index, bool value) {
     toggleYearSelection(index, value);
     List<int> paidYears =
@@ -968,171 +678,4 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       );
     }
   }
-
-  /* void handleYearSelection(BuildContext context, int index, bool value) {
-    if (value) {
-      /*   // When marking a year as paid
-      if (allPreviousYearsChecked(index)) {
-        toggleYearSelection(index, value);
-        List<int> paidYears =
-            updatePaidYears(context.read<AddCollectionCubit>().years);
-
-        if (paidYears.isNotEmpty) {
-          postPaymentValuesByID(
-            customerId:
-                context.read<AddCollectionCubit>().selectedCustomer.idBl,
-            paidYears: paidYears,
-          );
-        } else {
-          var emptyPaymentValues = PaymentValuesEntity(
-              compensation: 0,
-              current: 0,
-              different: 0,
-              late: 0,
-              paidYears: [],
-              total: 0,
-              yearsOfRepayment: "");
-/*           getSavedPaymentReceiept();
- */
-          ControllerManager().updateAddCollectionControllers(
-              customerDataEntity:
-                  context.read<AddCollectionCubit>().selectedCustomer,
-              paymentValuesEntity: emptyPaymentValues,
-              payementReceipt: 0);
-        }
-      } else {
-        QuickAlert.show(
-          showCancelBtn: true,
-          cancelBtnText: "رجوع",
-          context: context,
-          type: QuickAlertType.error,
-          confirmBtnColor: AppColors.greenColor,
-          title:
-              AppLocalizations.of(context)!.snackBar_error_year_of_payment_pay,
-          titleColor: AppColors.redColor,
-          confirmBtnText: AppLocalizations.of(context)!
-              .snackBar_label_year_of_payment_pay_action,
-          onConfirmBtnTap: () {
-            markAllYearsAsPaid(index);
-            List<int> paidYears =
-                updatePaidYears(context.read<AddCollectionCubit>().years);
-
-            if (paidYears.isNotEmpty) {
-              postPaymentValuesByID(
-                customerId:
-                    context.read<AddCollectionCubit>().selectedCustomer.idBl,
-                paidYears: paidYears,
-              );
-              Navigator.pop(context);
-            }
-          },
-        );
-      } */
-      toggleYearSelection(index, value);
-      List<int> paidYears =
-          updatePaidYears(context.read<AddCollectionCubit>().years);
-      showCustomSnackBar(
-          context: context,
-          message: paidYears.toString(),
-          type: SnackBarType.success);
-      if (paidYears.isNotEmpty) {
-        postPaymentValuesByID(
-          customerId: context.read<AddCollectionCubit>().selectedCustomer.idBl,
-          paidYears: paidYears,
-        );
-      }
-    } else {
-      // When marking a year as unpaid
-      /*   if (anyForwardYearsChecked(index)) {
-        // Show SnackBar if forward years are paid
-        QuickAlert.show(
-          showCancelBtn: true,
-          cancelBtnText: "رجوع",
-          context: context,
-          type: QuickAlertType.info,
-          confirmBtnColor: AppColors.greenColor,
-          title: "هل تريد وضع علامة على هذه السنة كغير مدفوعة؟",
-          text: "سيتم حذف السنين المدفوعه بعد هذه السنه",
-          titleAlignment: TextAlign.center,
-          textAlignment: TextAlign.center,
-          textColor: AppColors.greyColor,
-          titleColor: AppColors.redColor,
-          confirmBtnText: "نعم",
-          onConfirmBtnTap: () {
-            toggleYearSelection(index, value);
-            List<int> paidYears =
-                updatePaidYears(context.read<AddCollectionCubit>().years);
-
-            if (paidYears.isNotEmpty) {
-              postPaymentValuesByID(
-                customerId:
-                    context.read<AddCollectionCubit>().selectedCustomer.idBl,
-                paidYears: paidYears,
-              );
-            } else {
-              var emptyPaymentValues = PaymentValuesEntity(
-                  compensation: 0,
-                  current: 0,
-                  different: 0,
-                  late: 0,
-                  paidYears: [],
-                  total: 0,
-                  yearsOfRepayment: "");
-/*                   getSavedPaymentReceiept();
- */
-              ControllerManager().updateAddCollectionControllers(
-                  customerDataEntity:
-                      context.read<AddCollectionCubit>().selectedCustomer,
-                  payementReceipt: 0,
-                  paymentValuesEntity: emptyPaymentValues);
-            }
-            Navigator.pop(context);
-          },
-        );
-      } else {
-        toggleYearSelection(index, value);
-        List<int> paidYears =
-            updatePaidYears(context.read<AddCollectionCubit>().years);
-
-        if (paidYears.isNotEmpty) {
-          postPaymentValuesByID(
-            customerId:
-                context.read<AddCollectionCubit>().selectedCustomer.idBl,
-            paidYears: paidYears,
-          );
-        } else {
-          var emptyPaymentValues = PaymentValuesEntity(
-              compensation: 0,
-              current: 0,
-              different: 0,
-              late: 0,
-              paidYears: [],
-              total: 0,
-              yearsOfRepayment: "");
-/*           getSavedPaymentReceiept();
- */
-          ControllerManager().updateAddCollectionControllers(
-              customerDataEntity:
-                  context.read<AddCollectionCubit>().selectedCustomer,
-              payementReceipt: 0,
-              paymentValuesEntity: emptyPaymentValues);
-        }
-      } */
-      toggleYearSelection(index, value);
-      List<int> paidYears =
-          updatePaidYears(context.read<AddCollectionCubit>().years);
-      showCustomSnackBar(
-          context: context,
-          message: paidYears.toString(),
-          type: SnackBarType.error);
-
-      if (paidYears.isNotEmpty) {
-        postPaymentValuesByID(
-          customerId: context.read<AddCollectionCubit>().selectedCustomer.idBl,
-          paidYears: paidYears,
-        );
-      }
-    }
-  }
- */
 }

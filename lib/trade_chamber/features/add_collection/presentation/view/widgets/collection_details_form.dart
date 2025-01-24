@@ -1,5 +1,6 @@
 import 'package:code_icons/core/theme/sizes_manager.dart';
 import 'package:code_icons/core/widgets/custom_button.dart';
+import 'package:code_icons/trade_chamber/core/services/alert_service/alert_service.dart';
 import 'package:code_icons/trade_chamber/features/add_collection/presentation/view/widgets/build_collection_info.dart';
 import 'package:code_icons/trade_chamber/features/add_collection/presentation/view/widgets/build_payment_section.dart';
 import 'package:flutter/material.dart';
@@ -69,163 +70,20 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
                 CustomButton(
                   onPressed: () {
                     widget.cubit.addRegisteredCollection(
-                        context: context,
-                        cubit: widget.cubit,
-                        formKey: widget.cubit.formKey);
+                      formKey: widget.cubit.formKey,
+                      initializeTradeRequest: () {
+                        return widget.cubit.initializeTradeRequest(
+                          selectedCustomer: widget.cubit.selectedCustomer,
+                        );
+                      },
+                      showError: (message) {
+                        AlertService.showError(
+                            context: context, errorMsg: message);
+                      },
+                    );
                   },
-
-                  /*  context.read<AddCollectionCubit>().isButtonEnabled
-                      ? () async {
-                          // Immediately disable the button
-                          var cubit = context.read<AddCollectionCubit>();
-                          if (!cubit.isButtonEnabled)
-                            return; // Prevent double execution
-                          cubit.isButtonEnabled = false;
-
-                          if (context
-                              .read<AddCollectionCubit>()
-                              .yearsOfRepaymentBL
-                              .isEmpty) {
-                            AlertService.showError(
-                                context: context,
-                                errorMsg: "يجب اضافه سنوات السداد");
-                            return;
-                          }
-                          if (widget.cubit.formKey.currentState!.validate()) {
-                            try {
-                              if (mounted) {
-                                CustomerDataEntity selectedCustomer =
-                                    cubit.selectedCustomer;
-                                var tradeCollectionRequest =
-                                    cubit.intializeTradeRequest(
-                                  selectedCustomer: selectedCustomer,
-                                  context: context,
-                                );
-
-                                await widget.cubit.postTradeCollection(
-                                  token: "token",
-                                  tradeCollectionRequest:
-                                      tradeCollectionRequest,
-                                  context: context,
-                                );
-                              }
-                            } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                    "An error occurred: $e",
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  backgroundColor: AppColors.redColor,
-                                  duration: Durations.extralong1,
-                                ));
-                              }
-                            } finally {
-                              if (mounted) {
-                                cubit.isButtonEnabled =
-                                    true; // Re-enable the button
-                              }
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                "برجاء ادخال جميع البيانات",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              backgroundColor: AppColors.redColor,
-                              duration: Durations.extralong1,
-                            ));
-                            cubit.isButtonEnabled =
-                                true; // Re-enable if validation fails
-                          }
-                        }
-                      : null,
-                  // Disable the button if isButtonEnabled is false
- */
                   label: AppLocalizations.of(context)!.save,
                 ),
-                /*    ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.titleMedium,
-                      foregroundColor: AppColors.whiteColor,
-                      backgroundColor: AppColors.blueColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-
-                  onPressed: context.read<AddCollectionCubit>().isButtonEnabled
-                      ? () async {
-                          // Immediately disable the button
-                          var cubit = context.read<AddCollectionCubit>();
-                          /*  if (!cubit.isButtonEnabled)
-                            return; // Prevent double execution
-                          cubit.isButtonEnabled = false;
-                 */
-                          if (context
-                              .read<AddCollectionCubit>()
-                              .yearsOfRepaymentBL
-                              .isEmpty) {
-                            AlertService.showError(
-                                context: context,
-                                errorMsg: "يجب اضافه سنوات السداد");
-                            return;
-                          }
-                          if (widget.cubit.formKey.currentState!.validate()) {
-                            try {
-                              if (mounted) {
-                                CustomerDataEntity selectedCustomer =
-                                    cubit.selectedCustomer;
-                                var tradeCollectionRequest =
-                                    cubit.intializeTradeRequest(
-                                  selectedCustomer: selectedCustomer,
-                                  context: context,
-                                );
-
-                                await widget.cubit.postTradeCollection(
-                                  token: "token",
-                                  tradeCollectionRequest:
-                                      tradeCollectionRequest,
-                                  context: context,
-                                );
-                              }
-                            } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text(
-                                    "An error occurred: $e",
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  backgroundColor: AppColors.redColor,
-                                  duration: Durations.extralong1,
-                                ));
-                              }
-                            } finally {
-                              if (mounted) {
-                                cubit.isButtonEnabled =
-                                    true; // Re-enable the button
-                              }
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                "برجاء ادخال جميع البيانات",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              backgroundColor: AppColors.redColor,
-                              duration: Durations.extralong1,
-                            ));
-                            cubit.isButtonEnabled =
-                                true; // Re-enable if validation fails
-                          }
-                        }
-                      : null,
-                  // Disable the button if isButtonEnabled is false
-                  child: Text(AppLocalizations.of(context)!.save),
-                ),
-              */
               ],
             ),
             Sizes.size36.verticalSpace,

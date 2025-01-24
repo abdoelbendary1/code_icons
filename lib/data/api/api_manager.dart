@@ -246,7 +246,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.http(ApiConstants.chamberApi, ApiConstants.settingsEndPoint);
+            Uri.https(ApiConstants.chamberApi, ApiConstants.settingsEndPoint);
         var user = await authManager.getUser();
         var token = user!.accessToken;
 
@@ -317,7 +317,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -363,7 +364,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
+        var url = Uri.https(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -413,7 +414,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, '/api/Item/$id');
+        var url = Uri.https(ApiConstants.chamberApi, '/api/Item/$id');
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -459,7 +460,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
+        var url =
+            Uri.https(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -506,7 +508,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
+        var url =
+            Uri.https(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -552,7 +555,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(
+        var url = Uri.https(
             ApiConstants.chamberApi, ApiConstants.purchaseRequestEndPoint);
 
         var user = await authManager.getUser();
@@ -603,7 +606,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(
+        var url = Uri.https(
             ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
 
         var user = await authManager.getUser();
@@ -649,7 +652,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.http(ApiConstants.chamberApi, ApiConstants.postPREndPoint);
+            Uri.https(ApiConstants.chamberApi, ApiConstants.postPREndPoint);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -687,7 +690,8 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
+        var url =
+            Uri.https(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -730,7 +734,7 @@ class ApiManager {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(ApiConstants.chamberApi, ApiConstants.uoms);
+        var url = Uri.https(ApiConstants.chamberApi, ApiConstants.uoms);
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -775,7 +779,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.http(ApiConstants.chamberApi, "/api/Currency/$currencyId");
+            Uri.https(ApiConstants.chamberApi, "/api/Currency/$currencyId");
 
         var user = await authManager.getUser();
         var token = user!.accessToken;
@@ -818,7 +822,7 @@ class ApiManager {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         var url =
-            Uri.http(ApiConstants.chamberApi, ApiConstants.currencyEndPoint);
+            Uri.https(ApiConstants.chamberApi, ApiConstants.currencyEndPoint);
         String token =
             await SharedPrefrence.getData(key: 'accessToken') as String;
 

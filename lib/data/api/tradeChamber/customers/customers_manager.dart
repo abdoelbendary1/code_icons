@@ -32,7 +32,7 @@ class CustomersManager implements CustomersDataInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       // Define query parameters for pagination and filtering
 
       var queryParams = {
@@ -41,20 +41,18 @@ class CustomersManager implements CustomersDataInterface {
         'requireTotalCount': 'true',
         if (filter != null) 'filter': filter, // Only add filter if provided
       };
-      var url = Uri.http(
+      var url = Uri.https(
         ApiConstants.chamberApi,
         ApiConstants.customerDataEndPoint,
         queryParams, // Include the pagination and filter params
       );
 
 // If using http instead of https
-// var url = Uri.http(
+// var url = Uri.https(
 //   ApiConstants.chamberApi,
 //   ApiConstants.customerDataEndPoint,
 //   queryParams, // Include the pagination and filter params
 // );
-     
-     
 
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -83,8 +81,8 @@ class CustomersManager implements CustomersDataInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
-      var url = Uri.http(ApiConstants.chamberApi,
+
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.customerDataEndPoint}/$customerId");
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -111,9 +109,9 @@ class CustomersManager implements CustomersDataInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-     
+
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.customerDataEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.customerDataEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
