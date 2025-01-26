@@ -28,7 +28,7 @@ class EmployeeManager implements EmployeeInterface {
       }
 
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.employeeEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.employeeEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -57,7 +57,7 @@ class EmployeeManager implements EmployeeInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, "${ApiConstants.employeeEndPoint}/$id");
       var user = await authManager.getUser();
       var token = user?.accessToken;

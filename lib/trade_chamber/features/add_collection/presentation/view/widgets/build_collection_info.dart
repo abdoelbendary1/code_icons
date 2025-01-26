@@ -178,7 +178,8 @@ class BuildCollectionInfo extends StatelessWidget {
                     label: AppLocalizations.of(context)!.division_label,
                     hint: AppLocalizations.of(context)!.division_hint,
                     keyboardType: TextInputType.number,
-                    focusNode: cubit.divisionFocusNode,
+                    focusNode:
+                        context.read<AddCollectionCubit>().divisionFocusNode,
                     controller:
                         controllerManager.addCollectionDivisionController,
                     icon: Icons.diversity_3_sharp,

@@ -29,7 +29,7 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, ApiConstants.postPurchaseOrderEndPoint);
 
       var user = await authManager.getUser();
@@ -58,7 +58,7 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, ApiConstants.postPurchaseOrderEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -85,9 +85,9 @@ class PrOrderRequestManager implements PrOrderRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.postPurchaseOrderEndPoint}/$id");
-    
+
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -112,7 +112,7 @@ var url = Uri.http(ApiConstants.chamberApi,
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.taxes);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.taxes);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -137,7 +137,7 @@ var url = Uri.http(ApiConstants.chamberApi,
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.vendors);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.vendors);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -163,7 +163,7 @@ var url = Uri.http(ApiConstants.chamberApi,
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.postPurchaseOrderEndPoint}/$id");
 
       var user = await authManager.getUser();

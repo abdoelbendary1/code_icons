@@ -30,7 +30,7 @@ class LoanManager implements ILoan {
       }
 
       // Construct the URL for the loan request endpoint
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.loanRequest);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.loanRequest);
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();
@@ -62,7 +62,7 @@ class LoanManager implements ILoan {
       }
 
       // Construct the URL for the loan requests endpoint
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.loanRequest);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.loanRequest);
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();
@@ -93,10 +93,9 @@ class LoanManager implements ILoan {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
- var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           "${ApiConstants.loanRequest}/$loanRequestId");
       // Construct the URL for the delete loan request endpoint
-      
 
       // Get the user details and token for authentication
       var user = await authManager.getUser();

@@ -24,7 +24,7 @@ class PROrderAPi {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(
+        var url = Uri.https(
             ApiConstants.elreedyApi, ApiConstants.postPurchaseOrderEndPoint);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
@@ -61,7 +61,7 @@ class PROrderAPi {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
-        var url = Uri.http(
+        var url = Uri.https(
             ApiConstants.elreedyApi, ApiConstants.postPurchaseOrderEndPoint);
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
@@ -95,9 +95,9 @@ class PROrderAPi {
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi) { var url = Uri.http(ApiConstants.chamberApi,
-          "${ApiConstants.postPurchaseOrderEndPoint}/$id");
-        
+          connectivityResult == ConnectivityResult.wifi) {
+        var url = Uri.https(ApiConstants.chamberApi,
+            "${ApiConstants.postPurchaseOrderEndPoint}/$id");
 
         String token = SharedPrefrence.getData(key: "accessToken") as String;
 

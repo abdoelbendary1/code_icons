@@ -2,14 +2,15 @@ class ApiConstants {
 /*    static String chamberApi = "demoapi5.code-icons.com";
  */
   /*  static String chamberApi = "207.180.236.112:60015"; */
-
+//https://code2.demo.code-icons.com/api/ ==> الغرفة التجارية
   //autApi
   /*  static String chamberApi = "207.180.236.112:60009"; */
 //autApitest
 
   /*  static String chamberApi = "116.203.194.75:60009"; */
 //تيست الغرفه
-  static String chamberApi = "116.203.194.75:60011";
+  // static String chamberApi = "116.203.194.75:60011";
+  static String chamberApi = "code2.demo.code-icons.com";
 
   /*  static String chamberApi = "elreedy-api.code-icons.com";
  */

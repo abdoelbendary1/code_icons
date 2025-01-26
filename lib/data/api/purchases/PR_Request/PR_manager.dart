@@ -44,7 +44,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.storeEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -73,7 +73,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.itemEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -103,7 +103,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, '/api/Item/$id');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/Item/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -130,7 +130,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -157,7 +157,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/PurchaseRequest/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -184,7 +184,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.getPREndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -213,7 +213,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.uoms);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.uoms);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -241,8 +241,8 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
+      var url = Uri.https(
+          ApiConstants.chamberApi, ApiConstants.costCenterAllEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -272,7 +272,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, '/api/Currency/$currencyId');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/Currency/$currencyId');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -299,7 +299,7 @@ class PrRequestManager implements PrRequestInterface {
       }
 
       var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.currencyEndPoint);
+          Uri.https(ApiConstants.chamberApi, ApiConstants.currencyEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -327,8 +327,8 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
+      var url = Uri.https(
+          ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -356,7 +356,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.postPREndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.postPREndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -384,8 +384,8 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url =
-          Uri.http(ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
+      var url = Uri.https(
+          ApiConstants.chamberApi, ApiConstants.postPrInvoiceEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
       print("request : ${purchaseRequestDataModel.toJson()}");
@@ -413,7 +413,7 @@ class PrRequestManager implements PrRequestInterface {
       if (!await isConnected()) {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, "${ApiConstants.postPrInvoiceEndPoint}/$id");
 
       var user = await authManager.getUser();
@@ -443,7 +443,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, ApiConstants.purchaseRequestEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -474,7 +474,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, '/api/Vendor/$id');
+      var url = Uri.https(ApiConstants.chamberApi, '/api/Vendor/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -500,7 +500,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi, ApiConstants.vendorEndPoint);
+      var url = Uri.https(ApiConstants.chamberApi, ApiConstants.vendorEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
 
@@ -528,7 +528,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, '${ApiConstants.postPrInvoiceEndPoint}/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -555,7 +555,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(
+      var url = Uri.https(
           ApiConstants.chamberApi, ApiConstants.purchaseReturnEndPoint);
       var user = await authManager.getUser();
       var token = user?.accessToken;
@@ -591,7 +591,7 @@ class PrRequestManager implements PrRequestInterface {
         return left(NetworkError(errorMessege: "تأكد من اتصالك بالانترنت"));
       }
 
-      var url = Uri.http(ApiConstants.chamberApi,
+      var url = Uri.https(ApiConstants.chamberApi,
           '${ApiConstants.purchaseReturnEndPoint}/$id');
       var user = await authManager.getUser();
       var token = user?.accessToken;
