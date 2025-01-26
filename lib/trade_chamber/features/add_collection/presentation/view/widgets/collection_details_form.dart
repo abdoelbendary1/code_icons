@@ -24,24 +24,25 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
   @override
   void initState() {
     super.initState();
-    widget.cubit = AddCollectionCubit.initializeCubit();
-    // Add focus listener to the division focus node
-    widget.cubit.divisionFocusNode.addListener(() {
-      if (!widget.cubit.divisionFocusNode.hasFocus) {
-        // Call recalculateTotal when focus is lost
-        widget.cubit.recalculateTotal(
-            context.read<AddCollectionCubit>().paymentValuesEntity);
-      }
-    });
 
-    // Add focus listener to other focus nodes as needed
-    widget.cubit.diffrentFocusNode.addListener(() {
-      if (!widget.cubit.diffrentFocusNode.hasFocus) {
-        // Call recalculateTotal when focus is lost
-        widget.cubit.recalculateTotal(
-            context.read<AddCollectionCubit>().paymentValuesEntity);
-      }
-    });
+    if (mounted) {
+      widget.cubit = AddCollectionCubit.initializeCubit();
+      // Add focus listener to the division focus node
+      context.read<AddCollectionCubit>().divisionFocusNode.addListener(() {
+        if (!context.read<AddCollectionCubit>().divisionFocusNode.hasFocus) {
+          // Call recalculateTotal when focus is lost
+          context.read<AddCollectionCubit>().recalculateTotal(
+              context.read<AddCollectionCubit>().paymentValuesEntity);
+        }
+      }); // Add focus listener to other focus nodes as needed
+      context.read<AddCollectionCubit>().diffrentFocusNode.addListener(() {
+        if (!context.read<AddCollectionCubit>().diffrentFocusNode.hasFocus) {
+          // Call recalculateTotal when focus is lost
+          widget.cubit.recalculateTotal(
+              context.read<AddCollectionCubit>().paymentValuesEntity);
+        }
+      });
+    }
   }
 
   @override
