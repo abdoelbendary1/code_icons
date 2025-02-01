@@ -4,28 +4,26 @@ import 'package:code_icons/AUT/features/sales/returns/features/show_all_returns/
 import 'package:code_icons/AUT/features/sales/returns/features/edit_purchases_returns/presentation/view/EditSales_Return_body.dart';
 import 'package:code_icons/trade_chamber/core/widgets/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
-import 'package:code_icons/presentation/purchases/returns/All_pr_returns.dart';
-import 'package:code_icons/presentation/purchases/returns/editInvoice/EditPR_Return_body.dart';
 import 'package:code_icons/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class EditPrReturn extends StatefulWidget {
-  EditPrReturn({super.key});
-  static String routeName = "EditPrReturn";
+class EditSalesReturn extends StatefulWidget {
+  EditSalesReturn({super.key});
+  static String routeName = "EditSalesReturn";
 
   @override
-  State<EditPrReturn> createState() => _EditPrReturnState();
+  State<EditSalesReturn> createState() => _EditSalesReturnState();
 }
 
-class _EditPrReturnState extends State<EditPrReturn> {
+class _EditSalesReturnState extends State<EditSalesReturn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.whiteColor,
       body: CustomSliverAppBar(
-        body: const EditPrReturnBody(),
-        title: "مردود مشتريات",
+        body: const EditSalesReturnBody(),
+        title: "مردود مبيعات",
         onPressed: () {
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -36,7 +34,7 @@ class _EditPrReturnState extends State<EditPrReturn> {
           );
           Navigator.pushNamed(
             context,
-            AllPrReturnsScreenCards.routeName,
+            AllReturnsScreenCards.routeName,
           );
         },
       ),

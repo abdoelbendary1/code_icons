@@ -211,12 +211,13 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
     required TradeCollectionRequest Function() initializeTradeRequest,
     void Function(String message)? showError,
     VoidCallback? onSuccess,
+    List<int>? years,
   }) async {
     if (!isButtonEnabled) return;
 
     try {
       // Check if years of repayment are provided
-      if (yearsOfRepaymentBL.isEmpty) {
+      if (years!.isEmpty) {
         showError?.call("يجب اضافه سنوات السداد");
         return;
       }
@@ -431,6 +432,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
       updateYearsList(
         paymentValuesEntity.yearsOfRepayment!,
       );
+      yearsOfRepaymentBL = paymentValuesEntity.yearsOfRepayment!;
       years = updateCheckedStatus(
           years: years, paidYears: paymentValuesEntity.paidYears!);
       paidYears = updatePaidYears(years);

@@ -1,8 +1,8 @@
 import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoice_report_dm.dart';
 import 'package:code_icons/data/model/response/invoice/customersDM.dart';
 import 'package:code_icons/data/model/response/purchases/invoice/pr_invoice_dm.dart';
-import 'package:code_icons/presentation/Sales/Invoice/addInvoice/Sales_Invoice.dart';
-import 'package:code_icons/presentation/Sales/Invoice/editInvoice/EditSales_Invoice.dart';
+import 'package:code_icons/AUT/features/sales/invoice/features/add_purchases_invoice/presentation/view/Sales_Invoice.dart';
+import 'package:code_icons/AUT/features/sales/invoice/features/edit_purchases_invoice/presentation/view/EditSales_Invoice.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/addInvoice/purchase_Invoice.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/editInvoice/EditPRInvoice.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';

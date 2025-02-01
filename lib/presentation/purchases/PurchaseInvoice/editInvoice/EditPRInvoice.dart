@@ -1,4 +1,4 @@
-import 'package:code_icons/presentation/Sales/Invoice/All_invoices.dart';
+import 'package:code_icons/AUT/features/sales/invoice/view/All_invoices.dart';
 import 'package:code_icons/trade_chamber/core/widgets/custom_sliver_appbar.dart';
 import 'package:code_icons/presentation/home/home_screen.dart';
 import 'package:code_icons/presentation/purchases/PurchaseInvoice/All_invoices.dart';

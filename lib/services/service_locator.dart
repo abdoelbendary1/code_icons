@@ -1,4 +1,4 @@
-import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
+import 'package:code_icons/AUT/features/sales/invoice/cubit/SalesInvoiceCubit_cubit.dart';
 import 'package:code_icons/presentation/home/side_menu/cubit/menu_cubit.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:code_icons/trade_chamber/features/show_all_reciepts/presentation/controller/ReceiptManager%20.dart';

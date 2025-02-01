@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoice_item_details_dm.dart';
-import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
+import 'package:code_icons/AUT/features/sales/invoice/cubit/SalesInvoiceCubit_cubit.dart';
 import 'package:code_icons/services/controllers.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';

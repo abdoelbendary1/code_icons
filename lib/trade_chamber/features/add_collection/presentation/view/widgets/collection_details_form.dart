@@ -26,7 +26,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
     super.initState();
 
     if (mounted) {
-      widget.cubit = AddCollectionCubit.initializeCubit();
+      // context.read<AddCollectionCubit>() = AddCollectionCubit.initializeCubit();
       // Add focus listener to the division focus node
       context.read<AddCollectionCubit>().divisionFocusNode.addListener(() {
         if (!context.read<AddCollectionCubit>().divisionFocusNode.hasFocus) {
@@ -38,7 +38,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
       context.read<AddCollectionCubit>().diffrentFocusNode.addListener(() {
         if (!context.read<AddCollectionCubit>().diffrentFocusNode.hasFocus) {
           // Call recalculateTotal when focus is lost
-          widget.cubit.recalculateTotal(
+          context.read<AddCollectionCubit>().recalculateTotal(
               context.read<AddCollectionCubit>().paymentValuesEntity);
         }
       });
@@ -53,7 +53,7 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: widget.cubit.formKey,
+      key: context.read<AddCollectionCubit>().formKey,
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         physics: const BouncingScrollPhysics(),
@@ -62,26 +62,32 @@ class _CollectionDetailsFormState extends State<CollectionDetailsForm> {
           children: [
             BuildCollectionInfo(
               controllerManager: widget.controllerManager,
-              cubit: widget.cubit,
+              cubit: context.read<AddCollectionCubit>(),
             ),
-            BuildPaymentSection(cubit: widget.cubit),
+            BuildPaymentSection(cubit: context.read<AddCollectionCubit>()),
             Row(
               children: [
                 const Spacer(),
                 CustomButton(
                   onPressed: () {
-                    widget.cubit.addRegisteredCollection(
-                      formKey: widget.cubit.formKey,
-                      initializeTradeRequest: () {
-                        return widget.cubit.initializeTradeRequest(
-                          selectedCustomer: widget.cubit.selectedCustomer,
+                    context.read<AddCollectionCubit>().addRegisteredCollection(
+                          onSuccess: () {},
+                          formKey: context.read<AddCollectionCubit>().formKey,
+                          years: context.read<AddCollectionCubit>().paidYears,
+                          initializeTradeRequest: () {
+                            return context
+                                .read<AddCollectionCubit>()
+                                .initializeTradeRequest(
+                                  selectedCustomer: context
+                                      .read<AddCollectionCubit>()
+                                      .selectedCustomer,
+                                );
+                          },
+                          showError: (message) {
+                            AlertService.showError(
+                                context: context, errorMsg: message);
+                          },
                         );
-                      },
-                      showError: (message) {
-                        AlertService.showError(
-                            context: context, errorMsg: message);
-                      },
-                    );
                   },
                   label: AppLocalizations.of(context)!.save,
                 ),

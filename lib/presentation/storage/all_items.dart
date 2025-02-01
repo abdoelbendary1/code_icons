@@ -2,9 +2,9 @@ import 'package:code_icons/data/model/request/add_purchase_request/invoice/invoi
 import 'package:code_icons/data/model/request/add_purchase_request/invoice/salesItem.dart';
 import 'package:code_icons/data/model/response/invoice/customersDM.dart';
 import 'package:code_icons/domain/entities/invoice/customers/invoice_customer_entity.dart';
-import 'package:code_icons/presentation/Sales/Invoice/addInvoice/Sales_Invoice.dart';
-import 'package:code_icons/presentation/Sales/Invoice/cubit/SalesInvoiceCubit_cubit.dart';
-import 'package:code_icons/presentation/Sales/Invoice/editInvoice/EditSales_Invoice.dart';
+import 'package:code_icons/AUT/features/sales/invoice/features/add_purchases_invoice/presentation/view/Sales_Invoice.dart';
+import 'package:code_icons/AUT/features/sales/invoice/cubit/SalesInvoiceCubit_cubit.dart';
+import 'package:code_icons/AUT/features/sales/invoice/features/edit_purchases_invoice/presentation/view/EditSales_Invoice.dart';
 import 'package:code_icons/trade_chamber/features/add_collection/presentation/view/add_collection_view.dart';
 import 'package:code_icons/presentation/storage/items/cubit/items_cubit.dart';
 import 'package:code_icons/presentation/storage/items/storageBody.dart';

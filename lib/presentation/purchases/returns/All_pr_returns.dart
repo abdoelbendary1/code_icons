@@ -1,7 +1,7 @@
 import 'package:code_icons/data/model/response/purchases/purchase_request/store/store_data_model.dart';
 import 'package:code_icons/data/model/response/purchases/returns/PrReturnDM.dart';
-import 'package:code_icons/presentation/Sales/returns/addReturn/Sales_Returns.dart';
-import 'package:code_icons/presentation/Sales/returns/editInvoice/EditSales_Return.dart';
+import 'package:code_icons/AUT/features/sales/returns/features/add_purchases_returns/presentation/view/Sales_Returns.dart';
+import 'package:code_icons/AUT/features/sales/returns/features/edit_purchases_returns/presentation/view/EditSales_Return.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_cubit.dart';
 import 'package:code_icons/presentation/purchases/cubit/purchases_state.dart';
 import 'package:code_icons/presentation/purchases/returns/addReturn/PR_Returns.dart';

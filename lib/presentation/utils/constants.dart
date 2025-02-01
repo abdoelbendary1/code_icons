@@ -8,9 +8,9 @@ import 'package:code_icons/presentation/HR/VacationRequest/VacationOrderScreen.d
 import 'package:code_icons/presentation/HR/absenceRequest/absenceScreen.dart';
 import 'package:code_icons/presentation/HR/attendance/attendanceScreen.dart';
 import 'package:code_icons/presentation/HR/permissionRequest/permissionRequestScreen.dart';
-import 'package:code_icons/presentation/Sales/Invoice/All_invoices.dart';
-import 'package:code_icons/presentation/Sales/SalesScreen.dart';
-import 'package:code_icons/presentation/Sales/returns/All_returns.dart';
+import 'package:code_icons/AUT/features/sales/invoice/view/All_invoices.dart';
+import 'package:code_icons/AUT/features/sales/returns/view/SalesScreen.dart';
+import 'package:code_icons/AUT/features/sales/returns/features/show_all_returns/presentation/view/All_returns.dart';
 import 'package:code_icons/trade_chamber/features/show_all_collections/presentation/view/all_daily_collector_screenCards.dart';
 import 'package:code_icons/trade_chamber/features/add_unregistered_collection/presentation/view/add_unlimited_collection_view.dart';
 import 'package:code_icons/trade_chamber/features/show_all_unregistered_collection/presentation/view/unRegistered_collectionsCards.dart';
