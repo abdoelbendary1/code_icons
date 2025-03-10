@@ -67,7 +67,7 @@ class AddCollectionCubit extends Cubit<AddCollectionState> {
   String yearsOfRepaymentBL = '';
   late int paymentReceipt;
   final ScrollController scrollController = ScrollController();
-  List<CustomerDataEntity> customers = [];
+  List<CustomerDataEntity> customers = []; // 
   int skip = 0;
   final int take = 20;
   bool isLoading = false;
